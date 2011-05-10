@@ -14,8 +14,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.com/overlord
 */
 
 /* This is my little test app for my DPCRTLMM library
@@ -122,7 +122,7 @@ static void PrintVersion()
   S_DPCRTLMM_VERSION ver;
   printf("Gathering library version info...");
   dpcrtlmm_Ver(&ver);
-  printf("Version: %u.%u", ver.Major, ver.Minor);
+  printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
   if ((ver.Flags) & 1) printf("b"); /* BETA */
   printf("\n");
 }
@@ -136,6 +136,8 @@ static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg)
   printf("--------Caution! Stats display from trap hook!---------\n\n");
   dpcrtlmm_GetStats(&stats);
   PrintStats(&stats);
+  printf("Dumping library blocks!\n");
+  dpcrtlmm_Dump(stdout);
   /* What could I have done with the trap message?  Sorry for the warning,
   hey it's only a test */
   return;

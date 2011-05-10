@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /* 19th July 2000: This module replaces bbatrap.c and bbptrap.c, which no

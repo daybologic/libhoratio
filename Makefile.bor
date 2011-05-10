@@ -2,7 +2,7 @@
 # Written by Overlord David Duncan Ross Palmer
 # Overlord@DayboLogic.co.uk
 # 24th August 2000
-# Last modified 12th December 2000
+# Last modified 11th June 2001 by overlord
 
 # This Makefile designed for Borland C++, you'll have to change the tools
 # at the top of the file in the variables section to use Micro$oft or Colelus
@@ -28,10 +28,15 @@ CFLGS=-O   # Mad optimization, no debugging please :)
 # File control commands
 FILEEXISTS=if exist
 ERASE=erase
+COPY=copy
 PRINT=@echo
 BLANKLINE=.
 
-all : $(LIBNAME) example
+all:
+	make -f $(THISFILE) config
+	./config
+	make -f $(THISFILE) $(LIBNAME)
+	make -f $(THISFILE) example
 
 example : example1.exe example2.exe example3.exe
 
@@ -63,29 +68,30 @@ dpccap.obj : $(MASTERDEP) dpccap.cpp
 	$(COMPILE) $(ANSI) $(CFLGS) dpccap.cpp
 
 $(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj
-	-$(LIBRARY) $(LIBNAME) -+alloc.obj
-	-$(LIBRARY) $(LIBNAME) -+blkarray.obj
-	-$(LIBRARY) $(LIBNAME) -+calloc.obj
-	-$(LIBRARY) $(LIBNAME) -+free.obj
-	-$(LIBRARY) $(LIBNAME) -+isbad.obj
-	-$(LIBRARY) $(LIBNAME) -+stats.obj
-	-$(LIBRARY) $(LIBNAME) -+dbghooks.obj
-	-$(LIBRARY) $(LIBNAME) -+locktrap.obj
-	-$(LIBRARY) $(LIBNAME) -+safelist.obj
-	-$(LIBRARY) $(LIBNAME) -+dpcrtlmm.obj
-	-$(LIBRARY) $(LIBNAME) -+log.obj
-	-$(LIBRARY) $(LIBNAME) -+vptrap.obj
-	-$(LIBRARY) $(LIBNAME) -+trap.obj
-	-$(LIBRARY) $(LIBNAME) -+realloc.obj
-	-$(LIBRARY) $(LIBNAME) -+intdata.obj
-	-$(LIBRARY) $(LIBNAME) -+iblkptr.obj
-	-$(LIBRARY) $(LIBNAME) -+getblksz.obj
-	-$(LIBRARY) $(LIBNAME) -+bloclock.obj
-	-$(LIBRARY) $(LIBNAME) -+bdflags.obj
+	$(FILEEXISTS) $(LIBNAME) $(ERASE) $(LIBNAME)
+	-$(LIBRARY) $(LIBNAME) +alloc.obj
+	-$(LIBRARY) $(LIBNAME) +blkarray.obj
+	-$(LIBRARY) $(LIBNAME) +calloc.obj
+	-$(LIBRARY) $(LIBNAME) +free.obj
+	-$(LIBRARY) $(LIBNAME) +isbad.obj
+	-$(LIBRARY) $(LIBNAME) +stats.obj
+	-$(LIBRARY) $(LIBNAME) +dbghooks.obj
+	-$(LIBRARY) $(LIBNAME) +locktrap.obj
+	-$(LIBRARY) $(LIBNAME) +safelist.obj
+	-$(LIBRARY) $(LIBNAME) +dpcrtlmm.obj
+	-$(LIBRARY) $(LIBNAME) +log.obj
+	-$(LIBRARY) $(LIBNAME) +vptrap.obj
+	-$(LIBRARY) $(LIBNAME) +trap.obj
+	-$(LIBRARY) $(LIBNAME) +realloc.obj
+	-$(LIBRARY) $(LIBNAME) +intdata.obj
+	-$(LIBRARY) $(LIBNAME) +iblkptr.obj
+	-$(LIBRARY) $(LIBNAME) +getblksz.obj
+	-$(LIBRARY) $(LIBNAME) +bloclock.obj
+	-$(LIBRARY) $(LIBNAME) +bdflags.obj
 	$(PRINT)$(BLANKLINE)
-	$(PRINT) (C)2000, Overlord DDRP, Daybo Logic.
-	$(PRINT) Please read the license agreement before proceeding
-	$(PRINT) http://daybologic.com/Dev/dpcrtlmm
+	$(PRINT) (C)2000-2001, David Duncan Ross Palmer, Daybo Logic.
+	$(PRINT) Subject to the GNU General Public License.
+	$(PRINT) http://www.daybologic.co.uk/dev/dpcrtlmm
 
 alloc.obj : $(MASTERDEP) intdata.h log.h vptrap.h dbghooks.h
 	$(COMPILE) $(ANSI) $(CFLGS) alloc.c
@@ -177,11 +183,22 @@ clean:
 	#When not in optimization mode (not sure though), better
 	#get rid of it
 	$(FILEEXISTS) example.tds $(ERASE) example.tds
-
-# Clobber only used by maintainer generally (me), so that I may delete
-# ALL binaries which users of the lib wouldn't generally need to do.
-clobber: clean
-	$(FILEEXISTS) example1.exe $(ERASE) example1.exe
-	$(FILEEXISTS) example2.exe $(ERASE) example2.exe
-	$(FILEEXISTS) example3.exe $(ERASE) example3.exe
+	$(FILEEXISTS) example?.exe $(ERASE) example?.exe
 	$(FILEEXISTS) $(LIBNAME) $(ERASE) $(LIBNAME)
+	$(FILEEXISTS) config.exe $(ERASE) config.exe
+	$(FILEEXISTS) config.obj $(ERASE) config.obj
+	$(FILEEXISTS) config.h $(ERASE) config.h
+	$(COPY) config.h.default config.h
+
+# Clobber backward compat.
+clobber : clean
+
+# C based configurator rules
+
+config : config.exe
+
+config.exe : config.obj
+	$(COMPILE) -econfig.exe config.obj
+
+config.obj : config.c dpcrtlmm.h
+	$(COMPILE) $(ANSI) $(CFLGS) config.c

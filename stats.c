@@ -36,8 +36,11 @@ My official site: http://daybologic.com/overlord
                   functions to carry counts of flags.  Bug fix, the
                   swappable and locked block counts in the statistics
                   didn't make it back to the caller's structure.
+
+  24th May 2001 : Added dump and supported functions.
 */
 #include <stddef.h>
+#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -47,6 +50,8 @@ My official site: http://daybologic.com/overlord
 #include "intdata.h" /* Internal library data */
 
 static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats);
+static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray);
+static void CrackAndPrintFlags(FILE* Target, unsigned char Flags);
 /*-------------------------------------------------------------------------*/
 unsigned long dpcrtlmm_GetBlockCount()
 {
@@ -105,5 +110,72 @@ static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats)
     }
     #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
   }
+}
+/*-------------------------------------------------------------------------*/
+void dpcrtlmm_Dump(FILE* Target)
+{
+  if ( Target ) {
+    unsigned int i;
+
+    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) {
+      if ( _safetyList[i] ) { /* Used entry? */
+        unsigned int j;
+
+        for ( j = 0U; j < _safetyList[i]->Count; j++ )
+          DumpOnArray(Target, _safetyList[i]);
+      }
+    }
+    #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
+    DumpOnArray(Target, &_defaultArray);
+    #endif
+  }
+  return;
+}
+/*-------------------------------------------------------------------------*/
+static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray)
+{
+  unsigned int j; /* Just so I don't get confused with the other function */
+
+  for ( j = 0U; j < CurrentArray->Count; j++ ) {
+    char defaultFilename[] = "(unknown)";
+    char* filename;
+    unsigned char flags = CurrentArray->Descriptors[j].Flags;
+
+    if ( CurrentArray->Descriptors[j].SourceFile )
+      filename = CurrentArray->Descriptors[j].SourceFile;
+    else
+      filename = defaultFilename;
+
+    fprintf(Target, "Address: %p, owner: %s, line %u is %u bytes. ",
+                    CurrentArray->Descriptors[j].PBase,
+                    filename,
+                    CurrentArray->Descriptors[j].SourceLine,
+                    CurrentArray->Descriptors[j].Size
+    );
+    CrackAndPrintFlags(Target, flags);
+  }
+  return;
+}
+/*-------------------------------------------------------------------------*/
+static void CrackAndPrintFlags(FILE* Target, unsigned char Flags)
+{
+  if ( Target ) {
+    int comma = 0;
+    fprintf(Target, "Flags=");
+    if ( (Flags & 1) == 1 ) {
+      fprintf(Target, "LOCKED");
+      comma = 1;
+    }
+    if ( (Flags & 2) == 2 ) {
+      if ( comma ) {
+        /*comma = 0;*/
+        fprintf(Target, ", ");
+      }
+      fprintf(Target, "NOSWAP");
+      /*comma = 1;*/
+    }
+    fprintf(Target, "\n");
+  }
+  return;
 }
 /*-------------------------------------------------------------------------*/

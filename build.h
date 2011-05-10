@@ -18,24 +18,14 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 /*
-The build header is designed to localize settings for the build of the
-library, everybody has permission to change the build header.  It's
-intended to help the library build by keeping settings.  It's not intended
-for inclusion in user programs.
-
-When officially released the build header was written by Overlord David
-Duncan Ross Palmer from Daybo Logic.  It is only modified by end users
-of the library who have purchased the absolutely mental version of the
-library. - 24th Feb 2000 : 10:04
-
-When re-released as version 1.2 on GPL a lot of settings for different pay-
-for version of the library were taken out.
-
-Overlord@DayboLogic.co.uk
+The build header is used to add some more sense to the user options in
+config.h.  Note: Don't directly edit build.h or config.h, build.h is
+readonly and is included by the library, config.h is dynamically written
+by the config program and included in this file.
 
 
 3rd Mar 2000 - Overlord Added DPCRTLMM_SAFETYLIST_MAXSIZE
@@ -53,33 +43,22 @@ Overlord@DayboLogic.co.uk
 25th July 2000 - Overlord added DPCRTLMM_STDBLOCKLIMIT for free versions
 17th Nov 2000 - Overlord stripped all stuff to do with limiting and pricing
                 and the like in preparation for GPL release.
+24th May 2001 - Overlord refined versioning system, 1.2 goes down to 1.1.4 due
+                to DPCRTLMM_VERSION_PATCH.
+9th June 2001 - Overlord took most options out and made them the responsibillty
+                of the config program and config.h
 */
 
 #ifndef __INC_DPCRTLMM_BUILD_H
 #define __INC_DPCRTLMM_BUILD_H
+
+#include "config.h" /* User defined configuration */
+/* Below follows a non-user configuration ... */
 /*-------------------------------------------------------------------------*/
 /* Try to prevent users including this header */
 #ifndef DPCRTLMM_SOURCE
 #error this header is not intended for use outside of the library
 #endif /*!DPCRTLMM_SOURCE*/
-
-
-/* Build parameters may be changed here */
-
-#ifndef NDEBUG
-#  define DPCRTLMM_LOG
-#endif /*!NDEBUG*/
-/* comment out the above line to disable logging activity.
-If you've defined NDEBUG which is a standard macro which means
-no debugging, I automatically define it here, change it if you
-want to.
-When DPCRTLMM_LOG is defined a file called DPCRTLMM.LOG is created
-otherwise, stderr is still used for errors and warnings but normal
-messages such as allocation successful will not be displayed st all.
-*/
-
-#define DPCRTLMM_DEBUGHOOKS
-/* Comment out the define line to disable advanced debug hook support */
 
 /* Definition of MAX_TRAP_STRING_LENGTH (change if trap/log strings are
 	getting too long*/
@@ -88,40 +67,11 @@ messages such as allocation successful will not be displayed st all.
 #  undef MAX_TRAP_STRING_LENGTH
 #endif /*MAX_TRAP_STRING_LENGTH*/
 
-#define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) */
+#define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) - NOT USER CONFIGURABLE*/
 
-/* Definition of DPCRTLMM_HOOKCHAIN_SIZE, hook chain sizes used to differ
-depending on how much money was payed for the library, now they default to
-32 */
+/* To allow explicit far data pointers which are
+non-ANSI, configure with config --far */
 
-#if DPCRTLMM_HOOKCHAIN_SIZE /* Somebody else is using the macro we want? */
-#  undef DPCRTLMM_HOOKCHAIN_SIZE /* Get shot of that crap */
-#endif /*DPCRTLMM_HOOKCHAIN_SIZE*/
-
-#define DPCRTLMM_HOOKCHAIN_SIZE (32) /* Quite large hook chain sizes, change if you feel you need to go mental on me of need less to save memory */
-
-/* Definition of DPCRTLMM_SAFETYLIST_MAXSIZE, the maximum number of modules
-which may have their own array of blocks looked after byte this library is
-determined by the maxmimum number of entries which may be stored in the
-safety list.  The safety list is a fixed size structure in the data segment.
-In this GPL release it's 512 default, allowing for a very large application,
-but it may be changed manually here, remember changes require rebuilding
-DPCRTLMM */
-
-#if DPCRTLMM_SAFETYLIST_MAXSIZE /* Somebody else is using the macro we want? */
-#  undef DPCRTLMM_SAFETYLIST_MAXSIZE /* Again, get shot of that crap, they were just trying to disrupt the library! */
-#endif /*DPCRTLMM_SAFETYLIST_MAXSIZE*/
-
-#define DPCRTLMM_SAFETYLIST_MAXSIZE (512) /* Programmers change this value if you run out of space */
-
-/* Definition of DPCRTLMM_FARDATA, to allow explicit far data pointers which are
-non-ANSI define DPCRTLMM_WANTFARDATA, for normal mode which means you will have
-to ensure the memory modeal has far data comment the line below out (default)
-*/
-/* Un-comment for explicit far data!  (Ignored in flat memory model) */
-/*#define DPCRTLMM_WANTFARDATA*/
-
-/* Don't touch this part */
 #ifndef __FLAT__ /* Segmented */
 #  ifdef DPCRTLMM_WANTFARDATA
 #    define DPCRTLMM_FARDATA __far /* Non-ANSI, avoid if possible */
@@ -144,17 +94,11 @@ to ensure the memory modeal has far data comment the line below out (default)
 #  define DPCRTLMM_FREE free
 #endif /*!__FLAT__*/
 
-
-/* Uncomment the next line to return to the old behaviour, no NULL as default
-for block desc arrays, by default the next line is commented out because it's
-a new feature and I wouldn't want to assume you don't like my new feature :)
-*/
-/*#define DPCRTLMM_NONULL_BLOCKDESCARRAY*/
-
-/* Version information can be set here */
+/* Library version information can be set here */
 #define DPCRTLMM_VERSION_MAJOR (1)
-#define DPCRTLMM_VERSION_MINOR (2)
-/* Comment out the next line before releasing the library */
+#define DPCRTLMM_VERSION_MINOR (1)
+#define DPCRTLMM_VERSION_PATCH (4)
+/* Comment out the next line before releasing the library, this is part of the version */
 #define DPCRTLMM_VERSION_TEST
 /*-------------------------------------------------------------------------*/
 #endif /*!__INC_DPCRTLMM_BUILD_H*/

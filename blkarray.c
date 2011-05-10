@@ -190,8 +190,12 @@ void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
 {
+  #ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
+  return 0; /* Default (NULL) array does not exist */
+  #else
   if (!PBlockArray || PBlockArray == &_defaultArray)
     return 1U; /* TRUE */
   return 0U; /* FALSE */
+  #endif
 }
 /*-------------------------------------------------------------------------*/

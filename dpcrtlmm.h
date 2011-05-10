@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #ifndef __INC_DPCRTLMM_H
 #define __INC_DPCRTLMM_H
@@ -27,7 +27,7 @@ My official site: http://daybologic.com/overlord
 /*
 Company (Copyright): Daybo Logic 2000
 Date of creation: 15th Feb 2000
-Last modified: 1st December 2000
+Last modified: 6th June 2001
 Programmer: Overlord David Duncan Ross Palmer, Daybo Logic.
 Email: Overlord@DayboLogic.co.uk
 File: dpcrtlmm.h
@@ -95,6 +95,8 @@ typedef struct _S_DPCRTLMM_BLOCKDESCRIPTOR /* A block descriptor */
   void DPCRTLMM_FARDATA* PBase; /* Raw pointer to the base address of the block */
   size_t Size; /* Number of bytes which block is in length */
   unsigned char Flags;
+  unsigned int SourceLine; /* Line number at which the block was allocated */
+  char* SourceFile; /* Dynamic, filename of place where allocation was requested */
 } S_DPCRTLMM_BLOCKDESCRIPTOR, DPCRTLMM_FARDATA *PS_DPCRTLMM_BLOCKDESCRIPTOR;
 
 typedef struct _S_DPCRTLMM_BLOCKDESCARRAY /* Array of block descriptors */
@@ -119,7 +121,7 @@ typedef struct _S_DPCRTLMM_STATS /* Statistics info for dpcrtlmm_GetStats() */
 
 typedef struct _S_DPCRTLMM_VERSION
 {
-  unsigned char Major, Minor;
+  unsigned char Major, Minor, Patch;
   unsigned char Flags; /* Bit 0 is set in test builds, clear in tested safe builds, other bits have no meaning right now */
 } S_DPCRTLMM_VERSION, DPCRTLMM_FARDATA *PS_DPCRTLMM_VERSION;
 
@@ -296,7 +298,13 @@ is allocated and the pointer is returned, which must be typecasted to
 a pointer to the desired type before it is accessed so C knows how to
 do pointer arithmetic.  NULL is returned if there is not enough continuous
 memory to allocate a block of NewBlockSize. */
-void DPCRTLMM_FARDATA* dpcrtlmm_Alloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize);
+void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line);
+
+/* Alloc() "backwards compatibillity", it's actually a lot easier to use
+this version, so I recommend it.  This adds transparent file/line support for
+the logs. */
+#define dpcrtlmm_Alloc(blkarray, blksize) \
+        dpcrtlmm_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__)) /* Transparent line/file support */
 
 /* Free() - BlockPtr - Pass a pointer to the block to free, attempting to
 free a block we don't own will cause a trap which crashes the program,
@@ -378,7 +386,10 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
 	ever use is personally, the C run-time library uses it though so I might
 	as well do so too.  NULL is returned if the block cannot be allocated.
 */
-void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize);
+void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
+
+#define dpcrtlmm_Calloc(blkarray, n, blksize) \
+        dpcrtlmm_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
 
 /* When a trap is fired, the default behaviour of the program is to put
 the message on stderr and call abort, this behaviour can be changed to
@@ -438,6 +449,7 @@ unsigned long dpcrtlmm_GetBlockCount(void); /* Returns number of allocated block
 /* Look at the structure S_DPCRTLMM_STATS, it's all returned in the
 structure you pass */
 void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats);
+void dpcrtlmm_Dump(FILE* Target); /* Dumps a table of all active allocations with lots of detail */
 
 /* Call this to get the library version info */
 PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct);
@@ -504,6 +516,7 @@ them it won't be hard to write your own hack table. */
 #  define dpcaretrapsenabled dpclrtmm_AreTrapsEnabled
 #  define dpcgetblockcount dpcrtlmm_GetBlockCount
 #  define dpcgetstats dpcrtlmm_GetStats
+#  define dpcdump dpcrtlmm_Dump
 #  define dpcver dpcrtlmm_Ver
 #  define dpcisdefaultblockarray dpcrtlmm_IsDefaultBlockArray
 
@@ -523,6 +536,22 @@ them it won't be hard to write your own hack table. */
 #  define S_DPC_VERSION S_DPCRTLMM_VERSION
 #  define PS_DPC_VERSION PS_DPCRTLMM_VERSION
 #endif /*DPCRTLMM_LAZYHACK*/
+
+/* New in 1.1.4, define USING_DPCRTLMM before including this header if
+you wish to make normal C runtime using code switch to DPCRTLMM code
+without changing all the calls.  In some custom distributions this was
+done with usedpcrtlmm.h or similar */
+
+#ifdef USING_DPCRTLMM
+#  ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
+#    error ("You must configure as --enable-null-array to use USING_DPCRTLMM")
+#  else
+#    define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
+#    define free(p)       dpcrtlmm_Free(NULL, (p))
+#    define calloc(n, s)  dpcrtlmm_Calloc(NULL, (n), (s))
+#    define realloc(p, s) dpcrtlmm_Realloc(NULL, (p), (s))
+#  endif
+#endif /*USING_DPCRTLMM*/
 
 #ifdef __cplusplus
 } /* extern "C" */
