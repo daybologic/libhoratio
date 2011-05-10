@@ -45,6 +45,8 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "log.h" /* Main logging support */
 #include "vptrap.h" /* _VerifyPtrs() */
 #include "dbghooks.h" /* Debug hook executive and support functions */
+#include "biglock.h" /* Mutual exclusion */
+#include "alloc.h"
 /*-------------------------------------------------------------------------*/
 /* Internal functions (local) */
 
@@ -57,7 +59,6 @@ pointers are not acceptable and will be caught with assert() */
 
 static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray, const unsigned int GrowByElems);
 
-
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
@@ -66,6 +67,18 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
 #define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line)
+{
+  /* Thread safe wrapper for AllocEx() */
+  void DPCRTLMM_FARDATA* ret;
+
+  LOCK
+  ret = dpcrtlmm_int_AllocEx(PBlockArray, NewBlockSize, File, Line);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line)
 {
   /* locals */
   void DPCRTLMM_FARDATA* genBlockPtr; /* Generated block pointer */

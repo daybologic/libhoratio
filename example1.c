@@ -35,7 +35,7 @@ static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg);
 static void* _nullarrptrs[32]; /* 32 * 32k = 1MB */
 static void* _arrptrs[64]; /* 64 * 16k = 1MB */
 /*-------------------------------------------------------------------------*/
-int main(const int argc, const char* argv[])
+int main()
 {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
@@ -133,7 +133,8 @@ static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg)
   hook only.  Which means control is returned to the DPCRTLMM rap handler
   afterwards. */
   S_DPCRTLMM_STATS stats;
-  printf("--------Caution! Stats display from trap hook!---------\n\n");
+  printf("--------Caution! Stats display from trap hook!---------\n");
+  printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
   dpcrtlmm_GetStats(&stats);
   PrintStats(&stats);
   printf("Dumping library blocks!\n");

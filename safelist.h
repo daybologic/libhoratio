@@ -63,6 +63,6 @@ ignore this library. */
 #define SafetyList_AddBase              dpcrtlmm_SafetyList_AddBase
 #define SafetyList_RemoveBase           dpcrtlmm_SafetyList_RemoveBase
 
-#define SafetyList_CountFree(SafetyList) ( (DPCRTLMM_SAFETYLIST_MAXCOUNT) - SafetyList_CountList(safetyList) )
+#define SafetyList_CountFree(SafetyList) ( (DPCRTLMM_SAFETYLIST_MAXSIZE) - SafetyList_CountList(safetyList) )
 /*-------------------------------------------------------------------------*/
 #endif /*!__INC_DPCRTLMM_SAFETYLIST_H*/

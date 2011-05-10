@@ -52,8 +52,8 @@ THISFILE=Makefile.gnu
 LIBTITLE=dpcrtlmm
 LIBNAME=lib$(LIBTITLE).a
 # Master dependancies ALWAYS cause a rebuild
-MASTERDEP=build$(H) dpcrtlmm$(H) $(THISFILE) config$(H)
-OBJECTS=alloc$(OBJ) blkarray$(OBJ) calloc$(OBJ) free$(OBJ) isbad$(OBJ) stats$(OBJ) dbghooks$(OBJ) locktrap$(OBJ) safelist$(OBJ) dpcrtlmm$(OBJ) log$(OBJ) vptrap$(OBJ) trap$(OBJ) realloc$(OBJ) intdata$(OBJ) iblkptr$(OBJ) getblksz$(OBJ) bloclock$(OBJ) bdflags$(OBJ)
+MASTERDEP=build$(H) dpcrtlmm$(H) $(THISFILE) config$(H) biglock$(H)
+OBJECTS=alloc$(OBJ) blkarray$(OBJ) calloc$(OBJ) free$(OBJ) isbad$(OBJ) stats$(OBJ) dbghooks$(OBJ) locktrap$(OBJ) safelist$(OBJ) dpcrtlmm$(OBJ) log$(OBJ) vptrap$(OBJ) trap$(OBJ) realloc$(OBJ) intdata$(OBJ) iblkptr$(OBJ) getblksz$(OBJ) bloclock$(OBJ) bdflags$(OBJ) biglock$(OBJ)
 LOGFILE=DPCRTLMM.LOG
 COREDUMPS=example1.core example2.core example3.core core
 BACKUPS=*~
@@ -81,15 +81,16 @@ $(LIBNAME) : $(MASTERDEP) $(OBJECTS)
 	$(LIBADD) getblksz$(OBJ)
 	$(LIBADD) bloclock$(OBJ)
 	$(LIBADD) bdflags$(OBJ)
+	$(LIBADD) biglock$(OBJ)
 	$(RANLIB)
 
-alloc$(OBJ) : alloc$(C) $(MASTERDEP) intdata$(H) log$(H) vptrap$(H) dbghooks$(H)
+alloc$(OBJ) : alloc$(C) $(MASTERDEP) intdata$(H) log$(H) vptrap$(H) dbghooks$(H) alloc$(H)
 	$(COMPILE) alloc$(C)
 
 blkarray$(OBJ) : blkarray$(C) $(MASTERDEP) intdata$(H) log$(H) trap$(H) safelist$(H) dbghooks$(H)
 	$(COMPILE) blkarray$(C)
 
-calloc$(OBJ) : calloc$(C) $(MASTERDEP) intdata$(H) log$(H) iblkptr$(H) dbghooks$(H)
+calloc$(OBJ) : calloc$(C) alloc$(H) $(MASTERDEP) intdata$(H) log$(H) iblkptr$(H) dbghooks$(H)
 	$(COMPILE) calloc$(C)
 
 free$(OBJ) : free$(C) $(MASTERDEP) intdata$(H) vptrap$(H) locktrap$(H) log$(H) trap$(H) dbghooks$(H)
@@ -110,7 +111,7 @@ locktrap$(OBJ) : locktrap$(C) $(MASTERDEP) intdata$(H) trap$(H) locktrap$(H)
 safelist$(OBJ) : safelist$(C) $(MASTERDEP) intdata$(H) safelist$(H)
 	$(COMPILE) safelist$(C)
 
-dpcrtlmm$(OBJ) : dpcrtlmm$(C) $(MASTERDEP) intdata$(H) trap$(H) log$(H) safelist$(H) dbghooks$(H)
+dpcrtlmm$(OBJ) : dpcrtlmm$(C) $(MASTERDEP) intdata$(H) trap$(H) log$(H) safelist$(H) dbghooks$(H) biglock$(H)
 	$(COMPILE) dpcrtlmm$(C)
 
 log$(OBJ) : log$(C) $(MASTERDEP) intdata$(H) log$(H)
@@ -134,14 +135,14 @@ iblkptr$(OBJ) : iblkptr$(C) $(MASTERDEP) intdata$(H) trap$(H) vptrap$(H) iblkptr
 getblksz$(OBJ) : getblksz$(C) $(MASTERDEP) intdata$(H) trap$(H) vptrap$(H) iblkptr$(H)
 	$(COMPILE) getblksz$(C)
 
-bloclock$(OBJ) : bloclock$(C) $(MASTERDEP)
+bloclock$(OBJ) : bloclock$(C) $(MASTERDEP) bdflags$(H)
 	$(COMPILE) bloclock$(C)
 
-bdflags$(OBJ) : bdflags$(C) $(MASTERDEP) intdata$(H) vptrap$(H) iblkptr$(H) dbghooks$(H)
+bdflags$(OBJ) : bdflags$(C) $(MASTERDEP) intdata$(H) vptrap$(H) iblkptr$(H) dbghooks$(H) bdflags$(H)
 	$(COMPILE) bdflags$(C)
 
-critical$(OBJ) : critical$(C) $(MASTERDEP) critical$(H)
-	$(COMPILE) critical$(C)
+biglock$(OBJ) : biglock$(C) biglock$(H) $(MASTERDEP)
+	$(COMPILE) -D__UNIX__ biglock$(C)
 
 clean : confclean
 	@-$(ERASE) $(OBJECTS)

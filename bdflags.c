@@ -39,11 +39,25 @@ Now supports NULL arrays
 #include "vptrap.h" /* _VerifyPtrs() (replaces BBA/BBP traps) */
 #include "iblkptr.h" /* For getting array descriptor index for a particular block */
 #include "dbghooks.h" /* The debug hook executive */
+#include "biglock.h" /* Library's mutual exclusion */
+#include "bdflags.h"
 /*-------------------------------------------------------------------------*/
 /* NOTE: Adding of the hook caller in here has caused two variables
-both holding the index of the block, this should be optimized away when
+both holding the index of the block, this should be optimised away when
 I can be bothered */
+/*-------------------------------------------------------------------------*/
 unsigned char dpcrtlmm_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned char* PNewFlags)
+{
+  unsigned char ret;
+
+  LOCK
+  ret = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, PNewFlags);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+unsigned char dpcrtlmm_int_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned char* PNewFlags)
 {
   /* locals */
   const char funcName[] = "ModifyDescriptorFlags()"; /* Name of this function */

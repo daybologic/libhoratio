@@ -41,9 +41,24 @@ My official site: http://daybologic.com/overlord
 #include "dpcrtlmm.h" /* Main library header */
 #include "intdata.h" /* Access to internal data */
 #include "trap.h" /* Trap support */
-#include "safelist.h"
+#include "safelist.h" /* List of acceptable arrays */
+#include "biglock.h" /* Mutual exclusion */
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsBadBlockPtr( const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
+static unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
+/*-------------------------------------------------------------------------*/
+unsigned int dpcrtlmm_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
+{
+  /* Thread safe wrapper for IsBadBlockPtr() */
+  unsigned int ret;
+
+  LOCK
+  ret = dpcrtlmm_int_IsBadBlockPtr(PBlockArray, BlockPtr);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+static unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {
   /* locals */
   unsigned int i; /* List/loop control */

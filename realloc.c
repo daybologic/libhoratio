@@ -23,7 +23,7 @@ My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /* Created: UNKNOWN
-   Last modified: 1st Dec 2000
+   Last modified: 31st July 2001
    Programmer: Overlord David Duncan Ross Palmer
    Library: DPCRTLMM
    Language: ANSI C (1990 implementation)
@@ -31,6 +31,8 @@ My official site: http://www.daybologic.co.uk/overlord
 
    1st Dec 2000: To fix a possible porting problem I no longer assume
                  that realloc() will allocate when called with NULL, newSize
+
+   31st July 2001: Added support for using the big library lock.
 */
 #include <stdlib.h>
 #include <stdio.h>
@@ -49,8 +51,22 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "iblkptr.h"
 #include "dbghooks.h" /* Debug hooking routines, we use the executive */
 #include "log.h"
+#include "biglock.h" /* Mutual exclusion */
+/*-------------------------------------------------------------------------*/
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize);
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize)
+{
+  void DPCRTLMM_FARDATA* ret;
+
+  LOCK
+  ret = dpcrtlmm_int_Realloc(PBlockArray, OldBlockPtr, NewSize);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize)
 {
   void DPCRTLMM_FARDATA* ptr = OldBlockPtr; /* Pointer that is returned to the caller (modified later) */
   const char funcName[] = "Realloc()"; /* Name of our function */
@@ -117,3 +133,4 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
 
   return ptr; /* Give new pointer to caller */
 }
+/*-------------------------------------------------------------------------*/

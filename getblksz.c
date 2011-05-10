@@ -18,13 +18,13 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /* Gets size of a block
 
-Last mod: 21st July 2000
+Last mod: 31st July 2001
 */
 #include <stdio.h>
 #include <stddef.h>
@@ -38,8 +38,22 @@ Last mod: 21st July 2000
 #include "trap.h" /* _Trap() - Trap support */
 #include "vptrap.h" /* _VerifyPtrs() */
 #include "iblkptr.h" /* IndexFromBlockPtr() */
+#include "biglock.h" /* Library mutual exclusion */
+/*-------------------------------------------------------------------------*/
+static size_t dpcrtlmm_int_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* BlockPtr);
 /*-------------------------------------------------------------------------*/
 size_t dpcrtlmm_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* BlockPtr)
+{
+  size_t ret;
+
+  LOCK
+  ret = dpcrtlmm_int_GetBlockSize(PBlockArray, BlockPtr);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+static size_t dpcrtlmm_int_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* BlockPtr)
 {
   /* First test pointers */
   _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);

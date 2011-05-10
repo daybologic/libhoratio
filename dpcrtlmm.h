@@ -279,8 +279,8 @@ the executive, call them freely as I have designated for user
 callings, infact they aren't even called from inside. */
 
 unsigned int dpcrtlmm_InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));
-unsigned dpcrtlmm_GetDebugHookChainCount(const unsigned int HookType); /* Counts the number of hooks installed for this type of hook */
-unsigned dpcrtlmm_GetDebugHookMatrixCount(void); /* Counts the number of hooks in the entire debug hook matrix, that is the total number of hooks for all types */
+unsigned int dpcrtlmm_GetDebugHookChainCount(const unsigned int HookType); /* Counts the number of hooks installed for this type of hook */
+unsigned int dpcrtlmm_GetDebugHookMatrixCount(void); /* Counts the number of hooks in the entire debug hook matrix, that is the total number of hooks for all types */
 unsigned int dpcrtlmm_UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)); /* Remove the said hook, type of hook must be specified in order to find it */
 
 /*------------------ E N D   D E B U G   H O O K S ------------------------*/
@@ -437,12 +437,17 @@ unsigned int dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, cons
 #define dpcrtlmm_UnlockBlock(pArr, pBlock) dpcrtlmm_SetBlockLockingFlag(pArr, pBlock, (0U));
 void dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr); /* If locked, unlocks, if unlocked, locks */
 
-/* These are for switching on and off traps */
-#define dpcrtlmm_EnableTraps() dpcrtlmm__EnableTraps = '\x1'
-#define dpcrtlmm_DisableTraps() dpcrtlmm__EnableTraps = '\x0'
-#define dpcrtlmm_AreTrapsEnabled() (dpcrtlmm__EnableTraps)
+/* These are for switching on and off traps.  dpcrtlmm__EnableTraps the
+variable itself is supported for backward compatibillty only.  Internally
+in the library it is used of course but direct access by the user of the
+library is not thread safe, it is more preferable that the functions
+be used as provided. */
 
-extern unsigned char dpcrtlmm__EnableTraps; /* Modify it directly if you prefer */
+unsigned char dpcrtlmm_AreTrapsEnabled(void);
+void dpcrtlmm_DisableTraps(void);
+void dpcrtlmm_EnableTraps(void);
+
+extern unsigned char dpcrtlmm__EnableTraps; /* Obsolete */
 
 /* Statistics functions */
 unsigned long dpcrtlmm_GetBlockCount(void); /* Returns number of allocated blocks */

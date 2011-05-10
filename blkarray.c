@@ -50,8 +50,47 @@ My official site: http://daybologic.com/overlord
 #include "trap.h" /* _Trap() */
 #include "safelist.h" /* Safety list support functions */
 #include "dbghooks.h" /* For the debug hook executive */
+#include "biglock.h" /* For total library mutual exclusion */
+/*-------------------------------------------------------------------------*/
+static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray(void);
+static void dpcrtlmm_int_DestroyBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
+static unsigned int dpcrtlmm_int_IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
 /*-------------------------------------------------------------------------*/
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
+{
+  /* Thread safe wrapper for CreateBlockArray() */
+  PS_DPCRTLMM_BLOCKDESCARRAY ret;
+
+  LOCK
+  ret = dpcrtlmm_int_CreateBlockArray();
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+void dpcrtlmm_DestroyBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+{
+  /* Thread safe wrapper for DestroyBlockArray() */
+
+  LOCK
+  dpcrtlmm_int_DestroyBlockArray(PBlockArray);
+  UNLOCK
+}
+/*-------------------------------------------------------------------------*/
+unsigned int dpcrtlmm_IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+{
+  /* Thread safe wrapper for IsDefaultBlockArray() */
+
+  unsigned int ret;
+
+  LOCK
+  ret = dpcrtlmm_int_IsDefaultBlockArray(PBlockArray);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
 {
   PS_DPCRTLMM_BLOCKDESCARRAY Parray; /* Pointer for caller */
   #ifdef DPCRTLMM_LOG
@@ -110,7 +149,7 @@ PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
   return Parray; /* Give new pointer to the caller */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
+static void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
 {
   /* locals */
   unsigned int sli; /* Safety list loop processing */
@@ -188,7 +227,7 @@ void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
   return;
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
+static unsigned int dpcrtlmm_int_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
 {
   #ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
   return 0; /* Default (NULL) array does not exist */

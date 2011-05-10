@@ -38,6 +38,7 @@ for NULL */
 #include "log.h" /* LOG macro - Logging support */
 #include "safelist.h" /* Safety list support functions */
 #include "dbghooks.h" /* The debug hook support/executive */
+#include "biglock.h" /* To init / uninit the big lib lock */
 /*-------------------------------------------------------------------------*/
 /*
 Minimal stuff here please, if possible promote granularity by using other C files
@@ -54,6 +55,7 @@ unsigned char dpcrtlmm__EnableTraps = 1U;
 /*-------------------------------------------------------------------------*/
 PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
 {
+  /* No need to lock the big global lock for this, only reading readonly data. */
   if (PVerStruct)
   {
     /* Load version information into the caller's structure */
@@ -79,6 +81,9 @@ void dpcrtlmm_Startup()
     #ifdef DPCRTLMM_DEBUGHOOKS
       dpcrtlmm_int_InitDebugHookMatrix(); /* Init the debug hook matrix */
     #endif /*DPCRTLMM_DEBUGHOOKS*/
+    #ifdef DPCRTLMM_THREADS
+      dpcrtlmm_int_BigLockInit();
+    #endif /*DPCRTLMM_THREADS*/
   }
   else /* This has been done before! */
   {
@@ -108,11 +113,15 @@ void dpcrtlmm_Shutdown()
   {
     /* Cleanup of internal library data */
     _libStarted = 0U; /* The library has been shut down */
+    #ifdef DPCRTLMM_THREADS
+      dpcrtlmm_int_BigLockUninit();
+    #endif /*DPCRTLMM_THREADS*/
     #ifdef DPCRTLMM_DEBUGHOOKS
-    debugHookInfo.Success = 1U; /* Normal call to shutdown even if leaks are caught */
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
+      debugHookInfo.Success = 1U; /* Normal call to shutdown even if leaks are caught */
+      dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     TrapUnFreedArrays(); /* Output log information if memory has not been released */
+    MESSAGE("Library shutdown");
   }
   else /* This has been done before! */
   {
@@ -123,7 +132,6 @@ void dpcrtlmm_Shutdown()
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     _Trap(DPCRTLMM_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
   }
-  MESSAGE("Library shutdown");
   return;
 }
 /*-------------------------------------------------------------------------*/

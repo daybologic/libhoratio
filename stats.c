@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -27,10 +27,10 @@ My official site: http://daybologic.com/overlord
   Programmer: Overlord David Duncan Ross Palmer
   Contact: Overlord@DayboLogic.co.uk
   Created: 27th July 2000
-  Last modified: 11th Dec 2000
+  Last modified: 31st July 2001
   Library: DPCRTLMM 1.0
   Language: ANSI C (1990)
-  Revision #2
+  Revision #3
 
   11th Dec 2000 : Removed the structure that communicated between both
                   functions to carry counts of flags.  Bug fix, the
@@ -38,6 +38,8 @@ My official site: http://daybologic.com/overlord
                   didn't make it back to the caller's structure.
 
   24th May 2001 : Added dump and supported functions.
+
+  31st July 2001: Added support for big lock (thread safety).
 */
 #include <stddef.h>
 #include <stdio.h>
@@ -48,6 +50,7 @@ My official site: http://daybologic.com/overlord
 #include "build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Public library header */
 #include "intdata.h" /* Internal library data */
+#include "biglock.h" /* Mutual exclusion */
 
 static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats);
 static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray);
@@ -55,11 +58,18 @@ static void CrackAndPrintFlags(FILE* Target, unsigned char Flags);
 /*-------------------------------------------------------------------------*/
 unsigned long dpcrtlmm_GetBlockCount()
 {
-  return _blockCount;
+  unsigned long ret;
+
+  LOCK
+  ret = _blockCount;
+  UNLOCK
+
+  return ret;
 }
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats)
 {
+  LOCK
   if (PReadStats)
   {
     PReadStats->Blocks.Allocated = dpcrtlmm_GetBlockCount();
@@ -68,6 +78,7 @@ void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats)
     PReadStats->Charge.Allocated = _allocCharge;
     PReadStats->Charge.Peak = _allocPeak;
   }
+  UNLOCK
 }
 /*-------------------------------------------------------------------------*/
 static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats)
@@ -114,6 +125,7 @@ static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats)
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Dump(FILE* Target)
 {
+  LOCK
   if ( Target ) {
     unsigned int i;
 
@@ -129,6 +141,7 @@ void dpcrtlmm_Dump(FILE* Target)
     DumpOnArray(Target, &_defaultArray);
     #endif
   }
+  UNLOCK
   return;
 }
 /*-------------------------------------------------------------------------*/

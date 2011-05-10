@@ -15,15 +15,16 @@ THISFILE=Makefile.bor
 LIBTITLE=dpcrtlmm
 LIBNAME=$(LIBTITLE).lib
 # Master dependancies ALWAYS cause a rebuild
-MASTERDEP=build.h dpcrtlmm.h $(THISFILE)
+MASTERDEP=build.h dpcrtlmm.h $(THISFILE) biglock.h
 
 # Tools
 LIBRARY=tlib
 # -A : ANSI C only
 # -c : Compile with no link
 COMPILE=bcc32
-ANSI=-A -c
-CFLGS=-O   # Mad optimization, no debugging please :)
+ANSI=-A
+CFLGS=-c -DHDRSTOP -DDPCRTLMM_HDRSTOP -v   # Debugging
+LFLGS=-v
 
 # File control commands
 FILEEXISTS=if exist
@@ -32,28 +33,29 @@ COPY=copy
 PRINT=@echo
 BLANKLINE=.
 
-all:
-	make -f $(THISFILE) config
-	./config
-	make -f $(THISFILE) $(LIBNAME)
-	make -f $(THISFILE) example
+# Default build rule if nothing specified to build (build lib only)
+default : $(LIBNAME)
 
-example : example1.exe example2.exe example3.exe
+example : example1 example2 example3
+
+example1 : example1.exe
+example2 : example2.exe
+example3 : example3.exe
 
 example1.exe : $(MASTERDEP) example1.obj $(LIBNAME)
 	$(PRINT)$(BLANKLINE)
 	$(PRINT) Building example1 program
-	$(COMPILE) -eexample1.exe example1.obj $(LIBNAME)
+        $(COMPILE) $(LFLGS) -eexample1.exe example1.obj $(LIBNAME)
 
 example2.exe : $(MASTERDEP) example2.obj dpccap.obj $(LIBNAME)
 	$(PRINT)$(BLANKLINE)
 	$(PRINT) Building example2 program
-	$(COMPILE) -eexample2.exe example2.obj dpccap.obj $(LIBNAME)
+        $(COMPILE) $(LFLGS) -eexample2.exe example2.obj dpccap.obj $(LIBNAME)
 
 example3.exe : $(MASTERDEP) example3.obj $(LIBNAME)
 	$(PRINT)$(BLANKLINE)
 	$(PRINT) Building example3 program
-	$(COMPILE) -eexample3.exe example3.obj $(LIBNAME)
+        $(COMPILE) $(LFLGS) -eexample3.exe example3.obj $(LIBNAME)
 
 example1.obj : $(MASTERDEP) example1.c
 	$(COMPILE) $(ANSI) $(CFLGS) example1.c
@@ -67,7 +69,7 @@ example3.obj : $(MASTERDEP) example3.c
 dpccap.obj : $(MASTERDEP) dpccap.cpp
 	$(COMPILE) $(ANSI) $(CFLGS) dpccap.cpp
 
-$(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj
+$(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj biglock.obj
 	$(FILEEXISTS) $(LIBNAME) $(ERASE) $(LIBNAME)
 	-$(LIBRARY) $(LIBNAME) +alloc.obj
 	-$(LIBRARY) $(LIBNAME) +blkarray.obj
@@ -88,6 +90,7 @@ $(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbgh
 	-$(LIBRARY) $(LIBNAME) +getblksz.obj
 	-$(LIBRARY) $(LIBNAME) +bloclock.obj
 	-$(LIBRARY) $(LIBNAME) +bdflags.obj
+        -$(LIBRARY) $(LIBNAME) +biglock.obj
 	$(PRINT)$(BLANKLINE)
 	$(PRINT) (C)2000-2001, David Duncan Ross Palmer, Daybo Logic.
 	$(PRINT) Subject to the GNU General Public License.
@@ -144,11 +147,20 @@ iblkptr.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
 getblksz.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
 	$(COMPILE) $(ANSI) $(CFLGS) getblksz.c
 
-bloclock.obj : $(MASTERDEP)
+bloclock.obj : $(MASTERDEP) bdflags.h
 	$(COMPILE) $(ANSI) $(CFLGS) bloclock.c
 
-bdflags.obj : $(MASTERDEP) intdata.h vptrap.h iblkptr.h dbghooks.h
+bdflags.obj : $(MASTERDEP) intdata.h vptrap.h iblkptr.h dbghooks.h bdflags.h
 	$(COMPILE) $(ANSI) $(CFLGS) bdflags.c
+
+biglock.obj : $(MASTERDEP) vptrap.h iblkptr.h intdata.h biglock.h
+        $(COMPILE) $(CFLGS) biglock.c
+
+all:
+	make -f $(THISFILE) config
+	config
+	make -f $(THISFILE) $(LIBNAME)
+	make -f $(THISFILE) example
 
 clean:
 	$(FILEEXISTS) alloc.obj $(ERASE) alloc.obj
@@ -170,14 +182,10 @@ clean:
 	$(FILEEXISTS) getblksz.obj $(ERASE) getblksz.obj
 	$(FILEEXISTS) bloclock.obj $(ERASE) bloclock.obj
 	$(FILEEXISTS) bdflags.obj $(ERASE) bdflags.obj
+        $(FILEEXISTS) biglock.obj $(ERASE) biglock.obj
 	$(FILEEXISTS) $(LIBTITLE).bak $(ERASE) $(LIBTITLE).bak
 	$(FILEEXISTS) dpccap.obj $(ERASE) dpccap.obj
-	$(FILEEXISTS) example1.obj $(ERASE) example1.obj
-	$(FILEEXISTS) example2.obj $(ERASE) example2.obj
-	$(FILEEXISTS) example3.obj $(ERASE) example3.obj
-	$(FILEEXISTS) example1.tds $(ERASE) example1.tds
-	$(FILEEXISTS) example2.tds $(ERASE) example2.tds
-	$(FILEEXISTS) example3.tds $(ERASE) example3.tds
+        $(FILEEXISTS) example?.obj $(ERASE) example?.obj
 	$(FILEEXISTS) DPCRTLMM.LOG $(ERASE) DPCRTLMM.LOG
 	#Don't forget Borland's annoying tds file, probally only made
 	#When not in optimization mode (not sure though), better
@@ -198,7 +206,7 @@ clobber : clean
 config : config.exe
 
 config.exe : config.obj
-	$(COMPILE) -econfig.exe config.obj
+        $(COMPILE) $(LFLGS) -econfig.exe config.obj
 
 config.obj : config.c dpcrtlmm.h
 	$(COMPILE) $(ANSI) $(CFLGS) config.c

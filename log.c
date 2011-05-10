@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -34,6 +34,8 @@ the macro is not defined, in some compilers there must be at least one
 external definition so I chose to get rid of the contents and disable the
 warning about the unused parameter, if getting rid of the warning actually
 causes a warning on your compiler, I applogise!
+
+  - Does this apply any longer?  : DDRP
 */
 
 #include <stdio.h> /* FILE */

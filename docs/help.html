@@ -11,7 +11,7 @@
 </head>
 <body text="#FFFFFF" bgcolor="#000000" link="#FFFF00" vlink="#C0C0C0" alink="#C0FFC0">
 
-<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1.4
+<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1.5
 beta</font></u></b>
 <br><b><u><font size=+4>technical documentation</font></u></b></center>
 
@@ -58,12 +58,11 @@ use</a>
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Who"></a><b><u>1.1&nbsp; So who are Daybo Logic?</u></b>
-<br>Daybo Logic is a commercial software company that at time of writing
-does not specialize in developing libraries like this for other developers
-but is actually more of a program making company, established in 1997 we
-have been making small programs for a long time but now there are more
-in the team we have to decided to work on some very large products.&nbsp;
-Our site on the world wide web is <a href="http://www.daybologic.com">www.daybologic.com</a>
+<br>Daybo Logic is a commercial software company that develops libraries
+like this for other developers, established in 1997 we have been making
+small programs for a long time but now there are more in the team we have
+to decided to work on some very large products.&nbsp; Our site on the world
+wide web is&nbsp; <a href="http://www.daybologic.co.uk">www.daybologic.co.uk</a>
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Contact"></a><b><u>1.2&nbsp; Contacting the author</u></b>
@@ -73,7 +72,9 @@ and interested in computers since an early age.&nbsp; This product was
 a side effect of wanting to be able trap memory errors on users machines
 during beta testing phase, it was not originally designed to be released,
 it was originally too dependant on other Daybo Logic internal libraries.&nbsp;
-Mail me: <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a>
+It was then offered for download for free and a fee for the advanced features.&nbsp;
+Eventually the whole source was open sourced under the GNU General Public
+License.&nbsp; Mail me: <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a>
 <br>
 <hr WIDTH="100%">
 <br><a NAME="FAQ"></a>1.3&nbsp; FAQ - Frequently Asked Questions and common
@@ -162,10 +163,16 @@ and always assumes the machine uses little endian byte ordering.
 <br>Default, recommened.&nbsp; This make the config program perform a test
 to determine the byte order of the architecture of the host machine.
 <p>--enable-threads
-<br>This has no effect, in future releases, when DPCRTLMM supports multithreads
-safely this will become useful.
+<br>Enables multithread safety.&nbsp; Note: This does not inply support,
+DPCRTLMM can't handle threads portably for logging purposes etc.&nbsp;
+This option makes sure that DPCRTLMM is mutually exclusive, that is, if
+two threads attempt to call the library at the same time, one will succeed
+and one will have to wait until the first finishes.&nbsp; This stops internal
+corruption of DPCRTLMM's data structures but adds overhead, don't use it
+if you don't use pre-emptive threads.&nbsp; This is supported only on the
+following platforms: POSIX, Win32.
 <p>--disable-threads
-<br>Default, DPCRTLMM does not support multithreading yet.
+<br>Default, best option for most ANSI programs, saves overhead.
 <p>--enable-inline
 <br>On C99 and non-standard systems which support the keyword inline anyway,
 this enables certain speed-critical functions in DPCRTLMM to be inlined.&nbsp;
@@ -247,24 +254,21 @@ was scrapped.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Cost"></a><b><u>2.1&nbsp; How much does it cost?</u></b>
-<br>The standard version of the library costs nothing and does not expire,
-anyone may download this from <a href="http://www.daybologic.com">Daybo
-Logic's site</a> and use it.&nbsp; The professional version costs &pound;10
-and will always be updated free of charge.&nbsp; The absolutely mental
-version costs &pound;20 but it's worth it because it can be built for any
-platform anywhere, it's all written in ANSI C, if any problems happen,
-support is provided free of charge.
+<br>Nothing.&nbsp; The source is provided under the terms of the GNU General
+Public License.&nbsp; Please make sure you know your rights, especially
+where the license stands with commercial software.&nbsp; If you release
+software with this library you must release the source for the whole lot.&nbsp;&nbsp;&nbsp;
+If you would rather keep the source closed you will need to contact me
+for licensing terms.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Platforms"></a><b><u>2.2&nbsp; What platforms is the library
 available for</u></b>
-<br>The standard and professional versions of the library are generally
-built for 16-bit DOS, some of the memory models using Turbo C++ 3 and there
-is a Win32 386/Pentium build which is flat, these are built with Borland
-C++ 5.02, I will build it for Linux or FreeBSD if there is enough domand.&nbsp;
-I will build a version for Micro$oft Visual C++ 6.0 in due course.&nbsp;
-The absolutely mental version comes with source and because it complies
-to ANSI C (1990) is may be built for any platform.
+<br>The library is totally ANSI C (1990) and should now comply with C99
+too.&nbsp; I have successfully built the library on: DOS, Win32, Linux,
+FreeBSD.&nbsp; Thread support is only available for Win32 and POSIX.&nbsp;
+Warning: I have not tested the build under DOS for ages, incase of trouble
+use an earlier version from the website and send me details.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Concepts"></a><b><u>3.0&nbsp; Concepts and structures used
@@ -332,17 +336,15 @@ fails to free hald of the blocks.
 as such.&nbsp; However if you later want to speed the program up and remove
 the library read the section Getting Started, the first paragraph describes
 a hack, designing the program in the first place to use this hack is the
-only way to easily remove the library.&nbsp; Another approach might me
+only way to easily remove the library.&nbsp; Another approach might be
 to write a dummy version of the library, only doing the bare minimum, I
 may write one of these when I have nothing to do.
 <p>By default the library source is portable, it can be setup to use some
 non-ANSI features:
-<br>far pointers and precompiled headers.&nbsp; Most instructions for changes
-are in build.h, however allowing PCH pragmas has to be done with a predefinition.&nbsp;
+<br>far pointers, precompiled headers, mutexes and critical sections.&nbsp;
+Most instructions for changes are in build.h, please use the config program
+where appropriate, however allowing PCH pragmas has to be done with a predefinition.&nbsp;
 See <a href="#PCH">section 3.4</a>
-<p>I found a portabillity issue, the GNU C compiler (GCC) does not support
-the line continuation character '\' so I had to make some changes see my
-entry for 29th Aug 2000 in the history.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="8086"></a><b><u>3.3&nbsp; 8086 builds</u></b>
@@ -364,7 +366,7 @@ there are instructions in BUILD.H.
 annoyance to people I have removed all these by default, to get them back
 define DPCRTLMM_HDRSTOP.&nbsp; Note: This must be a predefine, defining
 it in build.h will be ineffective, since build.h is processed after the
-position where I want to add the #pragma.
+position where I want to add the pragma.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="History"></a><b><u>4.0&nbsp; History</u></b>
@@ -627,7 +629,7 @@ forgetting to copy from the structure back to the stats structure which
 was the bug.
 <br>Fixed bug in C++ example (example2.cpp), it an instance of Overlord::TDPCRTLMM_MemManager,
 which is illegal and probally a mistake many users will make.&nbsp; The
-real version is global and called MemManager, storage reference = dpccap.cpp.
+real version is global and called MemManager, storage reference dpccap.cpp.
 <br>Another bug found:&nbsp; Installed trap handler (which displays the
 stats again as a test) in example2.cpp, does not work in example1.c.&nbsp;
 It's unclear as to what differs at the moment.
@@ -651,6 +653,8 @@ Also I wouldn't advocate such a thing.
 <br>From now on read the ChangeLog, which will list all patches since the
 last release.&nbsp; Important postings (like the above but only if they
 are of consequence) now go to the mailing list instead.
+<p>1st August 2001 - Overlord:
+<br>Release DPCRTLMM 1.1.5b&nbsp; as source.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Plans"></a><b><u>4.1&nbsp; Plans for next version</u></b>
@@ -732,14 +736,14 @@ take one of these actions, return 0U if you do not wish for other hooks
 which follow you in the chain to be notified and called also, return 1U
 if I may call following hooks.</font>
 <br><a NAME="GetDebugHookChainCount"></a>
-<br><font color="#3366FF">unsigned dpcrtlmm_GetDebugHookChainCount(const
+<br><font color="#3366FF">unsigned int dpcrtlmm_GetDebugHookChainCount(const
 unsigned int HookType);</font>
 <br><font color="#FFFFFF">Returns the number of hooks installed for this
 hook type, it is not valid to use DPCRTLMM_HOOK_ALL for this functionalliy
 use <a href="#GetDebugHookMatrixCount">dpcrtlmm_GetDebugHookMatrixCount(
 )</a></font>
 <br><a NAME="GetDebugHookMatrixCount"></a>
-<br><font color="#3366FF">unsigned dpcrtlmm_GetDebugHookMatrixCount(void);</font>
+<br><font color="#3366FF">unsigned int dpcrtlmm_GetDebugHookMatrixCount(void);</font>
 <br>Counts the number of hooks in the entire debug hook matrix, that is
 the total number of hooks for all types, it is very unlikely that a program
 will have a practical use for this, I just thought I'd add it really, plus
@@ -1040,8 +1044,8 @@ traps, 1U = traps will be used.&nbsp; 1U is the default.&nbsp; If you have
 the absoluetely version (source) this variable is store in dpcrtlmm.c
 <br>&nbsp;
 <p>If you want to make sales enquires please contact <a href="mailto:sales@daybologic.co.uk">sales@daybologic.co.uk</a>,
-for lastest news check the <a href="http://daybologic.com/Dev/dpcrtlmm">web
-page</a> and update your documentation &amp; library regularly, remember
+for lastest news check the&nbsp; <a href="http://www.daybologic.co.uk/dev/dpcrtlmm">web
+page</a>&nbsp; and update your documentation &amp; library regularly, remember
 updates cost nothing.&nbsp; If you have an equiry of a more technical nature
 you can contact me directly at <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a>
 <center>

@@ -36,6 +36,8 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "log.h" /* Main logging support */
 #include "iblkptr.h" /* dpcrtlmm_int_IndexFromBlockPtr() */
 #include "dbghooks.h" /* Debug hook executive */
+#include "biglock.h" /* For entire library mutual exclusion */
+#include "alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
 static void OurLog(const unsigned short Severity, const char* Str);
@@ -46,8 +48,20 @@ static void OurLog(const unsigned short Severity, const char* Str);
 #endif /*OURLOG*/
 
 #define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
+{
+  void DPCRTLMM_FARDATA* ret;
+
+  LOCK
+  ret = dpcrtlmm_int_CallocEx(PBlockArray, N, NewBlockSize, File, Line);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
 {
   void DPCRTLMM_FARDATA* resultantPtr;
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -68,7 +82,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   debugHookInfo.AllocReq = (N*NewBlockSize);
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  resultantPtr = dpcrtlmm_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
+  resultantPtr = dpcrtlmm_int_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
   if (resultantPtr)
   {
     #ifdef DPCRTLMM_DEBUGHOOKS

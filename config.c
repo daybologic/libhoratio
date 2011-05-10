@@ -578,7 +578,7 @@ static void Syntax()
          "                 Unfortunately no debugging symbols are added yet.\n"
          "--force-bigendian/--force-littleendian = Not recommend, supresses byte order\n"
          "                                         auto-detection.\n"
-         "--enable-threads = Threads aren't supported yet so this does nothing.\n"
+         "--enable-threads = Enables thread safe locking support for POSIX or Windows NT.\n"
          "--enable-inline = Only try this if you know your compiler supports C99's new\n"
          "                  \'inline\' keyword.\n"
          "--enable-stderr = Makes errors report on stderr, (default=stdout)\n"

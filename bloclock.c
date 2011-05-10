@@ -26,7 +26,7 @@ My official site: http://www.daybologic.co.uk/overlord
 written by Overlord David Duncan Ross Palmer
 Copyright (C)2000 Daybo Logic, all rights reserved.
 Creation: 22nd Feb 2000
-Last modified: 21st July 2000
+Last modified: 31st July 2001
 RESPECT! */
 
 #include <stddef.h>
@@ -37,33 +37,64 @@ RESPECT! */
 
 #include "build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* The main library header */
+#include "biglock.h" /* Mutual exclusion */
+#include "bdflags.h" /* Need this to get around the lock */
+/*-------------------------------------------------------------------------*/
+static void dpcrtlmm_int_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned int NewStatus);
+static unsigned int dpcrtlmm_int_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr);
+static void dpcrtlmm_int_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr);
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned int NewStatus)
 {
-  unsigned char flags;
-
-  flags = dpcrtlmm_ModifyDescriptorFlags(PBlockArray, Ptr, NULL); /* Get current flags */
-  if (NewStatus) /* Locking? */
-    flags |= 1; /* Set lock bit */
-  else /* Unlocking? */
-    flags |= ~1; /* Clear lock bit */
-  dpcrtlmm_ModifyDescriptorFlags(PBlockArray, Ptr, &flags); /* Set the new flags */
-  return; /* That was simple enough, I can drink some water now */
+  LOCK
+  dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
+  UNLOCK
 }
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
 {
+  unsigned int ret;
+
+  LOCK
+  ret = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+void dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+{
+  LOCK
+  dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
+  UNLOCK
+}
+/*-------------------------------------------------------------------------*/
+static void dpcrtlmm_int_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned int NewStatus)
+{
   unsigned char flags;
 
-  flags = dpcrtlmm_ModifyDescriptorFlags(PBlockArray, Ptr, NULL); /* Get the flags for the descriptor */
+  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL); /* Get current flags */
+  if (NewStatus) /* Locking? */
+    flags |= 1; /* Set lock bit */
+  else /* Unlocking? */
+    flags |= ~1; /* Clear lock bit */
+  dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags); /* Set the new flags */
+  return; /* That was simple enough, I can drink some water now */
+}
+/*-------------------------------------------------------------------------*/
+static unsigned int dpcrtlmm_int_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+{
+  unsigned char flags;
+
+  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL); /* Get the flags for the descriptor */
   if ( ((flags & 1) == 1) ) /* The lock bit is set? */
     return 1U; /* Yes, the block is locked */
   return 0U; /* No, the block is not locked */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+static void dpcrtlmm_int_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
 {
-  unsigned int oldLockStat = dpcrtlmm_IsBlockLocked(PBlockArray, Ptr); /* Get current status */
-  dpcrtlmm_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat); /* Set locking state as NOT current locking state */
+  unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr); /* Get current status */
+  dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat); /* Set locking state as NOT current locking state */
 }
 /*-------------------------------------------------------------------------*/

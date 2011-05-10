@@ -1,0 +1,23 @@
+1.1.4
+-----
+overlord - Finally started keeping a ChangeLog
+overlord - Added source file and line number storage, AllocEx, CallocEx used, old functions are now macros but only work in C not C++.
+overlord - Added patch number to version function
+overlord - Added block information dumper dpcrtlmm_Dump()
+overlord - #define USING_DPCRTLMM added to make macros malloc(),realloc(),calloc() and free() use DPCRTLMM
+overlord - example3 rewritten
+overlord - Added C based autoconfigurator, build.h only adds more information to the config options now, users have no need to edit it
+overlord - Made stderr usage optional, defaults to stdout
+overlord - Bug fix: Disabling the NULL array from the configurator caused code to try to access the default array even so, used ifdefs around such code.
+NOTICE! Changes to user source might be needed, include stdio.h!
+
+1.1.5
+-----
+overlord - Problem with make all in Makefile.bor, fixed.
+overlord - Fixed bug with SafetyList_CountFree()
+overlord - Removed implict int usage in two public functions which deal with the debug hook matrix (implicit ints are illegal under C99)
+overlord - Created a big lock to make the library thread safe through mutual exclusion
+overlord - Possible minor bug in shutdown(), moved a call to MESSAGE.
+overlord - Removed an inclusion of signal.h, I cannot figure out why I was using it.
+overlord - Changed example1 & 2 slightly to avoid warnings on Borland C++
+overlord - Trap enablement functions have been made thread safe, the extern dpcrtlmm__EnableTraps is now considered obsolete.

@@ -28,6 +28,7 @@ use it with the old proprietary closed source DPCRTLMMs */
 
 #include <stdio.h> /* Required for dpcrtlmm.h since 1.1.4 */
 #include <stdlib.h> /* Old code would be using this anyway but also for atexit() */
+#include <string.h>
 #ifdef HDRSTOP
 #  pragma hdrstop  /* Precompile above headers if compiler supports it */
 #endif

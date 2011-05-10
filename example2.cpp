@@ -1,5 +1,5 @@
 /*
-    DPCRTLMM Memory Management Library example program (C)
+    DPCRTLMM Memory Management Library example program (C++)
     Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
@@ -48,7 +48,7 @@ static void* _arrptrs[64]; /* 64 * 16k = 1MB */
   using namespace Overlord;
 #endif /*!__NO_NAMESPACES__*/
 /*-------------------------------------------------------------------------*/
-int main(const int argc, const char* argv[])
+int main()
 {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
@@ -154,7 +154,8 @@ static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg)
   afterwards. */
 
   S_DPCRTLMM_STATS stats;
-  printf("------------Caution! Stats display from trap hook!-----------\n\n");
+  printf("------------Caution! Stats display from trap hook!-----------\n");
+  printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
   MemManager.GetStats(&stats);
   PrintStats(&stats);
   MemManager.Dump(stdout);

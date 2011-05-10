@@ -40,6 +40,7 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "log.h" /* LOG macro */
 #include "trap.h" /* _Trap() */
 #include "dbghooks.h" /* Debug hook executive */
+#include "biglock.h" /* For mutual exclusion */
 /*-------------------------------------------------------------------------*/
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
@@ -47,12 +48,24 @@ My official site: http://www.daybologic.co.uk/overlord
 
 #define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
 
+/* Function under the locked version */
+static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr);
+
 /* Always make sure to pass resolved arrays to these functions */
 static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int StartPos); /* Moveup following blocks descriptors in array to remove blank space.  StartPos is the item just deleted when moveup will be started from */
 static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int Amount); /* Shrink array, trap is fired on an attempt to shrink more than the current size */
 static void OurLog(const unsigned short Severity, const char* Msg);
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr)
+{
+  /* Thread safe wrapper around Free() */
+
+  LOCK
+  dpcrtlmm_int_Free(PBlockArray, Ptr);
+  UNLOCK
+}
+/*-------------------------------------------------------------------------*/
+static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr)
 {
   /* locals */
   unsigned int i; /* For the finder loop */
