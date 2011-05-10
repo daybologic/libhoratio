@@ -1,0 +1,90 @@
+GENERIC DPCRTLMM LICENSE AGREEMENT AND TERMS  -  2nd August 2000
+YOU MUST AGREE TO THIS IN ORDER TO USE MY LIBRARY
+
+(1) Using my library indicates automatically that you have accepted these
+terms, if you disagree you must delete my library BEFORE making any
+software which uses it.
+
+(2) FLAVORS: In the rest of this license I shall refer to "flavors" to the
+library, these are standard, professional and absolutely mental.
+STANDARD is the free version of the library downloadable from
+the Daybo Logic web site, FTP server or a public archive (see paragraph 3).
+The STANDARD version is feature limited and comes with no source code.
+PROFESSIONAL is the payed for fully featured version WITHOUT source code.
+ASOLUTELY MENTAL refers to the version which includes source code.
+
+(3) DISTRIBUTION: You may distribute the STANDARD flavor of the library
+to anyone who you know may be interested, you may not send unsolicited
+commercial email on behalf of Daybo Logic or David Duncan Ross Palmer.
+The STANDARD flavor may also be made available in a public archive or
+your web site, I would prefer that it is kept reasonably up to date
+however.
+The PROFESSIONAL flavor of the library may not be distributed, see
+section 3.1 for your rights with programs made with it.
+The ABSOLUTELY MENTAL flavor of the library follows the same rule as
+the PROFESSIONAL flavor, it may not be distributed, see section 4 for
+your rights to modify the source, but be aware that those changes cannot
+be distributed either.
+
+(3.1) DISTRIBUTION OF USER PROGRAMS: Programs made which use this
+library are your property, except for the compiled version of the
+library within them.  Choosing to use a seperated approach such as a
+Dynamic Link Library will not exclude this use of the library and your
+program, as a "user" of this library or derivatives of this library is
+therefore subject to this section.
+  I give you permission to distribute programs which use the STANDARD
+flavor of the library as long as there is no commercial exploiation,
+that means there may not even be a distribution fee for such software.
+Distributions of these programs which use the STANDARD flavor of the
+library may only be done through the INTERNET.  Also the programs may
+not use more than 50 blocks and/or 64 block arrays and must allow the
+library to display this message at startup:
+
+   DPCRTLMM Memory Manager freeware  Version x.xx
+   Copyright 2000 David D R Palmer, Daybo Logic, all rights reserved.
+   http://daybologic.com/Dev/dpcrtlmm
+
+If you are a registered user of the PROFESSIONAL or ABSOLUTELY MENTAL
+flavor of the library I give you permission to distribute programs which
+use the library without limitation and without royalty, BUT your program
+must offer significantly more functionally than the library itself, it
+may not be simply a wrapper intended to make the library usable by
+unregistered users.  You may not distribute the source code or the
+library file with your program.  You may not distribute a header to make
+it possible for unregistered users to use the library as a DLL, if you,
+or Daybo Logic have built the library as a DLL.
+
+(4) SOURCE CODE LICENSE (ABSOLUTELY MENTAL FLAVOR ONLY)
+If you do not have the source code for the library this section does not
+apply to you.  Provided you are a registered user of the ABSOLUTELY
+MENTAL flavor of the library you may modify the source as a neccesary
+extension to functionality.  The source is provided primarily so it may be
+rebuilt for unsupported platforms.  You may make modifcations to
+the source BUT it must still follow these rules:
+
+I want to see my copyright notice intact at the top of every source file.
+The file dpcrtlmm.c must contain the copyright string which is visible
+inside the library when dumped.
+No change must be distributed to other users of the library.
+
+Additionally, even unmodified source may not be disclosed to others, as
+a registered user of the DPCRTLMM library source you have been trusted
+to certain intellectual property of Daybo Logic.
+
+(5) DISASSEMBLY & BACKWARDS ENGINEERING (STANDARD & PROFESSIONAL
+VERSIONS ONLY)
+Disassembly which is possible with a library tool and an object
+disassembler is prohibited, you will be in violation of this agreement
+if you do this to recover assembly code.  If you want the source you
+should purchase the ABSOLUTELY MENTAL flavor, but before you do, read
+section 4 to understand your rights with the source.
+
+(6) DISCLAIMER
+Daybo Logic as an entity, or David Duncan Ross Palmer take no
+responsibility for damage to your system, this includes but is not
+limited to accidental data loss through the use or inabillity to use
+this library or physical damage to your system.
+The library is provided "as is" without warrenty for fitness for any
+particular application or purpose, I justify this because you may use
+the STANDARD flavor of the library to determine if it is suitable for
+your needs before purchase.
