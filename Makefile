@@ -1,138 +1,108 @@
 # Make file for DPCRTLMM
 # Written by Overlord David Duncan Ross Palmer
 # Overlord@DayboLogic.co.uk
-# 24th August 2000
-# Last modified 29th August 2000
+# 15th September 2000
 
-# This Makefile designed for Borland C++, you'll have to change the tools
-# at the top of the file in the variables section to use Micro$oft or Colelus
-# linker.  I have made everything easy to modify by putting it at the top
-# of the file but if you have problems, email me.
+# This Makefile designed for GNU tools, gcc GNU C compiler, GNU's make
+# not neccersarily on UNIX but that's what I'm building on.  If you have
+# Borland C++ please use Makefile.bor instead.
 
-# Paths & filenames - If this file is not called Makefile remember to
-# change the variable 'THISFILE'
+# Paths & filenames - Name of the makefile can be overridden on the command line in the form
+# make -MAKEFILE=newmakefilename
+.if !defined(MAKEFILE)
 THISFILE=Makefile
+.endif
+
 LIBTITLE=dpcrtlmm
 LIBNAME=$(LIBTITLE).lib
 # Master dependancies ALWAYS cause a rebuild
 MASTERDEP=build.h dpcrtlmm.h $(THISFILE)
+OBJECTS=alloc.o blkarray.o calloc.o free.o isbad.o stats.o dbghooks.o locktrap.o safelist.o dpcrtlmm.o log.o vptrap.o trap.o strtstop.o realloc.o intdata.o iblkptr.o getblksz.o bloclock.o bdflags.o
 
 # Tools
-LIBRARY=tlib
-# -A : ANSI C only
+LIBRARY=libtool
+LIBOPTS=--mode=link all-static version-info 1:1 release InternalSnapshot2
+# -ansi : Only accept ANSI C code
+# -pedantic : Be very fussy about ANSI related problems
 # -c : Compile with no link
-COMPILE=bcc32 -A -c
+COMPILE=gcc -c -ansi -pedantic
 
 # File control commands
 FILEEXISTS=if exist
-ERASE=erase
-PRINT=@echo
+ERASE=rm
 
-$(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj strtstop.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj
-  $(LIBRARY) $(LIBNAME) -+alloc.obj
-  $(LIBRARY) $(LIBNAME) -+blkarray.obj
-  $(LIBRARY) $(LIBNAME) -+calloc.obj
-  $(LIBRARY) $(LIBNAME) -+free.obj
-  $(LIBRARY) $(LIBNAME) -+isbad.obj
-  $(LIBRARY) $(LIBNAME) -+stats.obj
-  $(LIBRARY) $(LIBNAME) -+dbghooks.obj
-  $(LIBRARY) $(LIBNAME) -+locktrap.obj
-  $(LIBRARY) $(LIBNAME) -+safelist.obj
-  $(LIBRARY) $(LIBNAME) -+dpcrtlmm.obj
-  $(LIBRARY) $(LIBNAME) -+log.obj
-  $(LIBRARY) $(LIBNAME) -+vptrap.obj
-  $(LIBRARY) $(LIBNAME) -+trap.obj
-  $(LIBRARY) $(LIBNAME) -+strtstop.obj
-  $(LIBRARY) $(LIBNAME) -+realloc.obj
-  $(LIBRARY) $(LIBNAME) -+intdata.obj
-  $(LIBRARY) $(LIBNAME) -+iblkptr.obj
-  $(LIBRARY) $(LIBNAME) -+getblksz.obj
-  $(LIBRARY) $(LIBNAME) -+bloclock.obj
-  $(LIBRARY) $(LIBNAME) -+bdflags.obj
-  $(PRINT).
-  $(PRINT) (C)2000, Overlord DDRP, Daybo Logic.
-  $(PRINT) Please read the license agreement before proceeding
-  $(PRINT) http://daybologic.com/Dev/dpcrtlmm
+$(LIBNAME) : $(MASTERDEP) $(OBJECTS)
+	$(LIBRARY) $(LIBOPTS) -o $(LIBNAME) $(OBJECTS)
 
-alloc.obj : $(MASTERDEP) intdata.h log.h vptrap.h dbghooks.h
-  $(COMPILE) alloc.c
+alloc.o : alloc.c $(MASTERDEP) intdata.h log.h vptrap.h dbghooks.h
+	$(COMPILE) alloc.c
 
-blkarray.obj : $(MASTERDEP) intdata.h log.h trap.h safelist.h dbghooks.h
-  $(COMPILE) blkarray.c
+blkarray.o : blkarray.c $(MASTERDEP) intdata.h log.h trap.h safelist.h dbghooks.h
+	$(COMPILE) blkarray.c
 
-calloc.obj : $(MASTERDEP) intdata.h log.h iblkptr.h dbghooks.h
-  $(COMPILE) calloc.c
+calloc.o : calloc.c $(MASTERDEP) intdata.h log.h iblkptr.h dbghooks.h
+	$(COMPILE) calloc.c
 
-free.obj : $(MASTERDEP) intdata.h vptrap.h locktrap.h log.h trap.h dbghooks.h
-  $(COMPILE) free.c
+free.o : free.c $(MASTERDEP) intdata.h vptrap.h locktrap.h log.h trap.h dbghooks.h
+	$(COMPILE) free.c
 
-isbad.obj : $(MASTERDEP) intdata.h trap.h safelist.h
-  $(COMPILE) isbad.c
+isbad.o : isbad.c $(MASTERDEP) intdata.h trap.h safelist.h
+	$(COMPILE) isbad.c
 
-stats.obj : $(MASTERDEP) intdata.h
-  $(COMPILE) stats.c
+stats.o : stats.c $(MASTERDEP) intdata.h
+	$(COMPILE) stats.c
 
-dbghooks.obj : $(MASTERDEP) intdata.h log.h dbghooks.h
-  $(COMPILE) dbghooks.c
+dbghooks.o : dbghooks.c $(MASTERDEP) intdata.h log.h dbghooks.h
+	$(COMPILE) dbghooks.c
 
-locktrap.obj : $(MASTERDEP) intdata.h trap.h locktrap.h
-  $(COMPILE) locktrap.c
+locktrap.o : locktrap.c $(MASTERDEP) intdata.h trap.h locktrap.h
+	$(COMPILE) locktrap.c
 
-safelist.obj : $(MASTERDEP) intdata.h safelist.h
-  $(COMPILE) safelist.c
+safelist.o : safelist.c $(MASTERDEP) intdata.h safelist.h
+	$(COMPILE) safelist.c
 
-dpcrtlmm.obj : $(MASTERDEP)
-  $(COMPILE) dpcrtlmm.c
+dpcrtlmm.o : dpcrtlmm.c $(MASTERDEP)
+	$(COMPILE) dpcrtlmm.c
 
-log.obj : $(MASTERDEP) intdata.h log.h
-  $(COMPILE) log.c
+log.o : log.c $(MASTERDEP) intdata.h log.h
+	$(COMPILE) log.c
 
-vptrap.obj : $(MASTERDEP) intdata.h trap.h log.h safelist.h vptrap.h
-  $(COMPILE) vptrap.c
+vptrap.o : vptrap.c $(MASTERDEP) intdata.h trap.h log.h safelist.h vptrap.h
+	$(COMPILE) vptrap.c
 
-trap.obj : $(MASTERDEP) intdata.h log.h trap.h dbghooks.h
-  $(COMPILE) trap.c
+trap.o : trap.c $(MASTERDEP) intdata.h log.h trap.h dbghooks.h
+	$(COMPILE) trap.c
 
-strtstop.obj : $(MASTERDEP) intdata.h trap.h log.h safelist.h dbghooks.h
-  $(COMPILE) strtstop.c
+strtstop.o : strtstop.c $(MASTERDEP) intdata.h trap.h log.h safelist.h dbghooks.h
+	$(COMPILE) strtstop.c
 
-realloc.obj : $(MASTERDEP) intdata.h vptrap.h locktrap.h iblkptr.h dbghooks.h
-  $(COMPILE) realloc.c
+realloc.o : realloc.c $(MASTERDEP) intdata.h vptrap.h locktrap.h iblkptr.h dbghooks.h
+	$(COMPILE) realloc.c
 
-intdata.obj : $(MASTERDEP) intdata.h
-  $(COMPILE) intdata.c
+intdata.o : intdata.c $(MASTERDEP) intdata.h
+	$(COMPILE) intdata.c
 
-iblkptr.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
-  $(COMPILE) iblkptr.c
+iblkptr.o : iblkptr.c $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
+	$(COMPILE) iblkptr.c
 
-getblksz.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
-  $(COMPILE) getblksz.c
+getblksz.o : getblksz.c $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
+	$(COMPILE) getblksz.c
 
-bloclock.obj : $(MASTERDEP)
-  $(COMPILE) bloclock.c
+bloclock.o : bloclock.c $(MASTERDEP)
+	$(COMPILE) bloclock.c
 
-bdflags.obj : $(MASTERDEP) intdata.h vptrap.h iblkptr.h dbghooks.h
-  $(COMPILE) bdflags.c
+bdflags.o : bdflags.c $(MASTERDEP) intdata.h vptrap.h iblkptr.h dbghooks.h
+	$(COMPILE) bdflags.c
 
 clean:
-  $(FILEEXISTS) alloc.obj $(ERASE) alloc.obj
-  $(FILEEXISTS) blkarray.obj $(ERASE) blkarray.obj
-  $(FILEEXISTS) calloc.obj $(ERASE) calloc.obj
-  $(FILEEXISTS) free.obj $(ERASE) free.obj
-  $(FILEEXISTS) isbad.obj $(ERASE) isbad.obj
-  $(FILEEXISTS) stats.obj $(ERASE) stats.obj
-  $(FILEEXISTS) dbghooks.obj $(ERASE) dbghooks.obj
-  $(FILEEXISTS) locktrap.obj $(ERASE) locktrap.obj
-  $(FILEEXISTS) safelist.obj $(ERASE) safelist.obj
-  $(FILEEXISTS) dpcrtlmm.obj $(ERASE) dpcrtlmm.obj
-  $(FILEEXISTS) log.obj $(ERASE) log.obj
-  $(FILEEXISTS) vptrap.obj $(ERASE) vptrap.obj
-  $(FILEEXISTS) trap.obj $(ERASE) trap.obj
-  $(FILEEXISTS) strtstop.obj $(ERASE) strtstop.obj
-  $(FILEEXISTS) realloc.obj $(ERASE) realloc.obj
-  $(FILEEXISTS) intdata.obj $(ERASE) intdata.obj
-  $(FILEEXISTS) iblkptr.obj $(ERASE) iblkptr.obj
-  $(FILEEXISTS) getblksz.obj $(ERASE) getblksz.obj
-  $(FILEEXISTS) bloclock.obj $(ERASE) bloclock.obj
-  $(FILEEXISTS) bdflags.obj $(ERASE) bdflags.obj
-  $(FILEEXISTS) $(LIBTITLE).bak $(ERASE) $(LIBTITLE).bak
+	-$(ERASE) $(OBJECTS) $(LIBNAME) example.o example
+
+
+# Type make example to ceate this small example program
+
+example:
+example.o : $(MASTERDEP) example.c
+	$(COMPILE) example.c
+example : $(MASTERDEP) example.o $(LIBNAME)
+	make
+	ld -oexample $(LIBNAME) example.o
