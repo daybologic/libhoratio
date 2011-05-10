@@ -89,7 +89,7 @@ void dpcrtlmm_int_Log(const unsigned short Severity, const char* Message)
       #endif /*DPCRTLMM_LOG*/
 
       if ( Severity > DPCRTLMM_LOG_MESSAGE ) /* Anything more severe than a warning */
-        fprintf(stderr, formatMsg);
+        fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
     }
   }
   return;

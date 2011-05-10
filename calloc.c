@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 
@@ -47,7 +47,7 @@ static void OurLog(const unsigned short Severity, const char* Str);
 
 #define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize)
+void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
 {
   void DPCRTLMM_FARDATA* resultantPtr;
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -68,7 +68,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, c
   debugHookInfo.AllocReq = (N*NewBlockSize);
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  resultantPtr = dpcrtlmm_Alloc( PBlockArray, (N*NewBlockSize) ); /* Call Alloc() */
+  resultantPtr = dpcrtlmm_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
   if (resultantPtr)
   {
     #ifdef DPCRTLMM_DEBUGHOOKS
@@ -83,7 +83,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, c
     #endif /*DPCRTLMM_LOG*/
 
     /* Bug fix: I didn't realize this but the specification for for calloc()
-       requires that the new memory is zeroed. Fix DPCRTLMM Version 1.2 */
+       requires that the new memory is zeroed. Fix DPCRTLMM Version 1.1.2 or 1.1.3 */
     memset(resultantPtr, 0, N*NewBlockSize);
   }
   else

@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /* Main allocation function and block array grower
@@ -45,8 +45,6 @@ My official site: http://daybologic.com/overlord
 #include "log.h" /* Main logging support */
 #include "vptrap.h" /* _VerifyPtrs() */
 #include "dbghooks.h" /* Debug hook executive and support functions */
-
-
 /*-------------------------------------------------------------------------*/
 /* Internal functions (local) */
 
@@ -67,7 +65,7 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
 /* Shortcut for typecast */
 #define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_Alloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize)
+void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line)
 {
   /* locals */
   void DPCRTLMM_FARDATA* genBlockPtr; /* Generated block pointer */
@@ -114,6 +112,14 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Alloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, co
   /* Now the block's address can be added to the array */
   PRArr->Descriptors[PRArr->Count-1].PBase = genBlockPtr; /* Put pointer to base of block in block descriptor in the array */
   PRArr->Descriptors[PRArr->Count-1].Size = NewBlockSize; /* Save size so caller can find it out leter */
+
+  /* Version 1.1.4 changes, source file/line records */
+  PRArr->Descriptors[PRArr->Count-1].SourceLine = Line;
+  if ( File ) {
+    PRArr->Descriptors[PRArr->Count-1].SourceFile = (char*)malloc((strlen(File)+1)*sizeof(char));
+    if ( PRArr->Descriptors[PRArr->Count-1].SourceFile )
+      strcpy(PRArr->Descriptors[PRArr->Count-1].SourceFile, File);
+  }
 
   /* Update library statistics */
   dpcrtlmm_int__blockCount++;
@@ -178,6 +184,8 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
     PCurrentBlockArray->Descriptors[initi].PBase = NULL; /* No block assigned to this new descriptor yet */
     PCurrentBlockArray->Descriptors[initi].Size = (size_t)0U; /* Therefore no size either */
     PCurrentBlockArray->Descriptors[initi].Flags = 0U; /* No flags set */
+    PCurrentBlockArray->Descriptors[initi].SourceLine = 0U; /* No source line allocation */
+    PCurrentBlockArray->Descriptors[initi].SourceFile = NULL; /* No known source file */
   }
   return 1U; /* Success */
 }

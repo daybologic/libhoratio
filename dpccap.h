@@ -58,6 +58,8 @@ namespace Overlord
 
     void* Alloc(const size_t NewBlockSize);
 
+    void* Alloc(const size_t NewBlockSize, const char* File, const unsigned int Line);
+
     void Free(void* Ptr);
 
     // Only of use within a hook, see my docs for this function in DPCRTLMM, it's just the same
@@ -72,6 +74,8 @@ namespace Overlord
     void* Realloc(void* OldBlockPtr, const size_t NewSize);
 
     void* Calloc(const unsigned int N, const size_t NewBlockSize);
+
+    void* Calloc(const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
 
     void InstallTrapCallback( void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage), const unsigned int AsHook );
 
@@ -100,6 +104,8 @@ namespace Overlord
     unsigned long GetBlockCount();
 
     PS_DPCRTLMM_VERSION Ver(PS_DPCRTLMM_VERSION PVerStruct);
+
+    void Dump(FILE* Target);
   };
 
   class TDPCRTLMM_BlockArray
@@ -114,6 +120,8 @@ namespace Overlord
 
     void* Alloc(const size_t NewBlockSize); /* Allocates a block in this block array */
 
+    void* Alloc(const size_t NewBlockSize, const char* File, const unsigned int Line);
+
     void Free(void* Ptr);
 
     // dpcrtlmm should be using a constant pointer for this!
@@ -124,6 +132,8 @@ namespace Overlord
     void* Realloc(void* OldBlockPtr, const size_t NewSize);
 
     void* Calloc(const unsigned int N, const size_t NewBlockSize);
+
+    void* Calloc(const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
 
     unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags);
 

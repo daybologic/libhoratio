@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/Dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 // DPCRTLMM 1.2 compatible encapsulation object for C++
 // Add this file to your C++ project
@@ -32,6 +32,7 @@ My official site: http://daybologic.com/overlord
 // and version.
 
 #include <stddef.h> /* For NULL */
+#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP // Same as in library source
 #  pragma hdrstop
 #endif //DPCRTLMM_HDRSTOP
@@ -106,8 +107,16 @@ Overlord::
 #endif
 TDPCRTLMM_MemManager::Alloc(const size_t NewBlockSize)
 {
-  void* ptr = dpcrtlmm_Alloc(NULL, NewBlockSize);
-  return ptr;
+  return dpcrtlmm_Alloc(NULL, NewBlockSize);
+}
+//----------------------------------------------------------------------------
+void*
+#ifndef __NO_NAMESPACES__
+Overlord::
+#endif
+TDPCRTLMM_MemManager::Alloc(const size_t NewBlockSize, const char* File, const unsigned int Line)
+{
+  return dpcrtlmm_AllocEx(NULL, NewBlockSize, File, Line); 
 }
 //----------------------------------------------------------------------------
 // Don't bother shielding the library from NULLs, the library
@@ -165,6 +174,15 @@ Overlord::
 TDPCRTLMM_MemManager::Calloc(const unsigned int N, const size_t NewBlockSize)
 {
   return dpcrtlmm_Calloc(NULL, N, NewBlockSize);
+}
+//----------------------------------------------------------------------------
+void*
+#ifndef __NO_NAMESPACES__
+Overlord::
+#endif
+TDPCRTLMM_MemManager::Calloc(const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
+{
+  return dpcrtlmm_CallocEx(NULL, N, NewBlockSize, File, Line);
 }
 //----------------------------------------------------------------------------
 void
@@ -304,6 +322,15 @@ TDPCRTLMM_MemManager::Ver(PS_DPCRTLMM_VERSION PVerStruct)
   return dpcrtlmm_Ver(PVerStruct);
 } 
 //---------------------------------------------------------------------------
+void
+#ifndef __NO_NAMESPACES__
+Overlord::
+#endif
+TDPCRTLMM_MemManager::Dump(FILE* Target)
+{
+  dpcrtlmm_Dump(Target);
+}
+//---------------------------------------------------------------------------
 
 
 // Overlord::TDPCRTLMM_BlockArray
@@ -333,6 +360,15 @@ Overlord::
 TDPCRTLMM_BlockArray::Alloc(const size_t NewBlockSize)
 {
   return dpcrtlmm_Alloc(_PblockArray, NewBlockSize);
+}
+//----------------------------------------------------------------------------
+void*
+#ifndef __NO_NAMESPACES__
+Overlord::
+#endif
+TDPCRTLMM_BlockArray::Alloc(const size_t NewBlockSize, const char* File, const unsigned int Line)
+{
+  return dpcrtlmm_AllocEx(_PblockArray, NewBlockSize, File, Line);
 }
 //----------------------------------------------------------------------------
 void
@@ -378,6 +414,15 @@ Overlord::
 TDPCRTLMM_BlockArray::Calloc(const unsigned int N, const size_t NewBlockSize)
 {
   return dpcrtlmm_Calloc(_PblockArray, N, NewBlockSize);
+}
+//----------------------------------------------------------------------------
+void*
+#ifndef __NO_NaMESPACES__
+Overlord::
+#endif
+TDPCRTLMM_BlockArray::Calloc(const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
+{
+  return dpcrtlmm_CallocEx(_PblockArray, N, NewBlockSize, File, Line);
 }
 //----------------------------------------------------------------------------
 unsigned char

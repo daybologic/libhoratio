@@ -14,8 +14,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 /* Incase you're wondering why DPCRTLMM_SOURCE appears at the top of all my
 source, it's to do with build.h.  That header is for the compilation fo the
@@ -59,12 +59,13 @@ PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
     /* Load version information into the caller's structure */
     PVerStruct->Major = DPCRTLMM_VERSION_MAJOR;
     PVerStruct->Minor = DPCRTLMM_VERSION_MINOR;
+    PVerStruct->Patch = DPCRTLMM_VERSION_PATCH;
     PVerStruct->Flags = (unsigned char)0U;
     #ifdef DPCRTLMM_VERSION_TEST /* Test build? */
     PVerStruct->Flags |= 1;
     #endif /*DPCRTLMM_VERSION_TEST*/
   }
-  return NULL;
+  return PVerStruct;
 }
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Startup()
@@ -156,10 +157,12 @@ static void TrapUnFreedArrays()
         dpcrtlmm__EnableTraps = 1U; /* Traps are re-enabled */
     }
   }
+  #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
   if (_defaultArray.Count) /* Any unfreed blocks in the default ("NULL") array? */
   {
     totalBytesLeaked += TrapUnFreedBlocks(&_defaultArray);
   }
+  #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
   if (numArraysUnfreed)
   {
     sprintf(trapMsg, "%lu arrays were not freed", numArraysUnfreed);

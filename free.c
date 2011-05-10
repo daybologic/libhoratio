@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 #include <stdlib.h>
@@ -88,6 +88,8 @@ void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA
     if ( PRArr->Descriptors[i].PBase == Ptr ) /* This is the one */
     {
       DPCRTLMM_FREE( PRArr->Descriptors[i].PBase ); /* Free the block */
+      if ( PRArr->Descriptors[i].SourceFile ) /* We know the file which allocated this */
+        free(PRArr->Descriptors[i].SourceFile); /* Now we don't! */
 
       /* Update library stats */
       dpcrtlmm_int__blockCount--;
