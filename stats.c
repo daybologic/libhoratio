@@ -72,7 +72,7 @@ void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats)
   LOCK
   if (PReadStats)
   {
-    PReadStats->Blocks.Allocated = dpcrtlmm_GetBlockCount();
+    PReadStats->Blocks.Allocated = _blockCount;
     CountFlagsInUse(PReadStats); /* Loop through the entire load counting us flags */
     PReadStats->Blocks.Peak = _blockCountPeak;
     PReadStats->Charge.Allocated = _allocCharge;

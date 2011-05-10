@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -43,8 +43,7 @@ My official site: http://daybologic.com/overlord
 #include "trap.h" /* Trap support */
 #include "safelist.h" /* List of acceptable arrays */
 #include "biglock.h" /* Mutual exclusion */
-/*-------------------------------------------------------------------------*/
-static unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
+#include "isbad.h"
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {
@@ -58,14 +57,26 @@ unsigned int dpcrtlmm_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-static unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
+unsigned int dpcrtlmm_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+{
+  /* Thread safe wrapper for IsBadArrayPtr() */
+  unsigned int ret;
+
+  LOCK
+  ret = dpcrtlmm_int_IsBadArrayPtr(PBlockArray);
+  UNLOCK
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
+unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {
   /* locals */
   unsigned int i; /* List/loop control */
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
   /* Test for bad block array */
-  if ( dpcrtlmm_IsBadArrayPtr(PBlockArray) ) /* Block array bad? */
+  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* Block array bad? */
   {
     /* Fire a trap */
     char trapmsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
@@ -87,7 +98,7 @@ static unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY 
   return 1U; /* Yes, block is bad */
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsBadArrayPtr( const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
+unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
 {
   /* I've rewritten this function so that is can support NULL arrays
   and it does not matter whether PBlockArray is resolved or not */

@@ -40,14 +40,14 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
-static void OurLog(const unsigned short Severity, const char* Str);
+static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str);
 #endif /*DPCRTLMM_LOG*/
 
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
+#define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
 static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
@@ -73,7 +73,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
 
   #ifdef DPCRTLMM_LOG
   sprintf(logMsg, "Calloc() called, %u blocks of %u bytes requested, passing on to Alloc()", N, NewBlockSize);
-  OURLOG(DPCRTLMM_LOG_MESSAGE, logMsg);
+  OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
   #endif /*DPCRTLMM_LOG*/
 
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -93,7 +93,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
     #endif /*DPCRTLMM_DEBUGHOOKS*/
 
     #ifdef DPCRTLMM_LOG
-    OURLOG(DPCRTLMM_LOG_MESSAGE, "Allocation successful");
+    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation successful");
     #endif /*DPCRTLMM_LOG*/
 
     /* Bug fix: I didn't realize this but the specification for for calloc()
@@ -106,7 +106,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
     /*blockDescArray.Success = 0U;   - optimized away */
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     #ifdef DPCRTLMM_LOG
-    OURLOG(DPCRTLMM_LOG_MESSAGE, "Allocation failed");
+    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation failed");
     #endif /*DPCRTLMM_LOG*/
   }
 
@@ -117,7 +117,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
 }
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
-static void OurLog(const unsigned short Severity, const char* Str)
+static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
 {
   /* Our job is to add "Calloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
@@ -135,7 +135,7 @@ static void OurLog(const unsigned short Severity, const char* Str)
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(Severity, PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

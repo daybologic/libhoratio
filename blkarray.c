@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -30,6 +30,8 @@ My official site: http://daybologic.com/overlord
 # up each module) or the program wants to hide behind a normal allocation   #
 # function re-routed to us via a hack then only one block array exists per  #
 # per program.                                                              #
+# 24/11/2001 (DDRP): Attention, block arrays need to start supporting file/ #
+# line info soon.
 #############################################################################
 */
 
@@ -51,9 +53,9 @@ My official site: http://daybologic.com/overlord
 #include "safelist.h" /* Safety list support functions */
 #include "dbghooks.h" /* For the debug hook executive */
 #include "biglock.h" /* For total library mutual exclusion */
+#include "blkarray.h"
 /*-------------------------------------------------------------------------*/
 static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray(void);
-static void dpcrtlmm_int_DestroyBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
 static unsigned int dpcrtlmm_int_IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
 /*-------------------------------------------------------------------------*/
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
@@ -137,7 +139,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   #ifdef DPCRTLMM_LOG
   /* Safe, log progress */
   sprintf(logMsg, "CreateBlockArray() returns base 0x%p", Parray);
-  MESSAGE(logMsg);
+  MESSAGE(__FILE__, __LINE__, logMsg);
   #endif /*DPCRTLMM_LOG*/
 
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -149,7 +151,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   return Parray; /* Give new pointer to the caller */
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
+void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
 {
   /* locals */
   unsigned int sli; /* Safety list loop processing */
@@ -201,7 +203,7 @@ static void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
         _safetyList[sli] = NULL; /* Remove this array from the safety list */
         #ifdef DPCRTLMM_LOG
         sprintf(trapStr, "DestroyBlockArray(): The array at base 0x%p was destroyed", PBlockArray); /* Prepare log message */
-        MESSAGE(trapStr);
+        MESSAGE(__FILE__, __LINE__, trapStr);
         #endif /*DPCRTLMM_LOG*/
 
         #ifdef DPCRTLMM_DEBUGHOOKS

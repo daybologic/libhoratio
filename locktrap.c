@@ -40,11 +40,13 @@ trap.  Otherwise the function does not return. */
 #include "dpcrtlmm.h" /* Main library header */
 #include "intdata.h" /* Internal library header */
 #include "trap.h" /* _Trap() */
+#include "bloclock.h" /* For internal interfaces */
+#include "bdflags.h" /* For internal interface */
 #include "locktrap.h"
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_int_LockTrap(const char* FuncName, const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {
-  if (dpcrtlmm_IsBlockLocked(PBlockArray, BlockPtr)) /* Block locked? */
+  if (dpcrtlmm_int_IsBlockLocked(PBlockArray, BlockPtr)) /* Block locked? */
   {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For this trap message */
 
@@ -52,7 +54,7 @@ unsigned int dpcrtlmm_int_LockTrap(const char* FuncName, const PS_DPCRTLMM_BLOCK
             FuncName,
             PBlockArray,
             BlockPtr,
-            (unsigned short)dpcrtlmm_ModifyDescriptorFlags(PBlockArray, BlockPtr, NULL)
+            (unsigned short)dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, BlockPtr, NULL)
     );
     _Trap(DPCRTLMM_TRAP_LOCKINGVIOLATION, trapMsg); /* Execute the trap */
     return 1U; /* If the trap recovered let program go on and notify user that trap ocourred */

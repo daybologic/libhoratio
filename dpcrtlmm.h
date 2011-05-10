@@ -27,7 +27,7 @@ My official site: http://www.daybologic.co.uk/overlord
 /*
 Company (Copyright): Daybo Logic 2000
 Date of creation: 15th Feb 2000
-Last modified: 6th June 2001
+Last modified: 14th November 2001
 Programmer: Overlord David Duncan Ross Palmer, Daybo Logic.
 Email: Overlord@DayboLogic.co.uk
 File: dpcrtlmm.h
@@ -122,8 +122,13 @@ typedef struct _S_DPCRTLMM_STATS /* Statistics info for dpcrtlmm_GetStats() */
 typedef struct _S_DPCRTLMM_VERSION
 {
   unsigned char Major, Minor, Patch;
-  unsigned char Flags; /* Bit 0 is set in test builds, clear in tested safe builds, other bits have no meaning right now */
+  unsigned char Flags; /* See mnemonics below */
 } S_DPCRTLMM_VERSION, DPCRTLMM_FARDATA *PS_DPCRTLMM_VERSION;
+
+/* Version flag mnemonics (1.1.6) */
+#define DPCRTLMM_VERSION_DEBUG   (0x1)
+#define DPCRTLMM_VERSION_SPECIAL (0x2)
+#define DPCRTLMM_VERSION_PRIVATE (0x4)
 
 /*----------------------- D E B U G   H O O K S ---------------------------*/
 
@@ -343,6 +348,12 @@ this is where the library cleanup can help.  When the library was started to
 be used, the library function Startup() was used, so call Shutdown() before
 the program ends to guarentee all memory was released. */
 void dpcrtlmm_Shutdown(void);
+
+/* To test whether the library is started call this, normally use for
+conditional startup/shutdown when it is not clear whether a host program
+is already using DPCRTLMM (if you're building a library which uses
+DPCRTLMM. */
+unsigned int dpcrtlmm_IsStarted(void);
 
 /* GetBlockSize() - BlockPtr - Pass a pointer to the block
 	the size of the block is returned, a trap is fired stating

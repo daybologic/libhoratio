@@ -1,45 +1,39 @@
 /*
-    DPCRTLMM memory management library source
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
-
+    DPCRTLMM Memory Manager Library.
+    Copyright (C) 2000 Overlord David Duncan Ross Palmer, Daybo Logic.
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
 
 Contact me: Overlord@DayboLogic.co.uk
 Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
 My official site: http://www.daybologic.co.uk/overlord
 */
-#ifndef __INC_DPCRTLMM_IBLKPTR
-#define __INC_DPCRTLMM_IBLKPTR
+
+#ifndef __INC_DPCRTLMM_ISBAD_H
+#define __INC_DPCRTLMM_ISBAD_H
 /*-------------------------------------------------------------------------*/
+#ifdef __cplusplus
+  extern "C" {
+#endif /*__cplusplus*/
+
 #ifndef DPCRTLMM_SOURCE
-#  error ("iblkptr.h is for internal DPCRTLMM usage only")
+#  error ("This header is not for you")
 #endif /*DPCRTLMM_SOURCE*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif /*__cplusplus*/
-unsigned int dpcrtlmm_int_IndexFromBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
-#ifdef __cplusplus
-} /* extern "C" */
-#endif /*__cplusplus*/
+unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
+unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
 
-#ifdef __INC_DPCRTLMM_INTDATA_H /* Build from inside? */
-#  define _IndexFromBlockPtr dpcrtlmm_int_IndexFromBlockPtr /* Lazy shortcut */
-#else /* Build from outside? */
-#  error ("Clear off! This header is for internal library use")
-#endif /*__INC_DPCRTLMM_INTDATA_H*/
+#ifdef __cplusplus
+  }
+#endif /*__cplusplus*/
 /*-------------------------------------------------------------------------*/
-#endif /*__INC_DPCRTLMM_IBLKPTR*/
+#endif /*!__INC_DPCRTLMM_ISBAD_H*/

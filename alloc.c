@@ -50,7 +50,7 @@ My official site: http://www.daybologic.co.uk/overlord
 /*-------------------------------------------------------------------------*/
 /* Internal functions (local) */
 
-static void OurLog(const unsigned short Severity, const char* Message);
+static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Message);
 
 /* Grow the array by 'GrowByElems' elements, returns FALSE if
 it fails but then the original array is still valid and no
@@ -63,8 +63,14 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
+/* Do the same paranoid check for OURLOG_POS */
+#ifdef OURLOG_POS
+#  undef OURLOG_POS
+#endif /*OURLOG_POS*/
+
 /* Shortcut for typecast */
-#define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
+#define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG_POS(sev, msg) OURLOG(__FILE__, __LINE__, (sev), (msg))
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line)
 {
@@ -94,7 +100,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
 	  NewBlockSize,
 	  PBlockArray
 	  );
-  OURLOG(DPCRTLMM_LOG_MESSAGE, logMsg);
+  OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
   genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
   if (!genBlockPtr) /* Out of memory? */
@@ -104,7 +110,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
 	    NewBlockSize,
 	    PBlockArray
     );
-    OURLOG(DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
+    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
     return NULL; /* No pointer generated */
   }
 
@@ -118,7 +124,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
 	    PBlockArray
     );
     /* This could be quite critical, if the memory manager is running our of space */
-    OURLOG(DPCRTLMM_LOG_WARNING, logMsg);
+    OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
     return NULL; /* Give up */
   }
 
@@ -142,14 +148,6 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
     dpcrtlmm_int__blockCountPeak = dpcrtlmm_int__blockCount;
   if ( dpcrtlmm_int__allocCharge > dpcrtlmm_int__allocPeak )
     dpcrtlmm_int__allocPeak = dpcrtlmm_int__allocCharge;
-
-  sprintf(logMsg, "New block of %u bytes is at 0x%p, descarray (0x%p) was extended to hold a new descriptor\nAlloc() returns 0x%p\nLeaving...",
-	  NewBlockSize,
-	  genBlockPtr,
-	  PBlockArray,
-	  genBlockPtr
-  );
-  OURLOG(DPCRTLMM_LOG_MESSAGE, logMsg); /* Actually this is a bit of a library debugging commend, perhaps verbose, I could remove it */
 
   /* Call the debug hook executive */
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -179,7 +177,7 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
 
   if (!GrowByElems) /* Want to grow by nothing? */
   {
-    OURLOG(DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
+    OURLOG_POS(DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
     return 1U; /* Success, already this size, it's great when there's nothing to do isn't it, programmer's are lazy */
   }
 
@@ -203,7 +201,7 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
   return 1U; /* Success */
 }
 /*-------------------------------------------------------------------------*/
-static void OurLog(const unsigned short Severity, const char* Str)
+static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
 {
    /* Our job is to add "Alloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
@@ -221,7 +219,7 @@ static void OurLog(const unsigned short Severity, const char* Str)
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(Severity, PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

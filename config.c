@@ -45,6 +45,9 @@ static int config_hookchainsize = 32; /* How many hooks per handler, 32 by defau
 static int config_maxsafetyentries = 512; /* Allows for 512 modules by default! */
 static int config_wantfardata = 0; /* For obsolete computers in small memory models */
 static int config_nonullarray = 0; /* For backwards compatibillity, removes the NULL (default) array, default = 0 */
+static int config_maxport = 0; /* For mental portabillty at any cost! */
+static int config_private = 0; /* For marking a build for a private tree which will not be released */
+static int config_special = 0; /* For marking a specially modified or specially built library, not neccersarily private */
 
 static void Banner(void);
 static int MakeHeader(void);
@@ -62,6 +65,10 @@ static int ConfigSafetyList(FILE* FileHandle);
 static int ConfigFarData(FILE* FileHandle);
 static int ConfigNULLArray(FILE* FileHandle);
 static int ConfigLog(FILE* FileHandle);
+static int ConfigMaxPort(FILE* FileHandle);
+static int ConfigPrivate(FILE* FileHandle);
+static int ConfigSpecial(FILE* FileHandle);
+
 static void Syntax(void);
 
 int main(const int argc, const char* argv[])
@@ -138,6 +145,18 @@ int main(const int argc, const char* argv[])
       config_log = 0;
       continue;
     }
+    if ( strcmp(argv[i], "--maxport") == 0 ) {
+      config_maxport = 1;
+      continue;
+    }
+    if ( strcmp(argv[i], "--private") == 0 ) {
+      config_private = 1;
+      continue;
+    }
+    if ( strcmp(argv[i], "--special") == 0 ) {
+      config_special = 1;
+      continue;
+    }
     if ( strcmp(argv[i], "--help") == 0 ) {
       Syntax();
       return EXIT_SUCCESS;
@@ -208,7 +227,7 @@ int main(const int argc, const char* argv[])
 static void Banner()
 {
   printf("DPCRTLMM configurator (C)2001 DDRP, Daybo Logic, Overlord@DayboLogic.co.uk\n");
-  printf("Distributed under the GNU General Public License\n");
+  printf("Distributed under the GNU General Public License\n\n");
 }
 
 static int MakeHeader()
@@ -281,6 +300,21 @@ static int MakeHeader()
     return status;
   }
   status = ConfigLog(Hfile);
+  if ( !status ) {
+    fclose(Hfile);
+    return status;
+  }
+  status = ConfigMaxPort(Hfile);
+  if ( !status ) {
+    fclose(Hfile);
+    return status;
+  }
+  status = ConfigPrivate(Hfile);
+  if ( !status ) {
+    fclose(Hfile);
+    return status;
+  }
+  status = ConfigSpecial(Hfile);
   if ( !status ) {
     fclose(Hfile);
     return status;
@@ -570,6 +604,51 @@ static int ConfigLog(FILE* FileHandle)
   return 1;
 }
 
+static int ConfigMaxPort(FILE* FileHandle)
+{
+  printf("Use MaxPort to compile at any cost, anywhere? ... ");
+
+  if ( config_maxport ) {
+    printf("yes\n");
+    fprintf(FileHandle, "\n#define DPCRTLMM_MAXPORT /* Do not use anything which might not run everywhere */\n");
+  }
+  else {
+    printf("no\n");
+    fprintf(FileHandle, "\n/*#define DPCRTLMM_MAXPORT*/\n");
+  }
+  return 1;
+}
+
+static int ConfigPrivate(FILE* FileHandle)
+{
+  printf("Private tree build? ... ");
+
+  if ( config_private ) {
+    puts("yes");
+    fprintf(FileHandle, "\n#define PRIVATE /* Private tree build */\n");
+  }
+  else {
+    puts("no");
+    fprintf(FileHandle, "\n/* Not a private build */\n");
+  }
+  return 1;
+}
+
+static int ConfigSpecial(FILE* FileHandle)
+{
+  printf("Special build? ... ");
+
+  if ( config_special ) {
+    puts("yes");
+    fprintf(FileHandle, "\n#define SPECIAL /* Special build */\n");
+  }
+  else {
+    puts("no");
+    fprintf(FileHandle, "\n/* Not special but a regualr build */\n");
+  }
+  return 1;
+}
+
 static void Syntax()
 {
   printf("\nAutoconfiguration options: (defaults have been omitted)\n"
@@ -591,5 +670,8 @@ static void Syntax()
          "--disable-null-array = Restores old behaviour before the special NULL array\n"
          "                       existed.\n"
          "--disable-log = Supresses DPCRTLMM.LOG\n"
+         "--maxport = Disable anything which might not run on a games console\n"
+         "--private = Set the PRIVATE tree flag for subtrees on other projects\n"
+         "--special = Set the SPECIAL flag for specialised builds\n"
   );
 }

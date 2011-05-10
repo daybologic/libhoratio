@@ -39,6 +39,7 @@ for NULL */
 #include "safelist.h" /* Safety list support functions */
 #include "dbghooks.h" /* The debug hook support/executive */
 #include "biglock.h" /* To init / uninit the big lib lock */
+#include "blkarray.h" /* Internal interface to block arrays */
 /*-------------------------------------------------------------------------*/
 /*
 Minimal stuff here please, if possible promote granularity by using other C files
@@ -63,9 +64,15 @@ PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
     PVerStruct->Minor = DPCRTLMM_VERSION_MINOR;
     PVerStruct->Patch = DPCRTLMM_VERSION_PATCH;
     PVerStruct->Flags = (unsigned char)0U;
-    #ifdef DPCRTLMM_VERSION_TEST /* Test build? */
-    PVerStruct->Flags |= 1;
-    #endif /*DPCRTLMM_VERSION_TEST*/
+    #ifdef DEBUG
+      PVerStruct->Flags |= DPCRTLMM_VERSION_DEBUG;
+    #endif /*DEBUG*/
+    #ifdef PRIVATE
+      PVerStruct->Flags |= DPCRTLMM_VERSION_PRIVATE;
+    #endif /*PRIVATE*/
+    #ifdef SPECIAL
+      PVerStruct->Flags |= DPCRTLMM_VERSION_SPECIAL;
+    #endif /*SPECIAL*/
   }
   return PVerStruct;
 }
@@ -94,7 +101,7 @@ void dpcrtlmm_Startup()
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     _Trap(DPCRTLMM_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
   }
-  MESSAGE("Library started");
+  MESSAGE(NULL, 0, "Library started");
   return;
 }
 /*-------------------------------------------------------------------------*/
@@ -121,7 +128,7 @@ void dpcrtlmm_Shutdown()
       dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     TrapUnFreedArrays(); /* Output log information if memory has not been released */
-    MESSAGE("Library shutdown");
+    MESSAGE(NULL, 0, "Library shutdown");
   }
   else /* This has been done before! */
   {
@@ -133,6 +140,11 @@ void dpcrtlmm_Shutdown()
     _Trap(DPCRTLMM_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
   }
   return;
+}
+/*-------------------------------------------------------------------------*/
+unsigned int dpcrtlmm_IsStarted()
+{
+  return _libStarted;
 }
 /*-------------------------------------------------------------------------*/
 static void TrapUnFreedArrays()
@@ -160,7 +172,7 @@ static void TrapUnFreedArrays()
       /* The specified array must be automatically released */
       oldTrapEnablement = dpcrtlmm__EnableTraps; /* Save old enablement */
       dpcrtlmm__EnableTraps = 0U; /* Traps are supressed */
-      dpcrtlmm_DestroyBlockArray(_safetyList[sli]); /* Automatic garbage collection */
+      dpcrtlmm_int_DestroyBlockArray(_safetyList[sli]); /* Automatic garbage collection */
       if (oldTrapEnablement) /* Did traps used to be enabled? */
         dpcrtlmm__EnableTraps = 1U; /* Traps are re-enabled */
     }
@@ -213,7 +225,7 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
                 PArr,
                 PArr->Descriptors[0].Size
         );
-        MESSAGE(trapMsg);
+        MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
         totalLeakage += PArr->Descriptors[0].Size; /* Add size of this block to the total leakage value */
         dpcrtlmm_Free(PArr, PArr->Descriptors[0].PBase); /* Automatically collect the garbage */
       }

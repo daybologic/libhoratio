@@ -39,6 +39,7 @@ Last mod: 31st July 2001
 #include "vptrap.h" /* _VerifyPtrs() */
 #include "iblkptr.h" /* IndexFromBlockPtr() */
 #include "biglock.h" /* Library mutual exclusion */
+#include "isbad.h" /* Internal interface to block testers */
 /*-------------------------------------------------------------------------*/
 static size_t dpcrtlmm_int_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* BlockPtr);
 /*-------------------------------------------------------------------------*/
@@ -58,7 +59,7 @@ static size_t dpcrtlmm_int_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   /* First test pointers */
   _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
 
-  if (dpcrtlmm_IsBadBlockPtr(PBlockArray, BlockPtr)) /* Block pointer is invalid? */
+  if (dpcrtlmm_int_IsBadBlockPtr(PBlockArray, BlockPtr)) /* Block pointer is invalid? */
   {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1];
 

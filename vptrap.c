@@ -46,6 +46,7 @@ Last mod: 28th July 2000
 #include "trap.h" /* _Trap() */
 #include "log.h" /* LOG macro */
 #include "safelist.h" /* Safety list support functions */
+#include "isbad.h" /* Internal interface to isbad checkers */
 #include "vptrap.h"
 
 /* Functions only we can see */
@@ -66,7 +67,7 @@ static void TrapOnBadBlockArray(const char* FuncName, const PS_DPCRTLMM_BLOCKDES
   const char* cTrapMsg0 = ": The array base ptr 0x%p was not found in the internal safety list";
   char* dynMsg; /* Dynamically allocated message string */
 
-  if ( !dpcrtlmm_IsBadArrayPtr(PBlockArray) )
+  if ( !dpcrtlmm_int_IsBadArrayPtr(PBlockArray) )
     return;
 
   /* The array base is bad */
@@ -86,7 +87,7 @@ static void TrapOnBadBlockArray(const char* FuncName, const PS_DPCRTLMM_BLOCKDES
 /*-------------------------------------------------------------------------*/
 static void TrapOnBadBlockPtr(const char* FuncName, const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {
-  if ( dpcrtlmm_IsBadArrayPtr(PBlockArray) ) /* The pointer to the array is invalid */
+  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* The pointer to the array is invalid */
   {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For trap message */
     char blankStr[] = "";
@@ -108,7 +109,7 @@ static void TrapOnBadBlockPtr(const char* FuncName, const PS_DPCRTLMM_BLOCKDESCA
 
   /* The array is a valid and acceptable pointer, pass on to IsBadBlockPtr()
   and if it's bad fire a trap. */
-  if ( dpcrtlmm_IsBadBlockPtr( PBlockArray, BlockPtr ) ) /* Is bad block pointer? */
+  if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) /* Is bad block pointer? */
   {
     char trapMsg[128]; /* Space for trap message */
     char* PusedFuncName;

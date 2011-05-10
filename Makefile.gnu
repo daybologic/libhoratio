@@ -87,7 +87,7 @@ $(LIBNAME) : $(MASTERDEP) $(OBJECTS)
 alloc$(OBJ) : alloc$(C) $(MASTERDEP) intdata$(H) log$(H) vptrap$(H) dbghooks$(H) alloc$(H)
 	$(COMPILE) alloc$(C)
 
-blkarray$(OBJ) : blkarray$(C) $(MASTERDEP) intdata$(H) log$(H) trap$(H) safelist$(H) dbghooks$(H)
+blkarray$(OBJ) : blkarray$(C) $(MASTERDEP) intdata$(H) log$(H) trap$(H) safelist$(H) dbghooks$(H) biglock$(H) blkarray$(H)
 	$(COMPILE) blkarray$(C)
 
 calloc$(OBJ) : calloc$(C) alloc$(H) $(MASTERDEP) intdata$(H) log$(H) iblkptr$(H) dbghooks$(H)
@@ -111,7 +111,7 @@ locktrap$(OBJ) : locktrap$(C) $(MASTERDEP) intdata$(H) trap$(H) locktrap$(H)
 safelist$(OBJ) : safelist$(C) $(MASTERDEP) intdata$(H) safelist$(H)
 	$(COMPILE) safelist$(C)
 
-dpcrtlmm$(OBJ) : dpcrtlmm$(C) $(MASTERDEP) intdata$(H) trap$(H) log$(H) safelist$(H) dbghooks$(H) biglock$(H)
+dpcrtlmm$(OBJ) : dpcrtlmm$(C) $(MASTERDEP) intdata$(H) trap$(H) log$(H) safelist$(H) dbghooks$(H) biglock$(H) blkarray$(H)
 	$(COMPILE) dpcrtlmm$(C)
 
 log$(OBJ) : log$(C) $(MASTERDEP) intdata$(H) log$(H)
@@ -142,7 +142,7 @@ bdflags$(OBJ) : bdflags$(C) $(MASTERDEP) intdata$(H) vptrap$(H) iblkptr$(H) dbgh
 	$(COMPILE) bdflags$(C)
 
 biglock$(OBJ) : biglock$(C) biglock$(H) $(MASTERDEP)
-	$(COMPILE) -D__UNIX__ biglock$(C)
+	$(COMPILE) -D_RECURSIVE -D__UNIX__ biglock$(C)
 
 clean : confclean
 	@-$(ERASE) $(OBJECTS)

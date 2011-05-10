@@ -97,8 +97,6 @@ non-ANSI, configure with config --far */
 /* Library version information can be set here */
 #define DPCRTLMM_VERSION_MAJOR (1)
 #define DPCRTLMM_VERSION_MINOR (1)
-#define DPCRTLMM_VERSION_PATCH (5)
-/* Comment out the next line before releasing the library, this is part of the version */
-#define DPCRTLMM_VERSION_TEST
+#define DPCRTLMM_VERSION_PATCH (6)
 /*-------------------------------------------------------------------------*/
 #endif /*!__INC_DPCRTLMM_BUILD_H*/

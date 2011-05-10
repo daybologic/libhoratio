@@ -41,12 +41,14 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "trap.h" /* _Trap() */
 #include "dbghooks.h" /* Debug hook executive */
 #include "biglock.h" /* For mutual exclusion */
+#include "isbad.h" /* Internal interface to block testers */
 /*-------------------------------------------------------------------------*/
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
+#define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG_POS(sev, msg) OURLOG(__FILE__, __LINE__, (sev), (msg))
 
 /* Function under the locked version */
 static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr);
@@ -54,7 +56,7 @@ static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRT
 /* Always make sure to pass resolved arrays to these functions */
 static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int StartPos); /* Moveup following blocks descriptors in array to remove blank space.  StartPos is the item just deleted when moveup will be started from */
 static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int Amount); /* Shrink array, trap is fired on an attempt to shrink more than the current size */
-static void OurLog(const unsigned short Severity, const char* Msg);
+static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Msg);
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr)
 {
@@ -76,14 +78,9 @@ static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRT
   S_DPCRTLMM_DEBUGHOOKINFO debugTrapInfo;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  #ifdef DPCRTLMM_LOG
-  sprintf(trapMsg, "Attempting release of block 0x%p from array 0x%p . . .", Ptr, PBlockArray);
-  OURLOG(DPCRTLMM_LOG_MESSAGE, trapMsg);
-  #endif /*DPCRTLMM_LOG*/
-
   PRArr = _ResolveArrayPtr(PBlockArray); /* Resolve incase block array is NULL */
   _VerifyPtrs(funcName, PBlockArray, NULL); /* Don't check if bad block in this trap, use own trap... */
-  if ( dpcrtlmm_IsBadBlockPtr(PBlockArray, Ptr) ) /* Block pointer not valid? */
+  if ( dpcrtlmm_int_IsBadBlockPtr(PBlockArray, Ptr) ) /* Block pointer not valid? */
   {
     sprintf(trapMsg, "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: 0x%p, block 0x%p",
 	    PBlockArray,
@@ -100,6 +97,11 @@ static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRT
   {
     if ( PRArr->Descriptors[i].PBase == Ptr ) /* This is the one */
     {
+      #ifdef DPCRTLMM_LOG
+      sprintf(trapMsg, "Freeing block %p from array %p", PRArr->Descriptors[i].PBase, PRArr);
+      OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
+      #endif /*DPCRTLMM_LOG*/
+
       DPCRTLMM_FREE( PRArr->Descriptors[i].PBase ); /* Free the block */
       if ( PRArr->Descriptors[i].SourceFile ) /* We know the file which allocated this */
         free(PRArr->Descriptors[i].SourceFile); /* Now we don't! */
@@ -174,7 +176,7 @@ static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsig
     char logMsg[MAX_TRAP_STRING_LENGTH+1];
 
     sprintf(logMsg, "Attempt to ShrinkBlockArray(0x%p) by nothing, ignored (internal DPCRTLMM error)", PBlockArray);
-    OURLOG(DPCRTLMM_LOG_WARNING, logMsg);
+    OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
     return;
   }
   if (!PBlockArray->Count)
@@ -211,7 +213,7 @@ static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsig
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void OurLog(const unsigned short Severity, const char* Str)
+static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
 {
   /* Our job is to add "Free() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
@@ -229,7 +231,7 @@ static void OurLog(const unsigned short Severity, const char* Str)
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(Severity, PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

@@ -26,7 +26,7 @@ My official site: http://www.daybologic.co.uk/overlord
   Programmer: Overlord DDRP (Overlord@DayboLogic.co.uk)
   Library: DPCRTLMM
   Date: Feb 2000
-  Last modified: 1st August 2001
+  Last modified: 21st August 2001
 */
 
 #include <string.h>
@@ -139,7 +139,7 @@ static void dpcrtlmm_int_InstallTrapCallback( void(*NewTrapCallback)(const unsig
 	    (AsHook) ? ("hook") : ("handler"),
 	    NewTrapCallback
     );
-    MESSAGE(logStr);
+    MESSAGE(NULL, 0, logStr);
     #endif /*DPCRTLMM_LOG*/
 
     #ifdef DPCRTLMM_DEBUGHOOKS
@@ -177,7 +177,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(void(*CurrentCallback)(const unsigne
 
     /* Log the removal */
     sprintf(logStr, "RemoveTrapCallback(): %s removed.", (_userTrapCallbackIsHook) ? ("Hook") : ("Handler"));
-    MESSAGE(logStr);
+    MESSAGE(NULL, 0, logStr);
 
     #ifdef DPCRTLMM_DEBUGHOOKS
     debugHookInfo.Success = 1U;

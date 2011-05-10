@@ -26,6 +26,7 @@ My official site: http://www.daybologic.co.uk/overlord
 #############################################################################
 # Memory usage logging support for DPCRTLMM                                 #
 # Only included if DPCRTLMM_LOG is defined in build.h                       #
+# (Superseeded by --enable-log configuration option)                        #
 #############################################################################
 
 You might be wondering why I did not just get rid of the whole function if
@@ -33,7 +34,7 @@ DPCRTLMM_LOG was not defined.  Trouble is, even though it's never called if
 the macro is not defined, in some compilers there must be at least one
 external definition so I chose to get rid of the contents and disable the
 warning about the unused parameter, if getting rid of the warning actually
-causes a warning on your compiler, I applogise!
+causes a warning on your compiler, I aplogise!
 
   - Does this apply any longer?  : DDRP
 */
@@ -49,10 +50,13 @@ causes a warning on your compiler, I applogise!
 #include "intdata.h" /* Internal library header */
 #include "log.h"
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_int_Log(const unsigned short Severity, const char* Message)
+#define STRNCAT_FIXEDBUFF(buff, sourcestring) \
+          strncat((buff), (sourcestring), (sizeof((buff))/sizeof((buff)[0])-1))
+/*-------------------------------------------------------------------------*/
+void dpcrtlmm_int_Log(const char* File, const unsigned int Line, const unsigned short Severity, const char* Message)
 {
-  /* Yest this way of handling messages is very messy, don't hit me */
-  char formatMsg[MAX_TRAP_STRING_LENGTH + 1024]; /* String + safety for addons, note that mallocations should not be made here */
+  char formatMsg[MAX_TRAP_STRING_LENGTH + 1024 + 512]; /* String + safety for addons, note that mallocations should not be made here */
+  char number[64]; /* Paranoia length number to string conversion */
 
   #ifdef DPCRTLMM_LOG
   FILE* HLogFile; /* Handle for log file */
@@ -62,22 +66,30 @@ void dpcrtlmm_int_Log(const unsigned short Severity, const char* Message)
   {
     if (Message[0])
     {
-      strcpy(formatMsg, "DPCRTLMM: \"");
+      formatMsg[0] = '\0'; /* so strncat() knows where to begin */
+      STRNCAT_FIXEDBUFF(formatMsg, "DPCRTLMM: \"");
+      if ( File ) sprintf(number, "%u", Line); /* Convert line number to string */
       switch ( Severity )
       {
         case DPCRTLMM_LOG_WARNING :
 	{
-          strcat(formatMsg, "Warning! ");
+          STRNCAT_FIXEDBUFF(formatMsg, "Warning! ");
           break;
         }
         case DPCRTLMM_LOG_ERROR :
 	{
-          strcat(formatMsg, "FATAL ERROR! ");
+          STRNCAT_FIXEDBUFF(formatMsg, "FATAL ERROR! ");
           break;
         }
       }
-      strcat(formatMsg, Message);
-      strcat(formatMsg, "\"\n"); /* Close quotes and end line */
+      if ( File ) {
+        STRNCAT_FIXEDBUFF(formatMsg, File);
+        STRNCAT_FIXEDBUFF(formatMsg, ", L");
+        STRNCAT_FIXEDBUFF(formatMsg, number);
+        STRNCAT_FIXEDBUFF(formatMsg, ": ");
+      }
+      STRNCAT_FIXEDBUFF(formatMsg, Message);
+      STRNCAT_FIXEDBUFF(formatMsg, "\"\n"); /* Close quotes and end line */
 
       /* Determine what do do with the message based on it's severity */
       /* Everything goes in the log... */

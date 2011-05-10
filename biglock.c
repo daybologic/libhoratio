@@ -28,6 +28,10 @@ My official site: http://www.daybologic.co.uk/overlord
 #  error ("Not currently a supported platform, build as config --disable-threads")
 #endif
 
+#if ( defined(__UNIX__) && defined(DPCRTLMM_MAXPORT) )
+#  pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for DPCRTLMM access from user callbacks.  Callbacks have the power to deadlock a thread"
+#endif
+
 #ifdef __WIN32__
 #  include <windows.h>
 #else
@@ -42,13 +46,21 @@ My official site: http://www.daybologic.co.uk/overlord
 #  define DestroyMutant(x) DeleteCriticalSection((x))
 #else
 #  define Mutant pthread_mutex_t
-#  define InitialiseMutant(x) pthread_mutex_init((x), NULL)
+#  ifdef DPCRTLMM_MAXPORT /* Maxport, use POSIX fast mutex */
+#    define InitialiseMutant(x) pthread_mutex_init((x), NULL)
+#  else /* Use nonportable extension */
+#    define InitialiseMutant(x) InitNPMutant((x))
+#  endif /*DPCRTLMM_MAXPORT*/
 #  define LockMutant(x) pthread_mutex_lock((x))
 #  define UnlockMutant(x) pthread_mutex_unlock((x))
 #  define DestroyMutant(x) pthread_mutex_destroy((x))
 #endif /*__WIN32__*/
 /*--------------------------------------------------------------------------*/
 static Mutant _bigLock;
+
+#if ( defined(__UNIX__) && !defined(DPCRTLMM_MAXPORT) )
+void InitNPMutant(pthread_mutex_t* PMutant);
+#endif /*__UNIX__ && !DPCRTLMM_MAXPORT*/
 /*--------------------------------------------------------------------------*/
 void dpcrtlmm_int_BigLockInit()
 {
@@ -67,6 +79,18 @@ void dpcrtlmm_int_BigLock(int LockState)
   else
     UnlockMutant(&_bigLock);
 }
+/*--------------------------------------------------------------------------*/
+#if ( defined(__UNIX__) && !defined(DPCRTLMM_MAXPORT) )
+void InitNPMutant(pthread_mutex_t* PMutant)
+{
+  pthread_mutexattr_t attributes;
+
+  pthread_mutexattr_init(&attributes);
+  pthread_mutexattr_setkind_np(&attributes, PTHREAD_MUTEX_RECURSIVE_NP);
+  pthread_mutex_init(PMutant, &attributes);
+  pthread_mutexattr_destroy(&attributes);
+}
+#endif /*__UNIX__ && !DPCRTLMM_MAXPORT*/
 /*--------------------------------------------------------------------------*/
 #else /* Threads not required */
   char dpcrtlmm_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */

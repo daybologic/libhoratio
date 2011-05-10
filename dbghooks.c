@@ -227,9 +227,8 @@ static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(void)
   unsigned total = 0U;
 
   for ( i = 0U; i <= DPCRTLMM_DEBUGHOOK_LASTHOOK; i++ ) /* All types of hooks */
-  {
-    total += dpcrtlmm_GetDebugHookChainCount(i); /* Add chain contents to total for all chains */
-  }
+    total += dpcrtlmm_int_GetDebugHookChainCount(i); /* Add chain contents to total for all chains */
+
   return total; /* Give total to caller */
 }
 /*-------------------------------------------------------------------------*/

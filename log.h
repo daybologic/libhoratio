@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
+My official site: http://www.daybologic.co.uk/overlord
 */
 #ifndef __INC_DPCRTLMM_LOG_H
 #define __INC_DPCRTLMM_LOG_H
@@ -41,17 +41,17 @@ messages, warnings and errors */
 #define DPCRTLMM_LOG_ERROR (2U) /* Same as error for now */
 /* Even though error and warning do the same thing they display different messages in the log and on stderr */
 
-void dpcrtlmm_int_Log(const unsigned short Severity, const char* Message); /* Write the message to the log (or do nothing if the log macro is undefined */
+void dpcrtlmm_int_Log(const char* File, const unsigned int Line, const unsigned short Severity, const char* Message); /* Write the message to the log (or do nothing if the log macro is undefined */
 
 /* To make my life easier... but MESSAGE is only defined for logging builds */
 #ifdef DPCRTLMM_LOG
-#  define MESSAGE(msg) dpcrtlmm_int_Log((const unsigned short)DPCRTLMM_LOG_MESSAGE, (msg))
+#  define MESSAGE(sfn, sfl, msg) dpcrtlmm_int_Log((sfn), (sfl), (const unsigned short)DPCRTLMM_LOG_MESSAGE, (msg))
 #else /* Non logging build */
 #  define MESSAGE(msg) /* Do nothing with it */
 #endif /*DPCRTLMM_LOG*/
 
-#define WARNING(msg) dpcrtlmm_int_Log((const unsigned short)DPCRTLMM_LOG_WARNING, (msg))
-#define ERROR(msg) dpcrtlmm_int_Log((const unsigned short)DPCRTLMM_LOG_ERROR, (msg))
+#define WARNING(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_WARNING, (msg))
+#define ERROR(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_ERROR, (msg))
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -11,7 +11,7 @@
 </head>
 <body text="#FFFFFF" bgcolor="#000000" link="#FFFF00" vlink="#C0C0C0" alink="#C0FFC0">
 
-<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1.5
+<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1.6
 beta</font></u></b>
 <br><b><u><font size=+4>technical documentation</font></u></b></center>
 
@@ -230,6 +230,30 @@ for USING_DPCRTLMNM emulation of malloc( ) and the like.
 <br>Default, DPCRTLMM.LOG records all activity of every library call.
 <p>--disable-log
 <br>Turns off the log, for release modes.
+<p>--maxport
+<br>The old dream of portabilly revisited.&nbsp; Anything which even might
+breach ANSI is stripped, even file access is disabled incase of game console
+porting.&nbsp; Don't use this unless you find it helps you port, otherwise
+useful features will be removed.&nbsp; Currently on UNIX pthreads, maxport
+disables use of the recursive mutex used by the big lock, the recursion
+is useful but not that portable.&nbsp; Warnings will be displayed by the
+build progress of anything like this which might cause trouble.
+<p>--private
+<br>Set this flag in your higher level makefiles' calls to config, it will
+mark DPCRTLMM as 'private' so that it is known that the resulting library
+was built for a specific tree and should not be reused by other projects.&nbsp;
+The idea being that a program could perform a test build and test for the
+flag.&nbsp; If the flag is set refuse to use the library as it was built
+for a private tree and not a shared repository.&nbsp; Recommendations:
+Use this if you use any non-standard flags and do not want others to rely
+on binaries which might be for a specific tree.&nbsp; Otherwise, share
+the library in a directory where all parts of the development team can
+use it without having to compile DPCRTLMM and do not set private.&nbsp;
+The 'private' flag is returned with the version information.
+<p>--special
+<br>Set this flag if DPCRTLMM has been modified/tampered with for a special
+cause and must not be used by others.&nbsp; The 'special' flag is returned
+with the version information.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Flavors"></a><b><u>2.0&nbsp; What are the flavors of the library?</u></b>
@@ -254,12 +278,12 @@ was scrapped.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Cost"></a><b><u>2.1&nbsp; How much does it cost?</u></b>
-<br>Nothing.&nbsp; The source is provided under the terms of the GNU General
-Public License.&nbsp; Please make sure you know your rights, especially
-where the license stands with commercial software.&nbsp; If you release
-software with this library you must release the source for the whole lot.&nbsp;&nbsp;&nbsp;
-If you would rather keep the source closed you will need to contact me
-for licensing terms.
+<br>Nothing, unless you wish to send me beer.&nbsp; The source is provided
+under the terms of the GNU General Public License.&nbsp; Please make sure
+you know your rights, especially where the license stands with commercial
+software.&nbsp; If you release software with this library you must release
+the source for the whole lot.&nbsp;&nbsp;&nbsp; If you would rather keep
+the source closed you will need to contact me for licensing terms.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Platforms"></a><b><u>2.2&nbsp; What platforms is the library
@@ -268,7 +292,9 @@ available for</u></b>
 too.&nbsp; I have successfully built the library on: DOS, Win32, Linux,
 FreeBSD.&nbsp; Thread support is only available for Win32 and POSIX.&nbsp;
 Warning: I have not tested the build under DOS for ages, incase of trouble
-use an earlier version from the website and send me details.
+use an earlier version from the website and send me details.&nbsp; I'm
+not sad enough to have any DOS machines, perhaps I shall set one up at
+some time.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Concepts"></a><b><u>3.0&nbsp; Concepts and structures used
@@ -694,6 +720,7 @@ nosey.
 <br><a href="#IsDefaultBlockArray">dpcrtlmm_IsDefaultBlockArray( )</a>
 <br><a href="#Startup">dpcrtlmm_Startup( )</a>
 <br><a href="#Shutdown">dpcrtlmm_Shutdown( )</a>
+<br><a href="#IsStarted">dpcrtlmm_IsStarted( )</a>
 <br><a href="#GetBlockSize">dpcrtlmm_GetBlockSize( )</a>
 <br><a href="#IsBasBlockPtr">dpcrtlmm_IsBadBlockPtr( )</a>
 <br><a href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr( )</a>
@@ -842,6 +869,14 @@ contain GlobalStartup( ) which, as it's first function installs GlobalShutdown(
 ) with atext( ) and then inits all the libraries, I then call GlobalStartup(
 ) as the first thing to do in main( ) and then I don't have to worry about
 it.
+<br><a NAME="IsStarted"></a>
+<br><font color="#3333FF">unsigned int dpcrtlmm_IsStarted(void);</font>
+<br>Version: 1.1.6
+<br>This function returns nonzero if DPCRTLMM has been started.&nbsp; It
+is intended to be used by libraries which rely on DPCRTLMM for debugging
+memory but need to know whether the program which uses it already uses
+DPCRTLMM in oder to know when to start or stop the library or to leave
+well alone.
 <br><a NAME="GetBlockSize"></a>
 <br><font color="#3366FF">size_t dpcrtlmm_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, void* BlockPtr);</font>
