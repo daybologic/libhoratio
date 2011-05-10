@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /* Module for handling memory block lock flags,
@@ -30,7 +30,6 @@ Last modified: 21st July 2000
 RESPECT! */
 
 #include <stddef.h>
-#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/

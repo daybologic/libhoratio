@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /* This internal data is shared between the internal and user-called
@@ -39,7 +39,6 @@ Modifications
 		 Added dpcrtlmm_int__allocCharge & dpcrtlmm_int__allocPeak
 */
 #include <stddef.h>
-#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/

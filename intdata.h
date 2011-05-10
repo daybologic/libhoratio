@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #ifndef __INC_DPCRTLMM_INTDATA_H
 #define __INC_DPCRTLMM_INTDATA_H
@@ -40,11 +40,7 @@ extern unsigned int dpcrtlmm_int__userTrapCallbackIsHook; /* Indication as to th
 #ifdef DPCRTLMM_DEBUGHOOKS
 extern unsigned int (*dpcrtlmm_int__debugHookMatrix[DPCRTLMM_HOOKCHAIN_SIZE][DPCRTLMM_DEBUGHOOK_LASTHOOK+1])(PS_DPCRTLMM_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length) */
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-#ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
-# define dpcrtlmm_int__ResolveArrayPtr(p) (p)  /* Resolving not neccersary, it's for the NULL array */
-#else
-# define dpcrtlmm_int__ResolveArrayPtr(p) ((p) ? (p) : (&dpcrtlmm_int__defaultArray))
-#endif /*DPCRTLMM_NONULL_BLOCKDESCARRAY*/
+#define dpcrtlmm_int__ResolveArrayPtr(p) ((p) ? (p) : (&dpcrtlmm_int__defaultArray))
 /* Statistics */
 extern unsigned long dpcrtlmm_int__blockCount;
 extern unsigned long dpcrtlmm_int__blockCountPeak;

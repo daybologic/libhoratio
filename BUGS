@@ -1,7 +1,0 @@
-This file is not a history of bugs but a list line by line of known
-issues in this release.  If you wish to comment on any of them or have
-patches to fix any of them please email Overlord@DayboLogic.co.uk
-(maintainer).
-
-----------------------------------------------------------------------
-File/line reports in C++ report owner as dpccap.cpp not the true owner.

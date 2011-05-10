@@ -1,6 +1,6 @@
 /*
-    DPCRTLMM Memory Manager transparent usage example.
-    Copyright (C) 2000 Overlord David Duncan Ross Palmer, Daybo Logic.
+    DPCRTLMM Memory Management Library example program (C)
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -14,134 +14,74 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 
-/* This example should help end users to understand how to convert
-old code (code which has not been built around the intimate DPCRTLMM
-functions) into code which can use DPCRTLMM without being changed too
-much.  Remember to use the define in every module.  The define
-requires DPCRTLMM version 1.1.4, the NULL array used by the macros
-secretly only came about in DPCRTLMM 1.1.0 (I think), so don't try to
-use it with the old proprietary closed source DPCRTLMMs */
+/* This little example attempts to overload the library with too much work,
+   it creates as much stress & load as it can */
 
-#include <stdio.h> /* Required for dpcrtlmm.h since 1.1.4 */
-#include <stdlib.h> /* Old code would be using this anyway but also for atexit() */
-#ifdef HDRSTOP
-#  pragma hdrstop  /* Precompile above headers if compiler supports it */
-#endif
+#include <stdio.h>
+#include <stdlib.h>
+#ifdef DPCRTLMM_HDRSTOP
+#  pragma hdrstop
+#endif /*DPCRTLMM_HDRSTOP*/
 
-#define USING_DPCRTLMM /* Activate malloc() etc as macros */
 #include "dpcrtlmm.h"
-
-/* main() belongs to DPCRTLMM, rename your old main my_main or something */
-static int my_main(const int argc, const char* argv[]);
-static void handler(char** vector); /* Incase we can't allocate enough */
-static void PrintInfo(char** vector); /* Prints strings from vector */
-static void InitVector(char** vector, unsigned int n);
-static void Title(void); /* Just displays some information */
-static void Version(void); /* Prints the library version */
-
-int main(const int argc, const char* argv[])
+#define DPCRTLMM_SOURCE /* Hack to allow library violation */
+/* The following are library violations! */
+#include "build.h"
+#include "intdata.h"
+#include "safelist.h"
+/*--------------------------------------------------------------------------*/
+static void Title(void);
+/*--------------------------------------------------------------------------*/
+int main()
 {
-  if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
-    printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
-    return EXIT_FAILURE;
-  }
+  S_DPCRTLMM_BLOCKDESCARRAY* currentArrayPtr;
+  unsigned int count = 0U;
+
+  Title();
+
   dpcrtlmm_Startup();
-  return my_main(argc, argv);
-}
+  do
+  {
+    currentArrayPtr = dpcrtlmm_CreateBlockArray();
+    if (currentArrayPtr)
+    {
+      size_t j;
+      void* blocks[5];
 
-static int my_main(const int argc, const char* argv[])
-{
-  /* This is where the original program will begin, here's a
-  quick example of your program, allocating all the arguments,
-  using the dpcrtlmm_Dump and then releasing them. */
+      count++;
+      for ( j = 0; j < sizeof(blocks)/sizeof(blocks[0]); j++ )
+      {
+        blocks[j] = dpcrtlmm_Alloc(currentArrayPtr, (1024*1024)*5);
+        if (!blocks[j])
+          printf("Allocation %u failed block iterator: %u\n", j, count);
+      }
 
-  int i;
-  char** copyvector; /* NULL terminated vector version of arguments */
-
-  Title(); /* Nothing important */
-  copyvector = (char**)malloc( (argc + 1) * sizeof(char*) ); /* Allocate vector (array of pointers) */
-  if ( !copyvector ) {
-    handler(copyvector);
-    return EXIT_FAILURE;
-  }
-  InitVector(copyvector, argc + 1);
-
-  for ( i = 0; i < argc; i++ ) {
-    if ( argv[i] ) {
-      if ( argv[i][0] ) { /* Not blank string */
-        copyvector[i] = (char*)malloc( sizeof(char) * (strlen(argv[i]) + 1) );
-        if ( !copyvector[i] ) {
-          handler(copyvector);
-          return EXIT_FAILURE;
-        }
-        strcpy(copyvector[i], argv[i]);
+      for ( j = 0; j < sizeof(blocks)/sizeof(blocks[0]); j++ )
+      {
+        if (blocks[j])
+          dpcrtlmm_Free(currentArrayPtr, blocks[j]);
       }
     }
+  } while (currentArrayPtr);
+  printf("Created %u arrays\n", count);
+
+  printf("Cleaning up (library violation)\n");
+  for ( count = 0U; count < sizeof(dpcrtlmm_int__safetyList)/sizeof(dpcrtlmm_int__safetyList[0]); count++ )
+  {
+    if ( dpcrtlmm_int__safetyList[count] )
+      dpcrtlmm_DestroyBlockArray(dpcrtlmm_int__safetyList[count]);
   }
-  PrintInfo(copyvector);
-#ifndef NDEBUG
-  dpcrtlmm_Dump(stdout);
-#endif /*!NDEBUG*/
-  handler(copyvector); /* normal clean up */
+
+  dpcrtlmm_Shutdown();
   return EXIT_SUCCESS;
 }
-
-static void handler(char** vector)
-{
-  /* Vector cleaner */
-  if ( vector ) {
-    size_t i = 0U;
-
-    while ( vector[i] ) {
-      free(vector[i]);
-      vector[i++] = NULL;
-    }
-    free(vector);
-  }
-}
-
-static void PrintInfo(char** vector)
-{
-  if ( vector ) {
-    size_t i = 0U;
-
-    while ( vector[i] ) {
-      printf("Vector element %u : \"%s\"\n", i, vector[i]);
-      i++;
-    }
-  }
-}
-
-static void InitVector(char** vector, unsigned int n)
-{
-  if ( vector ) {
-    unsigned int i;
-
-    for ( i = 0U; i < n; i++ )
-      vector[i] = NULL;
-  }
-}
-
+/*--------------------------------------------------------------------------*/
 static void Title()
 {
-  printf("DPCRTLMM ");
-  Version();
-  printf(" example program.  The command line is copied into a NULL\n");
-  printf("terminated vector type as much as you like and see the owners\n");
-  printf("of the individual addresses.\n\n");
-}
-
-static void Version()
-{
-  S_DPCRTLMM_VERSION version;
-
-  dpcrtlmm_Ver(&version); /* Call lib to get version */
-  printf("%u.%u.%u", version.Major, version.Minor, version.Patch);
-  if ( (version.Flags & 1) == 1 ) /* Test build bit set? */
-    fputc((int)'b', stdout); /* b for beta of library */
-  return;
+  printf("DPCRTLMM!  Stress!  Have a caution\n");
+  printf("----------------------------------\n\n");
 }

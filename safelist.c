@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -30,11 +30,10 @@ My official site: http://www.daybologic.co.uk/overlord
 # library use.                                                              #
 #############################################################################
 Written: May 3rd 2000
-Last modified 10th June 2001 by OverlordDDRP - just code cleanups
+Last modified 21st July 2000 by OverlordDDRP
 */
 
 #include <stddef.h>
-#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -46,10 +45,14 @@ Last modified 10th June 2001 by OverlordDDRP - just code cleanups
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase)
 {
-  if (ArrayBase) {
-    unsigned int sli; /* Used for processing of the list */
-    for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
-      if (_safetyList[sli] == ArrayBase) return 1U;
+  if (ArrayBase)
+  {
+	 unsigned int sli; /* Used for processing of the list */
+
+	 for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
+	 {
+		if (_safetyList[sli] == ArrayBase) return 1U;
+	 }
   }
   return 0U; /* Not present or bad params */
 }
@@ -59,7 +62,7 @@ void dpcrtlmm_SafetyList_Init()
   unsigned int i;
 
   for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) /* All possible entries in list */
-    _safetyList[i] = NULL; /* Zero pointer */
+	 _safetyList[i] = NULL; /* Zero pointer */
 
   return;
 }
@@ -68,9 +71,10 @@ unsigned int dpcrtlmm_SafetyList_CountUsed()
 {
   unsigned int sli, slc = 0U;
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
-    if (_safetyList[sli]) /* Valid pointer in list? */
-      slc++; /* Increment count */
+  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
+  {
+	 if (_safetyList[sli]) /* Valid pointer in list? */
+		slc++; /* Increment count */
   }
 
   return slc; /* Give count to caller */
@@ -84,11 +88,13 @@ unsigned int dpcrtlmm_SafetyList_AddBase(const PS_DPCRTLMM_BLOCKDESCARRAY PArray
   it would cause false leaks later. */
   if (SafetyList_IsArrayPtrPresent(PArrayBase)) return 0U;
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
-    if (!_safetyList[sli]) { /* First free entry? */
-      _safetyList[sli] = PArrayBase; /* Store base in safety list */
-      return 1U; /* Done, abort loop, report success */
-    }
+  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
+  {
+	 if (!_safetyList[sli]) /* First free entry? */
+	 {
+		_safetyList[sli] = PArrayBase; /* Store base in safety list */
+		return 1U; /* Done, abort loop, report success */
+	 }
   }
 
   return 0U; /* Damn, no free entries */
@@ -108,11 +114,13 @@ unsigned int dpcrtlmm_SafetyList_RemoveBase(const PS_DPCRTLMM_BLOCKDESCARRAY PAr
   if it is not found the function fails, it is is the entry is set to NULL,
   which is an effective removal. */
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
-    if (_safetyList[sli] == PArrayBase) { /* Found the base in question? */
-      _safetyList[sli] = NULL; /* Mark entry in list as unused */
-      return 1U; /* Successfully removed */
-    }
+  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
+  {
+	 if (_safetyList[sli] == PArrayBase) /* Found the base in question? */
+	 {
+		_safetyList[sli] = NULL; /* Mark entry in list as unused */
+		return 1U; /* Successfully removed */
+	 }
   }
   return 0U; /* Looks like the item was not present */
 }

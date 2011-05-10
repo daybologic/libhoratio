@@ -1,5 +1,5 @@
 /*
-    DPCRTLMM Memory Manager Library reallocator
+    DPCRTLMM Memory Manage Library reallocator
     Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /* Created: UNKNOWN
@@ -33,7 +33,6 @@ My official site: http://www.daybologic.co.uk/overlord
                  that realloc() will allocate when called with NULL, newSize
 */
 #include <stdlib.h>
-#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/

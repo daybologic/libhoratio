@@ -3,7 +3,7 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="Author" content="Overlord David Duncan Ross Palmer">
-   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.17-0.6.1 ppc) [Netscape]">
+   <meta name="GENERATOR" content="Mozilla/4.6 [en-gb]C-CCK-MCD NetscapeOnline.co.uk  (Win95; I) [Netscape]">
    <meta name="Classification" content="programming,libraries">
    <meta name="Description" content="Technical documentation for DPCRTLMM library">
    <meta name="KeyWords" content="DPCRTLMM,Memory manager,Daybo Logic">
@@ -11,8 +11,8 @@
 </head>
 <body text="#FFFFFF" bgcolor="#000000" link="#FFFF00" vlink="#C0C0C0" alink="#C0FFC0">
 
-<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1.4
-beta</font></u></b>
+<center><b><u><font size=+4>Daybo Logic's C memory management library V1.2
+debug</font></u></b>
 <br><b><u><font size=+4>technical documentation</font></u></b></center>
 
 <p><b><u>Contents</u></b>
@@ -20,8 +20,6 @@ beta</font></u></b>
 <br><a href="#Who">1.1&nbsp; So who are Daybo Logic?</a>
 <br><a href="#Contact">1.2&nbsp; Contacting the author</a>
 <br><a href="#FAQ">1.3&nbsp; FAQ</a>
-<br><a href="#Compile">1.4&nbsp; Compiling the sources</a>
-<br><a href="#Config">1.5&nbsp; Configuration options explained</a>
 <p><a href="#Flavors">2.0&nbsp; What are the flavors of the library</a>
 <br><a href="#Cost">2.1&nbsp; How much does it cost?</a>
 <br><a href="#Platforms">2.2&nbsp; What platforms is the library available
@@ -78,7 +76,7 @@ Mail me: <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a
 <hr WIDTH="100%">
 <br><a NAME="FAQ"></a>1.3&nbsp; FAQ - Frequently Asked Questions and common
 compile problems
-<p>Q - Error DPCRTLMM.H (line number): Declaration missing ;
+<p>Q - Error DPCRTLMM.H 53: Declaration missing ;
 <br>A - This stumped me for a while too, this can only happen if you have
 the source and selected to have explict far data for the 16-bit tiny, small
 or medium memory models.&nbsp; The answer is one of these solutions I hope,
@@ -98,131 +96,17 @@ have any you will have to give up and turn off this option, make sure you
 don't have strict ANSI C compliance on or anything first but if all else
 fails just compile for the compact/large or huge model.
 <p>Q - I want to compile for 16-bit x86 processors in small memory models
-<br>A - The library only functions correctly with far data, run config
-with --far to enable explicit support.
+<br>A - The library only functions correctly with far data, edit BUILD.H
+and define the macro DPCRTLMM_WANTFARDATA
 <p>Q - My program is crashing unexpectedly when I try to free blocks of
 memory (or earlier while using the memory manager)
 <br>A - The most common problem is forgetting to start the library, if
 this is not the case and you are compiling for a 16-bit processor it may
 be that the data is near.&nbsp; The easiest way to avoid this is to rebuild
 in a memory model which has far data.&nbsp; There is another way in this
-version of the library, Cinfigure with --far.&nbsp; If this does not solve
+version of the library, open BUILD.H and find the commented out macro called
+DPCRTLMM_WANTFARDATA and remove the comments.&nbsp; If this does not solve
 the problem please send me all details possible.
-<br>
-<hr WIDTH="100%">
-<br><a NAME="Compile"></a><b><u>1.4&nbsp; Compiling the sources</u></b>
-<br>The way in which the library is built can change from time to time,
-last minute notes may be added in a file called README if these do not
-work.&nbsp; The Makefiles which have been tested are called Makefile.xxx,
-where 'xxx' is a string which is compiler dependent, such as bor for Borland
-C and gnu for GNU C.&nbsp; In the following examples substitute 'xxx' for
-the string which matches your compiler.&nbsp; GNU C is the default, just
-make with no -f etc will suffice.
-<p>To make the library with no bother whatsoever type:
-<br>make -f Makefile.xxx all
-<p>To make the library&nbsp; with custom configuration options (only available
-in previous versions to 1.1.4 by editing build.h) type:
-<br>make -f Makefile.xxx config
-<br>config --help (on Win32)
-<br>or ./config --help on UNIX
-<br>Then run config with the options you want from the ones listed.&nbsp;
-See <a href="#Config">section 1.5</a> for more information about the options.
-<br>Then type:
-<br>make -f Makefile.xxx
-<br>make -f Makefile.xxx example
-<br>if you want the example programs built too.&nbsp; That should be it.&nbsp;
-Any makefiles for other compilers which work in the same way would be appreciated.&nbsp;
-Manual building is neccersary on unsupported systems.&nbsp; Reading the
-makefiles may help that quest.
-<br>
-<hr WIDTH="100%">
-<br><a NAME="Config"></a><b><u>1.5&nbsp; Configuration options explained</u></b>
-<br>config --help displays some help but if you're still stuck, these options
-should reveal some more detail and history.
-<p>--enable-debug
-<br>This option defines DEBUG, it means extra debugging code is added to
-DPCRTLMM for when I am debugging it, it does not add any extra information
-for debugging your programs, only to my code.&nbsp; This could cause the
-library to abort on assert() traps and such.&nbsp; If you want to help
-submit problems with DPCRTLMM, make sure it's built with --enable-debug.&nbsp;
-This will also add symbolic debug information to DPCRTLMM but it doesn't
-in 1.1.4.
-<p>--disable-debug
-<br>This is the default, DPCRTLMM is in production mode and will try to
-ignore any internal problems but will still offer full information about
-host programs.&nbsp; Unfortunately it does not yet support stripping of
-symbol tables.
-<p>--force-bigendian
-<br>This is not recommened, it supresses endian detection code in the configurator
-and always assumes the machine uses big endian byte ordering.
-<p>--force-littleendian
-<br>This is not recommened, it supresses endian detection code in the configurator
-and always assumes the machine uses little endian byte ordering.
-<p>--auto-endian
-<br>Default, recommened.&nbsp; This make the config program perform a test
-to determine the byte order of the architecture of the host machine.
-<p>--enable-threads
-<br>This has no effect, in future releases, when DPCRTLMM supports multithreads
-safely this will become useful.
-<p>--disable-threads
-<br>Default, DPCRTLMM does not support multithreading yet.
-<p>--enable-inline
-<br>On C99 and non-standard systems which support the keyword inline anyway,
-this enables certain speed-critical functions in DPCRTLMM to be inlined.&nbsp;
-Using it on other systems would just cause a compile time error.
-<p>--disable-inline
-<br>Default, no inline functions are used except macros.&nbsp; The keyword
-inline is disallowed.&nbsp; Internal code uses the macro _INLINE to make
-sure it does not try to use inline functions when disallowed by config.
-<p>--enable-stderr
-<br>Error traffic will be printed onto stderr, a stream which can't be
-redirected at the command line and so some people find it annoying.
-<p>--disable-stderr
-<br>Default, error traffic destined for stderr will instead go to stdout
-and may be redirected to file output etc.
-<p>--hook-chain-size:nnnn
-<br>The default hook chain size is 32.&nbsp; In DPCRTLMM before it was
-Open Sourced advanced debug hooks were only allowed in payed for versions.&nbsp;
-to get rid of them set this to zero.&nbsp; Otherwise a debug matrix is
-used, a matrix of chains of hooks.&nbsp; Callers may install hooks into
-the matrix, up to nnnn hook per hooktype.&nbsp; For example, if monitoring
-allocation requests, only 32 (by default) hooks may be installed for the
-allocation type of hook.&nbsp; If one does not plan to use this feature,
-set this to zero to avoid space wastage.
-<p>--safety-list-size:nnnn
-<br>The default is 512.&nbsp; When creating new block arrays, each address
-of a block array is stored in an internal "safety list".&nbsp; It's a fixed
-size array determined here.&nbsp; It may not be zero but may be in the
-future.&nbsp; I recommend a new block array per module, so if the program
-contains 512 modules this is fine, otherwise adjust accordingly to save
-space or provide more space.
-<p>--far
-<br>For tiny, small and compact memory models in 16-bit segmented systems
-ONLY.&nbsp; This makes sure pointers are not truncated between callers
-in modules using near pointers and the DPCRTLMM library in other modules
-using near pointers.&nbsp; This ensures the DPCRTLMM library explictly
-uses fr pointers and the host program's code knows it.&nbsp; It has not
-been tested for a while since by 386 went into the loft.&nbsp; I will test
-it more before the 1.2.0 release to make sure everything is still in working
-order.&nbsp; Far pointers are non-ANSI, therefore, if this doesn't work,
-editing build.h might be neccersary, see the <a href="#FAQ">FAQ</a>.
-<p>--near
-<br>By default, should be fine for medium, large, huge and flat 32-bit
-memory models.
-<p>--disable-null-array
-<br>When I created the new NULL (default) array so that calls could be
-made to <a href="#Alloc">dpcrtlmm_Alloc( )</a> and other functions without
-specifying a block array, I realised that existing code might be broken
-if it accidently failured to created a new block array and then used it.&nbsp;
-Therefore I have always kept up an effort to make sure that the new NULL
-array could be ignored and cause the same errors as before.
-<p>--enable-null-array
-<br>By default, my great NULL (default) array is available, this is required
-for USING_DPCRTLMNM emulation of malloc( ) and the like.
-<p>--enable-log
-<br>Default, DPCRTLMM.LOG records all activity of every library call.
-<p>--disable-log
-<br>Turns off the log, for release modes.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Flavors"></a><b><u>2.0&nbsp; What are the flavors of the library?</u></b>
@@ -237,13 +121,10 @@ the others.
 calls for allocations / deallocations etc. so that the programmer's own
 code can view this information before allowing it to be passed on to another
 hook, or stopping it.
-<p>Absolutely mental version - Everything mentioned above plus larger size
-hook chains and double sized maximum safety list.&nbsp; All source and
-debug builds supplied so these items could be modified even further, far
-past madness, it's mental.
-<p>Open Source version - Supersedes all other versions, as DPCRTLMM was
-Open Sourced under the GNU General Public License.&nbsp; Proprietary license
-was scrapped.
+<p>Absolutely mental version - Everything mentioned above plus laerger
+size hook chains and double sized maximum safety list.&nbsp; All source
+and debug builds supplied so these items could be modified even further,
+far past madness, it's mental.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Cost"></a><b><u>2.1&nbsp; How much does it cost?</u></b>
@@ -310,11 +191,14 @@ is the primary structure for producing a leak report.
 <hr WIDTH="100%">
 <br><a NAME="Starting"></a><b><u>3.1&nbsp; Getting started</u></b>
 <br>If you already have a program to convert to use the library I suggest
-this.&nbsp; Download at least version 1.1.4 and define USING_DPCRTLMM before
-including dpcrtlmm.h in each module.&nbsp; This makes malloc( ) etc., your
-normal calls, call DPCRTLMM instead.&nbsp; Also, since the library should
-be started and shutdown correctly, I recommend code similar to example3
-as a typical transparent usage program.
+this.&nbsp; Make yourself a set of dummy wrappers called mm_alloc()&nbsp;
+mm_free() etc.&nbsp; Then add some defines to make alloc call them.&nbsp;
+In the wrappers module create on global block descriptor array and then
+add to it using the library when the functions get called.&nbsp; This is
+the most portable approach because the main part of the program does not
+know it is using the library, however all special features such as getting
+the size of a block of memory locking blocks of memory and having multiple
+arrays of blocks will be lost.
 <p>If you are writing a new program use the library from the start, add
 a block descriptor array structure to the main module at file level, then
 in main call the library startup routine, create the array then allocate
@@ -647,10 +531,6 @@ Be clear about my meaning of resetting the library in a session by starting
 it up and shutting it down.&nbsp; I'm not sure everything would be cleared,
 indeed at the moment it probally wouldn't be and I will fix this later.&nbsp;
 Also I wouldn't advocate such a thing.
-<p>7th June 2001 - Overlord:
-<br>From now on read the ChangeLog, which will list all patches since the
-last release.&nbsp; Important postings (like the above but only if they
-are of consequence) now go to the mailing list instead.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Plans"></a><b><u>4.1&nbsp; Plans for next version</u></b>
@@ -711,7 +591,6 @@ nosey.
 <br><a href="#GetStats">dpcrtlmm_GetStats( )</a>
 <br><a href="#GetBlockCount">dpcrtlmm_GetBlockCount( )</a>
 <br><a href="#Ver">dpcrtlmm_Ver( )</a>
-<br><a href="#Dump">dpcrtlmm_Dump( )</a>
 <p>External variables
 <br><a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>
 <br>
@@ -1020,13 +899,6 @@ I don't go mad, looping through all the arrays looking for blocks!
 PVerStruct);</font>
 <br>Returns library version info, the caller supplies the structure and
 I return them the same structure, passing NULL does nothing.
-<br><a NAME="Dump"></a>
-<br><font color="#3333FF">void dpcrtlmm_Dump(FILE* Target);</font>
-<br>Dumps a listing of all allocated blocks of memory which are currently
-managed by DPCRTLMM. Target may be any stream which allows writing, for
-example stdout, stderr or a writable file. The output may be used for knowing
-what state memory is in at any time without having to wait until a trap
-for a leak dump.
 <br><a NAME="_EnableTraps"></a>
 <br><font color="#3333FF">extern unsigned char dpcrtlmm__EnableTraps;</font>
 <br>This can be used to disable/enable traps, while it is off no trap will
@@ -1045,9 +917,13 @@ page</a> and update your documentation &amp; library regularly, remember
 updates cost nothing.&nbsp; If you have an equiry of a more technical nature
 you can contact me directly at <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a>
 <center>
-<p><font color="#FF0000"><font size=-2>(C)Copyright 2000-2001 David Duncan
-Ross Palmer, Daybo Logic. The library may only be used in accordence with
-the GPL license, which should be supplied.</font></font></center>
+<p><font color="#FF0000"><font size=-2>(C)Copyright 2000 Overlord David
+Duncan Ross Palmer, Daybo Logic.&nbsp; This copyright will be defended
+to th maximum extent of applicable law.&nbsp; The source is only released
+for rebuilding or user modifcation purposes for necersary extensions to
+functionaility.&nbsp; Modified version resale by purchasers or people who
+have obtained a registered copy through other means is a copyright violation
+if if we discover such activity do not assume we will not sue.</font></font></center>
 
 </body>
 </html>

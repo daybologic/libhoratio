@@ -34,7 +34,6 @@ Last modified by Overlord David Duncan Ross Palmer on 21st July 2000
 
 #include <assert.h>
 #include <stddef.h>
-#include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/

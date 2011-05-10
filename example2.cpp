@@ -142,7 +142,7 @@ static void PrintVersion()
 
   printf("Gathering library version info...");
   dpcrtlmm_Ver(&ver);
-  printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
+  printf("Version: %u.%u", ver.Major, ver.Minor);
   if ((ver.Flags) & 1) printf("b"); /* BETA */
   printf("\n");
 }
@@ -157,7 +157,6 @@ static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg)
   printf("------------Caution! Stats display from trap hook!-----------\n\n");
   MemManager.GetStats(&stats);
   PrintStats(&stats);
-  MemManager.Dump(stdout);
   /* What could I have done with the trap message?  Sorry for the warning,
   hey it's only a test */
   return;

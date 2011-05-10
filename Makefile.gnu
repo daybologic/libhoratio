@@ -1,7 +1,7 @@
 # Make file for DPCRTLMM
 # Written by Overlord David Duncan Ross Palmer
 # Overlord@DayboLogic.co.uk
-# 10th June 2001
+# 15th September 2000
 
 # This Makefile designed for GNU tools, gcc GNU C compiler, GNU's make
 # not neccersarily on UNIX but that's what I'm building on.  If you have
@@ -15,12 +15,11 @@
 # make example1 builds the C example program only
 # make example2 builds the C++ example program only 
 # make example3 builds the C-stress test program only
-# make clean deletes all files created by the build
-# make clobber is supported for backwards compatibillty only
+# make clean deletes all temporary binaries used to create the library
+# make clobber deletes target binaries (example programs and library).
 # make test builds all and then clobbers, it's for me to test the build before
 #      distribution only.
 # make all creates library and example programs
-# make config creates the configuration program
 
 # Tools
 LIBRARY=ar
@@ -38,8 +37,7 @@ LINK_CPP=g++ -g $(ANSI)
 RANLIB=ranlib $(LIBNAME)
 
 # File control commands
-ERASE=rm -f -v
-COPY=cp -v
+ERASE=rm -f
 
 # File names and extensions
 OBJ=.o
@@ -52,7 +50,7 @@ THISFILE=Makefile.gnu
 LIBTITLE=dpcrtlmm
 LIBNAME=lib$(LIBTITLE).a
 # Master dependancies ALWAYS cause a rebuild
-MASTERDEP=build$(H) dpcrtlmm$(H) $(THISFILE) config$(H)
+MASTERDEP=build$(H) dpcrtlmm$(H) $(THISFILE)
 OBJECTS=alloc$(OBJ) blkarray$(OBJ) calloc$(OBJ) free$(OBJ) isbad$(OBJ) stats$(OBJ) dbghooks$(OBJ) locktrap$(OBJ) safelist$(OBJ) dpcrtlmm$(OBJ) log$(OBJ) vptrap$(OBJ) trap$(OBJ) realloc$(OBJ) intdata$(OBJ) iblkptr$(OBJ) getblksz$(OBJ) bloclock$(OBJ) bdflags$(OBJ)
 LOGFILE=DPCRTLMM.LOG
 COREDUMPS=example1.core example2.core example3.core core
@@ -143,16 +141,16 @@ bdflags$(OBJ) : bdflags$(C) $(MASTERDEP) intdata$(H) vptrap$(H) iblkptr$(H) dbgh
 critical$(OBJ) : critical$(C) $(MASTERDEP) critical$(H)
 	$(COMPILE) critical$(C)
 
-clean : confclean
+clean:
 	@-$(ERASE) $(OBJECTS)
 	@-$(ERASE) $(LOGFILE) $(COREDUMPS) $(BACKUPS)
 	@-$(ERASE) example1$(OBJ) example2$(OBJ) example3$(OBJ)
 	@-$(ERASE) dpccap$(OBJ)
-	@-$(ERASE) example1 example2 example3
-	@-$(ERASE) $(LIBNAME)
 
-# Supported for backwards compatibillity
-clobber : clean
+# Destroy everything including final executables and library
+clobber: clean
+	@-$(ERASE) $(LIBNAME)
+	@-$(ERASE) example1 example2 example3
 
 
 example : example1 example2 example3  #Type make -f Makefile.gnu example to make all examples
@@ -185,26 +183,9 @@ example3$(OBJ) : $(MASTERDEP) example3$(C) intdata$(H) safelist$(H)
 	$(COMPILE) example3$(C)
 
 
-all:
-	make -f $(THISFILE) config
-	./config
-	make -f $(THISFILE) $(LIBNAME)
-	make -f $(THISFILE) example
+all : $(LIBNAME) example
 
 test : # Maintainer thing only
 	make -f $(THISFILE) clobber
 	make -f $(THISFILE) all
 	make -f $(THISFILE) clobber
-
-
-# This section is for the configurator program
-
-config : config$(OBJ)
-	$(LINK) -o config config$(OBJ)
-
-config$(OBJ) : config$(C) dpcrtlmm$(H)
-	$(COMPILE) config$(C)
-
-confclean:
-	@-$(ERASE) config config$(OBJ) config$(H)
-	@$(COPY) config$(H).default config$(H)

@@ -18,15 +18,15 @@
 
 
 Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
   Programmer: Overlord DDRP (Overlord@DayboLogic.co.uk)
   Library: DPCRTLMM
   Date: Feb 2000
-  Last modified: 10th June 2001
+  Last modified: 2nd August 2000
 */
 
 #include <signal.h>
@@ -180,7 +180,7 @@ signed char dpcrtlmm_GetTrapCallbackInfo()
 /*-------------------------------------------------------------------------*/
 static void DefHandler(const char* TrapMsg)
 {
-  fprintf(DPCRTLMM_DEV_ERROR, TrapMsg); /* Output trap's message on the standard error stream */
+  fprintf(stderr, TrapMsg); /* Output trap's message on the standard error stream */
   abort();
 }
 /*-------------------------------------------------------------------------*/
