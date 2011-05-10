@@ -1,25 +1,39 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM configuration at build time file
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 /*
 The build header is designed to localize settings for the build of the
-library, everybody has permission to change the build header.  The build
-header is only available in absolutely mental versions of the library
-because it is not intended to be included in the program which uses the
-library.  It is only used to build the library.
+library, everybody has permission to change the build header.  It's
+intended to help the library build by keeping settings.  It's not intended
+for inclusion in user programs.
 
 When officially released the build header was written by Overlord David
 Duncan Ross Palmer from Daybo Logic.  It is only modified by end users
 of the library who have purchased the absolutely mental version of the
 library. - 24th Feb 2000 : 10:04
+
+When re-released as version 1.2 on GPL a lot of settings for different pay-
+for version of the library were taken out.
 
 Overlord@DayboLogic.co.uk
 
@@ -37,6 +51,8 @@ Overlord@DayboLogic.co.uk
 21st July 2000 - Overlord added check for DPCRTLMM_SOURCE to try to stop users
 		 making the mistake of including this in their programs.
 25th July 2000 - Overlord added DPCRTLMM_STDBLOCKLIMIT for free versions
+17th Nov 2000 - Overlord stripped all stuff to do with limiting and pricing
+                and the like in preparation for GPL release.
 */
 
 #ifndef __INC_DPCRTLMM_BUILD_H
@@ -50,35 +66,20 @@ Overlord@DayboLogic.co.uk
 
 /* Build parameters may be changed here */
 
-/* These are release constants, don't change these, well it wouldn't cause
-any problems as such (as lnog as none matched) */
-#define DPCRTLMM_RELEASETYPE_STD (0) /* Standard release (boring) */
-#define DPCRTLMM_RELEASETYPE_PRO (1) /* Professional version with logging and advanced debug hook support (smart) */
-#define DPCRTLMM_RELEASETYPE_MENTAL (2) /* Mental version everything in professional version + full debug builds and source code */
-
-/* This is the release type, change this to alter copyright string,
-it also disables things which should not be released on that flavour
-of the lib */
-#define DPCRTLMM_RELEASETYPE ( DPCRTLMM_RELEASETYPE_MENTAL )
-
 #ifndef NDEBUG
 #  define DPCRTLMM_LOG
 #endif /*!NDEBUG*/
-/* comment out the above line to disable logging activity,
-I know it's also possible with a function, but it won't remove the
-string and code overhead, if you have the source, commenting out
-this is preferable if you will be releasing a program.
+/* comment out the above line to disable logging activity.
 If you've defined NDEBUG which is a standard macro which means
 no debugging, I automatically define it here, change it if you
-want to. */
+want to.
+When DPCRTLMM_LOG is defined a file called DPCRTLMM.LOG is created
+otherwise, stderr is still used for errors and warnings but normal
+messages such as allocation successful will not be displayed st all.
+*/
 
-/*------ THIS STUFF IS FOR PROFESSIONAL AND ABSOLUTELY MENTAL VERSIONS ----*/
-#if (DPCRTLMM_RELEASETYPE > DPCRTLMM_RELEASETYPE_STD) /* Better than standard version */
-
-#  define DPCRTLMM_DEBUGHOOKS
-  /* Comment out the define line to disable advanced debug hook support */
-#endif /* End block for better than standard versions only */
-/*-------------------------------------------------------------------------*/
+#define DPCRTLMM_DEBUGHOOKS
+/* Comment out the define line to disable advanced debug hook support */
 
 /* Definition of MAX_TRAP_STRING_LENGTH (change if trap/log strings are
 	getting too long*/
@@ -89,58 +90,29 @@ want to. */
 
 #define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) */
 
-/* Definition of DPCRTLMM_HOOKCHAIN_SIZE, hook chain sizes differ between
-flavors of the library, standard does not support debug hooks, professional
-supports hook chains containing 16 hooks per type.  Absolutely mental version
-defaults to 32 but programmer can change the source code and rebuild the
-library because all source code is supplied. */
+/* Definition of DPCRTLMM_HOOKCHAIN_SIZE, hook chain sizes used to differ
+depending on how much money was payed for the library, now they default to
+32 */
 
 #if DPCRTLMM_HOOKCHAIN_SIZE /* Somebody else is using the macro we want? */
 #  undef DPCRTLMM_HOOKCHAIN_SIZE /* Get shot of that crap */
 #endif /*DPCRTLMM_HOOKCHAIN_SIZE*/
 
-#if (DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_STD) /* Standard boring version */
-#  define DPCRTLMM_HOOKCHAIN_SIZE (0) /* Debug hooks are not supported */
-#endif
-#if (DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_PRO) /* Professional version */
-#  define DPCRTLMM_HOOKCHAIN_SIZE (16) /* Limited debug hook support */
-#endif
-#if (DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_MENTAL) /* Absolutely mental version */
-#  define DPCRTLMM_HOOKCHAIN_SIZE (32) /* Quite large hook chain sizes, can be altered because users have source */
-#endif
+#define DPCRTLMM_HOOKCHAIN_SIZE (32) /* Quite large hook chain sizes, change if you feel you need to go mental on me of need less to save memory */
 
 /* Definition of DPCRTLMM_SAFETYLIST_MAXSIZE, the maximum number of modules
 which may have their own array of blocks looked after byte this library is
 determined by the maxmimum number of entries which may be stored in the
 safety list.  The safety list is a fixed size structure in the data segment.
-The standard flavor of the library allows 64 entries (enough for 64 different
-sections or modules of the program to have different arrays for their blocks.
-The professional version has enough space for 512 which allows a much larger
-program.  The absolutely mental version is unlimited but 512 by default, it is
-unlimited by virtue of the number being able to be changed below because they
-would have the source code: */
+In this GPL release it's 512 default, allowing for a very large application,
+but it may be changed manually here, remember changes require rebuilding
+DPCRTLMM */
 
 #if DPCRTLMM_SAFETYLIST_MAXSIZE /* Somebody else is using the macro we want? */
 #  undef DPCRTLMM_SAFETYLIST_MAXSIZE /* Again, get shot of that crap, they were just trying to disrupt the library! */
 #endif /*DPCRTLMM_SAFETYLIST_MAXSIZE*/
 
-#if (DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_STD) /* Bog-standard boring version? */
-#  define DPCRTLMM_SAFETYLIST_MAXSIZE (64) /* A good size for a free project I should hope */
-#endif
-#if (DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_PRO) /* Professional version */
-#  define DPCRTLMM_SAFETYLIST_MAXSIZE (512) /* A very large size I'd say! */
-#endif
-#if (DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_MENTAL) /* Absolutely metal version */
-#  define DPCRTLMM_SAFETYLIST_MAXSIZE (512) /* Programmers change this value if you run out of space */
-#endif
-
-/* In standard builds I limit the number of blocks which may be allocated
-per program to 50 by default, that can be changed here, it has no effect
-in professional or absolutely mental builds of the library even if one
-removes the ifdef */
-#if DPCRTLMM_RELEASETYPE == DPCRTLMM_RELEASETYPE_STD
-#  define DPCRTLMM_STDBLOCKLIMIT (50)
-#endif /*DPCRTLMM_RELEASETYPE_STD*/
+#define DPCRTLMM_SAFETYLIST_MAXSIZE (512) /* Programmers change this value if you run out of space */
 
 /* Definition of DPCRTLMM_FARDATA, to allow explicit far data pointers which are
 non-ANSI define DPCRTLMM_WANTFARDATA, for normal mode which means you will have
@@ -181,8 +153,8 @@ a new feature and I wouldn't want to assume you don't like my new feature :)
 
 /* Version information can be set here */
 #define DPCRTLMM_VERSION_MAJOR (1)
-#define DPCRTLMM_VERSION_MINOR (1)
+#define DPCRTLMM_VERSION_MINOR (2)
 /* Comment out the next line before releasing the library */
-/*#define DPCRTLMM_VERSION_TEST*/
+#define DPCRTLMM_VERSION_TEST
 /*-------------------------------------------------------------------------*/
 #endif /*!__INC_DPCRTLMM_BUILD_H*/

@@ -1,18 +1,30 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM Memory Management Library : Debug hooks
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /* The debug hook executive and supporting code
 written (and perfomed by Overlord David
-Duncan Ross Palmer.  Copyright 2000 (Y2K) Daybo Logic, all rights reserved.
+Duncan Ross Palmer.
 
 File DBGHOOKS.C
 Library: DPCRTLMM Memory Manager
@@ -72,8 +84,8 @@ void dpcrtlmm_int_CallDebugHook(const unsigned short HookType, const PS_DPCRTLMM
 
   if (BadHookType(HookType)) /* Bad hook type (out of range in matrix) */
   {
-   LOG("CallDebugHook: Internal library error, HookType out of range!")
-   return;
+    ERROR("CallDebugHook: Internal library error, HookType out of range!");
+    return;
   }
 
   debugHookInfo = *PDebugHookInfo; /* Copy details by auto C deref */
@@ -204,12 +216,12 @@ static unsigned int BadHookType(const unsigned int HookType)
 {
   unsigned int bad = 0U; /* Not a bad hook type yet... */
 
-  #ifdef __DAYBO_DEBUGGING__ /* Daybo Logic's in debug mode */
+#ifndef NDEBUG_ /* Debugging lib */
     assert( HookType <= DPCRTLMM_DEBUGHOOK_LASTHOOK ); /* Check hook type is valid */
   #else /* Not in debug mode, must handle this same trap differenty */
     if ( !(HookType <= DPCRTLMM_DEBUGHOOK_LASTHOOK) ) /* Check hook type is valid */
       bad = 1U; /* bad = TRUE */
-  #endif /*__DAYBO_DEBUGGING__*/
+  #endif /*!NDEBUG*/
 
   return bad;
 }

@@ -1,5 +1,5 @@
 /*
-    DPCRTLMM Memory management library
+    DPCRTLMM Memory Management Library
     Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,19 +21,26 @@ Contact me: Overlord@DayboLogic.co.uk
 Get updates: http://daybologic.com/Dev/dpcrtlmm
 My official site: http://daybologic.com/overlord
 */
-#ifndef __INC_DPCRTLMM_VPTRAP_H
-#define __INC_DPCRTLMM_VPTRAP_H
-/*-------------------------------------------------------------------------*/
-#ifdef __cplusplus
-extern "C" {
-#endif /*__cplusplus*/
-void dpcrtlmm_int_VerifyPtrs(const char* FuncName, const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr); /* BlockPtr can be NULL */
-#ifdef __cplusplus
-} /* extern "C" */
-#endif /*__cplusplus*/
 
-#ifdef __INC_DPCRTLMM_INTDATA_H
-#  define _VerifyPtrs dpcrtlmm_int_VerifyPtrs
-#endif /*__INC_DPCRTLMM_INTDATA_H*/
-/*-------------------------------------------------------------------------*/
-#endif /*!__INC_DPCRTLMM_VPTRAP_H*/
+/* This is my C++ class test for DPCRTLMM */
+
+#include <stdlib.h>
+#ifdef DPCRTLMM_HDRSTOP
+#  pragma hdrstop
+#endif /*DPCRTLMM_HDRSTOP*/
+
+#include "dpcrtlmm.h"
+#include "dpccap.h"
+
+#ifndef __NO_NAMESPACES__
+using namespace Overlord;
+#endif /*!__NO_NAMESPACES__*/
+
+int main()
+{
+  TDPCRTLMM_MemManager mm;
+  void* ptr = mm.Alloc(4000U);
+  mm.Free(ptr);
+
+  return EXIT_SUCCESS;
+}

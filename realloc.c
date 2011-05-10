@@ -1,21 +1,36 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM Memory Manage Library reallocator
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /* Created: UNKNOWN
-   Last modified: 21st July 2000
+   Last modified: 1st Dec 2000
    Programmer: Overlord David Duncan Ross Palmer
    Library: DPCRTLMM
    Language: ANSI C (1990 implementation)
    Purpose: DPCRTLMM's memory user-memory reallocation
+
+   1st Dec 2000: To fix a possible porting problem I no longer assume
+                 that realloc() will allocate when called with NULL, newSize
 */
 #include <stdlib.h>
 #ifdef DPCRTLMM_HDRSTOP
@@ -32,6 +47,7 @@
 #include "locktrap.h" /* _LockTrap() */
 #include "iblkptr.h"
 #include "dbghooks.h" /* Debug hooking routines, we use the executive */
+#include "log.h"
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize)
 {
@@ -51,8 +67,15 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
 
   if (!NewSize) /* No new size, hmm, must be wanting free() really */
   {
+    WARNING("Dynamic possibly non-portable use of realloc() as a free-er");
     dpcrtlmm_Free(PBlockArray, OldBlockPtr); /* Give the caller what they want */
     return NULL;
+  }
+
+  if ( !OldBlockPtr ) /* This is a non-portable attempt to use realloc as an initial allocator */
+  {
+    WARNING("Dynamic possibly non-portable use of realloc() as an initial allocator");
+    return dpcrtlmm_Alloc(PBlockArray, NewSize);
   }
 
   blockIndex = dpcrtlmm_int_IndexFromBlockPtr(PRArr, OldBlockPtr);
@@ -61,7 +84,8 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
     /* The block is already the requested size! */
     return ptr; /* Give present pointer back to caller wihout touching it */
   }
-  /* The resize is valid if the block was not already the requested size */
+  /* The resize is valid */
+
   sizePtr = DPCRTLMM_REALLOC( OldBlockPtr, NewSize ); /* Attempt to resize the block */
   if (!sizePtr) return NULL; /* If the block cannot be enlarged return NULL to the caller to indicate the failure */
 

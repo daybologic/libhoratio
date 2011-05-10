@@ -1,162 +1,150 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM C++ user's interface header
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
-// DPCRTLMM 1.0 compatible encapsulation header for C++
+// DPCRTLMM 1.2 compatible encapsulation header for C++
 // include this and add dpccap.cpp to your project
 // You can have this particular module, it's free
-// Last update: 3rd August 2000
+// Last update: December 2000
+// I'm writing this in ANSI/ISO C++, that doesn't mean it'll work on all
+// old compilers!  define __NO_NAMESPACES__ if you don't want the namespace.
+// I've got rid of all inline functions as a wicked article on C++
+// porting on Mozilla said not to bother with them more or less, they'd
+// know, look how far Mozilla and Netscape has been ported!
+// I know the keyword bool is new, so I'm not using it, I'll use int thanks
 
 #ifndef __INC_DPCRTLMM_CAP_H
 #define __INC_DPCRTLMM_CAP_H
 //---------------------------------------------------------------------------
 // main object, don't create more than one, the object is externed
 
-namespace DPCRTLMM
+#ifndef __NO_NAMESPACES__
+namespace Overlord
 {
-  class TMemManager
+#endif /*!__NO_NAMESPACES__*/
+  class TDPCRTLMM_MemManager
   {
   public:
-    inline TMemManager()
-      { dpcrtlmm_Startup(); }
+    TDPCRTLMM_MemManager();
 
-    inline ~TMemManager()
-      { dpcrtlmm_Shutdown(); }
+    ~TDPCRTLMM_MemManager();
 
-    inline bool InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO))
-      { return (bool)dpcrtlmm_InstallDebugHook(HookType, NewHookProc); }
+    int InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));
 
-    inline unsigned GetDebugHookChainCount(const unsigned int HookType)
-      { return dpcrtlmm_GetDebugHookChainCount(HookType); }
+    unsigned GetDebugHookChainCount(const unsigned int HookType);
 
-    inline unsigned GetDebugHookMatrixCount()
-      { return dpcrtlmm_GetDebugHookMatrixCount(); }
+    unsigned GetDebugHookMatrixCount();
 
-    inline unsigned int UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO))
-      { return dpcrtlmm_UninstallDebugHook(HookType, HookProc2Remove); }
+    unsigned int UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO));
 
     void* Alloc(const size_t NewBlockSize);
 
-    // Don't bother shielding the library from NULLs, the library
-    // is perfectly capable of finding and reporting all the programmer's
-    // mistakes without this little fancy layer playing at being DPCRTLMM
-    inline void Free(void* Ptr)
-      { dpcrtlmm_Free(NULL, Ptr); }
+    void Free(void* Ptr);
 
     // Only of use within a hook, see my docs for this function in DPCRTLMM, it's just the same
-    inline bool IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
-      { return (bool)dpcrtlmm_IsDefaultBlockArray(PBlockArray); }
+    int IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
 
     // I shouldn't have been using void* in this function really, correct that
     // for the C++ layer
-    inline size_t GetBlockSize(const void* BlockPtr) const
-      { return dpcrtlmm_GetBlockSize(NULL, (void*)BlockPtr); }
+    size_t GetBlockSize(const void* BlockPtr) const;
 
-    inline bool IsBadBlockPtr(const void* BlockPtr) const
-      { return (bool)dpcrtlmm_IsBadBlockPtr(NULL, BlockPtr); }
+    int IsBadBlockPtr(const void* BlockPtr) const;
 
-    inline void* Realloc(void* OldBlockPtr, const size_t NewSize)
-      { return dpcrtlmm_Realloc(NULL, OldBlockPtr, NewSize); }
+    void* Realloc(void* OldBlockPtr, const size_t NewSize);
 
-    inline void* Calloc(const unsigned int N, const size_t NewBlockSize)
-      { return dpcrtlmm_Calloc(NULL, N, NewBlockSize); }
+    void* Calloc(const unsigned int N, const size_t NewBlockSize);
 
-    inline void InstallTrapCallback( void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage), const unsigned int AsHook )
-      { dpcrtlmm_InstallTrapCallback(UserCallbackProc, AsHook); }
+    void InstallTrapCallback( void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage), const unsigned int AsHook );
 
-    inline void RemoveTrapCallback( void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc) )
-      { dpcrtlmm_RemoveTrapCallback(CurrentCallbackProc); }
+    void RemoveTrapCallback( void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc) );
       
-    inline signed char GetTrapCallbackInfo()
-      { return dpcrtlmm_GetTrapCallbackInfo(); }
+    signed char GetTrapCallbackInfo();
 
-    inline unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags)
-      { return dpcrtlmm_ModifyDescriptorFlags(NULL, Ptr, PNewFlags); }
+    unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags);
 
-    inline void SetBlockLockingFlag(const void* Ptr, const bool NewStatus)
-      { dpcrtlmm_SetBlockLockingFlag(NULL, Ptr, (const unsigned int)NewStatus); }
+    void SetBlockLockingFlag(const void* Ptr, int NewStatus);
 
-    inline bool IsBlockLocked(const void* Ptr) const
-      { return (bool)dpcrtlmm_IsBlockLocked(NULL, Ptr); }
+    int IsBlockLocked(const void* Ptr) const;
 
-    inline void LockBlock(const void* pBlock)
-      { dpcrtlmm_SetBlockLockingFlag(NULL, pBlock, (1U)); }
+    void LockBlock(const void* pBlock);
 
-    inline void UnlockBlock(const void* pBlock)
-      { dpcrtlmm_SetBlockLockingFlag(NULL, pBlock, (0U)); }
+    void UnlockBlock(const void* pBlock);
 
-    inline void ToggleBlockLockingStatus(const void* Ptr)
-      { dpcrtlmm_ToggleBlockLockingStatus(NULL, Ptr); }
+    void ToggleBlockLockingStatus(const void* Ptr);
 
-    inline void EnableTraps() { dpcrtlmm_EnableTraps(); }
-    inline void DisableTraps() { dpcrtlmm_DisableTraps(); }
-    inline void AreTrapsEnabled() { dpcrtlmm_AreTrapsEnabled(); }
+    void EnableTraps();
+    void DisableTraps();
+    int AreTrapsEnabled();
 
-    inline void GetStats(PS_DPCRTLMM_STATS PReadStats)
-      { dpcrtlmm_GetStats(PReadStats); }
+    void GetStats(PS_DPCRTLMM_STATS PReadStats);
 
-    inline unsigned long GetBlockCount() { return dpcrtlmm_GetBlockCount(); }
+    unsigned long GetBlockCount();
 
-    inline PS_DPCRTLMM_VERSION Ver(PS_DPCRTLMM_VERSION PVerStruct)
-      { return dpcrtlmm_Ver(PVerStruct); }  
+    PS_DPCRTLMM_VERSION Ver(PS_DPCRTLMM_VERSION PVerStruct);
   };
 
-  class TBlockArray
+  class TDPCRTLMM_BlockArray
   {
   private:
       PS_DPCRTLMM_BLOCKDESCARRAY _PblockArray;
   public:
-    TBlockArray(); // Constructs the object, creates the block array
+    TDPCRTLMM_BlockArray(); // Constructs the object, creates the block array
 
     // Destroys the block array, destructs the object
-    inline ~TBlockArray()
-      { dpcrtlmm_DestroyBlockArray(_PblockArray); }
+    ~TDPCRTLMM_BlockArray();
 
     void* Alloc(const size_t NewBlockSize); /* Allocates a block in this block array */
 
-    inline void Free(void* Ptr)
-      { dpcrtlmm_Free(_PblockArray, Ptr); }
+    void Free(void* Ptr);
 
     // dpcrtlmm should be using a constant pointer for this!
-    inline size_t GetBlockSize(const void* BlockPtr) const
-      { return dpcrtlmm_GetBlockSize(_PblockArray, (void*)BlockPtr); }
+    size_t GetBlockSize(const void* BlockPtr) const;
 
-    inline bool IsBadBlockPtr(const void* BlockPtr) const
-      { return (bool)dpcrtlmm_IsBadBlockPtr(_PblockArray, BlockPtr); }
+    int IsBadBlockPtr(const void* BlockPtr) const;
 
-    inline void* Realloc(void* OldBlockPtr, const size_t NewSize)
-      { return dpcrtlmm_Realloc(_PblockArray, OldBlockPtr, NewSize); }
+    void* Realloc(void* OldBlockPtr, const size_t NewSize);
 
-    inline void* Calloc(const unsigned int N, const size_t NewBlockSize)
-      { return dpcrtlmm_Calloc(_PblockArray, N, NewBlockSize); }
+    void* Calloc(const unsigned int N, const size_t NewBlockSize);
 
-    inline unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags)
-      { return dpcrtlmm_ModifyDescriptorFlags(_PblockArray, Ptr, PNewFlags); }
+    unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags);
 
-    inline void SetBlockLockingFlag(const void* Ptr, const bool NewStatus)
-      { dpcrtlmm_SetBlockLockingFlag(_PblockArray, Ptr, (const unsigned int)NewStatus); }
+    void SetBlockLockingFlag(const void* Ptr, int NewStatus);
 
-    inline bool IsBlockLocked(const void* Ptr) const
-      { return (bool)dpcrtlmm_IsBlockLocked(_PblockArray, Ptr); }
+    int IsBlockLocked(const void* Ptr) const;
 
-    inline void LockBlock(const void* pBlock)
-      { dpcrtlmm_SetBlockLockingFlag(_PblockArray, pBlock, (1U)); }
+    void LockBlock(const void* pBlock);
 
-    inline void UnlockBlock(const void* pBlock)
-      { dpcrtlmm_SetBlockLockingFlag(_PblockArray, pBlock, (0U)); }
+    void UnlockBlock(const void* pBlock);
 
-    inline void ToggleBlockLockingStatus(const void* Ptr)
-      { dpcrtlmm_ToggleBlockLockingStatus(_PblockArray, Ptr); }
+    void ToggleBlockLockingStatus(const void* Ptr);
   };
-}; /*namespace DPCRTLMM*/
+#ifndef __NO_NAMESPACES__
+}; /*namespace Overlord*/
+#endif
 
-extern DPCRTLMM::TMemManager MemManager; /* This is the object you should use */
+extern
+#ifndef __NO_NAMESPACES__
+Overlord::
+#endif
+TDPCRTLMM_MemManager MemManager; /* This is the object you should use */
 //---------------------------------------------------------------------------
 #endif //__INC_DPCRTLMM_CAP_H

@@ -1,13 +1,25 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM master header
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #ifndef __INC_DPCRTLMM_H
 #define __INC_DPCRTLMM_H
@@ -15,7 +27,7 @@
 /*
 Company (Copyright): Daybo Logic 2000
 Date of creation: 15th Feb 2000
-Last modified: 5th September 2000
+Last modified: 1st December 2000
 Programmer: Overlord David Duncan Ross Palmer, Daybo Logic.
 Email: Overlord@DayboLogic.co.uk
 File: dpcrtlmm.h
@@ -42,10 +54,13 @@ Comments:
 	  be turned off or passed to a handler which will only execute the
 	  serious ones.
 
-Language: Everything here is portable to ANSI C, incase the MM is used on
-a games console or something without file support, all file activity can be
-disabled by undefining DPCRTLMM_LOG in build.h and rebuilding (it mightn't
-be defined in the first place).
+Language: Everything here is portable to ANSI C, I have tried my best to make
+this as portable as possible but don't try to port it to a games console
+because it might not support file I/O and such.
+
+At some point I will write a dummy, extreme-portabilly library which will
+allow programs which use DPCRTLMM to effectively remove DPCRTLMM without
+being rewritten.
 */
 
 #ifdef __cplusplus
@@ -58,6 +73,17 @@ remove with no complaints */
 #ifndef DPCRTLMM_FARDATA
 #  define DPCRTLMM_FARDATA
 #endif
+
+/* File / Line: This might be paranoia but I don't know if __FILE__ and
+__LINE__are defined on every compiler.  I'm not taking the risk */
+#ifndef __FILE__
+#  define __FILE__ "unknown"
+#endif /*!__FILE__*/
+
+#ifndef __LINE__
+#  define __LINE__ (0)
+#endif /*__LINE__*/
+
 
 /*
    Special flags, 0-Locked - Cannot be freed or resized by the library

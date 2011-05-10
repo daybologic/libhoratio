@@ -1,13 +1,25 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM Memory management library : Block array controls
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -18,8 +30,6 @@
 # up each module) or the program wants to hide behind a normal allocation   #
 # function re-routed to us via a hack then only one block array exists per  #
 # per program.                                                              #
-#              DPCRTLMM (C)Copyright 2000, OverlordDDRP, Daybo Logic        #
-#              All rights reserved.  Overlord@DayboLogic.co.uk              #
 #############################################################################
 */
 
@@ -57,11 +67,11 @@ PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
   debugHookInfo.AllocReq = (unsigned int)sizeof(S_DPCRTLMM_BLOCKDESCARRAY); /* Ha, this is only vaugly relavant, this will do */
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  LOG("Program called CreateBlockArray()")
   Parray = (S_DPCRTLMM_BLOCKDESCARRAY*)malloc( sizeof(S_DPCRTLMM_BLOCKDESCARRAY) ); /* Alloc the array for the caller */
   if (!Parray) /* Failed to alloc */
   {
-    LOG("CreateBlockArray(): Couldn\'t allocate the new block array!")
+    /* Memory outages while in memory manager mode must be warned about! */
+    WARNING("CreateBlockArray(): Couldn\'t allocate the new block array!");
     #ifdef DPCRTLMM_DEBUGHOOKS
     /* PRelArr is nothing, we couldn't allocate one :( */
     /* PRelDesc is nothing, there is no related descriptor */
@@ -79,17 +89,17 @@ PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
   */
   if ( !SafetyList_AddBase(Parray) ) /* Add to safety list */
   {
-    /* Failed to add to the list?! */
-    LOG("CreateBlockArray(): The array base address could not be added to the safety list")
+    /* Failed to add to the list?!  Memory outages while in memory manager must be warned about */
+    WARNING("CreateBlockArray(): The array base address could not be added to the safety list");
     DPCRTLMM_FREE(Parray); /* Free the array again */
     Parray = NULL; /* So caller sees there's nothing allocated */
   }
 
-  /* Safe, log progress */
   #ifdef DPCRTLMM_LOG
+  /* Safe, log progress */
   sprintf(logMsg, "CreateBlockArray() returns base 0x%p", Parray);
+  MESSAGE(logMsg);
   #endif /*DPCRTLMM_LOG*/
-  LOG(logMsg)
 
   #ifdef DPCRTLMM_DEBUGHOOKS
   /* Set up more hook information to indicate success */
@@ -108,11 +118,6 @@ void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo; /* Used for calling the debug hook executive */
   #endif /*DPCRTLMM_DEBUGHOOKS*/
-
-  #ifdef DPCRTLMM_LOG
-  sprintf(trapStr, "Program called DestroyBlockArray(0x%p)", PBlockArray);
-  #endif /*DPCRTLMM_LOG*/
-  LOG(trapStr)
 
   #ifdef DPCRTLMM_DEBUGHOOKS
   /* Set up common stuff for the debug hook info */
@@ -157,8 +162,8 @@ void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
         _safetyList[sli] = NULL; /* Remove this array from the safety list */
         #ifdef DPCRTLMM_LOG
         sprintf(trapStr, "DestroyBlockArray(): The array at base 0x%p was destroyed", PBlockArray); /* Prepare log message */
+        MESSAGE(trapStr);
         #endif /*DPCRTLMM_LOG*/
-        LOG(trapStr) /* Pass to logger */
 
         #ifdef DPCRTLMM_DEBUGHOOKS
         /* Success, call hooks */

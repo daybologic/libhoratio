@@ -1,13 +1,25 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM Memory Management Library
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 /*
@@ -39,7 +51,7 @@ void dpcrtlmm_int__Trap(const unsigned int Id, const char* Message)
   char* trapsCopy;
   const char preFix[] = "DPCRTLMM_UNHANDLED_TRAP: ";
 
-  LOG(Message) /* Pass on to the logger automatically */
+  ERROR(Message); /* Pass on to the logger automatically */
   if ( !dpcrtlmm__EnableTraps ) return; /* Don't execute traps if traps have been switched off */
 
   /* The message is prefixed with "DPCRTLMM (Trap): " by copying it */
@@ -99,8 +111,9 @@ void dpcrtlmm_InstallTrapCallback( void(*NewTrapCallback)(const unsigned int, co
 	    (AsHook) ? ("hook") : ("handler"),
 	    NewTrapCallback
     );
+    MESSAGE(logStr);
     #endif /*DPCRTLMM_LOG*/
-    LOG(logStr)
+
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
@@ -134,11 +147,9 @@ void dpcrtlmm_RemoveTrapCallback(void(*CurrentCallback)(const unsigned int, cons
   {
     _UserTrapCallback = NULL; /* Remove handler or hook */
 
-    #ifdef DPCRTLMM_LOG
     /* Log the removal */
     sprintf(logStr, "RemoveTrapCallback(): %s removed.", (_userTrapCallbackIsHook) ? ("Hook") : ("Handler"));
-    #endif /*DPCRTLMM_LOG*/
-    LOG(logStr);
+    MESSAGE(logStr);
 
     #ifdef DPCRTLMM_DEBUGHOOKS
     debugHookInfo.Success = 1U;

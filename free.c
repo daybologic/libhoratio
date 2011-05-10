@@ -1,13 +1,25 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM Memory Management library : Primary block freeer
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
 #include <stdlib.h>
@@ -33,16 +45,12 @@
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#ifdef DPCRTLMM_LOG /* Local logger only available in a log build */
-   static void OurLog(const char* Str); /* Logging wrapper which knows our name */
-#  define OURLOG(msg) OurLog(msg); /* Macro goes to local function */
-#else /* Not a loggable build */
-#  define OURLOG(msg) /* Dummy version so logging isn't done and log strings don't end up in the binary of the library */
-#endif /*DPCRTLMM_LOG*/
+#define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
 
 /* Always make sure to pass resolved arrays to these functions */
 static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int StartPos); /* Moveup following blocks descriptors in array to remove blank space.  StartPos is the item just deleted when moveup will be started from */
 static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int Amount); /* Shrink array, trap is fired on an attempt to shrink more than the current size */
+static void OurLog(const unsigned short Severity, const char* Msg);
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr)
 {
@@ -57,7 +65,7 @@ void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA
 
   #ifdef DPCRTLMM_LOG
   sprintf(trapMsg, "Attempting release of block 0x%p from array 0x%p . . .", Ptr, PBlockArray);
-  OURLOG(trapMsg);
+  OURLOG(DPCRTLMM_LOG_MESSAGE, trapMsg);
   #endif /*DPCRTLMM_LOG*/
 
   PRArr = _ResolveArrayPtr(PBlockArray); /* Resolve incase block array is NULL */
@@ -112,7 +120,6 @@ static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int St
   /* locals */
   unsigned int i; /* Loop control */
 
-  OURLOG("/Moveup: Executing Moveup!")
   if ( PBlockArray->Count < 2) /* Only one or no items, can't do a moveup */
   {
     /* Do trap */
@@ -141,7 +148,6 @@ static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int St
     blockDesc = PBlockArray->Descriptors[i];
     PBlockArray->Descriptors[i-1] = blockDesc;
   }
-  OURLOG("/Moveup: Finished Moveup operation")
   return;
 }
 /*-------------------------------------------------------------------------*/
@@ -150,12 +156,10 @@ static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsig
   _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
   if (!Amount)
   {
-    #ifdef DPCRTLMM_LOG
     char logMsg[MAX_TRAP_STRING_LENGTH+1];
 
-    sprintf(logMsg, "WARNING! Attempt to ShrinkBlockArray(0x%p) by nothing, ignored", PBlockArray);
-    OURLOG(logMsg)
-    #endif /*DPCRTLMM_LOG*/
+    sprintf(logMsg, "Attempt to ShrinkBlockArray(0x%p) by nothing, ignored (internal DPCRTLMM error)", PBlockArray);
+    OURLOG(DPCRTLMM_LOG_WARNING, logMsg);
     return;
   }
   if (!PBlockArray->Count)
@@ -180,24 +184,19 @@ static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsig
 
   if (!(PBlockArray->Count - Amount)) /* Reducing to zero? */
   {
-    OURLOG("Attempting to free array interior but leave usable array base (shrinking to zero)...")
     DPCRTLMM_FREE(PBlockArray->Descriptors); /* Release entire descriptor array */
     PBlockArray->Descriptors = NULL; /* Mark as no allocation in entire array */
   }
   else /* Reducing somewhat but not completely */
   {
-    OURLOG("Attempting to shrink an array leaving usable entries...")
     /* Shrink array */
     PBlockArray->Descriptors = DPCRTLMM_REALLOC( PBlockArray->Descriptors, (PBlockArray->Count - Amount)*sizeof(S_DPCRTLMM_BLOCKDESCRIPTOR) );
   }
-  OURLOG("The resize appears to have completed successfully, adjusting count...")
   PBlockArray->Count -= Amount; /* Adjust count for descriptor array */
-  OURLOG("The block descriptor array count is adjusted")
   return;
 }
 /*-------------------------------------------------------------------------*/
-#ifdef DPCRTLMM_LOG /* Loggable build? */
-static void OurLog(const char* Str)
+static void OurLog(const unsigned short Severity, const char* Str)
 {
   /* Our job is to add "Free() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
@@ -215,12 +214,11 @@ static void OurLog(const char* Str)
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      LOG(PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }
   }
   return;
 }
-#endif /*DPCRTLMM_LOG*/
 /*-------------------------------------------------------------------------*/

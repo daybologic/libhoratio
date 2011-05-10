@@ -11,7 +11,8 @@
 </head>
 <body text="#FFFFFF" bgcolor="#000000" link="#FFFF00" vlink="#C0C0C0" alink="#C0FFC0">
 
-<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1</font></u></b>
+<center><b><u><font size=+4>Daybo Logic's C memory management library V1.2
+debug</font></u></b>
 <br><b><u><font size=+4>technical documentation</font></u></b></center>
 
 <p><b><u>Contents</u></b>
@@ -485,11 +486,23 @@ on Borland C++.&nbsp; Today I added a clean section to the makefile.&nbsp;
 Attention programmers! There was a typo 'dpcinstalltrapcallback' in the
 lazy lazy section of dpcrtlmm.h was actually typed 'dpcinstallrrapcallback',
 sorry about that!
-<p>5th Septembr 2000 - Overlord:
+<p>5th September 2000 - Overlord:
 <br>I had two different versions of the isbad.c functions, in the C file
-they were constant and in dpcrtlmm.h they were not, cuased me two warnings
+they were constant and in dpcrtlmm.h they were not, caused me two warnings
 on Visual C++ so I corrected the copy on dpcrtlmm.h, so the formal version
 is constant, people.
+<p>November 2000 - Overlord:
+<br>A variety of changes, strtstop.c was renamed husk.c but then removed
+all together and put the startup and shutdown functions from husk.c into
+dpcrtlmm.c.&nbsp; dpcrtlmm.c contained a #pragma use which caused a warning,
+I got rid of that and got rid of all copyright notices from dpcrtlmm.c
+which would end up in the library.&nbsp; Changed all files to GPL license.&nbsp;
+Virtually rewrote dpccap.cpp, it's now completely ANSI/ISO C++.&nbsp; I'm
+not so sure of my '\' line continutation problems in September, whatever
+now, it works.&nbsp; realloc() issues resolved!&nbsp; I found out recently
+that realloc(NULL, 1024); for example won't neccersarily allocate memory
+so I've added a run-time warning printed to stderr if somebody tries this
+with DPCRTLMM.&nbsp; Also if somebody tried to use realloc() as a free-er.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Plans"></a><b><u>4.1&nbsp; Plans for next version</u></b>

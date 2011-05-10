@@ -16,8 +16,6 @@
 # make clobber deletes target binaries (example program and library).
 # make all creates library and example programs
 
-# Temporary hack makefile for 1.1.0
-
 # Tools
 LIBRARY=ar
 LIBOPTS=cru

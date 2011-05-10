@@ -1,21 +1,28 @@
-/**********************************************************************
- *                                                                    *
- * "DPCRTLMM" David Palmer's C-RTL Memory Manager Copyright (c) 2000  *
- * David Duncan Ross Palmer, Daybo Logic all rights reserved.         *
- * http://daybologic.com/Dev/dpcrtlmm                                 *
- *                                                                    *
- * D.D.R. Palmer's official homepage: http://daybologic.com/overlord  *
- * See the included license file for more information.                *
- *                                                                    *
- **********************************************************************
+/*
+    DPCRTLMM Memory Management Library : callocator
+    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+Contact me: Overlord@DayboLogic.co.uk
+Get updates: http://daybologic.com/Dev/dpcrtlmm
+My official site: http://daybologic.com/overlord
 */
 #define DPCRTLMM_SOURCE
-/*
-#############################################################################
-# calloc() for DPCRTLMM by Overlord David Duncan Ross Palmer,               #
-# Copyright 2000, OverlordDDRP, Daybo Logic, all rights reserved.           #
-#############################################################################
-*/
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,16 +37,15 @@
 #include "iblkptr.h" /* dpcrtlmm_int_IndexFromBlockPtr() */
 #include "dbghooks.h" /* Debug hook executive */
 /*-------------------------------------------------------------------------*/
+#ifdef DPCRTLMM_LOG
+static void OurLog(const unsigned short Severity, const char* Str);
+#endif /*DPCRTLMM_LOG*/
+
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#ifdef DPCRTLMM_LOG /* Local logger only available in a log build */
-   static void OurLog(const char* Str); /* Logging wrapper which knows our name */
-#  define OURLOG(msg) OurLog(msg); /* Macro goes to local function */
-#else /* Not a loggable build */
-#  define OURLOG(msg) /* Dummy version so logging isn't done and log strings don't end up in the binary of the library */
-#endif /*DPCRTLMM_LOG*/
+#define OURLOG(sev, msg) OurLog(((const unsigned short)(sev)), (msg))
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize)
 {
@@ -49,10 +55,12 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, c
   #endif /*DPCRTLMM_DEBUGHOOKS*/
   #ifdef DPCRTLMM_LOG
   char logMsg[MAX_TRAP_STRING_LENGTH+1];
-
-  sprintf(logMsg, "called, %u blocks of %u bytes requested, passing on to Alloc()", N, NewBlockSize);
   #endif /*DPCRTLMM_LOG*/
-  OURLOG(logMsg)
+
+  #ifdef DPCRTLMM_LOG
+  sprintf(logMsg, "Calloc() called, %u blocks of %u bytes requested, passing on to Alloc()", N, NewBlockSize);
+  OURLOG(DPCRTLMM_LOG_MESSAGE, logMsg);
+  #endif /*DPCRTLMM_LOG*/
 
   #ifdef DPCRTLMM_DEBUGHOOKS
   debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
@@ -70,14 +78,22 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, c
     debugHookInfo.Success = 1U;
     #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-    OURLOG("Allocation successful")
+    #ifdef DPCRTLMM_LOG
+    OURLOG(DPCRTLMM_LOG_MESSAGE, "Allocation successful");
+    #endif /*DPCRTLMM_LOG*/
+
+    /* Bug fix: I didn't realize this but the specification for for calloc()
+       requires that the new memory is zeroed. Fix DPCRTLMM Version 1.2 */
+    memset(resultantPtr, 0, N*NewBlockSize);
   }
   else
   {
     #ifdef DPCRTLMM_DEBUGHOOKS
     /*blockDescArray.Success = 0U;   - optimized away */
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-    OURLOG("Allocation failed")
+    #ifdef DPCRTLMM_LOG
+    OURLOG(DPCRTLMM_LOG_MESSAGE, "Allocation failed");
+    #endif /*DPCRTLMM_LOG*/
   }
 
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -86,8 +102,8 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, c
   return resultantPtr;
 }
 /*-------------------------------------------------------------------------*/
-#ifdef DPCRTLMM_LOG /* Logging must be enabled in the build (see Build.H) */
-static void OurLog(const char* Str)
+#ifdef DPCRTLMM_LOG
+static void OurLog(const unsigned short Severity, const char* Str)
 {
   /* Our job is to add "Calloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
@@ -105,7 +121,7 @@ static void OurLog(const char* Str)
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      LOG(PcopyStr) /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }
