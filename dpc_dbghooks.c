@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management Library : Debug hooks
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,12 +39,12 @@ Last modified by Overlord David Duncan Ross Palmer on 31st July 2001
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "log.h" /* LOG macro */
-#include "biglock.h" /* Mutual exclusion */
-#include "dbghooks.h"
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_log.h" /* LOG macro */
+#include "dpc_biglock.h" /* Mutual exclusion */
+#include "dpc_dbghooks.h"
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
 static unsigned int BadHookType(const unsigned int HookType);

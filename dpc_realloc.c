@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Manager Library reallocator
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,18 +40,18 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #ifdef DPCRTLMM_WANTFARDATA
 #  include <alloc.h>
 #endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "vptrap.h" /* _VerifyPtrs() */
-#include "locktrap.h" /* _LockTrap() */
-#include "iblkptr.h"
-#include "dbghooks.h" /* Debug hooking routines, we use the executive */
-#include "log.h"
-#include "biglock.h" /* Mutual exclusion */
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_vptrap.h" /* _VerifyPtrs() */
+#include "dpc_locktrap.h" /* _LockTrap() */
+#include "dpc_iblkptr.h"
+#include "dpc_dbghooks.h" /* Debug hooking routines, we use the executive */
+#include "dpc_log.h"
+#include "dpc_biglock.h" /* Mutual exclusion */
 /*-------------------------------------------------------------------------*/
 static void DPCRTLMM_FARDATA* dpcrtlmm_int_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize);
 /*-------------------------------------------------------------------------*/

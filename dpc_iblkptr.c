@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management Library
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,12 +32,12 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal data */
-#include "trap.h" /* Trap support */
-#include "vptrap.h" /* For _VerifyPtrs() */
-#include "iblkptr.h"
+#include "dpc_intdata.h" /* Internal data */
+#include "dpc_trap.h" /* Trap support */
+#include "dpc_vptrap.h" /* For _VerifyPtrs() */
+#include "dpc_iblkptr.h"
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_int_IndexFromBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {

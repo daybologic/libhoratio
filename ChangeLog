@@ -1,3 +1,9 @@
+1.1.6-pre2
+----------
+DDRP - Rename source files to prevent conflicts with C runtime lib
+DDRP - Borland makefile cleans up Borland's TDS files
+DDRP - Delete out of date dpcrtlmm.mak (Microsoft)
+
 1.1.6-pre1
 -----
 DDRP - Changed a call of a user function in TrapUnFreedArrays(), which led to a biglock locking after the biglock was uninitialised.

@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management lib's internal data
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,9 +44,9 @@ Modifications
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h"
+#include "dpc_intdata.h"
 /*-------------------------------------------------------------------------*/
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int__safetyList[DPCRTLMM_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */
 #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY /* New NULL block array support enabled? */

@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management library
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -31,15 +31,15 @@ for NULL */
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal data */
-#include "trap.h" /* _Trap() - Trap support */
-#include "log.h" /* LOG macro - Logging support */
-#include "safelist.h" /* Safety list support functions */
-#include "dbghooks.h" /* The debug hook support/executive */
-#include "biglock.h" /* To init / uninit the big lib lock */
-#include "blkarray.h" /* Internal interface to block arrays */
+#include "dpc_intdata.h" /* Internal data */
+#include "dpc_trap.h" /* _Trap() - Trap support */
+#include "dpc_log.h" /* LOG macro - Logging support */
+#include "dpc_safelist.h" /* Safety list support functions */
+#include "dpc_dbghooks.h" /* The debug hook support/executive */
+#include "dpc_biglock.h" /* To init / uninit the big lib lock */
+#include "dpc_blkarray.h" /* Internal interface to block arrays */
 /*-------------------------------------------------------------------------*/
 /*
 Minimal stuff here please, if possible promote granularity by using other C files

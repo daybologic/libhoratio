@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory management library : Descriptor flags modifiers
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,14 +33,14 @@ Now supports NULL arrays
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "vptrap.h" /* _VerifyPtrs() (replaces BBA/BBP traps) */
-#include "iblkptr.h" /* For getting array descriptor index for a particular block */
-#include "dbghooks.h" /* The debug hook executive */
-#include "biglock.h" /* Library's mutual exclusion */
-#include "bdflags.h"
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_vptrap.h" /* _VerifyPtrs() (replaces BBA/BBP traps) */
+#include "dpc_iblkptr.h" /* For getting array descriptor index for a particular block */
+#include "dpc_dbghooks.h" /* The debug hook executive */
+#include "dpc_biglock.h" /* Library's mutual exclusion */
+#include "dpc_bdflags.h"
 /*-------------------------------------------------------------------------*/
 /* NOTE: Adding of the hook caller in here has caused two variables
 both holding the index of the block, this should be optimised away when

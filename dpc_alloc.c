@@ -24,7 +24,7 @@ My official site: http://www.daybologic.co.uk/overlord
 #define DPCRTLMM_SOURCE
 /* Main allocation function and block array grower
  - Overlord David Duncan Ross Palmer
- Copyright (C)2000 OverlordDDRP, Daybo Logic, all rights reserved.
+ Copyright (C)2000-2002 OverlordDDRP, Daybo Logic, all rights reserved.
  Overlord@DayboLogic.co.uk
 */
 
@@ -36,17 +36,17 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #ifdef DPCRTLMM_WANTFARDATA
 #  include <alloc.h>
 #endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "log.h" /* Main logging support */
-#include "vptrap.h" /* _VerifyPtrs() */
-#include "dbghooks.h" /* Debug hook executive and support functions */
-#include "biglock.h" /* Mutual exclusion */
-#include "alloc.h"
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_log.h" /* Main logging support */
+#include "dpc_vptrap.h" /* _VerifyPtrs() */
+#include "dpc_dbghooks.h" /* Debug hook executive and support functions */
+#include "dpc_biglock.h" /* Mutual exclusion */
+#include "dpc_alloc.h"
 /*-------------------------------------------------------------------------*/
 /* Internal functions (local) */
 

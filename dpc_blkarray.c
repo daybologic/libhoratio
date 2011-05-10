@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory management library : Block array controls
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,18 +42,18 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #ifdef DPCRTLMM_WANTFARDATA
 #  include <alloc.h>
 #endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Access to internal data */
-#include "log.h" /* LOG macro */
-#include "trap.h" /* _Trap() */
-#include "safelist.h" /* Safety list support functions */
-#include "dbghooks.h" /* For the debug hook executive */
-#include "biglock.h" /* For total library mutual exclusion */
-#include "blkarray.h"
+#include "dpc_intdata.h" /* Access to internal data */
+#include "dpc_log.h" /* LOG macro */
+#include "dpc_trap.h" /* _Trap() */
+#include "dpc_safelist.h" /* Safety list support functions */
+#include "dpc_dbghooks.h" /* For the debug hook executive */
+#include "dpc_biglock.h" /* For total library mutual exclusion */
+#include "dpc_blkarray.h"
 /*-------------------------------------------------------------------------*/
 static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray(void);
 static unsigned int dpcrtlmm_int_IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);

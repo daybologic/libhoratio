@@ -21,7 +21,7 @@ My official site: http://www.daybologic.co.uk/overlord
 #define DPCRTLMM_SOURCE
 #include <stdio.h>
 #include "dpcrtlmm.h"
-#include "build.h"
+#include "dpc_build.h"
 #ifdef DPCRTLMM_THREADS
 
 #if ( !defined(__UNIX__) && !defined(__WIN32__) )

@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management Library
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,13 +36,13 @@ trap.  Otherwise the function does not return. */
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library header */
-#include "trap.h" /* _Trap() */
-#include "bloclock.h" /* For internal interfaces */
-#include "bdflags.h" /* For internal interface */
-#include "locktrap.h"
+#include "dpc_intdata.h" /* Internal library header */
+#include "dpc_trap.h" /* _Trap() */
+#include "dpc_bloclock.h" /* For internal interfaces */
+#include "dpc_bdflags.h" /* For internal interface */
+#include "dpc_locktrap.h"
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_int_LockTrap(const char* FuncName, const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
 {

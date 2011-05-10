@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management Library : callocator
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,14 +30,14 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "log.h" /* Main logging support */
-#include "iblkptr.h" /* dpcrtlmm_int_IndexFromBlockPtr() */
-#include "dbghooks.h" /* Debug hook executive */
-#include "biglock.h" /* For entire library mutual exclusion */
-#include "alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_log.h" /* Main logging support */
+#include "dpc_iblkptr.h" /* dpcrtlmm_int_IndexFromBlockPtr() */
+#include "dpc_dbghooks.h" /* Debug hook executive */
+#include "dpc_biglock.h" /* For entire library mutual exclusion */
+#include "dpc_alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
 static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str);

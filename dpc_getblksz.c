@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management Library: Block size function(s)
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,14 +32,14 @@ Last mod: 31st July 2001
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "trap.h" /* _Trap() - Trap support */
-#include "vptrap.h" /* _VerifyPtrs() */
-#include "iblkptr.h" /* IndexFromBlockPtr() */
-#include "biglock.h" /* Library mutual exclusion */
-#include "isbad.h" /* Internal interface to block testers */
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_trap.h" /* _Trap() - Trap support */
+#include "dpc_vptrap.h" /* _VerifyPtrs() */
+#include "dpc_iblkptr.h" /* IndexFromBlockPtr() */
+#include "dpc_biglock.h" /* Library mutual exclusion */
+#include "dpc_isbad.h" /* Internal interface to block testers */
 /*-------------------------------------------------------------------------*/
 static size_t dpcrtlmm_int_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* BlockPtr);
 /*-------------------------------------------------------------------------*/

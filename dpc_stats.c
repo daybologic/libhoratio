@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management Library : Stats management
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,10 +47,10 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Public library header */
-#include "intdata.h" /* Internal library data */
-#include "biglock.h" /* Mutual exclusion */
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_biglock.h" /* Mutual exclusion */
 
 static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats);
 static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray);

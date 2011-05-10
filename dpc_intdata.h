@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory management lib - internal data header
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ My official site: http://www.daybologic.co.uk/overlord
 /* WARNING! This header is for internal library use only, it contains
 internal data for the library. */
 
-#include "build.h" /* Build parameters */
+#include "dpc_build.h" /* Build parameters */
 
 /* Internal library data */
 extern PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int__safetyList[DPCRTLMM_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */

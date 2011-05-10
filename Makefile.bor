@@ -2,7 +2,7 @@
 # Written by Overlord David Duncan Ross Palmer
 # Overlord@DayboLogic.co.uk
 # 24th August 2000
-# Last modified 11th June 2001 by overlord
+# Last modified 11th January 2002 by DDRP
 
 # This Makefile designed for Borland C++, you'll have to change the tools
 # at the top of the file in the variables section to use Micro$oft or Colelus
@@ -15,7 +15,7 @@ THISFILE=Makefile.bor
 LIBTITLE=dpcrtlmm
 LIBNAME=$(LIBTITLE).lib
 # Master dependancies ALWAYS cause a rebuild
-MASTERDEP=build.h dpcrtlmm.h $(THISFILE) biglock.h
+MASTERDEP=dpc_build.h dpcrtlmm.h $(THISFILE) dpc_biglock.h
 
 # Tools
 LIBRARY=tlib
@@ -69,92 +69,92 @@ example3.obj : $(MASTERDEP) example3.c
 dpccap.obj : $(MASTERDEP) dpccap.cpp
 	$(COMPILE) $(ANSI) $(CFLGS) dpccap.cpp
 
-$(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj biglock.obj
+$(LIBNAME) : dpc_alloc.obj dpc_blkarray.obj dpc_calloc.obj dpc_free.obj dpc_isbad.obj dpc_stats.obj dpc_dbghooks.obj dpc_locktrap.obj dpc_safelist.obj dpcrtlmm.obj dpc_log.obj dpc_vptrap.obj dpc_trap.obj dpc_realloc.obj dpc_intdata.obj dpc_iblkptr.obj dpc_getblksz.obj dpc_bloclock.obj dpc_bdflags.obj dpc_biglock.obj
 	$(FILEEXISTS) $(LIBNAME) $(ERASE) $(LIBNAME)
-	-$(LIBRARY) $(LIBNAME) +alloc.obj
-	-$(LIBRARY) $(LIBNAME) +blkarray.obj
-	-$(LIBRARY) $(LIBNAME) +calloc.obj
-	-$(LIBRARY) $(LIBNAME) +free.obj
-	-$(LIBRARY) $(LIBNAME) +isbad.obj
-	-$(LIBRARY) $(LIBNAME) +stats.obj
-	-$(LIBRARY) $(LIBNAME) +dbghooks.obj
-	-$(LIBRARY) $(LIBNAME) +locktrap.obj
-	-$(LIBRARY) $(LIBNAME) +safelist.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_alloc.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_blkarray.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_calloc.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_free.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_isbad.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_stats.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_dbghooks.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_locktrap.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_safelist.obj
 	-$(LIBRARY) $(LIBNAME) +dpcrtlmm.obj
-	-$(LIBRARY) $(LIBNAME) +log.obj
-	-$(LIBRARY) $(LIBNAME) +vptrap.obj
-	-$(LIBRARY) $(LIBNAME) +trap.obj
-	-$(LIBRARY) $(LIBNAME) +realloc.obj
-	-$(LIBRARY) $(LIBNAME) +intdata.obj
-	-$(LIBRARY) $(LIBNAME) +iblkptr.obj
-	-$(LIBRARY) $(LIBNAME) +getblksz.obj
-	-$(LIBRARY) $(LIBNAME) +bloclock.obj
-	-$(LIBRARY) $(LIBNAME) +bdflags.obj
-        -$(LIBRARY) $(LIBNAME) +biglock.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_log.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_vptrap.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_trap.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_realloc.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_intdata.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_iblkptr.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_getblksz.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_bloclock.obj
+	-$(LIBRARY) $(LIBNAME) +dpc_bdflags.obj
+        -$(LIBRARY) $(LIBNAME) +dpc_biglock.obj
 	$(PRINT)$(BLANKLINE)
-	$(PRINT) (C)2000-2001, David Duncan Ross Palmer, Daybo Logic.
+	$(PRINT) (C)2000-2002, David Duncan Ross Palmer, Daybo Logic.
 	$(PRINT) Subject to the GNU General Public License.
 	$(PRINT) http://www.daybologic.co.uk/dev/dpcrtlmm
 
-alloc.obj : $(MASTERDEP) intdata.h log.h vptrap.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) alloc.c
+dpc_alloc.obj : $(MASTERDEP) dpc_intdata.h dpc_log.h dpc_vptrap.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_alloc.c
 
-blkarray.obj : $(MASTERDEP) intdata.h log.h trap.h safelist.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) blkarray.c
+dpc_blkarray.obj : $(MASTERDEP) dpc_intdata.h dpc_log.h dpc_trap.h dpc_safelist.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_blkarray.c
 
-calloc.obj : $(MASTERDEP) intdata.h log.h iblkptr.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) calloc.c
+dpc_calloc.obj : $(MASTERDEP) dpc_intdata.h dpc_log.h dpc_iblkptr.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_calloc.c
 
-free.obj : $(MASTERDEP) intdata.h vptrap.h locktrap.h log.h trap.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) free.c
+dpc_free.obj : $(MASTERDEP) dpc_intdata.h dpc_vptrap.h dpc_locktrap.h dpc_log.h dpc_trap.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_free.c
 
-isbad.obj : $(MASTERDEP) intdata.h trap.h safelist.h
-	$(COMPILE) $(ANSI) $(CFLGS) isbad.c
+dpc_isbad.obj : $(MASTERDEP) dpc_intdata.h dpc_trap.h dpc_safelist.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_isbad.c
 
-stats.obj : $(MASTERDEP) intdata.h
-	$(COMPILE) $(ANSI) $(CFLGS) stats.c
+dpc_stats.obj : $(MASTERDEP) dpc_intdata.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_stats.c
 
-dbghooks.obj : $(MASTERDEP) intdata.h log.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) dbghooks.c
+dpc_dbghooks.obj : $(MASTERDEP) dpc_intdata.h dpc_log.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_dbghooks.c
 
-locktrap.obj : $(MASTERDEP) intdata.h trap.h locktrap.h
-	$(COMPILE) $(ANSI) $(CFLGS) locktrap.c
+dpc_locktrap.obj : $(MASTERDEP) dpc_intdata.h dpc_trap.h dpc_locktrap.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_locktrap.c
 
-safelist.obj : $(MASTERDEP) intdata.h safelist.h
-	$(COMPILE) $(ANSI) $(CFLGS) safelist.c
+dpc_safelist.obj : $(MASTERDEP) dpc_intdata.h dpc_safelist.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_safelist.c
 
 dpcrtlmm.obj : $(MASTERDEP)
 	$(COMPILE) $(ANSI) $(CFLGS) dpcrtlmm.c
 
-log.obj : $(MASTERDEP) intdata.h log.h
-	$(COMPILE) $(ANSI) $(CFLGS) log.c
+dpc_log.obj : $(MASTERDEP) dpc_intdata.h dpc_log.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_log.c
 
-vptrap.obj : $(MASTERDEP) intdata.h trap.h log.h safelist.h vptrap.h
-	$(COMPILE) $(ANSI) $(CFLGS) vptrap.c
+dpc_vptrap.obj : $(MASTERDEP) dpc_intdata.h dpc_trap.h dpc_log.h dpc_safelist.h dpc_vptrap.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_vptrap.c
 
-trap.obj : $(MASTERDEP) intdata.h log.h trap.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) trap.c
+dpc_trap.obj : $(MASTERDEP) dpc_intdata.h dpc_log.h dpc_trap.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_trap.c
 
-realloc.obj : $(MASTERDEP) intdata.h vptrap.h locktrap.h iblkptr.h dbghooks.h
-	$(COMPILE) $(ANSI) $(CFLGS) realloc.c
+dpc_realloc.obj : $(MASTERDEP) dpc_intdata.h dpc_vptrap.h dpc_locktrap.h dpc_iblkptr.h dpc_dbghooks.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_realloc.c
 
-intdata.obj : $(MASTERDEP) intdata.h
-	$(COMPILE) $(ANSI) $(CFLGS) intdata.c
+dpc_intdata.obj : $(MASTERDEP) dpc_intdata.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_intdata.c
 
-iblkptr.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
-	$(COMPILE) $(ANSI) $(CFLGS) iblkptr.c
+dpc_iblkptr.obj : $(MASTERDEP) dpc_intdata.h dpc_trap.h dpc_vptrap.h dpc_iblkptr.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_iblkptr.c
 
-getblksz.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
-	$(COMPILE) $(ANSI) $(CFLGS) getblksz.c
+dpc_getblksz.obj : $(MASTERDEP) dpc_intdata.h dpc_trap.h dpc_vptrap.h dpc_iblkptr.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_getblksz.c
 
-bloclock.obj : $(MASTERDEP) bdflags.h
-	$(COMPILE) $(ANSI) $(CFLGS) bloclock.c
+dpc_bloclock.obj : $(MASTERDEP) dpc_bdflags.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_bloclock.c
 
-bdflags.obj : $(MASTERDEP) intdata.h vptrap.h iblkptr.h dbghooks.h bdflags.h
-	$(COMPILE) $(ANSI) $(CFLGS) bdflags.c
+dpc_bdflags.obj : $(MASTERDEP) dpc_intdata.h dpc_vptrap.h dpc_iblkptr.h dpc_dbghooks.h dpc_bdflags.h
+	$(COMPILE) $(ANSI) $(CFLGS) dpc_bdflags.c
 
-biglock.obj : $(MASTERDEP) vptrap.h iblkptr.h intdata.h biglock.h
-        $(COMPILE) $(CFLGS) biglock.c
+dpc_biglock.obj : $(MASTERDEP) dpc_vptrap.h dpc_iblkptr.h dpc_intdata.h dpc_biglock.h
+        $(COMPILE) $(CFLGS) dpc_biglock.c
 
 all:
 	make -f $(THISFILE) config
@@ -163,26 +163,26 @@ all:
 	make -f $(THISFILE) example
 
 clean:
-	$(FILEEXISTS) alloc.obj $(ERASE) alloc.obj
-	$(FILEEXISTS) blkarray.obj $(ERASE) blkarray.obj
-	$(FILEEXISTS) calloc.obj $(ERASE) calloc.obj
-	$(FILEEXISTS) free.obj $(ERASE) free.obj
-	$(FILEEXISTS) isbad.obj $(ERASE) isbad.obj
-	$(FILEEXISTS) stats.obj $(ERASE) stats.obj
-	$(FILEEXISTS) dbghooks.obj $(ERASE) dbghooks.obj
-	$(FILEEXISTS) locktrap.obj $(ERASE) locktrap.obj
-	$(FILEEXISTS) safelist.obj $(ERASE) safelist.obj
+	$(FILEEXISTS) dpc_alloc.obj $(ERASE) dpc_alloc.obj
+	$(FILEEXISTS) dpc_blkarray.obj $(ERASE) dpc_blkarray.obj
+	$(FILEEXISTS) dpc_calloc.obj $(ERASE) dpc_calloc.obj
+	$(FILEEXISTS) dpc_free.obj $(ERASE) dpc_free.obj
+	$(FILEEXISTS) dpc_isbad.obj $(ERASE) dpc_isbad.obj
+	$(FILEEXISTS) dpc_stats.obj $(ERASE) dpc_stats.obj
+	$(FILEEXISTS) dpc_dbghooks.obj $(ERASE) dpc_dbghooks.obj
+	$(FILEEXISTS) dpc_locktrap.obj $(ERASE) dpc_locktrap.obj
+	$(FILEEXISTS) dpc_safelist.obj $(ERASE) dpc_safelist.obj
 	$(FILEEXISTS) dpcrtlmm.obj $(ERASE) dpcrtlmm.obj
-	$(FILEEXISTS) log.obj $(ERASE) log.obj
-	$(FILEEXISTS) vptrap.obj $(ERASE) vptrap.obj
-	$(FILEEXISTS) trap.obj $(ERASE) trap.obj
-	$(FILEEXISTS) realloc.obj $(ERASE) realloc.obj
-	$(FILEEXISTS) intdata.obj $(ERASE) intdata.obj
-	$(FILEEXISTS) iblkptr.obj $(ERASE) iblkptr.obj
-	$(FILEEXISTS) getblksz.obj $(ERASE) getblksz.obj
-	$(FILEEXISTS) bloclock.obj $(ERASE) bloclock.obj
-	$(FILEEXISTS) bdflags.obj $(ERASE) bdflags.obj
-        $(FILEEXISTS) biglock.obj $(ERASE) biglock.obj
+	$(FILEEXISTS) dpc_log.obj $(ERASE) dpc_log.obj
+	$(FILEEXISTS) dpc_vptrap.obj $(ERASE) dpc_vptrap.obj
+	$(FILEEXISTS) dpc_trap.obj $(ERASE) dpc_trap.obj
+	$(FILEEXISTS) dpc_realloc.obj $(ERASE) dpc_realloc.obj
+	$(FILEEXISTS) dpc_intdata.obj $(ERASE) dpc_intdata.obj
+	$(FILEEXISTS) dpc_iblkptr.obj $(ERASE) dpc_iblkptr.obj
+	$(FILEEXISTS) dpc_getblksz.obj $(ERASE) dpc_getblksz.obj
+	$(FILEEXISTS) dpc_bloclock.obj $(ERASE) dpc_bloclock.obj
+	$(FILEEXISTS) dpc_bdflags.obj $(ERASE) dpc_bdflags.obj
+        $(FILEEXISTS) dpc_biglock.obj $(ERASE) dpc_biglock.obj
 	$(FILEEXISTS) $(LIBTITLE).bak $(ERASE) $(LIBTITLE).bak
 	$(FILEEXISTS) dpccap.obj $(ERASE) dpccap.obj
         $(FILEEXISTS) example?.obj $(ERASE) example?.obj
@@ -192,10 +192,12 @@ clean:
 	#get rid of it
 	$(FILEEXISTS) example.tds $(ERASE) example.tds
 	$(FILEEXISTS) example?.exe $(ERASE) example?.exe
+	$(FILEEXISTS) example?.tds $(ERASE) example?.tds
 	$(FILEEXISTS) $(LIBNAME) $(ERASE) $(LIBNAME)
 	$(FILEEXISTS) config.exe $(ERASE) config.exe
 	$(FILEEXISTS) config.obj $(ERASE) config.obj
 	$(FILEEXISTS) config.h $(ERASE) config.h
+	$(FILEEXISTS) config.tds $(ERASE) config.tds
 	$(COPY) config.h.default config.h
 
 # Clobber backward compat.

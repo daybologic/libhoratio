@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory Management logger
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,10 +45,10 @@ causes a warning on your compiler, I aplogise!
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library header */
-#include "log.h"
+#include "dpc_intdata.h" /* Internal library header */
+#include "dpc_log.h"
 /*-------------------------------------------------------------------------*/
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
           strncat((buff), (sourcestring), (sizeof((buff))/sizeof((buff)[0])-1))

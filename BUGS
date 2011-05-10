@@ -6,4 +6,4 @@ patches to fix any of them please email Overlord@DayboLogic.co.uk
 ----------------------------------------------------------------------
 File/line reports in C++ report owner as dpccap.cpp not the true owner.
 Truely portable --maxport --enable-threads mutlithreaded builds on UNIX allow callbacks to deadlock the thread.  I am seeing this as just an unfortunate thing we have to accept and use the NP POSIX extensions for recursive mutexes if possible.  Unless you have a better idea?
-Library can lock the big lock after it destroyed it during shutdown.
+Library can lock the big lock after it destroyed it during shutdown.   <= I don't know if this still applies

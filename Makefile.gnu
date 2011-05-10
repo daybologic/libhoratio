@@ -1,7 +1,7 @@
 # Make file for DPCRTLMM
 # Written by Overlord David Duncan Ross Palmer
 # Overlord@DayboLogic.co.uk
-# 10th June 2001
+# 10th June 2001 - 11th January 2002
 
 # This Makefile designed for GNU tools, gcc GNU C compiler, GNU's make
 # not neccersarily on UNIX but that's what I'm building on.  If you have
@@ -52,8 +52,8 @@ THISFILE=Makefile.gnu
 LIBTITLE=dpcrtlmm
 LIBNAME=lib$(LIBTITLE).a
 # Master dependancies ALWAYS cause a rebuild
-MASTERDEP=build$(H) dpcrtlmm$(H) $(THISFILE) config$(H) biglock$(H)
-OBJECTS=alloc$(OBJ) blkarray$(OBJ) calloc$(OBJ) free$(OBJ) isbad$(OBJ) stats$(OBJ) dbghooks$(OBJ) locktrap$(OBJ) safelist$(OBJ) dpcrtlmm$(OBJ) log$(OBJ) vptrap$(OBJ) trap$(OBJ) realloc$(OBJ) intdata$(OBJ) iblkptr$(OBJ) getblksz$(OBJ) bloclock$(OBJ) bdflags$(OBJ) biglock$(OBJ)
+MASTERDEP=dpc_build$(H) dpcrtlmm$(H) $(THISFILE) config$(H) dpc_biglock$(H)
+OBJECTS=dpc_alloc$(OBJ) dpc_blkarray$(OBJ) dpc_calloc$(OBJ) dpc_free$(OBJ) dpc_isbad$(OBJ) dpc_stats$(OBJ) dpc_dbghooks$(OBJ) dpc_locktrap$(OBJ) dpc_safelist$(OBJ) dpcrtlmm$(OBJ) dpc_log$(OBJ) dpc_vptrap$(OBJ) dpc_trap$(OBJ) dpc_realloc$(OBJ) dpc_intdata$(OBJ) dpc_iblkptr$(OBJ) dpc_getblksz$(OBJ) dpc_bloclock$(OBJ) dpc_bdflags$(OBJ) dpc_biglock$(OBJ)
 LOGFILE=DPCRTLMM.LOG
 COREDUMPS=example1.core example2.core example3.core core
 BACKUPS=*~
@@ -62,87 +62,68 @@ LIBADD=$(LIBRARY) $(LIBOPTS) $(LIBNAME)
 # Build rules
 
 $(LIBNAME) : $(MASTERDEP) $(OBJECTS)
-	$(LIBADD) alloc$(OBJ)
-	$(LIBADD) blkarray$(OBJ)
-	$(LIBADD) calloc$(OBJ)
-	$(LIBADD) free$(OBJ)
-	$(LIBADD) isbad$(OBJ)
-	$(LIBADD) stats$(OBJ)
-	$(LIBADD) dbghooks$(OBJ)
-	$(LIBADD) locktrap$(OBJ)
-	$(LIBADD) safelist$(OBJ)
-	$(LIBADD) dpcrtlmm$(OBJ)
-	$(LIBADD) log$(OBJ)
-	$(LIBADD) vptrap$(OBJ)
-	$(LIBADD) trap$(OBJ)
-	$(LIBADD) realloc$(OBJ)
-	$(LIBADD) intdata$(OBJ)
-	$(LIBADD) iblkptr$(OBJ)
-	$(LIBADD) getblksz$(OBJ)
-	$(LIBADD) bloclock$(OBJ)
-	$(LIBADD) bdflags$(OBJ)
-	$(LIBADD) biglock$(OBJ)
+	$(LIBADD) $(OBJECTS)
 	$(RANLIB)
 
-alloc$(OBJ) : alloc$(C) $(MASTERDEP) intdata$(H) log$(H) vptrap$(H) dbghooks$(H) alloc$(H)
-	$(COMPILE) alloc$(C)
+dpc_alloc$(OBJ) : dpc_alloc$(C) $(MASTERDEP) dpc_intdata$(H) dpc_log$(H) dpc_vptrap$(H) dpc_dbghooks$(H) dpc_alloc$(H)
+	$(COMPILE) dpc_alloc$(C)
 
-blkarray$(OBJ) : blkarray$(C) $(MASTERDEP) intdata$(H) log$(H) trap$(H) safelist$(H) dbghooks$(H) biglock$(H) blkarray$(H)
-	$(COMPILE) blkarray$(C)
+dpc_blkarray$(OBJ) : dpc_blkarray$(C) $(MASTERDEP) dpc_intdata$(H) dpc_log$(H) dpc_trap$(H) dpc_safelist$(H) dpc_dbghooks$(H) dpc_biglock$(H) dpc_blkarray$(H)
+	$(COMPILE) dpc_blkarray$(C)
 
-calloc$(OBJ) : calloc$(C) alloc$(H) $(MASTERDEP) intdata$(H) log$(H) iblkptr$(H) dbghooks$(H)
-	$(COMPILE) calloc$(C)
+dpc_calloc$(OBJ) : dpc_calloc$(C) dpc_alloc$(H) $(MASTERDEP) dpc_intdata$(H) dpc_log$(H) dpc_iblkptr$(H) dpc_dbghooks$(H)
+	$(COMPILE) dpc_calloc$(C)
 
-free$(OBJ) : free$(C) $(MASTERDEP) intdata$(H) vptrap$(H) locktrap$(H) log$(H) trap$(H) dbghooks$(H)
-	$(COMPILE) free$(C)
+dpc_free$(OBJ) : dpc_free$(C) $(MASTERDEP) dpc_intdata$(H) dpc_vptrap$(H) dpc_locktrap$(H) dpc_log$(H) dpc_trap$(H) dpc_dbghooks$(H)
+	$(COMPILE) dpc_free$(C)
 
-isbad$(OBJ) : isbad$(C) $(MASTERDEP) intdata$(H) trap$(H) safelist$(H)
-	$(COMPILE) isbad$(C)
+dpc_isbad$(OBJ) : dpc_isbad$(C) $(MASTERDEP) dpc_intdata$(H) dpc_trap$(H) dpc_safelist$(H)
+	$(COMPILE) dpc_isbad$(C)
 
-stats$(OBJ) : stats$(C) $(MASTERDEP) intdata$(H)
-	$(COMPILE) stats$(C)
+dpc_stats$(OBJ) : dpc_stats$(C) $(MASTERDEP) dpc_intdata$(H)
+	$(COMPILE) dpc_stats$(C)
 
-dbghooks$(OBJ) : dbghooks$(C) $(MASTERDEP) intdata$(H) log$(H) dbghooks$(H)
-	$(COMPILE) dbghooks$(C)
+dpc_dbghooks$(OBJ) : dpc_dbghooks$(C) $(MASTERDEP) dpc_intdata$(H) dpc_log$(H) dpc_dbghooks$(H)
+	$(COMPILE) dpc_dbghooks$(C)
 
-locktrap$(OBJ) : locktrap$(C) $(MASTERDEP) intdata$(H) trap$(H) locktrap$(H)
-	$(COMPILE) locktrap$(C)
+dpc_locktrap$(OBJ) : dpc_locktrap$(C) $(MASTERDEP) dpc_intdata$(H) dpc_trap$(H) dpc_locktrap$(H)
+	$(COMPILE) dpc_locktrap$(C)
 
-safelist$(OBJ) : safelist$(C) $(MASTERDEP) intdata$(H) safelist$(H)
-	$(COMPILE) safelist$(C)
+dpc_safelist$(OBJ) : dpc_safelist$(C) $(MASTERDEP) dpc_intdata$(H) dpc_safelist$(H)
+	$(COMPILE) dpc_safelist$(C)
 
-dpcrtlmm$(OBJ) : dpcrtlmm$(C) $(MASTERDEP) intdata$(H) trap$(H) log$(H) safelist$(H) dbghooks$(H) biglock$(H) blkarray$(H)
+dpcrtlmm$(OBJ) : dpcrtlmm$(C) $(MASTERDEP) dpc_intdata$(H) dpc_trap$(H) dpc_log$(H) dpc_safelist$(H) dpc_dbghooks$(H) dpc_biglock$(H) dpc_blkarray$(H)
 	$(COMPILE) dpcrtlmm$(C)
 
-log$(OBJ) : log$(C) $(MASTERDEP) intdata$(H) log$(H)
-	$(COMPILE) log$(C)
+dpc_log$(OBJ) : dpc_log$(C) $(MASTERDEP) dpc_intdata$(H) dpc_log$(H)
+	$(COMPILE) dpc_log$(C)
 
-vptrap$(OBJ) : vptrap$(C) $(MASTERDEP) intdata$(H) trap$(H) log$(H) safelist$(H) vptrap$(H)
-	$(COMPILE) vptrap$(C)
+dpc_vptrap$(OBJ) : dpc_vptrap$(C) $(MASTERDEP) dpc_intdata$(H) dpc_trap$(H) dpc_log$(H) dpc_safelist$(H) dpc_vptrap$(H)
+	$(COMPILE) dpc_vptrap$(C)
 
-trap$(OBJ) : trap$(C) $(MASTERDEP) intdata$(H) log$(H) trap$(H) dbghooks$(H)
-	$(COMPILE) trap$(C)
+dpc_trap$(OBJ) : dpc_trap$(C) $(MASTERDEP) dpc_intdata$(H) dpc_log$(H) dpc_trap$(H) dpc_dbghooks$(H)
+	$(COMPILE) dpc_trap$(C)
 
-realloc$(OBJ) : realloc$(C) $(MASTERDEP) intdata$(H) vptrap$(H) locktrap$(H) iblkptr$(H) dbghooks$(H) log$(H)
-	$(COMPILE) realloc$(C)
+dpc_realloc$(OBJ) : dpc_realloc$(C) $(MASTERDEP) dpc_intdata$(H) dpc_vptrap$(H) dpc_locktrap$(H) dpc_iblkptr$(H) dpc_dbghooks$(H) dpc_log$(H)
+	$(COMPILE) dpc_realloc$(C)
 
-intdata$(OBJ) : intdata$(C) $(MASTERDEP) intdata$(H)
-	$(COMPILE) intdata$(C)
+dpc_intdata$(OBJ) : dpc_intdata$(C) $(MASTERDEP) dpc_intdata$(H)
+	$(COMPILE) dpc_intdata$(C)
 
-iblkptr$(OBJ) : iblkptr$(C) $(MASTERDEP) intdata$(H) trap$(H) vptrap$(H) iblkptr$(H)
-	$(COMPILE) iblkptr$(C)
+dpc_iblkptr$(OBJ) : dpc_iblkptr$(C) $(MASTERDEP) dpc_intdata$(H) dpc_trap$(H) dpc_vptrap$(H) dpc_iblkptr$(H)
+	$(COMPILE) dpc_iblkptr$(C)
 
-getblksz$(OBJ) : getblksz$(C) $(MASTERDEP) intdata$(H) trap$(H) vptrap$(H) iblkptr$(H)
-	$(COMPILE) getblksz$(C)
+dpc_getblksz$(OBJ) : dpc_getblksz$(C) $(MASTERDEP) dpc_intdata$(H) dpc_trap$(H) dpc_vptrap$(H) dpc_iblkptr$(H)
+	$(COMPILE) dpc_getblksz$(C)
 
-bloclock$(OBJ) : bloclock$(C) $(MASTERDEP) bdflags$(H)
-	$(COMPILE) bloclock$(C)
+dpc_bloclock$(OBJ) : dpc_bloclock$(C) $(MASTERDEP) dpc_bdflags$(H)
+	$(COMPILE) dpc_bloclock$(C)
 
-bdflags$(OBJ) : bdflags$(C) $(MASTERDEP) intdata$(H) vptrap$(H) iblkptr$(H) dbghooks$(H) bdflags$(H)
-	$(COMPILE) bdflags$(C)
+dpc_bdflags$(OBJ) : dpc_bdflags$(C) $(MASTERDEP) dpc_intdata$(H) dpc_vptrap$(H) dpc_iblkptr$(H) dpc_dbghooks$(H) dpc_bdflags$(H)
+	$(COMPILE) dpc_bdflags$(C)
 
-biglock$(OBJ) : biglock$(C) biglock$(H) $(MASTERDEP)
-	$(COMPILE) -D_RECURSIVE -D__UNIX__ biglock$(C)
+dpc_biglock$(OBJ) : dpc_biglock$(C) dpc_biglock$(H) $(MASTERDEP)
+	$(COMPILE) -D_RECURSIVE -D__UNIX__ dpc_biglock$(C)
 
 clean : confclean
 	@-$(ERASE) $(OBJECTS)
@@ -182,7 +163,7 @@ dpccap$(OBJ) : $(MASTERDEP) dpccap$(CPP) dpccap$(H)
 example3 : $(MASTERDEP) example3$(OBJ) $(LIBNAME)
 	$(LINK) -o example3 example3$(OBJ) $(LIBNAME)
 
-example3$(OBJ) : $(MASTERDEP) example3$(C) intdata$(H) safelist$(H)
+example3$(OBJ) : $(MASTERDEP) example3$(C) dpc_intdata$(H) dpc_safelist$(H)
 	$(COMPILE) example3$(C)
 
 

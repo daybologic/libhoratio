@@ -47,7 +47,7 @@ void dpcrtlmm_int_Log(const char* File, const unsigned int Line, const unsigned 
 #ifdef DPCRTLMM_LOG
 #  define MESSAGE(sfn, sfl, msg) dpcrtlmm_int_Log((sfn), (sfl), (const unsigned short)DPCRTLMM_LOG_MESSAGE, (msg))
 #else /* Non logging build */
-#  define MESSAGE(msg) /* Do nothing with it */
+#  define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
 #endif /*DPCRTLMM_LOG*/
 
 #define WARNING(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_WARNING, (msg))

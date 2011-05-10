@@ -29,19 +29,19 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #ifdef DPCRTLMM_WANTFARDATA
 #  include <alloc.h>
 #endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal data */
-#include "vptrap.h" /* _VerifyPtrs() */
-#include "locktrap.h" /* _LockTrap() */
-#include "log.h" /* LOG macro */
-#include "trap.h" /* _Trap() */
-#include "dbghooks.h" /* Debug hook executive */
-#include "biglock.h" /* For mutual exclusion */
-#include "isbad.h" /* Internal interface to block testers */
+#include "dpc_intdata.h" /* Internal data */
+#include "dpc_vptrap.h" /* _VerifyPtrs() */
+#include "dpc_locktrap.h" /* _LockTrap() */
+#include "dpc_log.h" /* LOG macro */
+#include "dpc_trap.h" /* _Trap() */
+#include "dpc_dbghooks.h" /* Debug hook executive */
+#include "dpc_biglock.h" /* For mutual exclusion */
+#include "dpc_isbad.h" /* Internal interface to block testers */
 /*-------------------------------------------------------------------------*/
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */

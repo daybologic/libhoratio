@@ -1,6 +1,6 @@
 /*
     DPCRTLMM Memory management library : Block locking interface
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ RESPECT! */
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* The main library header */
-#include "biglock.h" /* Mutual exclusion */
-#include "bdflags.h" /* Need this to get around the lock */
-#include "bloclock.h"
+#include "dpc_biglock.h" /* Mutual exclusion */
+#include "dpc_bdflags.h" /* Need this to get around the lock */
+#include "dpc_bloclock.h"
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned int NewStatus)
 {

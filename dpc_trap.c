@@ -36,13 +36,13 @@ My official site: http://www.daybologic.co.uk/overlord
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "build.h" /* General build parameters */
+#include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
-#include "intdata.h" /* Internal library data */
-#include "log.h" /* Internal logging support */
-#include "trap.h"
-#include "dbghooks.h" /* The debug hook executive */
-#include "biglock.h" /* Mutual exclusion */
+#include "dpc_intdata.h" /* Internal library data */
+#include "dpc_log.h" /* Internal logging support */
+#include "dpc_trap.h"
+#include "dpc_dbghooks.h" /* The debug hook executive */
+#include "dpc_biglock.h" /* Mutual exclusion */
 /*-------------------------------------------------------------------------*/
 static void dpcrtlmm_int_InstallTrapCallback( void(*NewTrapCallback)(const unsigned int, const char*), const unsigned int AsHook );
 static void dpcrtlmm_int_RemoveTrapCallback(void(*CurrentCallback)(const unsigned int, const char*));
