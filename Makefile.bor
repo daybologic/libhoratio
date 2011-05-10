@@ -2,7 +2,7 @@
 # Written by Overlord David Duncan Ross Palmer
 # Overlord@DayboLogic.co.uk
 # 24th August 2000
-# Last modified 10th October 2000
+# Last modified 12th December 2000
 
 # This Makefile designed for Borland C++, you'll have to change the tools
 # at the top of the file in the variables section to use Micro$oft or Colelus
@@ -31,101 +31,118 @@ ERASE=erase
 PRINT=@echo
 BLANKLINE=.
 
-example.exe : $(MASTERDEP) example.obj $(LIBNAME) example.c
+all : $(LIBNAME) example
+
+example : example1.exe example2.exe example3.exe
+
+example1.exe : $(MASTERDEP) example1.obj $(LIBNAME)
 	$(PRINT)$(BLANKLINE)
-	$(PRINT) Building example program
-        $(COMPILE) -eexample.exe example.obj $(LIBNAME)
+	$(PRINT) Building example1 program
+	$(COMPILE) -eexample1.exe example1.obj $(LIBNAME)
 
-# This was a missing rule!  Nasty stuff, Make with Builder 5 doesn't like
-# me not bothering with it.
-example.obj : $(MASTERDEP) example.c
-        $(COMPILE) $(ANSI) $(CFLGS) example.c
+example2.exe : $(MASTERDEP) example2.obj dpccap.obj $(LIBNAME)
+	$(PRINT)$(BLANKLINE)
+	$(PRINT) Building example2 program
+	$(COMPILE) -eexample2.exe example2.obj dpccap.obj $(LIBNAME)
 
-$(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj strtstop.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj
-        -$(LIBRARY) $(LIBNAME) -+alloc.obj
-        -$(LIBRARY) $(LIBNAME) -+blkarray.obj
-        -$(LIBRARY) $(LIBNAME) -+calloc.obj
-        -$(LIBRARY) $(LIBNAME) -+free.obj
-        -$(LIBRARY) $(LIBNAME) -+isbad.obj
-        -$(LIBRARY) $(LIBNAME) -+stats.obj
-        -$(LIBRARY) $(LIBNAME) -+dbghooks.obj
-        -$(LIBRARY) $(LIBNAME) -+locktrap.obj
-        -$(LIBRARY) $(LIBNAME) -+safelist.obj
-        -$(LIBRARY) $(LIBNAME) -+dpcrtlmm.obj
-        -$(LIBRARY) $(LIBNAME) -+log.obj
-        -$(LIBRARY) $(LIBNAME) -+vptrap.obj
-        -$(LIBRARY) $(LIBNAME) -+trap.obj
-        -$(LIBRARY) $(LIBNAME) -+strtstop.obj
-        -$(LIBRARY) $(LIBNAME) -+realloc.obj
-        -$(LIBRARY) $(LIBNAME) -+intdata.obj
-        -$(LIBRARY) $(LIBNAME) -+iblkptr.obj
-        -$(LIBRARY) $(LIBNAME) -+getblksz.obj
-        -$(LIBRARY) $(LIBNAME) -+bloclock.obj
-        -$(LIBRARY) $(LIBNAME) -+bdflags.obj
-        $(PRINT)$(BLANKLINE)
+example3.exe : $(MASTERDEP) example3.obj $(LIBNAME)
+	$(PRINT)$(BLANKLINE)
+	$(PRINT) Building example3 program
+	$(COMPILE) -eexample3.exe example3.obj $(LIBNAME)
+
+example1.obj : $(MASTERDEP) example1.c
+	$(COMPILE) $(ANSI) $(CFLGS) example1.c
+
+example2.obj : $(MASTERDEP) example2.cpp
+	$(COMPILE) $(ANSI) $(CFLGS) example2.cpp
+
+example3.obj : $(MASTERDEP) example3.c
+	$(COMPILE) $(ANSI) $(CFLGS) example3.c
+
+dpccap.obj : $(MASTERDEP) dpccap.cpp
+	$(COMPILE) $(ANSI) $(CFLGS) dpccap.cpp
+
+$(LIBNAME) : alloc.obj blkarray.obj calloc.obj free.obj isbad.obj stats.obj dbghooks.obj locktrap.obj safelist.obj dpcrtlmm.obj log.obj vptrap.obj trap.obj realloc.obj intdata.obj iblkptr.obj getblksz.obj bloclock.obj bdflags.obj
+	-$(LIBRARY) $(LIBNAME) -+alloc.obj
+	-$(LIBRARY) $(LIBNAME) -+blkarray.obj
+	-$(LIBRARY) $(LIBNAME) -+calloc.obj
+	-$(LIBRARY) $(LIBNAME) -+free.obj
+	-$(LIBRARY) $(LIBNAME) -+isbad.obj
+	-$(LIBRARY) $(LIBNAME) -+stats.obj
+	-$(LIBRARY) $(LIBNAME) -+dbghooks.obj
+	-$(LIBRARY) $(LIBNAME) -+locktrap.obj
+	-$(LIBRARY) $(LIBNAME) -+safelist.obj
+	-$(LIBRARY) $(LIBNAME) -+dpcrtlmm.obj
+	-$(LIBRARY) $(LIBNAME) -+log.obj
+	-$(LIBRARY) $(LIBNAME) -+vptrap.obj
+	-$(LIBRARY) $(LIBNAME) -+trap.obj
+	-$(LIBRARY) $(LIBNAME) -+realloc.obj
+	-$(LIBRARY) $(LIBNAME) -+intdata.obj
+	-$(LIBRARY) $(LIBNAME) -+iblkptr.obj
+	-$(LIBRARY) $(LIBNAME) -+getblksz.obj
+	-$(LIBRARY) $(LIBNAME) -+bloclock.obj
+	-$(LIBRARY) $(LIBNAME) -+bdflags.obj
+	$(PRINT)$(BLANKLINE)
 	$(PRINT) (C)2000, Overlord DDRP, Daybo Logic.
 	$(PRINT) Please read the license agreement before proceeding
 	$(PRINT) http://daybologic.com/Dev/dpcrtlmm
 
 alloc.obj : $(MASTERDEP) intdata.h log.h vptrap.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) alloc.c
+	$(COMPILE) $(ANSI) $(CFLGS) alloc.c
 
 blkarray.obj : $(MASTERDEP) intdata.h log.h trap.h safelist.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) blkarray.c
+	$(COMPILE) $(ANSI) $(CFLGS) blkarray.c
 
 calloc.obj : $(MASTERDEP) intdata.h log.h iblkptr.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) calloc.c
+	$(COMPILE) $(ANSI) $(CFLGS) calloc.c
 
 free.obj : $(MASTERDEP) intdata.h vptrap.h locktrap.h log.h trap.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) free.c
+	$(COMPILE) $(ANSI) $(CFLGS) free.c
 
 isbad.obj : $(MASTERDEP) intdata.h trap.h safelist.h
-        $(COMPILE) $(ANSI) $(CFLGS) isbad.c
+	$(COMPILE) $(ANSI) $(CFLGS) isbad.c
 
 stats.obj : $(MASTERDEP) intdata.h
-        $(COMPILE) $(ANSI) $(CFLGS) stats.c
+	$(COMPILE) $(ANSI) $(CFLGS) stats.c
 
 dbghooks.obj : $(MASTERDEP) intdata.h log.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) dbghooks.c
+	$(COMPILE) $(ANSI) $(CFLGS) dbghooks.c
 
 locktrap.obj : $(MASTERDEP) intdata.h trap.h locktrap.h
-        $(COMPILE) $(ANSI) $(CFLGS) locktrap.c
+	$(COMPILE) $(ANSI) $(CFLGS) locktrap.c
 
 safelist.obj : $(MASTERDEP) intdata.h safelist.h
-        $(COMPILE) $(ANSI) $(CFLGS) safelist.c
+	$(COMPILE) $(ANSI) $(CFLGS) safelist.c
 
 dpcrtlmm.obj : $(MASTERDEP)
-        $(COMPILE) $(ANSI) $(CFLGS) dpcrtlmm.c
+	$(COMPILE) $(ANSI) $(CFLGS) dpcrtlmm.c
 
 log.obj : $(MASTERDEP) intdata.h log.h
-        $(COMPILE) $(ANSI) $(CFLGS) log.c
+	$(COMPILE) $(ANSI) $(CFLGS) log.c
 
 vptrap.obj : $(MASTERDEP) intdata.h trap.h log.h safelist.h vptrap.h
-        $(COMPILE) $(ANSI) $(CFLGS) vptrap.c
+	$(COMPILE) $(ANSI) $(CFLGS) vptrap.c
 
 trap.obj : $(MASTERDEP) intdata.h log.h trap.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) trap.c
-
-strtstop.obj : $(MASTERDEP) intdata.h trap.h log.h safelist.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) strtstop.c
+	$(COMPILE) $(ANSI) $(CFLGS) trap.c
 
 realloc.obj : $(MASTERDEP) intdata.h vptrap.h locktrap.h iblkptr.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) realloc.c
+	$(COMPILE) $(ANSI) $(CFLGS) realloc.c
 
 intdata.obj : $(MASTERDEP) intdata.h
-        $(COMPILE) $(ANSI) $(CFLGS) intdata.c
+	$(COMPILE) $(ANSI) $(CFLGS) intdata.c
 
 iblkptr.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
-        $(COMPILE) $(ANSI) $(CFLGS) iblkptr.c
+	$(COMPILE) $(ANSI) $(CFLGS) iblkptr.c
 
 getblksz.obj : $(MASTERDEP) intdata.h trap.h vptrap.h iblkptr.h
-        $(COMPILE) $(ANSI) $(CFLGS) getblksz.c
+	$(COMPILE) $(ANSI) $(CFLGS) getblksz.c
 
 bloclock.obj : $(MASTERDEP)
-        $(COMPILE) $(ANSI) $(CFLGS) bloclock.c
+	$(COMPILE) $(ANSI) $(CFLGS) bloclock.c
 
 bdflags.obj : $(MASTERDEP) intdata.h vptrap.h iblkptr.h dbghooks.h
-        $(COMPILE) $(ANSI) $(CFLGS) bdflags.c
+	$(COMPILE) $(ANSI) $(CFLGS) bdflags.c
 
 clean:
 	$(FILEEXISTS) alloc.obj $(ERASE) alloc.obj
@@ -141,7 +158,6 @@ clean:
 	$(FILEEXISTS) log.obj $(ERASE) log.obj
 	$(FILEEXISTS) vptrap.obj $(ERASE) vptrap.obj
 	$(FILEEXISTS) trap.obj $(ERASE) trap.obj
-	$(FILEEXISTS) strtstop.obj $(ERASE) strtstop.obj
 	$(FILEEXISTS) realloc.obj $(ERASE) realloc.obj
 	$(FILEEXISTS) intdata.obj $(ERASE) intdata.obj
 	$(FILEEXISTS) iblkptr.obj $(ERASE) iblkptr.obj
@@ -149,15 +165,23 @@ clean:
 	$(FILEEXISTS) bloclock.obj $(ERASE) bloclock.obj
 	$(FILEEXISTS) bdflags.obj $(ERASE) bdflags.obj
 	$(FILEEXISTS) $(LIBTITLE).bak $(ERASE) $(LIBTITLE).bak
-	$(FILEEXISTS) example.obj $(ERASE) example.obj
-        $(FILEEXISTS) dpcrtlmm.log $(ERASE) dpcrtlmm.log
-        #Don't forget Borland's annoying tds file, probally only made
-        #When not in optimization mode (not sure though), better
-        #get rid of it
-        $(FILEEXISTS) example.tds $(ERASE) example.tds
+	$(FILEEXISTS) dpccap.obj $(ERASE) dpccap.obj
+	$(FILEEXISTS) example1.obj $(ERASE) example1.obj
+	$(FILEEXISTS) example2.obj $(ERASE) example2.obj
+	$(FILEEXISTS) example3.obj $(ERASE) example3.obj
+	$(FILEEXISTS) example1.tds $(ERASE) example1.tds
+	$(FILEEXISTS) example2.tds $(ERASE) example2.tds
+	$(FILEEXISTS) example3.tds $(ERASE) example3.tds
+	$(FILEEXISTS) DPCRTLMM.LOG $(ERASE) DPCRTLMM.LOG
+	#Don't forget Borland's annoying tds file, probally only made
+	#When not in optimization mode (not sure though), better
+	#get rid of it
+	$(FILEEXISTS) example.tds $(ERASE) example.tds
 
 # Clobber only used by maintainer generally (me), so that I may delete
 # ALL binaries which users of the lib wouldn't generally need to do.
 clobber: clean
-	$(FILEEXISTS) example.exe $(ERASE) example.exe
+	$(FILEEXISTS) example1.exe $(ERASE) example1.exe
+	$(FILEEXISTS) example2.exe $(ERASE) example2.exe
+	$(FILEEXISTS) example3.exe $(ERASE) example3.exe
 	$(FILEEXISTS) $(LIBNAME) $(ERASE) $(LIBNAME)

@@ -10,10 +10,15 @@
 # Paths & filenames - Name of the makefile can be overridden on the command line in the form
 # make THISFILE=newmakefilename
 #
-# Normal make creates the library
-# make example creates an example program
+# Normal make creates the library but not the examples
+# make example creates all example programs
+# make example1 builds the C example program only
+# make example2 builds the C++ example program only 
+# make example3 builds the C-stress test program only
 # make clean deletes all temporary binaries used to create the library
-# make clobber deletes target binaries (example program and library).
+# make clobber deletes target binaries (example programs and library).
+# make test builds all and then clobbers, it's for me to test the build before
+#      distribution only.
 # make all creates library and example programs
 
 # Tools
@@ -28,6 +33,7 @@ ANSI=-ansi -pedantic -Wall
 COMPILE=gcc -g -c $(ANSI)
 CPP_COMPILE=g++ -g -c $(ANSI)
 LINK=gcc -g $(ANSI)
+LINK_CPP=g++ -g $(ANSI)
 RANLIB=ranlib $(LIBNAME)
 
 # File control commands
@@ -47,12 +53,11 @@ LIBNAME=lib$(LIBTITLE).a
 MASTERDEP=build$(H) dpcrtlmm$(H) $(THISFILE)
 OBJECTS=alloc$(OBJ) blkarray$(OBJ) calloc$(OBJ) free$(OBJ) isbad$(OBJ) stats$(OBJ) dbghooks$(OBJ) locktrap$(OBJ) safelist$(OBJ) dpcrtlmm$(OBJ) log$(OBJ) vptrap$(OBJ) trap$(OBJ) realloc$(OBJ) intdata$(OBJ) iblkptr$(OBJ) getblksz$(OBJ) bloclock$(OBJ) bdflags$(OBJ)
 LOGFILE=DPCRTLMM.LOG
-COREDUMPS=example1.core example2.core
+COREDUMPS=example1.core example2.core example3.core core
 BACKUPS=*~
 LIBADD=$(LIBRARY) $(LIBOPTS) $(LIBNAME)
 
 # Build rules
-all : $(LIBNAME) example
 
 $(LIBNAME) : $(MASTERDEP) $(OBJECTS)
 	$(LIBADD) alloc$(OBJ)
@@ -139,16 +144,16 @@ critical$(OBJ) : critical$(C) $(MASTERDEP) critical$(H)
 clean:
 	@-$(ERASE) $(OBJECTS)
 	@-$(ERASE) $(LOGFILE) $(COREDUMPS) $(BACKUPS)
-	@-$(ERASE) example1$(OBJ) example2$(OBJ)
+	@-$(ERASE) example1$(OBJ) example2$(OBJ) example3$(OBJ)
 	@-$(ERASE) dpccap$(OBJ)
 
 # Destroy everything including final executables and library
 clobber: clean
 	@-$(ERASE) $(LIBNAME)
-	@-$(ERASE) example1 example2
+	@-$(ERASE) example1 example2 example3
 
 
-example : example1 example2   #Type make -f Makefile.gnu example to make both examples
+example : example1 example2 example3  #Type make -f Makefile.gnu example to make all examples
 
 # example1 program (C)
 
@@ -161,10 +166,26 @@ example1$(OBJ) : $(MASTERDEP) example1$(C)
 # example2 program (C++)
 
 example2 : $(MASTERDEP) example2$(OBJ) dpccap$(OBJ) $(LIBNAME)
-	$(LINK) -o example2 example2$(OBJ) dpccap$(OBJ) $(LIBNAME)
+	$(LINK_CPP) -o example2 example2$(OBJ) dpccap$(OBJ) $(LIBNAME)
 
 example2$(OBJ) : $(MASTERDEP) example2$(CPP) dpccap$(CPP)
 	$(CPP_COMPILE) example2$(CPP)
 
 dpccap$(OBJ) : $(MASTERDEP) dpccap$(CPP) dpccap$(H)
 	$(CPP_COMPILE) dpccap$(CPP)
+
+# Stress test (example3)
+
+example3 : $(MASTERDEP) example3$(OBJ) $(LIBNAME)
+	$(LINK) -o example3 example3$(OBJ) $(LIBNAME)
+
+example3$(OBJ) : $(MASTERDEP) example3$(C) intdata$(H) safelist$(H)
+	$(COMPILE) example3$(C)
+
+
+all : $(LIBNAME) example
+
+test : # Maintainer thing only
+	make -f $(THISFILE) clobber
+	make -f $(THISFILE) all
+	make -f $(THISFILE) clobber

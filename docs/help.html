@@ -503,6 +503,34 @@ now, it works.&nbsp; realloc() issues resolved!&nbsp; I found out recently
 that realloc(NULL, 1024); for example won't neccersarily allocate memory
 so I've added a run-time warning printed to stderr if somebody tries this
 with DPCRTLMM.&nbsp; Also if somebody tried to use realloc() as a free-er.
+<p>11th December 2000 - Overlord:
+<br>Fixed a bug which I saw by reading the source, statistics for block
+flags were not being returned to the caller from the function dpcrtlmm_GetStats(
+).&nbsp; Also got rid of an unneccersary structure.&nbsp; Is was this,
+forgetting to copy from the structure back to the stats structure which
+was the bug.
+<br>Fixed bug in C++ example (example2.cpp), it an instance of Overlord::TDPCRTLMM_MemManager,
+which is illegal and probally a mistake many users will make.&nbsp; The
+real version is global and called MemManager, storage reference = dpccap.cpp.
+<br>Another bug found:&nbsp; Installed trap handler (which displays the
+stats again as a test) in example2.cpp, does not work in example1.c.&nbsp;
+It's unclear as to what differs at the moment.
+<br>Managed to get rid of two unneccersary integers in dpcrtlmm.c.&nbsp;
+Functions can use _libStarted (an internal variable).&nbsp; This would
+mean the library could be restarted from the same session and save a little
+memory.
+<p>12th December 2000 - Overlord:
+<br>Fixed yesterdays bug with the C++ example not running the trap handler
+after it had installed it when a trap was fired from the library.&nbsp;
+Turned out that the library was started after the trap handler was installed.&nbsp;
+My fault. oh yeah, all bugs in DPCRTLMM are my fault, damn.
+<br>Seems not even the GNU C compiler's -ansi -pedantic -Wall mode spots
+all warnings, on Micro$oft Visual C++ it spotted the missing const in parameter
+1 of the trap handler.&nbsp; This only effected the examples not the library.&nbsp;
+Be clear about my meaning of resetting the library in a session by starting
+it up and shutting it down.&nbsp; I'm not sure everything would be cleared,
+indeed at the moment it probally wouldn't be and I will fix this later.&nbsp;
+Also I wouldn't advocate such a thing.
 <br>
 <hr WIDTH="100%">
 <br><a NAME="Plans"></a><b><u>4.1&nbsp; Plans for next version</u></b>

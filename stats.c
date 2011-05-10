@@ -27,14 +27,17 @@ My official site: http://daybologic.com/overlord
   Programmer: Overlord David Duncan Ross Palmer
   Contact: Overlord@DayboLogic.co.uk
   Created: 27th July 2000
-  Last modified: 28th July 2000
+  Last modified: 11th Dec 2000
   Library: DPCRTLMM 1.0
   Language: ANSI C (1990)
-  Revision #1
-*/
+  Revision #2
 
+  11th Dec 2000 : Removed the structure that communicated between both
+                  functions to carry counts of flags.  Bug fix, the
+                  swappable and locked block counts in the statistics
+                  didn't make it back to the caller's structure.
+*/
 #include <stddef.h>
-#include <string.h> /* memset() */
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -43,13 +46,7 @@ My official site: http://daybologic.com/overlord
 #include "dpcrtlmm.h" /* Public library header */
 #include "intdata.h" /* Internal library data */
 
-/* Local types other people don't need to know about */
-typedef struct _S_FLAGCOUNTS
-{
-  unsigned long Locked, Unswappable; /* More will be added on the end */
-} S_FLAGCOUNTS, *PS_FLAGCOUNTS;
-
-static void CountFlagsInUse(PS_FLAGCOUNTS Pfc);
+static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats);
 /*-------------------------------------------------------------------------*/
 unsigned long dpcrtlmm_GetBlockCount()
 {
@@ -60,25 +57,25 @@ void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats)
 {
   if (PReadStats)
   {
-    S_FLAGCOUNTS flagCounts;
-    memset(PReadStats, 0, sizeof(S_DPCRTLMM_STATS)); /* Init the stats structure */
-
     PReadStats->Blocks.Allocated = dpcrtlmm_GetBlockCount();
-    CountFlagsInUse(&flagCounts); /* Loop through the entire load counting us flags */
+    CountFlagsInUse(PReadStats); /* Loop through the entire load counting us flags */
     PReadStats->Blocks.Peak = _blockCountPeak;
     PReadStats->Charge.Allocated = _allocCharge;
     PReadStats->Charge.Peak = _allocPeak;
   }
 }
 /*-------------------------------------------------------------------------*/
-static void CountFlagsInUse(PS_FLAGCOUNTS Pfc)
+static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats)
 {
-  if (Pfc)
+  if (PFlagsStats)
   {
     unsigned int i;
 
-    memset(Pfc, 0, sizeof(S_FLAGCOUNTS)); /* Init the structure */
-    /* First go through normal arrays */
+    /* First reset the counts in the stats struct */
+    PFlagsStats->Blocks.Locked = 0UL;
+    PFlagsStats->Blocks.Unswappable = 0UL;
+ 
+    /* Go through normal arrays */
     for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ )
     {
       if (_safetyList[i]) /* Used entry? */
@@ -89,9 +86,9 @@ static void CountFlagsInUse(PS_FLAGCOUNTS Pfc)
 	  unsigned char flags = _safetyList[i]->Descriptors[j].Flags;
 
 	  if ( (flags & 1) == 1) /* Lock bit set */
-	    Pfc->Locked++;
+	    PFlagsStats->Blocks.Locked++;
 	  if ( (flags & 2) == 2) /* NoSwap bit set */
-	    Pfc->Unswappable++;
+	    PFlagsStats->Blocks.Unswappable++;
 	}
       }
     }
@@ -102,9 +99,9 @@ static void CountFlagsInUse(PS_FLAGCOUNTS Pfc)
       unsigned char flags = _defaultArray.Descriptors[i].Flags;
 
       if ( (flags & 1) == 1) /* Lock bit set */
-	Pfc->Locked++;
+	PFlagsStats->Blocks.Locked++;
       if ( (flags & 2) == 2) /* NoSwap bit set */
-	Pfc->Unswappable++;
+	PFlagsStats->Blocks.Unswappable++;
     }
     #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
   }

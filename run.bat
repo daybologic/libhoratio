@@ -6,7 +6,7 @@ if not exist Makefile.bor goto nomake
 
 make -f Makefile.bor %1 %2 %3 %4 %5 %6 %7 %8 %9
 if not exist dpcrtlmm.lib goto nolib
-if not exist example.exe goto noexe
+if not exist example1.exe goto noexe
 example
 echo Press any key to read log of memory activities
 pause > nul
@@ -29,9 +29,9 @@ pause
 goto doneit
 
 :noexe
-echo ERROR: Could not generate example program but library built successfully.
+echo ERROR: Could not generate example1 program but library built successfully.
 echo Link dpcrtlmm.lib with your own apps.  I'd appreciate the output of this
-echo session to determine why I couldn't build example.exe
+echo session to determine why I couldn't build example1.exe
 pause
 
 :doneit
