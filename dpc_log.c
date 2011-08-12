@@ -33,18 +33,9 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
 #############################################################################
 # Memory usage logging support for DPCRTLMM                                 #
-# Only included if DPCRTLMM_LOG is defined in build.h                       #
-# (Superseeded by --enable-log configuration option)                        #
+# Will not log to a file if DPCRTLMM_LOG is not defined                     #
+# (Controlled by the --enable-log configuration option)                     #
 #############################################################################
-
-You might be wondering why I did not just get rid of the whole function if
-DPCRTLMM_LOG was not defined.  Trouble is, even though it's never called if
-the macro is not defined, in some compilers there must be at least one
-external definition so I chose to get rid of the contents and disable the
-warning about the unused parameter, if getting rid of the warning actually
-causes a warning on your compiler, I aplogise!
-
-  - Does this apply any longer?  : DDRP
 */
 
 #define DPCRTLMM_SOURCE
