@@ -35,7 +35,8 @@ POSSIBILITY OF SUCH DAMAGE.
 // You can have this particular module it's free
 // I'm not going to use new style C++ casts, I want this module to port
 // to compilers pre-ANSI/ISO C++
-// If you have any warnings mail them to me at Overlord@DayboLogic.co.uk
+// If you have any warnings, please raise an issue via the bitbucket.org
+// web-site.
 // but please make sure it's the full compiler output with compiler name
 // and version.
 
