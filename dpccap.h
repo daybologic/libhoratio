@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,6 @@ POSSIBILITY OF SUCH DAMAGE.
 // DPCRTLMM 1.2 compatible encapsulation header for C++
 // include this and add dpccap.cpp to your project
 // You can have this particular module, it's free
-// Last update: August 2005
 // I'm writing this in ANSI/ISO C++, that doesn't mean it'll work on all
 // old compilers!  define __NO_NAMESPACES__ if you don't want the namespace.
 // I've got rid of all inline functions as a wicked article on C++
