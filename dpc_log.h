@@ -46,7 +46,7 @@ messages, warnings and errors */
 /* Types of logging messages */
 #define DPCRTLMM_LOG_MESSAGE (0U) /* Only put in log */
 #define DPCRTLMM_LOG_WARNING (1U) /* stderr and log */
-#define DPCRTLMM_LOG_ERROR (2U) /* Same as error for now */
+#define DPCRTLMM_LOG_ERROR (2U) /* Same as WARNING for now */
 /*
   Even though error and warning do the same thing, they display different
   messages in the log and on stderr
