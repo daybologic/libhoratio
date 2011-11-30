@@ -1,31 +1,44 @@
 /*
-    DPCRTLMM Memory management library : Descriptor flags modifiers
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+*/
 
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+/*
+  Raw block descriptor flag modifiers : David Duncan Ross Palmer
+  Copyright 2000-2006 Daybo Logic, all rights reserved.
+  Now supports NULL arrays
 */
 #define DPCRTLMM_SOURCE
-/* Raw block descriptor flag modifiers : Overlord David Duncan Ross Palmer
-Copyright Y2K Daybo Logic, all rights reserved.
-Now supports NULL arrays
-*/
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 #include <stddef.h>
 #include <string.h> /* memset() */
 #include <stdio.h>
@@ -42,22 +55,36 @@ Now supports NULL arrays
 #include "dpc_biglock.h" /* Library's mutual exclusion */
 #include "dpc_bdflags.h"
 /*-------------------------------------------------------------------------*/
-/* NOTE: Adding of the hook caller in here has caused two variables
-both holding the index of the block, this should be optimised away when
-I can be bothered */
+/*
+  NOTE: Adding of the hook caller in here has caused two variables
+  both holding the index of the block, this should be optimised away when
+  I can be bothered
+*/
 /*-------------------------------------------------------------------------*/
-unsigned char dpcrtlmm_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned char* PNewFlags)
+unsigned char dpcrtlmm_ModifyDescriptorFlags(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr,
+  const unsigned char *PNewFlags
+)
 {
   unsigned char ret;
 
   LOCK
-  ret = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, PNewFlags);
+  ret = dpcrtlmm_int_ModifyDescriptorFlags(
+    PBlockArray,
+    Ptr,
+    PNewFlags
+  );
   UNLOCK
 
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-unsigned char dpcrtlmm_int_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned char* PNewFlags)
+unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr,
+  const unsigned char *PNewFlags
+)
 {
   /* locals */
   const char funcName[] = "ModifyDescriptorFlags()"; /* Name of this function */
@@ -75,7 +102,8 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRA
 
   debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
   indexOfBlock = dpcrtlmm_int_IndexFromBlockPtr(PBlockArray, Ptr);
-  debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[indexOfBlock]; /* Looked up the right descriptor to suit hook requirements */
+  /* Looked up the right descriptor to suit hook requirements */
+  debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[indexOfBlock];
   debugHookInfo.HookType = DPCRTLMM_HOOK_MODIFYDESCFLAGS;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
@@ -97,3 +125,4 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRA
   return oldFlags; /* Give the old flags back to the caller */
 }
 /*-------------------------------------------------------------------------*/
+

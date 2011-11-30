@@ -1,58 +1,65 @@
 /*
-    DPCRTLMM master header
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef __INC_DPCRTLMM_H
-#define __INC_DPCRTLMM_H
+#ifndef INC_DPCRTLMM_H
+#define INC_DPCRTLMM_H
 /*-------------------------------------------------------------------------*/
 /*
 Company (Copyright): Daybo Logic 2000
 Date of creation: 15th Feb 2000
-Last modified: 14th November 2001
-Programmer: Overlord David Duncan Ross Palmer, Daybo Logic.
-Email: Overlord@DayboLogic.co.uk
+Last modified: 23rd Feb 2006
+Programmer: David Duncan Ross Palmer, Daybo Logic.
 File: dpcrtlmm.h
-Description: Overlord David Duncan Ross Palmer's
-				 C-RunTime Library
-				 Memory Manager
+Description: David Duncan Ross Palmer's
+             C-RunTime Library
+             Memory Manager
 Comments:
-	  What the hell is this?  This could be used as an alternative to
-	  memory tracking tools such as CodeGuard of MemorySleuth,
-	  it's not as thorough as them however, it can't detect memory over
-	  runs on pointer accesses or anything like that.  It can be used
-	  to detect failures to release memory (as long as it's allocated
-	  by us) and attempts to release memory which we do not own.
-	  It has an automatic garbage collection feature to free up all
-	  unfreed memory too.  It should be used by the entire program to
-	  be most effective, it can provide statistics on memory left an
-	  such like too.  The best thing about the MM is that it provides
-	  a central place for dynamic memory allocation in a program so
-	  we can trace all activity, an optional log mode is avialable
-	  though a define.  Swapping cannot be implemented as the MM has
-	  no control over pointer-based memory accesses.  This is indeed
-	  why we don't see memory overruns. If the program is going to
-	  be released even though it contains memory bugs, the traps can
-	  be turned off or passed to a handler which will only execute the
-	  serious ones.
+          What the hell is this?  This could be used as an alternative to
+          memory tracking tools such as CodeGuard of MemorySleuth,
+          it's not as thorough as them however, it can't detect memory over
+          runs on pointer accesses or anything like that.  It can be used
+          to detect failures to release memory (as long as it's allocated
+          by us) and attempts to release memory which we do not own.
+          It has an automatic garbage collection feature to free up all
+          unfreed memory too.  It should be used by the entire program to
+          be most effective, it can provide statistics on memory left an
+          such like too.  The best thing about the MM is that it provides
+          a central place for dynamic memory allocation in a program so
+          we can trace all activity, an optional log mode is avialable
+          though a define.  Swapping cannot be implemented as the MM has
+          no control over pointer-based memory accesses.  This is indeed
+          why we don't see memory overruns. If the program is going to
+          be released even though it contains memory bugs, the traps can
+          be turned off or passed to a handler which will only execute the
+          serious ones.
 
 Language: Everything here is portable to ANSI C, I have tried my best to make
 this as portable as possible but don't try to port it to a games console
@@ -67,9 +74,10 @@ being rewritten.
 extern "C" {
 #endif /*__cplusplus*/
 
-/* Users who don't have the absolutely mental version of the library will not
-have BUILD.H so it's likely that DPCRTLMM_FARDATA is not defined, if not just
-remove with no complaints */
+/*
+  Users who don't have dpc_build.h won't have DPCRTLMM_FARDATA defined,
+  so just remove it to stop any problems happening
+*/
 #ifndef DPCRTLMM_FARDATA
 #  define DPCRTLMM_FARDATA
 #endif
@@ -126,9 +134,11 @@ typedef struct _S_DPCRTLMM_VERSION
 } S_DPCRTLMM_VERSION, DPCRTLMM_FARDATA *PS_DPCRTLMM_VERSION;
 
 /* Version flag mnemonics (1.1.6) */
-#define DPCRTLMM_VERSION_DEBUG   (0x1)
-#define DPCRTLMM_VERSION_SPECIAL (0x2)
-#define DPCRTLMM_VERSION_PRIVATE (0x4)
+#define DPCRTLMM_VERSION_DEBUG    (0x1)
+#define DPCRTLMM_VERSION_SPECIAL  (0x2)
+#define DPCRTLMM_VERSION_PRIVATE  (0x4)
+#define DPCRTLMM_VERSION_BETA     (0x8)
+#define DPCRTLMM_VERSION_MT      (0x10) /* Multi-threaded */
 
 /*----------------------- D E B U G   H O O K S ---------------------------*/
 
@@ -257,19 +267,19 @@ or if the code is similar in all hook procs. */
 #define DPCRTLMM_DEBUGHOOK_LASTHOOK ( DPCRTLMM_HOOK_MODIFYDESCFLAGS ) /* Last available hook type */
 
 /* This is the definition of a hook function for reference only :
-	BOOL (*HookFunc)( PS_DPCRTLMM_DEBUGHOOKINFO PDebugHookInfo );
+        BOOL (*HookFunc)( PS_DPCRTLMM_DEBUGHOOKINFO PDebugHookInfo );
 
-	Information: PDebugHookInfo on the stack of the hook executive when the
-	hook function sees it through a pointer, the hook function can take
-	all the information it wants and tamper with details if it wishes
-	(I take no responsibility), when the hook function returns the information
-	(modified or not) is passed to the next entry in the hook chain for this
-	type, to prevent the information being passed to the next hook return
-	FALSE.  As the information is on the stack of the hook executive it has
-	been copied from other sources (the functions which were called in the
-	first place), therefore changing the debug hook info does not effect
-	the actual memory manager's main copies, just the information recieved
-	by the next hook.
+        Information: PDebugHookInfo on the stack of the hook executive when the
+        hook function sees it through a pointer, the hook function can take
+        all the information it wants and tamper with details if it wishes
+        (I take no responsibility), when the hook function returns the information
+        (modified or not) is passed to the next entry in the hook chain for this
+        type, to prevent the information being passed to the next hook return
+        FALSE.  As the information is on the stack of the hook executive it has
+        been copied from other sources (the functions which were called in the
+        first place), therefore changing the debug hook info does not effect
+        the actual memory manager's main copies, just the information recieved
+        by the next hook.
 */
 
 /* The debug hook executive is internal to the library and cannot
@@ -283,10 +293,33 @@ are support functions which are contained in the same module as
 the executive, call them freely as I have designated for user
 callings, infact they aren't even called from inside. */
 
-unsigned int dpcrtlmm_InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));
-unsigned int dpcrtlmm_GetDebugHookChainCount(const unsigned int HookType); /* Counts the number of hooks installed for this type of hook */
-unsigned int dpcrtlmm_GetDebugHookMatrixCount(void); /* Counts the number of hooks in the entire debug hook matrix, that is the total number of hooks for all types */
-unsigned int dpcrtlmm_UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)); /* Remove the said hook, type of hook must be specified in order to find it */
+unsigned int dpcrtlmm_InstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO)
+);
+
+/*
+  Counts the number of hooks installed for this type of hook
+*/
+unsigned int dpcrtlmm_GetDebugHookChainCount(
+  const unsigned int HookType
+);
+
+/*
+  Counts the number of hooks in the entire debug hook matrix,
+  that is the total number of hooks for all types
+*/
+unsigned int dpcrtlmm_GetDebugHookMatrixCount(
+  void
+);
+
+/*
+  Remove the said hook, type of hook must be specified in order to find it
+*/
+unsigned int dpcrtlmm_UninstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)
+);
 
 /*------------------ E N D   D E B U G   H O O K S ------------------------*/
 
@@ -303,19 +336,27 @@ is allocated and the pointer is returned, which must be typecasted to
 a pointer to the desired type before it is accessed so C knows how to
 do pointer arithmetic.  NULL is returned if there is not enough continuous
 memory to allocate a block of NewBlockSize. */
-void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line);
+void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const size_t NewBlockSize,
+  const char *File,
+  const unsigned int Line
+);
 
 /* Alloc() "backwards compatibillity", it's actually a lot easier to use
 this version, so I recommend it.  This adds transparent file/line support for
 the logs. */
 #define dpcrtlmm_Alloc(blkarray, blksize) \
-        dpcrtlmm_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__)) /* Transparent line/file support */
+        dpcrtlmm_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__))
 
 /* Free() - BlockPtr - Pass a pointer to the block to free, attempting to
 free a block we don't own will cause a trap which crashes the program,
 passing the wrong block descriptor array would cause this problem too of
 cause because Free() wouldn't be able to see it. */
-void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr);
+void dpcrtlmm_Free(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *Ptr
+);
 
 /* CreateBlockArray() takes no parameters and returns a dynamically
 allocated array of blocks which the user should not play with, all the
@@ -326,15 +367,22 @@ wrong pointer is passed to the Freer, or if Shutdown() is called before
 all arrays are destroyed.  It is possible that not enough memory can
 be allocated, if so NULL is returned, a trap is not fired, perhaps the
 caller can cope or crash the program with a trap themselves. */
-PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray(void);
-void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray );
+PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray(
+  void
+);
+
+void dpcrtlmm_DestroyBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+);
 
 /* In debug hooks and the like, the user may be returned a pointer
 which does not corrospond to any of the pointers which were allocated,
 in this case it may be the resolved NULL pointer to the default array
 because the array is not directly available for comparison use this function
 to determine if that is the case, it will also report 1U (TRUE) for NULL */
-unsigned int dpcrtlmm_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray );
+unsigned int dpcrtlmm_IsDefaultBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+);
 
 /* Before any of these functions are used, internal initialization of the
 memory manager is neccersary and must be done ONCE and ONLY ONCE per
@@ -355,28 +403,41 @@ is already using DPCRTLMM (if you're building a library which uses
 DPCRTLMM. */
 unsigned int dpcrtlmm_IsStarted(void);
 
-/* GetBlockSize() - BlockPtr - Pass a pointer to the block
-	the size of the block is returned, a trap is fired stating
-	"Attempt to GetBlockSize() unknown block at base 0x????????, in array base: 0x????????"
-	A nonzero value is always returned, if traps are disabled anything could
-	happen when we try to retrieve the block size! */
-size_t dpcrtlmm_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* BlockPtr);
+/*
+  GetBlockSize() - BlockPtr - Pass a pointer to the block
+  the size of the block is returned, a trap is fired stating
+  "Attempt to GetBlockSize() unknown block at base 0x????????,
+  in array base: 0x????????" A nonzero value is always returned,
+  if traps are disabled anything could happen when we try to retrieve
+  the block size!
+*/
+size_t dpcrtlmm_GetBlockSize(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *BlockPtr
+);
 
-/* IsBadBlockPtr() - BlockPtr - Pass a pointer to the block base address,
-	the function only fires a trap if the array base address is invalid.
-	If the base address of the block is not found in the array of descriptors
-	the function returns TRUE (meaning, TRUE the block pointer is bad), if FALSE
-	then accessing the block is safe.  This does not check for corruption or
-	anything, just checks the pointer is valid.  Checksums for block are NOT
-	maintained, otherwise direct pointer write access for the blocks for users
-	would not be an option. */
-unsigned int dpcrtlmm_IsBadBlockPtr( const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
+/*
+  IsBadBlockPtr() - BlockPtr - Pass a pointer to the block base address,
+  the function only fires a trap if the array base address is invalid.
+  If the base address of the block is not found in the array of descriptors
+  the function returns TRUE (meaning, TRUE the block pointer is bad), if
+  FALSE then accessing the block is safe.  This does not check for
+  corruption or anything, just checks the pointer is valid.  Checksums for
+  block are NOT maintained, otherwise direct pointer write access for the
+  blocks for users would not be an option.
+*/
+unsigned int dpcrtlmm_IsBadBlockPtr(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *BlockPtr
+);
 
 /* IsBadArrayPtr() - PblockArray - A different use for our block array pointer,
 verifies it's a valid address assigned by CreateBlockArray(), does not fire
 any traps, TRUE is returned if the address is bad, FALSE is returned if the
 array of block descriptors is safe. */
-unsigned int dpcrtlmm_IsBadArrayPtr( const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray );
+unsigned int dpcrtlmm_IsBadArrayPtr(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+);
 
 /* Some other operations we might want to do on memory which is our
 responsibility... */
@@ -388,16 +449,25 @@ accept the return value unless it is NULL.  NULL is returned when the block
 could not be enlarged or relocated to an area where continuous memory is
 large enough, in short, there is not enough memory to enlarge the block.
 NewSize - New size in bytes of the block. */
-void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize);
+void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *OldBlockPtr, const size_t NewSize
+);
 
 /* Calloc() - N - Number of items
-				  NewBlockSize - Size of one item
-	Allocates a block of (N * NewBlockSize), used for allocating an array
-	of items in one go.  Just calls Alloc() with (N * NewBlockSize), I hardly
-	ever use is personally, the C run-time library uses it though so I might
-	as well do so too.  NULL is returned if the block cannot be allocated.
+                                  NewBlockSize - Size of one item
+        Allocates a block of (N * NewBlockSize), used for allocating an array
+        of items in one go.  Just calls Alloc() with (N * NewBlockSize), I hardly
+        ever use is personally, the C run-time library uses it though so I might
+        as well do so too.  NULL is returned if the block cannot be allocated.
 */
-void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
+void DPCRTLMM_FARDATA *dpcrtlmm_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char *File,
+  const unsigned int Line
+);
 
 #define dpcrtlmm_Calloc(blkarray, n, blksize) \
         dpcrtlmm_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
@@ -413,11 +483,31 @@ If the specified function is installed as a hook it is called when a
 trap is fired but if it returns the default library handler is called
 anyway.  It just gets a preview.  Do not try to remove a handler by
 passing NULL to this function, use dpcrtlmm_RemoveTrapCallback() */
-void dpcrtlmm_InstallTrapCallback( void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage), const unsigned int AsHook );
+void dpcrtlmm_InstallTrapCallback(
+  void(*UserCallbackProc)(
+    const unsigned int TrapID,
+    const char *TrapMessage
+  ),
+  const unsigned int AsHook
+);
 
-/* These are other misc. trap handler functions. */
-void dpcrtlmm_RemoveTrapCallback( void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc) ); /* Remove a trap handler which was installed earlier, must pass address so we know you know and are not making a dreadful mistake */
-signed char dpcrtlmm_GetTrapCallbackInfo(void); /* Returns -1 for no user trap handler, 0 indicates it is installed as a handler, 1 as a hook */
+/*
+  These are other misc. trap handler functions. ---
+  Remove a trap handler which was installed earlier, must pass address so we
+  know you know and are not making a dreadful mistake
+*/
+void dpcrtlmm_RemoveTrapCallback(
+  void(*CurrentCallbackProc)(
+    const unsigned int TrapID,
+    const char *TrapDesc
+  )
+);
+
+/*
+  Returns -1 for no user trap handler, 0 indicates it is installed as
+  a handler, 1 as a hook.
+*/
+signed char dpcrtlmm_GetTrapCallbackInfo(void);
 
 /* These functions implement direct flag access (not reconmended except
 for advanced programmers), casual programmers should use the specialist
@@ -435,7 +525,11 @@ traps are off or a user handler is called for the trap, which returned.
 It is not possible to tell, if anything is suspected on running the
 program, at redesign your code so that it does not use a user trap (just
 comment out the line installing the handler, or don't turn off trapping) */
-unsigned char dpcrtlmm_ModifyDescriptorFlags(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned char* PNewFlags);
+unsigned char dpcrtlmm_ModifyDescriptorFlags(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr,
+  const unsigned char *PNewFlags
+);
 
 /* These functions deal with locking, when a block of memory is locked,
 it means it cannot be freed or resized, if a trap is fired as a result of
@@ -573,4 +667,4 @@ done with usedpcrtlmm.h or similar */
 } /* extern "C" */
 #endif /*__cplusplus*/
 /*-------------------------------------------------------------------------*/
-#endif /*!__INC_DPCRTLMM_H*/
+#endif /*!INC_DPCRTLMM_H*/

@@ -1,36 +1,44 @@
 /*
-    DPCRTLMM Memory Management Library : Stats management
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
+
 /*
   Functions for returning statistics about memory handled by the library
-  Programmer: Overlord David Duncan Ross Palmer
-  Contact: Overlord@DayboLogic.co.uk
+  Programmer: David Duncan Ross Palmer
+  Contact: http://www.daybologic.co.uk/mailddrp/
   Created: 27th July 2000
-  Last modified: 31st July 2001
+  Last modified: 23rd February 2006
   Library: DPCRTLMM 1.0
   Language: ANSI C (1990)
-  Revision #3
+  Revision #5
 
   11th Dec 2000 : Removed the structure that communicated between both
                   functions to carry counts of flags.  Bug fix, the
@@ -39,10 +47,24 @@ My official site: http://www.daybologic.co.uk/overlord
 
   24th May 2001 : Added dump and supported functions.
 
-  31st July 2001: Added support for big lock (thread safety).
+  31st Jul 2001 : Added support for big lock (thread safety).
+
+  16th Sep 2002 : Fix infinite loop in dpcrtlmm_Dump() and add array
+                  pointer to dump.
+
+  14th Apr 2005:  Fix %p printing warning, some re-formatting.
+  23rd Feb 2006:  General tidy up; license change
 */
+
+#define DPCRTLMM_SOURCE
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stddef.h>
 #include <stdio.h>
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -52,9 +74,17 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_biglock.h" /* Mutual exclusion */
 
-static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats);
-static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray);
-static void CrackAndPrintFlags(FILE* Target, unsigned char Flags);
+static void CountFlagsInUse(
+  PS_DPCRTLMM_STATS PFlagsStats
+);
+static void DumpOnArray(
+  FILE *Target,
+  PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
+);
+static void CrackAndPrintFlags(
+  FILE *Target,
+  unsigned char Flags
+);
 /*-------------------------------------------------------------------------*/
 unsigned long dpcrtlmm_GetBlockCount()
 {
@@ -67,13 +97,16 @@ unsigned long dpcrtlmm_GetBlockCount()
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats)
+void dpcrtlmm_GetStats(
+  PS_DPCRTLMM_STATS PReadStats
+)
 {
   LOCK
   if (PReadStats)
   {
     PReadStats->Blocks.Allocated = _blockCount;
-    CountFlagsInUse(PReadStats); /* Loop through the entire load counting us flags */
+    /* Loop through the entire load counting us flags */
+    CountFlagsInUse(PReadStats);
     PReadStats->Blocks.Peak = _blockCountPeak;
     PReadStats->Charge.Allocated = _allocCharge;
     PReadStats->Charge.Peak = _allocPeak;
@@ -81,7 +114,9 @@ void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats)
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats)
+static void CountFlagsInUse(
+  PS_DPCRTLMM_STATS PFlagsStats
+)
 {
   if (PFlagsStats)
   {
@@ -96,46 +131,44 @@ static void CountFlagsInUse(PS_DPCRTLMM_STATS PFlagsStats)
     {
       if (_safetyList[i]) /* Used entry? */
       {
-	unsigned int j;
-	for ( j = 0U; j < _safetyList[i]->Count; j++ )
-	{
-	  unsigned char flags = _safetyList[i]->Descriptors[j].Flags;
+        unsigned int j;
+        for ( j = 0U; j < _safetyList[i]->Count; j++ )
+        {
+          unsigned char flags = _safetyList[i]->Descriptors[j].Flags;
 
-	  if ( (flags & 1) == 1) /* Lock bit set */
-	    PFlagsStats->Blocks.Locked++;
-	  if ( (flags & 2) == 2) /* NoSwap bit set */
-	    PFlagsStats->Blocks.Unswappable++;
-	}
+          if ( (flags & 1) == 1) /* Lock bit set */
+            PFlagsStats->Blocks.Locked++;
+          if ( (flags & 2) == 2) /* NoSwap bit set */
+            PFlagsStats->Blocks.Unswappable++;
+        }
       }
     }
     /* Extra support for the "NULL array" */
-    #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY /* Source purchasers can turn disable this support */
+    #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
     for ( i = 0U; i < _defaultArray.Count; i++ )
     {
       unsigned char flags = _defaultArray.Descriptors[i].Flags;
 
       if ( (flags & 1) == 1) /* Lock bit set */
-	PFlagsStats->Blocks.Locked++;
+        PFlagsStats->Blocks.Locked++;
       if ( (flags & 2) == 2) /* NoSwap bit set */
-	PFlagsStats->Blocks.Unswappable++;
+        PFlagsStats->Blocks.Unswappable++;
     }
     #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
   }
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_Dump(FILE* Target)
+void dpcrtlmm_Dump(
+  FILE *Target
+)
 {
   LOCK
   if ( Target ) {
     unsigned int i;
 
     for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) {
-      if ( _safetyList[i] ) { /* Used entry? */
-        unsigned int j;
-
-        for ( j = 0U; j < _safetyList[i]->Count; j++ )
-          DumpOnArray(Target, _safetyList[i]);
-      }
+      if ( _safetyList[i] ) /* Used entry? */
+        DumpOnArray(Target, _safetyList[i]);
     }
     #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
     DumpOnArray(Target, &_defaultArray);
@@ -145,7 +178,10 @@ void dpcrtlmm_Dump(FILE* Target)
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray)
+static void DumpOnArray(
+  FILE *Target,
+  PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
+)
 {
   unsigned int j; /* Just so I don't get confused with the other function */
 
@@ -159,18 +195,21 @@ static void DumpOnArray(FILE* Target, PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray)
     else
       filename = defaultFilename;
 
-    fprintf(Target, "Address: %p, owner: %s, line %u is %u bytes. ",
-                    CurrentArray->Descriptors[j].PBase,
-                    filename,
-                    CurrentArray->Descriptors[j].SourceLine,
-                    CurrentArray->Descriptors[j].Size
+    fprintf(
+      Target,
+      "Address: %p, (Array: %p), owner: %s, line %u is %u bytes. ",
+      CurrentArray->Descriptors[j].PBase,
+      (void*)CurrentArray,
+      filename,
+      CurrentArray->Descriptors[j].SourceLine,
+      (unsigned int)CurrentArray->Descriptors[j].Size
     );
     CrackAndPrintFlags(Target, flags);
   }
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void CrackAndPrintFlags(FILE* Target, unsigned char Flags)
+static void CrackAndPrintFlags(FILE *Target, unsigned char Flags)
 {
   if ( Target ) {
     int comma = 0;

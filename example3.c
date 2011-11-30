@@ -1,37 +1,62 @@
 /*
-    DPCRTLMM Memory Manager transparent usage example.
-    Copyright (C) 2000 Overlord David Duncan Ross Palmer, Daybo Logic.
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* This example should help end users to understand how to convert
-old code (code which has not been built around the intimate DPCRTLMM
-functions) into code which can use DPCRTLMM without being changed too
-much.  Remember to use the define in every module.  The define
-requires DPCRTLMM version 1.1.4, the NULL array used by the macros
-secretly only came about in DPCRTLMM 1.1.0 (I think), so don't try to
-use it with the old proprietary closed source DPCRTLMMs */
+/*
+  This example should help end users to understand how to convert
+  old code (code which has not been built around the intimate DPCRTLMM
+  functions) into code which can use DPCRTLMM without being changed too
+  much.  Remember to use the define in every module.  The define
+  requires DPCRTLMM version 1.1.4, the NULL array used by the macros
+  secretly only came about in DPCRTLMM 1.1.0 (I think), so don't try to
+  use it with the old proprietary closed source DPCRTLMMs
+*/
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 
 #include <stdio.h> /* Required for dpcrtlmm.h since 1.1.4 */
 #include <stdlib.h> /* Old code would be using this anyway but also for atexit() */
 #include <string.h>
-#ifdef HDRSTOP
+
+#ifdef DPCRTLMM_THREADS_PTH
+# ifdef HAVE_PTH_H
+#  include <pth.h>
+# endif /*HAVE_PTH_H*/
+#endif /*DPCRTLMM_THREADS_PTH*/
+
+#ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop  /* Precompile above headers if compiler supports it */
-#endif
+#endif /*DPCRTMM_HDRSTOP*/
 
 #define USING_DPCRTLMM /* Activate malloc() etc as macros */
 #include "dpcrtlmm.h"
@@ -44,12 +69,20 @@ static void InitVector(char** vector, unsigned int n);
 static void Title(void); /* Just displays some information */
 static void Version(void); /* Prints the library version */
 
-int main(const int argc, const char* argv[])
+int main(const int argc, const char *argv[])
 {
   if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
     printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
     return EXIT_FAILURE;
   }
+
+#ifdef DPCRTLMM_THREADS_PTH
+  if ( !pth_init() ) {
+    puts("Can\'t initialise GNU Portable Threads\n");
+    return EXIT_FAILURE;
+  }
+#endif /*DPCRTLMM_THREADS_PTH*/
+
   dpcrtlmm_Startup();
   return my_main(argc, argv);
 }
@@ -63,8 +96,9 @@ static int my_main(const int argc, const char* argv[])
   int i;
   char** copyvector; /* NULL terminated vector version of arguments */
 
-  Title(); /* Nothing important */
-  copyvector = (char**)malloc( (argc + 1) * sizeof(char*) ); /* Allocate vector (array of pointers) */
+  Title();
+  /* Allocate vector */
+  copyvector = (char**)malloc( (argc + 1) * sizeof(char*) );
   if ( !copyvector ) {
     handler(copyvector);
     return EXIT_FAILURE;
@@ -74,7 +108,9 @@ static int my_main(const int argc, const char* argv[])
   for ( i = 0; i < argc; i++ ) {
     if ( argv[i] ) {
       if ( argv[i][0] ) { /* Not blank string */
-        copyvector[i] = (char*)malloc( sizeof(char) * (strlen(argv[i]) + 1) );
+        copyvector[i] = (char*)malloc(
+          sizeof(char) * (strlen(argv[i]) + 1)
+        );
         if ( !copyvector[i] ) {
           handler(copyvector);
           return EXIT_FAILURE;
@@ -111,7 +147,7 @@ static void PrintInfo(char** vector)
     size_t i = 0U;
 
     while ( vector[i] ) {
-      printf("Vector element %u : \"%s\"\n", i, vector[i]);
+      printf("Vector element %u : \"%s\"\n", (unsigned int)i, vector[i]);
       i++;
     }
   }
@@ -131,7 +167,8 @@ static void Title()
 {
   printf("DPCRTLMM ");
   Version();
-  printf(" example program.  The command line is copied into a NULL\n");
+  printf(" example program.\n");
+  printf("The command line is copied into a NULL\n");
   printf("terminated vector type as much as you like and see the owners\n");
   printf("of the individual addresses.\n\n");
 }
@@ -142,7 +179,17 @@ static void Version()
 
   dpcrtlmm_Ver(&version); /* Call lib to get version */
   printf("%u.%u.%u", version.Major, version.Minor, version.Patch);
-  if ( (version.Flags & 1) == 1 ) /* Test build bit set? */
+
+  if ( (version.Flags & DPCRTLMM_VERSION_BETA) )
     fputc((int)'b', stdout); /* b for beta of library */
+  if ( (version.Flags & DPCRTLMM_VERSION_DEBUG) )
+    printf("%s", " (debug)");
+  if ( (version.Flags & DPCRTLMM_VERSION_PRIVATE) )
+    printf("%s", " (private)");
+  if ( (version.Flags & DPCRTLMM_VERSION_SPECIAL) )
+    printf("%s", " (special)");
+  if ( (version.Flags & DPCRTLMM_VERSION_MT) )
+    printf("%s", " (multi-threaded)");
+
   return;
 }

@@ -1,37 +1,51 @@
 /*
-    DPCRTLMM Memory Management Library
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
+
 /*
-  Programmer: Overlord DDRP (Overlord@DayboLogic.co.uk)
   Library: DPCRTLMM
-  Date: Feb 2000
-  Last modified: 21st August 2001
+  Created: Feb 2000
+  Last modified: 23rd February 2006
 */
+
+#define DPCRTLMM_SOURCE
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 
 #include <string.h>
 #include <stdio.h> /* For fprintf() */
 #include <stdlib.h> /* For abort() */
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -44,19 +58,31 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "dpc_dbghooks.h" /* The debug hook executive */
 #include "dpc_biglock.h" /* Mutual exclusion */
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_InstallTrapCallback( void(*NewTrapCallback)(const unsigned int, const char*), const unsigned int AsHook );
-static void dpcrtlmm_int_RemoveTrapCallback(void(*CurrentCallback)(const unsigned int, const char*));
+static void dpcrtlmm_int_InstallTrapCallback(
+  void(*NewTrapCallback)(const unsigned int, const char*),
+  const unsigned int AsHook
+);
+static void dpcrtlmm_int_RemoveTrapCallback(
+  void(*CurrentCallback)(const unsigned int, const char*)
+);
 static signed char dpcrtlmm_int_GetTrapCallbackInfo(void);
-static void DefHandler(const char* TrapMsg);
+static void DefHandler(
+  const char *TrapMsg
+);
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_InstallTrapCallback( void(*NewTrapCallback)(const unsigned int, const char*), const unsigned int AsHook )
+void dpcrtlmm_InstallTrapCallback(
+  void(*NewTrapCallback)(const unsigned int, const char*),
+  const unsigned int AsHook
+)
 {
   LOCK
   dpcrtlmm_int_InstallTrapCallback(NewTrapCallback, AsHook);
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_RemoveTrapCallback(void(*CurrentCallback)(const unsigned int, const char*))
+void dpcrtlmm_RemoveTrapCallback(
+  void(*CurrentCallback)(const unsigned int, const char*)
+)
 {
   LOCK
   dpcrtlmm_int_RemoveTrapCallback(CurrentCallback);
@@ -74,7 +100,10 @@ signed char dpcrtlmm_GetTrapCallbackInfo()
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_int__Trap(const unsigned int Id, const char* Message)
+void dpcrtlmm_int_Trap(
+  const unsigned int Id,
+  const char *Message
+)
 {
   char* trapsCopy;
   const char preFix[] = "DPCRTLMM_UNHANDLED_TRAP: ";
@@ -107,7 +136,10 @@ trapRecover:
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_InstallTrapCallback( void(*NewTrapCallback)(const unsigned int, const char*), const unsigned int AsHook )
+static void dpcrtlmm_int_InstallTrapCallback(
+  void(*NewTrapCallback)(const unsigned int, const char*),
+  const unsigned int AsHook
+)
 {
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
@@ -135,9 +167,11 @@ static void dpcrtlmm_int_InstallTrapCallback( void(*NewTrapCallback)(const unsig
 
     #ifdef DPCRTLMM_LOG
     /* Log that we did that */
-    sprintf(logStr, "InstallTrapCallback(): Installed the trap %s 0x%p",
-	    (AsHook) ? ("hook") : ("handler"),
-	    NewTrapCallback
+    sprintf(
+      logStr,
+      "InstallTrapCallback(): Installed the trap %s 0x%lX",
+      (AsHook) ? ("hook") : ("handler"),
+      (unsigned long int)NewTrapCallback
     );
     MESSAGE(NULL, 0, logStr);
     #endif /*DPCRTLMM_LOG*/
@@ -153,14 +187,16 @@ static void dpcrtlmm_int_InstallTrapCallback( void(*NewTrapCallback)(const unsig
     #endif /*DPCRTLMM_DEBUGHOOKS*/
 
     if (_UserTrapCallback) /* Already have a handler and caller is trying to NULL it */
-      _Trap(DPCRTLMM_TRAP_BAD_HANDLER_REMOVAL, "InstallTrapCallback(): Can\'t remove handler or hook in this way");
+      Trap(DPCRTLMM_TRAP_BAD_HANDLER_REMOVAL, "InstallTrapCallback(): Can\'t remove handler or hook in this way");
     else /* Trying to set handler when no current handler installed */
-      _Trap(DPCRTLMM_TRAP_NULL_HANDLER, "InstallTrapCallback(): NULL handler or hook is not acceptable.");
+      Trap(DPCRTLMM_TRAP_NULL_HANDLER, "InstallTrapCallback(): NULL handler or hook is not acceptable.");
   }
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_RemoveTrapCallback(void(*CurrentCallback)(const unsigned int, const char*))
+static void dpcrtlmm_int_RemoveTrapCallback(
+  void(*CurrentCallback)(const unsigned int, const char*)
+)
 {
   char logStr[MAX_TRAP_STRING_LENGTH+1];
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -190,8 +226,13 @@ static void dpcrtlmm_int_RemoveTrapCallback(void(*CurrentCallback)(const unsigne
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-    sprintf(logStr, "RemoveTrapCallback(): The handler is NOT 0x%p !!!", CurrentCallback);
-    _Trap(DPCRTLMM_TRAP_UNAUTH_REMOVE, logStr);
+    sprintf(
+      logStr,
+      "RemoveTrapCallback(): The handler is NOT 0x%lX !!!",
+      (unsigned long int)CurrentCallback
+    );
+
+    Trap(DPCRTLMM_TRAP_UNAUTH_REMOVE, logStr);
   }
   return;
 }
@@ -231,9 +272,14 @@ unsigned char dpcrtlmm_AreTrapsEnabled()
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-static void DefHandler(const char* TrapMsg)
+static void DefHandler(
+  const char *TrapMsg
+)
 {
-  fprintf(DPCRTLMM_DEV_ERROR, TrapMsg); /* Output trap's message on the standard error stream */
+  /*
+    Output trap's message on the standard error stream
+  */
+  fprintf(DPCRTLMM_DEV_ERROR, TrapMsg);
   abort();
 }
 /*-------------------------------------------------------------------------*/

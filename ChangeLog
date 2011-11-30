@@ -1,3 +1,31 @@
+1.2
+---
+DDRP - Add GNU autoconf support, remove old configurator.
+DDRP - Rename _Trap to Trap internally
+DDRP - Change license to a BSD-style license for all code.
+DDRP - Examples no longer cause leaks on purpose because automated
+       calls to make check might be taking place by something
+       bigger than us.
+
+1.1.6
+-----
+DDRP - Add support to 'make install' on UNIX-like systems
+DDRP - Elimination of new spurious warnings from GCC 3.3 about %p printing
+DDRP - Some code re-formatting to my newer style
+DDRP - One newline added to an error message
+DDRP - __INC_DPCRTLMM_H changed to INC_DPCRTLMM_H in dpcrtlmm.h
+DDRP - Removed use of chown during installation, if installing as
+       root, this shouldn't matter and group ownership of root's files
+       differs on the BSDs.  Let me know how this goes.
+DDRP - Elimination of new spurious warnings from GCC 4.0 about %u printing
+DDRP - Remove superfluous semi-colon from dpccap.h end of namespace
+DDRP - Dependent on supplementary scripts package for OC libtool 0.9
+
+1.1.6-pre3
+----------
+DDRP - Display array pointer in dpcrtlmm_Dump()
+DDRP - Fix infinite loop in dpcrtlmm_Dump()
+
 1.1.6-pre2
 ----------
 DDRP - Rename source files to prevent conflicts with C runtime lib

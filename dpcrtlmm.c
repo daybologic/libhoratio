@@ -1,40 +1,63 @@
 /*
-    DPCRTLMM Memory Management library
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 /* Incase you're wondering why DPCRTLMM_SOURCE appears at the top of all my
 source, it's to do with build.h.  That header is for the compilation fo the
 library only, not to be included in user programs.  If users include build.h
 the definition won't exist and build.h will tell them off! */
+
+/*
+  Allocations on behalf of callers are done with DPCRTLMM_MALLOC,
+  internal allocations are done with malloc() and failure should be
+  ignored by checking for NULL.
+*/
+
 #define DPCRTLMM_SOURCE
-/* Allocations on behalf of callers are done with DPCRTLMM_MALLOC, internal
-allocations are done with malloc() and failure should be ignored by checking
-for NULL */
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stdlib.h> /* For normal C memory functions */
 #include <string.h>
 #include <stdio.h>
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
+
 #include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal data */
-#include "dpc_trap.h" /* _Trap() - Trap support */
+#include "dpc_trap.h" /* Trap() - Trap support */
 #include "dpc_log.h" /* LOG macro - Logging support */
 #include "dpc_safelist.h" /* Safety list support functions */
 #include "dpc_dbghooks.h" /* The debug hook support/executive */
@@ -73,6 +96,9 @@ PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
     #ifdef SPECIAL
       PVerStruct->Flags |= DPCRTLMM_VERSION_SPECIAL;
     #endif /*SPECIAL*/
+    #ifdef DPCRTLMM_THREADS
+      PVerStruct->Flags |= DPCRTLMM_VERSION_MT;
+    #endif /*DPCRTLMM_THREADS*/
   }
   return PVerStruct;
 }
@@ -99,7 +125,7 @@ void dpcrtlmm_Startup()
     memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_STARTUP, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-    _Trap(DPCRTLMM_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
+    Trap(DPCRTLMM_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
   }
   MESSAGE(NULL, 0, "Library started");
   return;
@@ -137,7 +163,7 @@ void dpcrtlmm_Shutdown()
     debugHookInfo.Success = 0U; /* Failed */
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-    _Trap(DPCRTLMM_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
+    Trap(DPCRTLMM_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
   }
   return;
 }
@@ -161,8 +187,10 @@ static void TrapUnFreedArrays()
       /* numArraysUnfreed is used for a log message */
       numArraysUnfreed++; /* Increment count of failures to free an array */
       /* Make a log message that an array was not destroyed */
-      sprintf(trapMsg, "Shutdown(): The array 0x%p was not freed, any blocks unfreed in the array will be listed",
-              _safetyList[sli]
+      sprintf(
+        trapMsg,
+        "Shutdown(): The array 0x%p was not freed, any blocks unfreed in the array will be listed",
+        (void*)(_safetyList[sli])
       );
       WARNING(trapMsg);
       if (_safetyList[sli]->Count) /* Are there any unfreed blocks in the array? */
@@ -198,7 +226,7 @@ static void TrapUnFreedArrays()
       strcat(trapMsg, "only solve this problem if it will not take too much development time and does not increase with time.");
     else
       strcat(trapMsg, "You should use the log as an aid to resolving this.");
-    _Trap(DPCRTLMM_TRAP_UNFREED_DATA, trapMsg);
+    Trap(DPCRTLMM_TRAP_UNFREED_DATA, trapMsg);
   }
   return;
 }
@@ -220,21 +248,25 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
       contains descriptors I shall remove the top one (0) */
       while ( PArr->Count )
       {
-        sprintf(trapMsg, "Block 0x%p in descriptor array 0x%p was not freed, size: %u bytes",
-                PArr->Descriptors[0].PBase,
-                PArr,
-                PArr->Descriptors[0].Size
+        sprintf(
+          trapMsg,
+          "Block 0x%p in descriptor array 0x%p was not freed, size: %u bytes",
+          PArr->Descriptors[0].PBase,
+          (void*)PArr,
+          (unsigned int)PArr->Descriptors[0].Size
         );
         MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
         totalLeakage += PArr->Descriptors[0].Size; /* Add size of this block to the total leakage value */
         dpcrtlmm_Free(PArr, PArr->Descriptors[0].PBase); /* Automatically collect the garbage */
       }
       /* Array leakage summary */
-      sprintf(trapMsg, "Array leakage summary: array 0x%p contained %u unfreed blocks, a total of %lu bytes",
-              PArr,
-              unfreedBlockCount,
-              totalLeakage
-             );
+      sprintf(
+        trapMsg,
+        "Array leakage summary: array 0x%p contained %u unfreed blocks, a total of %lu bytes",
+        (void*)PArr,
+        unfreedBlockCount,
+        totalLeakage
+      );
       WARNING(trapMsg);
     }
   } /*(PArr)*/

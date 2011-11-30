@@ -1,45 +1,59 @@
 /*
-    DPCRTLMM Memory management library : Primary allocator
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 #define DPCRTLMM_SOURCE
-/* Main allocation function and block array grower
- - Overlord David Duncan Ross Palmer
- Copyright (C)2000-2002 OverlordDDRP, Daybo Logic, all rights reserved.
- Overlord@DayboLogic.co.uk
+
+/*
+  Main allocation function and block array grower
 */
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#ifdef DPCRTLMM_WANTFARDATA
+# ifdef HAVE_ALLOC_H
+#  include <alloc.h>
+# endif /*HAVE_ALLOC_H*/
+#endif /*DPCRTLMM_WANTFARDATA*/
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#ifdef DPCRTLMM_WANTFARDATA
-#  include <alloc.h>
-#endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_log.h" /* Main logging support */
@@ -50,14 +64,24 @@ My official site: http://www.daybologic.co.uk/overlord
 /*-------------------------------------------------------------------------*/
 /* Internal functions (local) */
 
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Message);
+static void OurLog(
+  const char * File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Message
+);
 
-/* Grow the array by 'GrowByElems' elements, returns FALSE if
-it fails but then the original array is still valid and no
-bigger.  Always make sure the array pointer is resolved, NULL
-pointers are not acceptable and will be caught with assert() */
+/*
+  Grow the array by 'GrowByElems' elements, returns FALSE if
+  it fails but then the original array is still valid and no
+  bigger.  Always make sure the array pointer is resolved, NULL
+  pointers are not acceptable and will be caught with assert()
+*/
 
-static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray, const unsigned int GrowByElems);
+static unsigned int GrowBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
+  const unsigned int GrowByElems
+);
 
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
@@ -69,10 +93,18 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
 #endif /*OURLOG_POS*/
 
 /* Shortcut for typecast */
-#define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-#define OURLOG_POS(sev, msg) OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG(f, l, sev, msg) \
+  OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+
+#define OURLOG_POS(sev, msg) \
+  OURLOG(__FILE__, __LINE__, (sev), (msg))
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line)
+void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const size_t NewBlockSize,
+  const char *File,
+  const unsigned int Line
+)
 {
   /* Thread safe wrapper for AllocEx() */
   void DPCRTLMM_FARDATA* ret;
@@ -84,7 +116,12 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const size_t NewBlockSize, const char* File, const unsigned int Line)
+void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const size_t NewBlockSize,
+  const char *File,
+  const unsigned int Line
+)
 {
   /* locals */
   void DPCRTLMM_FARDATA* genBlockPtr; /* Generated block pointer */
@@ -96,19 +133,23 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
 
   _VerifyPtrs("Alloc()", PBlockArray, NULL); /* Haults program if array not valid, third arg is not applicable here */
 
-  sprintf(logMsg, "Program Requested to allocate %u byte block for array 0x%p",
-	  NewBlockSize,
-	  PBlockArray
-	  );
+  sprintf(
+    logMsg,
+    "Program Requested to allocate %u byte block for array 0x%p",
+    (unsigned int)NewBlockSize,
+    (void*)PBlockArray
+  );
   OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
   genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
   if (!genBlockPtr) /* Out of memory? */
   {
     /* Use buffer for log messages, it's the same size as for traps */
-    sprintf(logMsg, "Attempt to allocate block of %u bytes for array at base 0x%p has failed",
-	    NewBlockSize,
-	    PBlockArray
+    sprintf(
+      logMsg,
+      "Attempt to allocate block of %u bytes for array at base 0x%p has failed",
+      (unsigned int)NewBlockSize,
+      (void*)PBlockArray
     );
     OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
     return NULL; /* No pointer generated */
@@ -120,8 +161,10 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
     /* Attempt to enlarge the array failed? */
     DPCRTLMM_FREE(genBlockPtr); /* Release the new block of memory */
 
-    sprintf(logMsg, "Attempt to enlarge array at base 0x%p by one element failed",
-	    PBlockArray
+    sprintf(
+      logMsg,
+      "Attempt to enlarge array at base 0x%p by one element failed",
+      (void*)PBlockArray
     );
     /* This could be quite critical, if the memory manager is running our of space */
     OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
@@ -163,7 +206,10 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArr
   return genBlockPtr; /* Give pointer to the caller */
 }
 /*-------------------------------------------------------------------------*/
-static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray, const unsigned int GrowByElems)
+static unsigned int GrowBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
+  const unsigned int GrowByElems
+)
 {
   PS_DPCRTLMM_BLOCKDESCRIPTOR ptr; /* Pointer to block descriptors during enlargement */
   unsigned int oldCount; /* Count before enlargement */
@@ -201,7 +247,12 @@ static unsigned int GrowBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray
   return 1U; /* Success */
 }
 /*-------------------------------------------------------------------------*/
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
+static void OurLog(
+  const char *File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Str
+)
 {
    /* Our job is to add "Alloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.

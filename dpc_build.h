@@ -1,26 +1,35 @@
 /*
-    DPCRTLMM configuration at build time file
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
+
 /*
 The build header is used to add some more sense to the user options in
 config.h.  Note: Don't directly edit build.h or config.h, build.h is
@@ -39,7 +48,7 @@ by the config program and included in this file.
                  DPCRTLMM_NONULL_BLOCKDESCARRAY, find the define in this file &
                  uncomment it to restore old behaviour.
 21st July 2000 - Overlord added check for DPCRTLMM_SOURCE to try to stop users
-		 making the mistake of including this in their programs.
+                 making the mistake of including this in their programs.
 25th July 2000 - Overlord added DPCRTLMM_STDBLOCKLIMIT for free versions
 17th Nov 2000 - Overlord stripped all stuff to do with limiting and pricing
                 and the like in preparation for GPL release.
@@ -49,11 +58,11 @@ by the config program and included in this file.
                 of the config program and config.h
 */
 
-#ifndef __INC_DPCRTLMM_BUILD_H
-#define __INC_DPCRTLMM_BUILD_H
-
-#include "config.h" /* User defined configuration */
-/* Below follows a non-user configuration ... */
+#ifndef INC_DPCRTLMM_BUILD_H
+#define INC_DPCRTLMM_BUILD_H
+/*
+  Below follows a non-user configuration ...
+*/
 /*-------------------------------------------------------------------------*/
 /* Try to prevent users including this header */
 #ifndef DPCRTLMM_SOURCE
@@ -61,7 +70,7 @@ by the config program and included in this file.
 #endif /*!DPCRTLMM_SOURCE*/
 
 /* Definition of MAX_TRAP_STRING_LENGTH (change if trap/log strings are
-	getting too long*/
+        getting too long*/
 
 #ifdef MAX_TRAP_STRING_LENGTH /* Somebody else is using the macro we want? */
 #  undef MAX_TRAP_STRING_LENGTH
@@ -70,11 +79,11 @@ by the config program and included in this file.
 #define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) - NOT USER CONFIGURABLE*/
 
 /* To allow explicit far data pointers which are
-non-ANSI, configure with config --far */
+non-ANSI, configure with configure --enable-fardata */
 
 #ifndef __FLAT__ /* Segmented */
 #  ifdef DPCRTLMM_WANTFARDATA
-#    define DPCRTLMM_FARDATA __far /* Non-ANSI, avoid if possible */
+#    define DPCRTLMM_FARDATA far /* Non-ANSI, avoid if possible */
 #    define DPCRTLMM_MALLOC farmalloc
 #    define DPCRTLMM_REALLOC farrealloc
 #    define DPCRTLMM_CALLOC farcalloc
@@ -96,7 +105,7 @@ non-ANSI, configure with config --far */
 
 /* Library version information can be set here */
 #define DPCRTLMM_VERSION_MAJOR (1)
-#define DPCRTLMM_VERSION_MINOR (1)
-#define DPCRTLMM_VERSION_PATCH (6)
+#define DPCRTLMM_VERSION_MINOR (2)
+#define DPCRTLMM_VERSION_PATCH (0)
 /*-------------------------------------------------------------------------*/
-#endif /*!__INC_DPCRTLMM_BUILD_H*/
+#endif /*!INC_DPCRTLMM_BUILD_H*/

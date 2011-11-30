@@ -1,34 +1,47 @@
 /*
-    DPCRTLMM Memory management library : Block locking interface
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
-/* Module for handling memory block lock flags,
-written by Overlord David Duncan Ross Palmer
-Copyright (C)2000 Daybo Logic, all rights reserved.
-Creation: 22nd Feb 2000
-Last modified: 31st July 2001
-RESPECT! */
 
+/*
+  Module for handling memory block lock flags,
+  written by Overlord David Duncan Ross Palmer
+  Copyright (C)2000-2006 Daybo Logic, all rights reserved.
+  Creation: 22nd Feb 2000
+  Last modified: 23rd Feb 2006
+*/
+
+#define DPCRTLMM_SOURCE
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 #include <stddef.h>
 #include <stdio.h>
 #ifdef DPCRTLMM_HDRSTOP
@@ -41,14 +54,21 @@ RESPECT! */
 #include "dpc_bdflags.h" /* Need this to get around the lock */
 #include "dpc_bloclock.h"
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned int NewStatus)
+void dpcrtlmm_SetBlockLockingFlag(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr,
+  const unsigned int NewStatus
+)
 {
   LOCK
   dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+unsigned int dpcrtlmm_IsBlockLocked(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr
+)
 {
   unsigned int ret;
 
@@ -59,39 +79,59 @@ unsigned int dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, cons
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+void dpcrtlmm_ToggleBlockLockingStatus(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr
+)
 {
   LOCK
   dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_int_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr, const unsigned int NewStatus)
+void dpcrtlmm_int_SetBlockLockingFlag(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr,
+  const unsigned int NewStatus
+)
 {
   unsigned char flags;
 
-  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL); /* Get current flags */
+  /* Get current flags */
+  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
   if (NewStatus) /* Locking? */
     flags |= 1; /* Set lock bit */
   else /* Unlocking? */
     flags |= ~1; /* Clear lock bit */
-  dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags); /* Set the new flags */
+
+  /* Set the new flags */
+  dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
   return; /* That was simple enough, I can drink some water now */
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_int_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+unsigned int dpcrtlmm_int_IsBlockLocked(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr
+)
 {
   unsigned char flags;
 
-  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL); /* Get the flags for the descriptor */
+  /* Get the flags for the descriptor */
+  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
   if ( ((flags & 1) == 1) ) /* The lock bit is set? */
     return 1U; /* Yes, the block is locked */
   return 0U; /* No, the block is not locked */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_int_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* Ptr)
+void dpcrtlmm_int_ToggleBlockLockingStatus(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *Ptr
+)
 {
-  unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr); /* Get current status */
-  dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat); /* Set locking state as NOT current locking state */
+  /* Get current status */
+  unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);
+  /* Set locking state as NOT current locking state */
+  dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat);
 }
 /*-------------------------------------------------------------------------*/
+

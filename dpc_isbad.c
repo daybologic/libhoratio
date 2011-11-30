@@ -1,27 +1,35 @@
 /*
-    DPCRTLMM Memory Management Library : Block validity tests
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
+
 /*
 #############################################################################
 # IsBad....() routines for testing validity of pointers, just a small part  #
@@ -31,8 +39,15 @@ My official site: http://www.daybologic.co.uk/overlord
   NOTE: 28th July 2000
   Both function can now cope with resolved or unresolved array pointers
 */
+#define DPCRTLMM_SOURCE
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stddef.h>
 #include <stdio.h>
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -45,7 +60,10 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "dpc_biglock.h" /* Mutual exclusion */
 #include "dpc_isbad.h"
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
+unsigned int dpcrtlmm_IsBadBlockPtr(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *BlockPtr
+)
 {
   /* Thread safe wrapper for IsBadBlockPtr() */
   unsigned int ret;
@@ -57,7 +75,9 @@ unsigned int dpcrtlmm_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+unsigned int dpcrtlmm_IsBadArrayPtr(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+)
 {
   /* Thread safe wrapper for IsBadArrayPtr() */
   unsigned int ret;
@@ -69,7 +89,10 @@ unsigned int dpcrtlmm_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr)
+unsigned int dpcrtlmm_int_IsBadBlockPtr(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const void DPCRTLMM_FARDATA *BlockPtr
+)
 {
   /* locals */
   unsigned int i; /* List/loop control */
@@ -81,11 +104,13 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockA
     /* Fire a trap */
     char trapmsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
 
-    sprintf(trapmsg, "The block array address 0x%p is unknown, unable to search for blocks.",
-	    PBlockArray
+    sprintf(
+      trapmsg,
+      "The block array address 0x%p is unknown, unable to search for blocks.",
+      (void*)PBlockArray
     );
 
-    _Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapmsg);
+    Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapmsg);
   }
 
   for ( i = 0U; i < PRArr->Count; i++ ) /* For all the block descriptors in the list */
@@ -98,7 +123,9 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockA
   return 1U; /* Yes, block is bad */
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+unsigned int dpcrtlmm_int_IsBadArrayPtr(
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+)
 {
   /* I've rewritten this function so that is can support NULL arrays
   and it does not matter whether PBlockArray is resolved or not */

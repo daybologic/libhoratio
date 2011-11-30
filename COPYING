@@ -1,4 +1,3 @@
-/*
 Daybo Logic C RTL Memory Manager
 Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
@@ -28,28 +27,3 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
-*/
-
-#ifndef INC_DPCRTLMM_ALLOC_H
-#define INC_DPCRTLMM_ALLOC_H
-/*-------------------------------------------------------------------------*/
-#ifndef DPCRTLMM_SOURCE
-#  error ("This header is for internal library use only, include dpcrtlmm.h")
-#endif /*DPCRTLMM_SOURCE*/
-
-#ifdef __cplusplus
-  extern "C" {
-#endif /*__cplusplus*/
-
-void DPCRTLMM_FARDATA *dpcrtlmm_int_AllocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const size_t NewBlockSize,
-  const char *File,
-  const unsigned int Line
-);
-
-#ifdef __cplusplus
-  }
-#endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
-#endif /*!INC_DPCRTLMM_ALLOC_H*/

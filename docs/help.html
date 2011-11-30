@@ -1,1092 +1,1743 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="Author" content="Overlord David Duncan Ross Palmer">
-   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.17-0.6.1 ppc) [Netscape]">
-   <meta name="Classification" content="programming,libraries">
-   <meta name="Description" content="Technical documentation for DPCRTLMM library">
-   <meta name="KeyWords" content="DPCRTLMM,Memory manager,Daybo Logic">
-   <title>Daybo Logic DPCRTLMM documentation</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Overlord David Duncan Ross Palmer">
+  <meta name="GENERATOR"
+ content="Mozilla/4.7 [en] (X11; I; Linux 2.2.17-0.6.1 ppc) [Netscape]">
+  <meta name="Classification" content="programming,libraries">
+  <meta name="Description"
+ content="Technical documentation for DPCRTLMM library">
+  <meta name="KeyWords" content="DPCRTLMM,Memory manager,Daybo Logic">
+  <title>Daybo Logic DPCRTLMM documentation</title>
+  <meta content="David Duncan Ross Palmer" name="author">
+  <meta content="Manual for DPCRTLMM" name="description">
 </head>
-<body text="#FFFFFF" bgcolor="#000000" link="#FFFF00" vlink="#C0C0C0" alink="#C0FFC0">
-
-<center><b><u><font size=+4>Daybo Logic's C memory management library V1.1.6
-beta</font></u></b>
-<br><b><u><font size=+4>technical documentation</font></u></b></center>
-
+<body style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);"
+ alink="#c0ffc0" link="#ffff00" vlink="#c0c0c0">
+<center><b><u><font size="+4">Daybo Logic's C memory management library
+V1.2.0</font></u></b>
+<br>
+<b><u><font size="+4">technical documentation</font></u></b></center>
 <p><b><u>Contents</u></b>
-<br><a href="#About">1.&nbsp; About the library</a>
-<br><a href="#Who">1.1&nbsp; So who are Daybo Logic?</a>
-<br><a href="#Contact">1.2&nbsp; Contacting the author</a>
-<br><a href="#FAQ">1.3&nbsp; FAQ</a>
-<br><a href="#Compile">1.4&nbsp; Compiling the sources</a>
-<br><a href="#Config">1.5&nbsp; Configuration options explained</a>
-<p><a href="#Flavors">2.0&nbsp; What are the flavors of the library</a>
-<br><a href="#Cost">2.1&nbsp; How much does it cost?</a>
-<br><a href="#Platforms">2.2&nbsp; What platforms is the library available
+<br>
+<a href="#About">1.&nbsp; About the library</a>
+<br>
+<a href="#Who">1.1&nbsp; So who are Daybo Logic?</a>
+<br>
+<a href="#Contact">1.2&nbsp; Contacting the author</a>
+<br>
+<a href="#FAQ">1.3&nbsp; FAQ</a>
+<br>
+<a href="#Compile">1.4&nbsp; Compiling the sources</a>
+<br>
+<a href="#Config">1.5&nbsp; Configuration options explained</a>
+</p>
+<p><a href="#Enumerations">2.0&nbsp; Enumerations and detail</a><br>
+<a href="#Cost">2.1&nbsp; How much does it cost?</a>
+<br>
+<a href="#Platforms">2.2&nbsp; What platforms is the library available
 for?</a>
-<p><a href="#Concepts">3.0&nbsp; Concepts and structures used by the library</a>
-<br><a href="#Starting">3.1&nbsp; Getting started</a>
-<br><a href="#Portability">3.2&nbsp; Portability issues</a>
-<br><a href="#8086">3.3&nbsp; 8086 builds</a>
-<br><a href="#PCH">3.4&nbsp; Precompiled headers</a>
+</p>
+<p><a href="#Concepts">3.0&nbsp; Concepts and structures used by the
+library</a>
+<br>
+<a href="#Starting">3.1&nbsp; Getting started</a>
+<br>
+<a href="#Portability">3.2&nbsp; Portability issues</a>
+<br>
+<a href="#8086">3.3&nbsp; 8086 builds</a>
+<br>
+<a href="#PCH">3.4&nbsp; Precompiled headers</a>
+</p>
 <p><a href="#History">4.0&nbsp; History</a>
-<br><a href="#Plans">4.1&nbsp; Plans for next version</a>
+<br>
+<a href="#Plans">4.1&nbsp; Plans for next version</a>
+</p>
 <p><a href="#Listings">5.0&nbsp; Function listings</a>
-<br><a href="#FuncDescs">5.1&nbsp; Descriptions of all functions and their
+<br>
+<a href="#FuncDescs">5.1&nbsp; Descriptions of all functions and their
 use</a>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="About"></a><b><u>1.&nbsp; About the library</u></b>
-<br>This could be used as an alternative to
-<br>memory tracking tools such as CodeGuard of MemorySleuth,
-<br>it's not as thorough as them however, it can't detect memory over
-<br>runs on pointer accesses or anything like that.&nbsp; It can be used
-<br>to detect failures to release memory (as long as it's allocated
-<br>by us) and attempts to release memory which we do not own.
-<br>It has an automatic garbage collection feature to free up all
-<br>unfreed memory too.&nbsp; It should be used by the entire program to
-<br>be most effective, it can provide statistics on memory left an
-<br>such like too.&nbsp; The best thing about the MM is that it provides
-<br>a central place for dynamic memory allocation in a program so
-<br>we can trace all activity, an optional log mode is avialable
-<br>though a define.&nbsp; Swapping is not implemented but may be in a
-<br>future version. If the program is going to be released even though
-<br>it contains memory bugs, the traps can be turned off or passed to
-<br>a handler which will only execute the serious ones.
+</p>
+<hr width="100%"><br>
+<a name="About"></a><b><u>1.&nbsp; About the library</u></b>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Who"></a><b><u>1.1&nbsp; So who are Daybo Logic?</u></b>
-<br>Daybo Logic is a commercial software company that develops libraries
-like this for other developers, established in 1997 we have been making
-small programs for a long time but now there are more in the team we have
-to decided to work on some very large products.&nbsp; Our site on the world
-wide web is&nbsp; <a href="http://www.daybologic.co.uk">www.daybologic.co.uk</a>
+This could be used as an alternative to
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Contact"></a><b><u>1.2&nbsp; Contacting the author</u></b>
-<br>The author of this library is David Duncan Ross Palmer, a C/C++ programmer
+memory tracking tools such as CodeGuard of MemorySleuth,
+<br>
+it's not as thorough as them however, it can't detect memory over
+<br>
+runs on pointer accesses or anything like that.&nbsp; It can be used
+<br>
+to detect failures to release memory (as long as it's allocated
+<br>
+by us) and attempts to release memory which we do not own.
+<br>
+It has an automatic garbage collection feature to free up all
+<br>
+unfreed memory too.&nbsp; It should be used by the entire program to
+<br>
+be most effective, it can provide statistics on memory left and
+<br>
+such like too.&nbsp; The best thing about the MM is that it provides
+<br>
+a central place for dynamic memory allocation in a program, so
+<br>
+we can trace all activity, an optional log mode is available too.<br>
+Swapping is not implemented but may be in a future version.<br>
+If the program is going to be released even though
+<br>
+it contains memory bugs, the traps can be turned off or passed to
+<br>
+a handler which will only execute the serious ones.
+<br>
+<hr width="100%">
+<br>
+<a name="Who"></a><b><u>1.1&nbsp; So who are Daybo Logic?</u></b>
+<br>
+Daybo Logic started in 1997 as a software development company.&nbsp; It
+then became a general troubleshooting company, as a sole trader, David
+Duncan Ross Palmer and in 2006, it reverted to being purely a
+programming hobby of mine.&nbsp; I still release all my software,
+including source code on the Daybo Logic web-site at <a
+ href="http://www.daybologic.co.uk/">www.daybologic.co.uk</a>.<br>
+<hr width="100%">
+<br>
+<a name="Contact"></a><b><u>1.2&nbsp; Contacting the author</u></b>
+<br>
+The author of this library is David Duncan Ross Palmer, a C/C++
+programmer
 since 1997 and a BASIC programmer since 1989.&nbsp; Born 5th March 1982
 and interested in computers since an early age.&nbsp; This product was
-a side effect of wanting to be able trap memory errors on users machines
-during beta testing phase, it was not originally designed to be released,
-it was originally too dependant on other Daybo Logic internal libraries.&nbsp;
-It was then offered for download for free and a fee for the advanced features.&nbsp;
-Eventually the whole source was open sourced under the GNU General Public
-License.&nbsp; Mail me: <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a>
+a side effect of wanting to be able trap memory errors on users
+machines
+during beta testing phase, it was not originally designed to be
+released,
+it was originally too dependant on other Daybo Logic internal
+libraries.&nbsp;
+It was then offered for download for free and a fee for the advanced
+features.&nbsp;
+Eventually the whole source was open sourced under the GNU General
+Public
+License.&nbsp; IN 2006, the library was re-released under a BSD-style
+license.&nbsp; The author of the library can be conacted by visiting
+the following web-site: <a href="http://www.daybologic.co.uk/mailddrp/">http://www.daybologic.co.uk/mailddrp/</a>.&nbsp;
+I especially welcome bug reports, feature requests and technical
+questions.<br>
+<hr width="100%">
 <br>
-<hr WIDTH="100%">
-<br><a NAME="FAQ"></a>1.3&nbsp; FAQ - Frequently Asked Questions and common
-compile problems
-<p>Q - Error DPCRTLMM.H (line number): Declaration missing ;
-<br>A - This stumped me for a while too, this can only happen if you have
-the source and selected to have explict far data for the 16-bit tiny, small
-or medium memory models.&nbsp; The answer is one of these solutions I hope,
-firstly check the language is set to non-ANSI compliance, if your compiler
-only supports ANSI you cannot support explicit far pointers so give up!&nbsp;
-The other problem is on line 112 (ish) of BUILD.H #define DPCRTLMM_FARDATA
-_ _ far, change the _ _ far bit to just far and try again.&nbsp; Look for
-what the 'far' keyword equivilant is in your language.&nbsp; If you still
+<a name="FAQ"></a><span
+ style="font-weight: bold; text-decoration: underline;">1.3&nbsp; FAQ -
+Frequently Asked Questions and common
+compile problems</span>
+<p>Q - I am using ./configure --enable-threads --with-gnu-pth to link
+with the GNU Portable Threads library.&nbsp; As soon as my program
+initialises the DPCRTLMM library, the program crashes with a
+segmentation fault.&nbsp; Is this a bug?<br>
+A - No, GNU Portable Threads needs explicit initialisation before
+use.&nbsp; DPCRTLMM uses GNU Portable threads for an internal lock and
+initialises this lock when DPCRTLMM is initialised.&nbsp; It is your
+program's responsibility to initialise GNU Portable Threads before
+DPCRTLMM is initialised.&nbsp; You will need to call pth_init( ) at
+some point before <a href="#Startup">dpcrtlmm_Startup</a>( ) is called.<br>
+</p>
+<p>Q - Error dpcrtlmm.h (line number): Declaration missing ;
+<br>
+A - The following answer applies to 16-bit segmented programming
+only.&nbsp; This only happens if you selected to have explict far data
+for the 16-bit tiny, small
+or medium memory models.&nbsp; The answer is one of these solutions I
+hope,
+firstly check the language is set to non-ANSI compliance, if your
+compiler
+only supports ANSI you cannot support explicit far pointers so give
+up!&nbsp;
+The other problem is on line 112 (ish) of BUILD.H #define
+DPCRTLMM_FARDATA
+_ _ far, change the _ _ far bit to just far and try again.&nbsp; Look
+for
+what the 'far' keyword equivilant is in your language.&nbsp; If you
+still
 have problems contact me.
-<p>Q - No prototype for function 'farmalloc' or 'farcalloc' or 'farfree'
+</p>
+<p>Q - No prototype for function 'farmalloc' or 'farcalloc' or
+'farfree'
 or 'farrealloc'
-<br>A - The explicit fars are non-ANSI, unfortunately the functions differ
-from one compiler to the next when one strays from ANSI.&nbsp; In BUILD.H
-there are a list of functions here, change them to point to your compiler's
-equivilant functions if you can discover what they are.&nbsp; If you don't
-have any you will have to give up and turn off this option, make sure you
-don't have strict ANSI C compliance on or anything first but if all else
+<br>
+A - The following answer applies to 16-bit segmented programming
+only.&nbsp; The explicit fars are non-ANSI, unfortunately the functions
+differ
+from one compiler to the next when one strays from ANSI.&nbsp; In
+BUILD.H
+there are a list of functions here, change them to point to your
+compiler's
+equivilant functions if you can discover what they are.&nbsp; If you
+don't
+have any you will have to give up and turn off this option, make sure
+you
+don't have strict ANSI C compliance on or anything first but if all
+else
 fails just compile for the compact/large or huge model.
-<p>Q - I want to compile for 16-bit x86 processors in small memory models
-<br>A - The library only functions correctly with far data, run config
-with --far to enable explicit support.
+</p>
+<p>Q - I want to compile for 16-bit x86 processors in small memory
+models.&nbsp; However, the pointers returned from DPCRTLMM use my
+segment address and not real segment address,&nbsp; When I try to
+success these pointers, the program crashes, or unexpected results
+happen.<br>
+A - The library only functions correctly with far data, run ./configure
+with --enable-fardata to enable explicit support.&nbsp; Unfortunately,
+this is not within the scope of ANSI C and you may find difficulty
+compiling.&nbsp; If your compiler cannot support explicit far pointers,
+you may be forced to compile for another memory model or not use
+DPCRTLMM at all.<br>
+</p>
 <p>Q - My program is crashing unexpectedly when I try to free blocks of
 memory (or earlier while using the memory manager)
-<br>A - The most common problem is forgetting to start the library, if
-this is not the case and you are compiling for a 16-bit processor it may
-be that the data is near.&nbsp; The easiest way to avoid this is to rebuild
-in a memory model which has far data.&nbsp; There is another way in this
-version of the library, Cinfigure with --far.&nbsp; If this does not solve
+<br>
+A - The most common problem is forgetting to start the library, if
+this is not the case and you are compiling for a 16-bit processor it
+may
+be that the data is near.&nbsp; The easiest way to avoid this is to
+rebuild
+in a memory model which has far data.&nbsp; There is another way in
+this
+version of the library, Configure with --enable-fardata.&nbsp; If this
+does not solve
 the problem please send me all details possible.
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Compile"></a><b><u>1.4&nbsp; Compiling the sources</u></b>
-<br>The way in which the library is built can change from time to time,
-last minute notes may be added in a file called README if these do not
-work.&nbsp; The Makefiles which have been tested are called Makefile.xxx,
-where 'xxx' is a string which is compiler dependent, such as bor for Borland
-C and gnu for GNU C.&nbsp; In the following examples substitute 'xxx' for
-the string which matches your compiler.&nbsp; GNU C is the default, just
-make with no -f etc will suffice.
-<p>To make the library with no bother whatsoever type:
-<br>make -f Makefile.xxx all
-<p>To make the library&nbsp; with custom configuration options (only available
-in previous versions to 1.1.4 by editing build.h) type:
-<br>make -f Makefile.xxx config
-<br>config --help (on Win32)
-<br>or ./config --help on UNIX
-<br>Then run config with the options you want from the ones listed.&nbsp;
-See <a href="#Config">section 1.5</a> for more information about the options.
-<br>Then type:
-<br>make -f Makefile.xxx
-<br>make -f Makefile.xxx example
-<br>if you want the example programs built too.&nbsp; That should be it.&nbsp;
-Any makefiles for other compilers which work in the same way would be appreciated.&nbsp;
-Manual building is neccersary on unsupported systems.&nbsp; Reading the
-makefiles may help that quest.
+</p>
+<hr width="100%"><br>
+<a name="Compile"></a><b><u>1.4&nbsp; Compiling the sources</u></b>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Config"></a><b><u>1.5&nbsp; Configuration options explained</u></b>
-<br>config --help displays some help but if you're still stuck, these options
+<span style="color: rgb(204, 0, 0);">The way in which the library is
+built can change from time to time,
+last minute notes may be added in a file called README if these do not
+work.</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">Compiling under UNIX:</span><br
+ style="color: rgb(204, 0, 0);">
+<br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">Unpack the souce tarball with the
+following command:</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">tar -zxvf dpcrtlmm-1.2.0.tar.gz or</span><br
+ style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">tar -jxvf dpcrtlmm-1.2.0.tar.bz2
+if you are using the bzip2ed version.</span><br
+ style="color: rgb(204, 0, 0);">
+<br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">cd dpcrtlmm-1.2.0/</span><br
+ style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">./configure --help</span><br
+ style="color: rgb(204, 0, 0);">
+<br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">This will display a large output
+of help text.&nbsp; It may help to
+pipe this though 'more'.&nbsp; Read this help carefully and when you
+have decided upon the configuration options you want to use, type:</span><br
+ style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">./configure [add any options you
+want to use here]</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">Once the script has configured
+(assuming all went well), type:</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">make.</span><br
+ style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">This builds the library.</span><br
+ style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">You can now type make check if you
+want to build and run some
+example/test programs.</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">Finally, as root, type make
+install.</span><br style="color: rgb(204, 0, 0);">
+<span style="color: rgb(204, 0, 0);">The DPCRTLMM library is now
+installed and ready for use by your system.</span><br>
+<br>
+Compiling under Win32 (Borland C):<br>
+<span style="color: rgb(204, 0, 0);">(write these instructions)</span><br>
+<br>
+Compiling under Win32 (Microsoft C):<br>
+<span style="color: rgb(204, 0, 0);">(write these instructions)</span><br>
+<br>
+Compiling under Win32 (Open Watcom C):<br>
+<span style="color: rgb(204, 0, 0);">(write these instructions)</span><br>
+<br>
+Compiling under DOS (Turbo C):<br>
+<span style="color: rgb(204, 0, 0);">First, you will need to have
+either a Win32 or UNIX-like box available and have Perl
+installed.&nbsp; Then run perl ./mkdosdist.pl<br>
+This will update all of the of the source files in a sub-directory
+called dos_dist/ and rename them to DOS compatible names.<br>
+Finally, it will process each of the files multiple times to rename any
+internal references to the old filenames (this may take some time).<br>
+Warning: Do not run the mkdosdist.pl script if you have build the
+sources under another OS because you will have your own<br>
+config.h which will over-write the DOS-crafted one which is stored as
+dos_dist/config.h.<br>
+You now have a useable source for building with Turbo C.&nbsp; I have
+also supplied project files which may or may not work for you.<br>
+I built them from the directory c:\dpcrtlmm.&nbsp; If it works, you
+might be able to get away with typing:<br>
+tc /b dpcrtlmm.prj<br>
+This will build dpcrtlmm.lib from the sources.&nbsp; You may need to
+mess around with memory models and the contents of config.h<br>
+to get things to work.&nbsp; I found that things generally worked only
+if built with a large memory model.&nbsp; This is generally what you<br>
+will need to do nowadays anyway, as people don't tend to explicitly use
+far or near pointers any more.<br>
+</span>
+<hr width="100%"><br>
+<a name="Config"></a><b><u>1.5&nbsp; Configuration options explained</u></b>
+<br>
+Since version 1.2.0, the old config program has been removed.&nbsp; It
+has been replaced with a GNU autoconf generated configure script.&nbsp;
+This is good news for the portability and maintenance of DPCRTMM on
+UNIX platforms but it does means that pure DOS and Win32 users must
+either run the script via Cygwin (Win32) only, or edit config.h
+manually and then build their own makefile for their compiler.&nbsp;
+However, I have decided that it is in the best interest of the project
+because, although we do have DOS and Win32 users, the majority of the
+library's users use a form of UNIX and UNIX is my development platform
+for the library.<br>
+./configure --help displays some help but if you're still stuck, these
+explanations
 should reveal some more detail and history.
+<p>--enable-win32<br>
+The configure script can't tell if you are running it under Cygwin and
+indeed, you may still want to build for POSIX.&nbsp; Enabling this
+switch turns on specific Win32 code.&nbsp; If you are building with
+--enable-threads, it will use the Win32 API for mutual exclusion,
+rather than the pthread (POSIX threads) API.<br>
+</p>
 <p>--enable-debug
-<br>This option defines DEBUG, it means extra debugging code is added to
-DPCRTLMM for when I am debugging it, it does not add any extra information
-for debugging your programs, only to my code.&nbsp; This could cause the
-library to abort on assert() traps and such.&nbsp; If you want to help
-submit problems with DPCRTLMM, make sure it's built with --enable-debug.&nbsp;
-This will also add symbolic debug information to DPCRTLMM but it doesn't
-in 1.1.4.
-<p>--disable-debug
-<br>This is the default, DPCRTLMM is in production mode and will try to
-ignore any internal problems but will still offer full information about
-host programs.&nbsp; Unfortunately it does not yet support stripping of
-symbol tables.
-<p>--force-bigendian
-<br>This is not recommened, it supresses endian detection code in the configurator
-and always assumes the machine uses big endian byte ordering.
-<p>--force-littleendian
-<br>This is not recommened, it supresses endian detection code in the configurator
-and always assumes the machine uses little endian byte ordering.
-<p>--auto-endian
-<br>Default, recommened.&nbsp; This make the config program perform a test
-to determine the byte order of the architecture of the host machine.
+<br>
+This option defines DEBUG, it means extra debugging code is added to
+DPCRTLMM for when I am debugging it, it does not add any extra
+information
+for debugging your programs, only to my code.&nbsp; This could cause
+the
+library to abort on assert( ) traps and such.&nbsp; If you want to help
+submit problems with DPCRTLMM, make sure it's built with
+--enable-debug.&nbsp;
+This will also add symbolic debug information to DPCRTLMM where
+possible.<br>
+</p>
 <p>--enable-threads
-<br>Enables multithread safety.&nbsp; Note: This does not inply support,
+<br>
+Enables multithread safety.&nbsp; Note: This does not inply support,
 DPCRTLMM can't handle threads portably for logging purposes etc.&nbsp;
 This option makes sure that DPCRTLMM is mutually exclusive, that is, if
-two threads attempt to call the library at the same time, one will succeed
-and one will have to wait until the first finishes.&nbsp; This stops internal
-corruption of DPCRTLMM's data structures but adds overhead, don't use it
-if you don't use pre-emptive threads.&nbsp; This is supported only on the
-following platforms: POSIX, Win32.
-<p>--disable-threads
-<br>Default, best option for most ANSI programs, saves overhead.
-<p>--enable-inline
-<br>On C99 and non-standard systems which support the keyword inline anyway,
-this enables certain speed-critical functions in DPCRTLMM to be inlined.&nbsp;
-Using it on other systems would just cause a compile time error.
-<p>--disable-inline
-<br>Default, no inline functions are used except macros.&nbsp; The keyword
-inline is disallowed.&nbsp; Internal code uses the macro _INLINE to make
-sure it does not try to use inline functions when disallowed by config.
+two threads attempt to call the library at the same time, one will
+succeed
+and one will have to wait until the first finishes.&nbsp; This stops
+internal
+corruption of DPCRTLMM's data structures but adds overhead, don't use
+it
+if you don't use pre-emptive threads.&nbsp; This is supported only on
+the
+following platforms: POSIX, Win32.<br>
+</p>
+<p>--with-gnu-pth<br>
+This will enable you to build against the GNU Portable Threads library,
+rather than the POSIX threads API.&nbsp; This is useful if your program
+uses the GNU Portable Threads rather than POSIX threads.&nbsp; You will
+get a warning if you specifiy --enable-win32 and --with-gnu-pth because
+at time of writing, The GNU Portable Threads are only supported on
+UNIX-like platforms.&nbsp; Your program is resonsible for initialising
+the GNU Portable Threads library before DPCRTLMM is started.<br>
+</p>
 <p>--enable-stderr
-<br>Error traffic will be printed onto stderr, a stream which can't be
-redirected at the command line and so some people find it annoying.
-<p>--disable-stderr
-<br>Default, error traffic destined for stderr will instead go to stdout
-and may be redirected to file output etc.
-<p>--hook-chain-size:nnnn
-<br>The default hook chain size is 32.&nbsp; In DPCRTLMM before it was
-Open Sourced advanced debug hooks were only allowed in payed for versions.&nbsp;
+<br>
+Error traffic will be printed onto stderr, a stream which can be
+redirected separately from the normal standard output stream.<br>
+</p>
+<p>--with-hook-chain-size:nnnn
+<br>
+The default hook chain size is 32.&nbsp; In DPCRTLMM before it was
+Open Sourced advanced debug hooks were only allowed in paid-for
+versions.&nbsp;
 to get rid of them set this to zero.&nbsp; Otherwise a debug matrix is
 used, a matrix of chains of hooks.&nbsp; Callers may install hooks into
-the matrix, up to nnnn hook per hooktype.&nbsp; For example, if monitoring
-allocation requests, only 32 (by default) hooks may be installed for the
-allocation type of hook.&nbsp; If one does not plan to use this feature,
-set this to zero to avoid space wastage.
-<p>--safety-list-size:nnnn
-<br>The default is 512.&nbsp; When creating new block arrays, each address
-of a block array is stored in an internal "safety list".&nbsp; It's a fixed
+the matrix, up to nnnn hook per hooktype.&nbsp; For example, if
+monitoring
+allocation requests, only 32 (by default) hooks may be installed for
+the
+allocation type of hook.&nbsp; If one does not plan to use this
+feature,
+set this to zero to avoid space wastage.&nbsp; Being a matrix, a high
+value will occupy a large amount of space quickly.&nbsp; The total size
+used can be calculated by the hook chainsize, multiplied by the size of
+a hook pointer, multiplied by the number of debuggable hook types (eg.
+allocation is one specific type of debug hook).<br>
+</p>
+<p>--with-safety-list-size:nnnn
+<br>
+The default is 512.&nbsp; When creating new block arrays, each address
+of a block array is stored in an internal "safety list".&nbsp; It's a
+fixed
 size array determined here.&nbsp; It may not be zero but may be in the
-future.&nbsp; I recommend a new block array per module, so if the program
+future.&nbsp; I recommend a new block array per module, so if the
+program
 contains 512 modules this is fine, otherwise adjust accordingly to save
 space or provide more space.
-<p>--far
-<br>For tiny, small and compact memory models in 16-bit segmented systems
+</p>
+<p>--enable-fardata
+<br>
+For tiny, small and compact memory models in 16-bit segmented systems
 ONLY.&nbsp; This makes sure pointers are not truncated between callers
-in modules using near pointers and the DPCRTLMM library in other modules
+in modules using near pointers and the DPCRTLMM library in other
+modules
 using near pointers.&nbsp; This ensures the DPCRTLMM library explictly
-uses fr pointers and the host program's code knows it.&nbsp; It has not
-been tested for a while since by 386 went into the loft.&nbsp; I will test
-it more before the 1.2.0 release to make sure everything is still in working
-order.&nbsp; Far pointers are non-ANSI, therefore, if this doesn't work,
-editing build.h might be neccersary, see the <a href="#FAQ">FAQ</a>.
-<p>--near
-<br>By default, should be fine for medium, large, huge and flat 32-bit
-memory models.
-<p>--disable-null-array
-<br>When I created the new NULL (default) array so that calls could be
-made to <a href="#Alloc">dpcrtlmm_Alloc( )</a> and other functions without
+uses far pointers and the host program's code knows it.&nbsp; Far
+pointers are non-ANSI, therefore, if this doesn't work,
+editing build.h might be necessary, see the <a href="#FAQ">FAQ</a>.&nbsp;
+If you enable this option on 32-bit platforms, you will just break the
+build.<br>
+</p>
+<p>--enable-hdrstop<br>
+This will produce #pragma hdrstop and allow pre-defined header
+stop-points for pre-processors which support it.&nbsp; It is harmless
+and will just produce a warning for every file if it is not supported.<br>
+</p>
+<p>--with-no-null-array<br>
+When I created the new NULL (default) array so that calls could be
+made to <a href="#Alloc">dpcrtlmm_Alloc</a>( ) and other functions
+without
 specifying a block array, I realised that existing code might be broken
-if it accidently failured to created a new block array and then used it.&nbsp;
-Therefore I have always kept up an effort to make sure that the new NULL
-array could be ignored and cause the same errors as before.
-<p>--enable-null-array
-<br>By default, my great NULL (default) array is available, this is required
-for USING_DPCRTLMNM emulation of malloc( ) and the like.
+if it accidently failed to created a new block array and then used
+it.&nbsp;
+Therefore I have always kept up an effort to make sure that the new
+NULL
+array could be ignored and cause the same errors as before.&nbsp; This
+really is for legacy support only.<br>
+</p>
 <p>--enable-log
-<br>Default, DPCRTLMM.LOG records all activity of every library call.
-<p>--disable-log
-<br>Turns off the log, for release modes.
-<p>--maxport
-<br>The old dream of portabilly revisited.&nbsp; Anything which even might
-breach ANSI is stripped, even file access is disabled incase of game console
-porting.&nbsp; Don't use this unless you find it helps you port, otherwise
-useful features will be removed.&nbsp; Currently on UNIX pthreads, maxport
-disables use of the recursive mutex used by the big lock, the recursion
-is useful but not that portable.&nbsp; Warnings will be displayed by the
-build progress of anything like this which might cause trouble.
-<p>--private
-<br>Set this flag in your higher level makefiles' calls to config, it will
-mark DPCRTLMM as 'private' so that it is known that the resulting library
-was built for a specific tree and should not be reused by other projects.&nbsp;
-The idea being that a program could perform a test build and test for the
-flag.&nbsp; If the flag is set refuse to use the library as it was built
-for a private tree and not a shared repository.&nbsp; Recommendations:
-Use this if you use any non-standard flags and do not want others to rely
-on binaries which might be for a specific tree.&nbsp; Otherwise, share
-the library in a directory where all parts of the development team can
-use it without having to compile DPCRTLMM and do not set private.&nbsp;
-The 'private' flag is returned with the version information.
-<p>--special
-<br>Set this flag if DPCRTLMM has been modified/tampered with for a special
-cause and must not be used by others.&nbsp; The 'special' flag is returned
-with the version information.
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Flavors"></a><b><u>2.0&nbsp; What are the flavors of the library?</u></b>
-<br>The library is only written for C applications and comes in three different
-flavors, the one you have depends how much you payed for it.
-<p>Standard version - The standard version is the version which most people
-will probally have, it is freeware and has limited functionallity.&nbsp;
-It comes with builds for DOS and Win32 and the header to use the library.&nbsp;
-The version offers all the functionallity excluding what is offered in
-the others.
-<p>Professional version - Adds advanced debug hook support for tracing
-calls for allocations / deallocations etc. so that the programmer's own
-code can view this information before allowing it to be passed on to another
-hook, or stopping it.
-<p>Absolutely mental version - Everything mentioned above plus larger size
-hook chains and double sized maximum safety list.&nbsp; All source and
-debug builds supplied so these items could be modified even further, far
-past madness, it's mental.
-<p>Open Source version - Supersedes all other versions, as DPCRTLMM was
-Open Sourced under the GNU General Public License.&nbsp; Proprietary license
-was scrapped.
+A file called DPCRTLMM.LOG wil be created and record the activity of
+every library call.&nbsp; This is an alternative to installing debug
+hooks.&nbsp; Do not forget to disable this feature before releasing
+your program!&nbsp; DPCRTLMM.LOG can grow very quickly!<br>
+</p>
+<hr width="100%"><br>
+<a name="Enumerations"></a><b><u>2.0&nbsp; Enumerations and detail</u></b><br>
+Blah<br>
+<hr width="100%"><br>
+<a name="Cost"></a><b><u>2.1&nbsp; How much does it cost?</u></b>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Cost"></a><b><u>2.1&nbsp; How much does it cost?</u></b>
-<br>Nothing, unless you wish to send me beer.&nbsp; The source is provided
-under the terms of the GNU General Public License.&nbsp; Please make sure
-you know your rights, especially where the license stands with commercial
-software.&nbsp; If you release software with this library you must release
-the source for the whole lot.&nbsp;&nbsp;&nbsp; If you would rather keep
-the source closed you will need to contact me for licensing terms.
+Nothing, but I do accept donations via the web-site.&nbsp; If you have
+found this software useful, please donate.&nbsp; If you can't afford to
+donate (which I wholly understand), please send me an email letting me
+know what you are using the library with.&nbsp; I really would be
+interested to know!&nbsp; I get quite a bit of email but I do enjoy
+reading email from folk who are using my software.<br>
+<hr width="100%">
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Platforms"></a><b><u>2.2&nbsp; What platforms is the library
+<a name="Platforms"></a><b><u>2.2&nbsp; What platforms is the library
 available for</u></b>
-<br>The library is totally ANSI C (1990) and should now comply with C99
-too.&nbsp; I have successfully built the library on: DOS, Win32, Linux,
-FreeBSD.&nbsp; Thread support is only available for Win32 and POSIX.&nbsp;
-Warning: I have not tested the build under DOS for ages, incase of trouble
-use an earlier version from the website and send me details.&nbsp; I'm
-not sad enough to have any DOS machines, perhaps I shall set one up at
-some time.
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Concepts"></a><b><u>3.0&nbsp; Concepts and structures used
+The library has been tested on the following platforms: Win16, Win32,
+DOS (16-bit and 32-bit builds), GNU/Linux and FreeBSD.<br>
+I aim to make sure this library can be built anywhere and if you have
+any specfic problems building it, please let me know.<br>
+<hr width="100%">
+<br>
+<a name="Concepts"></a><b><u>3.0&nbsp; Concepts and structures used
 by the library</u></b>
-<br>The primary memory managment structure is called a block descriptor,
+<br>
+The primary memory managment structure is called a block descriptor,
 it contains basic information about a block of memory allocated by the
-program, it is not normally directly accessed by a program, it is generally
+program, it is not normally directly accessed by a program, it is
+generally
 only used by the library, it is possible to access it but I don't know
-why a program would need to because all information may be obtained using
+why a program would need to because all information may be obtained
+using
 the library interface.
 <p>These block descriptors contain this simple information: The block's
-base address, size in bytes and a number of flags with special meanings.
-<p>The other structure you will encounter is the block descriptor array.&nbsp;
-I recommend that every C file maintains it's own array.&nbsp; When a block
+base address, size in bytes and a number of flags with special
+meanings.
+</p>
+<p>The other structure you will encounter is the block descriptor
+array.&nbsp;
+I recommend that every C file maintains it's own array.&nbsp; When a
+block
 is allocated it's decriptor is always inserted into one of these arrays
-and nearly every library call will want to know the address of one of these
+and nearly every library call will want to know the address of one of
+these
 arrays.&nbsp; This only causes a problem if the program&nbsp; passes a
-descriptor to another module the program which tries to get size information
+descriptor to another module the program which tries to get size
+information
 on the block using the library functions while passing it's own array,
-then the program will be terminated because the library will assume that
-the address is invalid.&nbsp; I recommend using NULL as a placeholder for
-arrays, for blocks which are designed to be shared.&nbsp; Normal sharing
+then the program will be terminated because the library will assume
+that
+the address is invalid.&nbsp; I recommend using NULL as a placeholder
+for
+arrays, for blocks which are designed to be shared.&nbsp; Normal
+sharing
 is fine, as long as the library is not used on that block from another
-module.
-<p>The final structure is stored internally and the program should never
+module.&nbsp; Note: If you have configured the library
+--with-no-null-arrays,&nbsp; it will not be possible to use NULL in
+this manner.<br>
+</p>
+<p>The final structure is stored internally and the program should
+never
 need to access, this structure is called the safety list.&nbsp; It is a
-large fixed size array of all the addresses of the block descriptor arrays
-used throughout the program.&nbsp; The interface to this list is kept internal
-to the library, if you want to access it you could always add it to DPCRTLMM.H
-if you have the source code although there should be no reason to do this.
-<p>The only time you will encounter the safety list is if you run out of
-space.&nbsp; By default the standard library comes with 64 entries which
-is about normal for most programs.&nbsp; The professional version comes
-with 512 entries which is massive.&nbsp; Purchasing the source code will
-man you may change the size to anything and / or expose the hidden interface
-to the safety list.
-<p>So what is this safety list for if I can't access it under normal circumstances?&nbsp;
-Well it's used to trap any call to the library which specifies an invalid
-pointer to a block descriptor array.&nbsp; It is also processed when the
-library is shut down to ensure all blocks have been released, it is therefore
+large fixed size array of all the addresses of the block descriptor
+arrays
+used throughout the program.&nbsp; The interface to this list is kept
+internal
+to the library, if you want to access it you could always add it to
+DPCRTLMM.H,
+although there should be no reason to do this.&nbsp; The safety list's
+size can be adjusted at configuration time via the
+--with-safety-list-size option.<br>
+</p>
+<p>So what is this safety list for if I can't access it under normal
+circumstances?&nbsp;
+Well, it's used to trap any call to the library which specifies an
+invalid
+pointer to a block descriptor array.&nbsp; It is also processed when
+the
+library is shut down to ensure all blocks have been released, it is
+therefore
 is the primary structure for producing a leak report.
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Starting"></a><b><u>3.1&nbsp; Getting started</u></b>
-<br>If you already have a program to convert to use the library I suggest
-this.&nbsp; Download at least version 1.1.4 and define USING_DPCRTLMM before
-including dpcrtlmm.h in each module.&nbsp; This makes malloc( ) etc., your
-normal calls, call DPCRTLMM instead.&nbsp; Also, since the library should
+</p>
+<hr width="100%"><br>
+<a name="Starting"></a><b><u>3.1&nbsp; Getting started</u></b>
+<br>
+If you already have a program to convert to use the library I suggest
+this.&nbsp; Download at least version 1.1.4 and define USING_DPCRTLMM
+before
+including dpcrtlmm.h in each module.&nbsp; This makes malloc( ),
+calloc( ), realloc( ) and free( ), call DPCRTLMM instead.&nbsp; Also,
+since the library should
 be started and shutdown correctly, I recommend code similar to example3
 as a typical transparent usage program.
 <p>If you are writing a new program use the library from the start, add
-a block descriptor array structure to the main module at file level, then
-in main call the library startup routine, create the array then allocate
-blocks using it.&nbsp; When main() is about to exit free all blocks, destroy
-the array with the dedicated function and shutdown the library.&nbsp; These
+a block descriptor array structure to the main module at file level,
+then
+in main call the library startup routine, create the array then
+allocate
+blocks using it.&nbsp; When main() is about to exit free all blocks,
+destroy
+the array with the dedicated function and shutdown the library.&nbsp;
+These
 destroy and shutdown routines are the main ones which check if anything
-was not freed from the array etc.
-<p>I have supplied an example with the library to help you see this in
-action, it is called example.c, actually as you will see, it intentionally
-fails to free hald of the blocks.
+was not freed from the array.<br>
+</p>
+<hr width="100%"><br>
+<a name="Portability"></a><b><u>3.2&nbsp; Portablilty issues</u></b>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Portability"></a><b><u>3.2&nbsp; Portablilty issues</u></b>
-<br>This library will slow the program down but not make it any less portable
-as such.&nbsp; However if you later want to speed the program up and remove
-the library read the section Getting Started, the first paragraph describes
-a hack, designing the program in the first place to use this hack is the
+This library will slow the program down but not make it any less
+portable
+as such.&nbsp; However if you later want to speed the program up and
+remove
+the library read the section Getting Started, the first paragraph
+describes
+a hack, designing the program in the first place to use this hack is
+the
 only way to easily remove the library.&nbsp; Another approach might be
 to write a dummy version of the library, only doing the bare minimum, I
-may write one of these when I have nothing to do.
-<p>By default the library source is portable, it can be setup to use some
+intend to write one of these at some point soon.
+<p>By default the library source is portable, it can be setup to use
+some
 non-ANSI features:
-<br>far pointers, precompiled headers, mutexes and critical sections.&nbsp;
-Most instructions for changes are in build.h, please use the config program
-where appropriate, however allowing PCH pragmas has to be done with a predefinition.&nbsp;
-See <a href="#PCH">section 3.4</a>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="8086"></a><b><u>3.3&nbsp; 8086 builds</u></b>
-<br>When building the library for the 8086-80286 (16-bit versions of Intel's
+far pointers, mutexes and critical sections.&nbsp;
+Most instructions for changes are in build.h, please use the configure
+script
+where appropriate.<br>
+<br>
+</p>
+<hr width="100%"><br>
+<a name="8086"></a><b><u>3.3&nbsp; 8086 builds</u></b>
+<br>
+When building the library for the 8086-80286 (16-bit versions of
+Intel's
 processor) the library should be built for one of these memory models:
-Compact, Large or Huge.&nbsp; Trying to build the library for smaller memory
-models results in near data.&nbsp; If such a build is made I have discovered
-that the hosting program will be assuming the wrong data segment when the
-pointers are returned from the library.&nbsp; There is a way to get around
-this if you really want to use a smaller memory model, modify the source
-so that all the pointers are far, this is non-ANSI but can easily be acheived,
-there are instructions in BUILD.H.
-<br>
-<hr WIDTH="100%">
-<br><a NAME="PCH"></a><b><u>3.4&nbsp; Precompiled headers</u></b>
-<br>My compiler (Borland C++) supports this pragma:
-<br>#pragma hdrstop
-<br>However using it on other compilers might cause a warning, to avoid
-annoyance to people I have removed all these by default, to get them back
-define DPCRTLMM_HDRSTOP.&nbsp; Note: This must be a predefine, defining
-it in build.h will be ineffective, since build.h is processed after the
-position where I want to add the pragma.
-<br>
-<hr WIDTH="100%">
-<br><a NAME="History"></a><b><u>4.0&nbsp; History</u></b>
-<br>2nd May 2000 - Overlord:
-<br>Removed dependancies that made this library rely on other Daybo Logic
-<br>libraries, this will mean the library can be used by Colelus without
-<br>disrupting the portability of the Colelus source tree.&nbsp; This step
-<br>involves stripping out all references to STDS\DLSTRLIB.H a very annoying
-<br>thing to do because all code which is Daybo Logic shared code (and
-therefore
-<br>not part of Colelus) should include this header.&nbsp; However if this
-library
-<br>source is to be made available to the public too, this dependancy must
-go.
-<br>The other dependacy which follows in a similar fasion is the use of
+Compact, Large or Huge.&nbsp; Trying to build the library for smaller
+memory
+models results in near data.&nbsp; If such a build is made I have
+discovered
+that the hosting program will be assuming the wrong data segment when
 the
-<br>generic list object as the list of block arrays, the so-called safety
+pointers are returned from the library.&nbsp; There is a way to get
+around
+this if you really want to use a smaller memory model, build with
+--enable-fardata.&nbsp; This is non-ANSI and you're on your own if your
+compiler can't support the '__far' keyword.<br>
+<br>
+<hr width="100%">
+<br>
+<a name="PCH"></a><b><u>3.4&nbsp; Precompiled headers</u></b>
+<br>
+My compiler (Borland C++) supports this pragma:
+<br>
+#pragma hdrstop
+<br>
+However using it on other compilers might cause a warning, to avoid
+annoyance to people, it is disabled by default.&nbsp; To enable it,
+re-configure with ./configure --enable-hdrstop.<br>
+<hr width="100%">
+<br>
+<a name="History"></a><b><u>4.0&nbsp; History</u></b>
+<br>
+2nd May 2000 - Overlord:
+<br>
+Removed dependancies that made this library rely on other Daybo Logic
+<br>
+libraries, this will mean the library can be used by Colelus without
+<br>
+disrupting the portability of the Colelus source tree.&nbsp; This step
+<br>
+involves stripping out all references to STDS\DLSTRLIB.H a very
+annoying
+<br>
+thing to do because all code which is Daybo Logic shared code (and
+therefore
+<br>
+not part of Colelus) should include this header.&nbsp; However if this
+library
+<br>
+source is to be made available to the public too, this dependancy must
+go.
+<br>
+The other dependacy which follows in a similar fasion is the use of
+the
+<br>
+generic list object as the list of block arrays, the so-called safety
 list.
-<br>To avoid this I will design a safety list object type which is only
+<br>
+To avoid this I will design a safety list object type which is only
 used by
-<br>us and indeed only makes sense to us!&nbsp; This new object definition
+<br>
+us and indeed only makes sense to us!&nbsp; This new object definition
 is in
-<br>SAFELIST.H and the code to run is SAFELIST.C
+<br>
+SAFELIST.H and the code to run is SAFELIST.C
 <p>3rd May 2000 - Overlord:
-<br>Totally got rid of SAFELIST.C/.H and decided to start again.&nbsp;
+<br>
+Totally got rid of SAFELIST.C/.H and decided to start again.&nbsp;
 The
-<br>declaration of the safety list object is in INTDATA.C and the size
+<br>
+declaration of the safety list object is in INTDATA.C and the size
 is
-<br>determined in the configuration file BUILD.H
-<br>The new SAFELIST.C will contain simple functions to save having to
+<br>
+determined in the configuration file BUILD.H
+<br>
+The new SAFELIST.C will contain simple functions to save having to
 write
-<br>the list processing several times, code to count the number of items,
-<br>code to add a new one at the first blank entry and remove items.
-<br>There is no need for a linked list or shift up code because it's a
+<br>
+the list processing several times, code to count the number of items,
+<br>
+code to add a new one at the first blank entry and remove items.
+<br>
+There is no need for a linked list or shift up code because it's a
 fixed
-<br>size determined at compile time therefore anything which is not a valid
-<br>entry will just be NULL.
+<br>
+size determined at compile time therefore anything which is not a valid
+<br>
+entry will just be NULL.
+</p>
 <p>4th May 2000 - Overlord:
-<br>Compiled in the new SAFELIST.C and tried to build the library muliple
+<br>
+Compiled in the new SAFELIST.C and tried to build the library muliple
 times
-<br>until all references to other Daybo Logic stuff were stripped out.&nbsp;
+<br>
+until all references to other Daybo Logic stuff were stripped
+out.&nbsp;
 BOOL had
-<br>to change to unsigned int, however the user of the library may still
+<br>
+to change to unsigned int, however the user of the library may still
 treat
-<br>these values as BOOL/TRUE/FALSE even though they are used as unsigned
+<br>
+these values as BOOL/TRUE/FALSE even though they are used as unsigned
 ints
-<br>inside the library.&nbsp; The user can only do this if they have their
+<br>
+inside the library.&nbsp; The user can only do this if they have their
 own
-<br>compatible versions of BOOL/TRUE/FALSE which most developers have by
+<br>
+compatible versions of BOOL/TRUE/FALSE which most developers have by
 now, or
-<br>can easily make them if they do now have them.
-<br>Also changed defintion of _safeList and all people who used it had
+<br>
+can easily make them if they do now have them.
+<br>
+Also changed defintion of _safeList and all people who used it had
 to be
-<br>altered to be aware of the new definition.
-<br>Wrote a new page on the web site offering it for sale.
+<br>
+altered to be aware of the new definition.
+<br>
+Wrote a new page on the web site offering it for sale.
+</p>
 <p>5h May 2000 - Overlord:
-<br>Wrote documentation for library and released it on the Daybo Logic
+<br>
+Wrote documentation for library and released it on the Daybo Logic
 web site
-<br>http://www.daybologic.co.uk
+<br>
+http://www.daybologic.co.uk
+</p>
 <p>10th May 2000 - Overlord:
-<br>There was a bug in the new safety list which stopped the whole library
-<br>working, a single missing '!' (logical not).&nbsp; Republishing the
+<br>
+There was a bug in the new safety list which stopped the whole library
+<br>
+working, a single missing '!' (logical not).&nbsp; Republishing the
 library.
+</p>
 <p>14th June 2000 - Overlord:
-<br>In 16-bit memory models on x86 processors, if the data segment is near
+<br>
+In 16-bit memory models on x86 processors, if the data segment is near
 the pointers do not mean anything to the hosting program when given to
-it, the near pointers are for us with DPCRTLMM's own assumed data segment,
-therefore explicit far data is needed, added a macro to build.h for doing
+it, the near pointers are for us with DPCRTLMM's own assumed data
+segment,
+therefore explicit far data is needed, added a macro to build.h for
+doing
 so and severely modified this documentation.
+</p>
 <p>18th July 2000 - Overlord:
-<br>OK this isn't a technical note, it's just that today I set myself the
+<br>
+OK this isn't a technical note, it's just that today I set myself the
 deadline of August 1st for the version 1.0 release.
+</p>
 <p>19th July 2000 - Overlord:
-<br>Coverted all the filenames to lower case and all the #includes to lower
+<br>
+Coverted all the filenames to lower case and all the #includes to lower
 case for compatibility with UNIX systems.
-<br>Tried and failed miserably to create a working makefile and the Borland
-C++ IDE auto-generated one came up with warnings about some of my symbols
-not being in the library, works ok from the IDE and I don't ever get warnings
-for it so I gave up on this for now.&nbsp; The library is saimple enough
+<br>
+Tried and failed miserably to create a working makefile and the Borland
+C++ IDE auto-generated one came up with warnings about some of my
+symbols
+not being in the library, works ok from the IDE and I don't ever get
+warnings
+for it so I gave up on this for now.&nbsp; The library is saimple
+enough
 to build I feel.
-<br>&nbsp;&nbsp;&nbsp; Merged BBATRAP and BBPTRAP, well, put them in the
+<br>
+&nbsp;&nbsp;&nbsp; Merged BBATRAP and BBPTRAP, well, put them in the
 same module with another function call _VerifyPtrs() which calls both,
-this stops having to do both calls in some functions which looks untidy.&nbsp;
-Both functions were always called at once anyway, the new module is called
+this stops having to do both calls in some functions which looks
+untidy.&nbsp;
+Both functions were always called at once anyway, the new module is
+called
 vptrap.c
-<br>&nbsp;&nbsp;&nbsp; In realloc.c the string "Realloc()" was used twice,
+<br>
+&nbsp;&nbsp;&nbsp; In realloc.c the string "Realloc()" was used twice,
 optimized out second instance.
-<br>&nbsp;&nbsp;&nbsp; Noticed quite a few modules called the old BBA trap
-and did not have a pointer to verify also, so I changed _VerifyPtrs() slightly
-so argument three could be NULL and the second trap call would be skipped.&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp; Noticed quite a few modules called the old BBA trap
+and did not have a pointer to verify also, so I changed _VerifyPtrs()
+slightly
+so argument three could be NULL and the second trap call would be
+skipped.&nbsp;
 Well mustn't grumble, it still feels cleaner this way and I got rid of
 a whole module in effect!
-<br>Free() used the string "Free()" twice, made it share a variable, only
+<br>
+Free() used the string "Free()" twice, made it share a variable, only
 has an effect on non-optimizing compilers which don't support duplicate
 strings merged.
-<br>&nbsp;&nbsp;&nbsp; Removed all #pragma hdrstop PCH support unless DPCRTLMM_HDRSTOP
+<br>
+&nbsp;&nbsp;&nbsp; Removed all #pragma hdrstop PCH support unless
+DPCRTLMM_HDRSTOP
 is defined, to save annoying warnings to people who's compiler does not
 understand the pragma
-<br>&nbsp; Added support for NULL as the default built-in block array,
-define DPCRTLMM_NONULL_BLOCKDESCARRAY in build.h to restore old behaviour,
+<br>
+&nbsp; Added support for NULL as the default built-in block array,
+define DPCRTLMM_NONULL_BLOCKDESCARRAY in build.h to restore old
+behaviour,
 old behaviour was to say that NULL was not a valid block desc array and
 crash the program.
-<br>&nbsp;&nbsp;&nbsp; Added a hack table for shorter function names, this
-was suggested by <a href="mailto:Jeremy@DayboLogic.co.uk?Subject=DPCRTLMM hacks">Jeremy</a>
-and will also shorten the structure names.&nbsp; Developers already using
+<br>
+&nbsp;&nbsp;&nbsp; Added a hack table for shorter function names, this
+was suggested by <a
+ href="mailto:Jeremy@DayboLogic.co.uk?Subject=DPCRTLMM%20hacks">Jeremy</a>
+and will also shorten the structure names.&nbsp; Developers already
+using
 the library can totally ignore this.
+</p>
 <p>20th July 2000 - Overlord:
-<br>In adding the support for default block arrays I had to split up the
-trap routine called TrapUnFreedArrays() in strtstop.c into a new routine
-also TrapUnFreedBlocks().&nbsp; I realized that not all data which is unfreed
-(garbage) is just arrays now due to the default array which is never destroyed
-but can contain blocks.&nbsp; I renamed the define DPCRTLMM_TRAP_UNFREED_ARRAYS
-to DPCRTLMM_TRAP_UNFREED_DATA.&nbsp; If you used this (which I doubt) at
+<br>
+In adding the support for default block arrays I had to split up the
+trap routine called TrapUnFreedArrays() in strtstop.c into a new
+routine
+also TrapUnFreedBlocks().&nbsp; I realized that not all data which is
+unfreed
+(garbage) is just arrays now due to the default array which is never
+destroyed
+but can contain blocks.&nbsp; I renamed the define
+DPCRTLMM_TRAP_UNFREED_ARRAYS
+to DPCRTLMM_TRAP_UNFREED_DATA.&nbsp; If you used this (which I doubt)
+at
 this stage just rename the macro in your code.
+</p>
 <p>21st July 2000 - Overlord:
-<br>Corrected an assertion failure due to the new NULL block array.&nbsp;
-In the betas, when DPCRTLMM_LOG was not defined the messages were not output
+<br>
+Corrected an assertion failure due to the new NULL block array.&nbsp;
+In the betas, when DPCRTLMM_LOG was not defined the messages were not
+output
 to a log file but the messages were still taking space in the resulting
-program, got rid of most of them, some are used as traps too so I couldn't
-get rid of them.&nbsp; To try to stop users making the mistake of including
+program, got rid of most of them, some are used as traps too so I
+couldn't
+get rid of them.&nbsp; To try to stop users making the mistake of
+including
 build.h in their own programs I made build.h look for a macro I define
 in my source only.
-<br>&nbsp;&nbsp;&nbsp; Loads of warnings about variables that were never
-used when I tried to define DPCRTLMM_LOG for an experiment, filtered them
-all out, all the #ifdef DPCRTLMM_LOG #endif /*DPCRTLMM_LOG*/ stuff everywhere
+<br>
+&nbsp;&nbsp;&nbsp; Loads of warnings about variables that were never
+used when I tried to define DPCRTLMM_LOG for an experiment, filtered
+them
+all out, all the #ifdef DPCRTLMM_LOG #endif /*DPCRTLMM_LOG*/ stuff
+everywhere
 looks a right mess though.
+</p>
 <p>24th July 2000 - Overlord:
-<br>Limited block descriptor arrays to 64 entries in standard builds
+<br>
+Limited block descriptor arrays to 64 entries in standard builds
+</p>
 <p>26th July 2000 - Overlord:
-<br>Added a new module getstats.c, countains these functions: <a href="#GetBlockCount">dpcrtlmm_GetBlockCount(
-)</a> &amp; <a href="#GetStats">dpcrtlmm_GetStats( )</a>, GetStats( ) is
-very simple and it uses _blockCount which I added to intdata.c. Alloc()/Free()
+<br>
+Added a new module getstats.c, countains these functions: <a
+ href="#GetBlockCount">dpcrtlmm_GetBlockCount(
+)</a> &amp; <a href="#GetStats">dpcrtlmm_GetStats( )</a>, GetStats( )
+is
+very simple and it uses _blockCount which I added to intdata.c.
+Alloc()/Free()
 don't update the counter yet
-<br>Limited library to 50 blocks for standard builds, first set up a define
+<br>
+Limited library to 50 blocks for standard builds, first set up a define
 in build.h so I could modify it easily and then put all the statistics
-(except flag counting) into internal vars (intdata.c).&nbsp; Flag counting
+(except flag counting) into internal vars (intdata.c).&nbsp; Flag
+counting
 is done by an internal routine called CountFlagsInUse( ), I put that in
 getstats.c
-<br>&nbsp;&nbsp;&nbsp; Added <a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled(
+<br>
+&nbsp;&nbsp;&nbsp; Added <a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled(
 )</a>
-<br>&nbsp;&nbsp;&nbsp; There is now an extern in town called <a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>,
-it used to be an internal variable called dpcrtlmm_int__enableTraps, now
-the modifiers <a href="#EnableTraps">dpcrtlmm_EnableTraps( )</a>, <a href="#DisableTraps">dpcrtlmm_DisableTraps(
+<br>
+&nbsp;&nbsp;&nbsp; There is now an extern in town called <a
+ href="#_EnableTraps">dpcrtlmm__EnableTraps</a>,
+it used to be an internal variable called dpcrtlmm_int__enableTraps,
+now
+the modifiers <a href="#EnableTraps">dpcrtlmm_EnableTraps( )</a>, <a
+ href="#DisableTraps">dpcrtlmm_DisableTraps(
 )</a> &amp; <a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled( )</a>
 are just macros to use it.
-<br>&nbsp;&nbsp;&nbsp; Making this new extern meant the simple module enbltrap.c
+<br>
+&nbsp;&nbsp;&nbsp; Making this new extern meant the simple module
+enbltrap.c
 was redundant, deleted it.
-<br>&nbsp;&nbsp;&nbsp; Limited standard version of the library to 50 blocks,
-not sure it's turned off in payed for versions, better test that or I could
+<br>
+&nbsp;&nbsp;&nbsp; Limited standard version of the library to 50
+blocks,
+not sure it's turned off in payed for versions, better test that or I
+could
 be in trouble!
+</p>
 <p>27th July 2000 - Overlord:
-<br>Been doing other stuff mainly, we ran out of coffee, arghhh!&nbsp;
+<br>
+Been doing other stuff mainly, we ran out of coffee, arghhh!&nbsp;
 Fixed a link problem and Mike agreed to test the library.
-<br>Got Alloc()/Free() to update statistics, got code to work to nag user
-and terminate the program if more than DPCRTLMM_STDBLOCKLIMIT blocks are
+<br>
+Got Alloc()/Free() to update statistics, got code to work to nag user
+and terminate the program if more than DPCRTLMM_STDBLOCKLIMIT blocks
+are
 used in the program, oh and no worries it doesn't nag registered users.
+</p>
 <p>28th July 2000 - Overlord:
-<br>Renamed getstats.c stats.c, added support for the default array into
-CountFlagsInUse( ).&nbsp; It seems Alloc( ) is correctly allocating blocks
+<br>
+Renamed getstats.c stats.c, added support for the default array into
+CountFlagsInUse( ).&nbsp; It seems Alloc( ) is correctly allocating
+blocks
 in the default array because of the NULL array resolver macro, must be
 Free( ) that is not so aware.&nbsp; I have noticed that GrowBlockArray(
 ) is relying on the run-time library realloc( ) to accept NULL and pass
-it on to alloc( ), I'm not sure that this is <i>always</i> supported, I
-may have to change it.&nbsp; Had to make some changes to isbad.c both IsBad...(
+it on to alloc( ), I'm not sure that this is <i>always</i> supported,
+I
+may have to change it.&nbsp; Had to make some changes to isbad.c both
+IsBad...(
 ) calls did not resolve array pointers and <a href="#IsBadArrayPtr">dpclrtmm_IsBadArrayPtr(
-)</a> was so somple it was just asking the safety list.&nbsp; Some functions
-may try dereferencing NULL pointers without resolving them first so I'll
+)</a> was so somple it was just asking the safety list.&nbsp; Some
+functions
+may try dereferencing NULL pointers without resolving them first so
+I'll
 have to find all this instances of this behaviour, all functions which
-are exposed in the library so the user can call them will probally be affected.
-<br>&nbsp;&nbsp;&nbsp; Whoops!&nbsp; vptrap.c is a bit odd, looking for
-bad blocks is simple, it called IsBadBlockPtr( ), seems logical, and yet
-the trap on a bad array pointer (the trap above) decides to call the safety
-list itself, hmm, it might be more advisable to call IsBadArrayPtr( ) of
+are exposed in the library so the user can call them will probally be
+affected.
+<br>
+&nbsp;&nbsp;&nbsp; Whoops!&nbsp; vptrap.c is a bit odd, looking for
+bad blocks is simple, it called IsBadBlockPtr( ), seems logical, and
+yet
+the trap on a bad array pointer (the trap above) decides to call the
+safety
+list itself, hmm, it might be more advisable to call IsBadArrayPtr( )
+of
 course, changing code again....
+</p>
 <p>29th July 2000 - Overlord:
-<br>The trap unfreed arrays routine was always seeing one less block then
-it should, traced the problem down to a loop which looked at PArr->Count
+<br>
+The trap unfreed arrays routine was always seeing one less block then
+it should, traced the problem down to a loop which looked at
+PArr-&gt;Count
 but that count was being changed by dpcrtlmm_Free( ) which the routine
-was calling as automatic garbage collection on every unreleased block it
-found.&nbsp; I changed it to while ( PArr->Count ) and took off element
+was calling as automatic garbage collection on every unreleased block
+it
+found.&nbsp; I changed it to while ( PArr-&gt;Count ) and took off
+element
 0
+</p>
 <p>30th July 2000 - Overlord:
-<br>The change to the loop has (or perhaps not but I suspect it's this)
-has caused the machine to halt running as a 16-bit program under DOS.&nbsp;
-I have been trying to debug it all day but it's very hard to see what goes
-wrong, might have to re-write this loop in the next release, it's too close
-to release day now, I'll have to say that the library is currently limited
+<br>
+The change to the loop has (or perhaps not but I suspect it's this)
+has caused the machine to halt running as a 16-bit program under
+DOS.&nbsp;
+I have been trying to debug it all day but it's very hard to see what
+goes
+wrong, might have to re-write this loop in the next release, it's too
+close
+to release day now, I'll have to say that the library is currently
+limited
 to flat builds ie. 32-bit.
-<br>Wrote <a href="#Ver">dpcrtlmm_Ver( )</a>, which uses DPCRTLMM_VER as
+<br>
+Wrote <a href="#Ver">dpcrtlmm_Ver( )</a>, which uses DPCRTLMM_VER as
 in build.h
+</p>
 <p>31st July 2000 - Overlord:
-<br>Hmm, this morning the program no longer halts, if anybody out there
+<br>
+Hmm, this morning the program no longer halts, if anybody out there
 decides to read this revision history I'd really like to know what was
-going on!&nbsp; Not a lot of programming done today, too hot.&nbsp; Only
+going on!&nbsp; Not a lot of programming done today, too hot.&nbsp;
+Only
 7 hours until it's midnight in the USA so I should have the demos built
 by then.
+</p>
 <p>1.0 - 1st August 2000 - Overlord:
-<br>Altered the way the version number is reported, it now puts data into
+<br>
+Altered the way the version number is reported, it now puts data into
 a small structure, S_DPCRTLMM_VERSION, removed the define from build.h
-and made the structure in dpcrtlmm.h&nbsp; I don't think the debug hooks
-are properly set up I noticed dpcrtlmm_CreateBlockArray( ) at no time lead
+and made the structure in dpcrtlmm.h&nbsp; I don't think the debug
+hooks
+are properly set up I noticed dpcrtlmm_CreateBlockArray( ) at no time
+lead
 to the hook chain being processed.&nbsp; Must fix this in all functions
 I suspect.
-<br>&nbsp;&nbsp;&nbsp; Added <a href="#IsDefaultBlockArray">dpcrtlmm_IsDefaultBlockArray(
+<br>
+&nbsp;&nbsp;&nbsp; Added <a href="#IsDefaultBlockArray">dpcrtlmm_IsDefaultBlockArray(
 )</a>
-<br>&nbsp;&nbsp;&nbsp; Whoops saw dpcrtlmm_Realloc( ) forgot to resolve
+<br>
+&nbsp;&nbsp;&nbsp; Whoops saw dpcrtlmm_Realloc( ) forgot to resolve
 NULL arrays, fixed.
-<br>Invalid page faults were being caused at the end, changed raise(SIGABRT)
+<br>
+Invalid page faults were being caused at the end, changed
+raise(SIGABRT)
 to abort( ), then found this wasn't the real cause, the real cause was
-the library was designed for the static run time library and then example
-was built for the DLL version.&nbsp; I'll leave that as abort( ) anyway.
+the library was designed for the static run time library and then
+example
+was built for the DLL version.&nbsp; I'll leave that as abort( )
+anyway.
+</p>
 <p>1.1 - 3nd August 2000 - Overlord:
-<br>Changes between 1.0 and 1.1 are reasonably simple and will only affect
+<br>
+Changes between 1.0 and 1.1 are reasonably simple and will only affect
 people who have used the hooking system properly, I had discovered that
-Misc0 and Misc1 are unsigned int and are used as pointers sometimes, his
-works ok in flat model but when segmented the segment is lost, so now they
-are unsigned longs, the trap DPCRTLMM_HOOK_TRAPENABLEMENT was removed because
-it never worked, this is because the variable in question is externed so
-I can't monitor it.&nbsp; I could not support DPCRRLMM_HOOK_INSTHOOK and
-REMHOOK either, inst hook was too mashed, it even calls itself so hooking
+Misc0 and Misc1 are unsigned int and are used as pointers sometimes,
+his
+works ok in flat model but when segmented the segment is lost, so now
+they
+are unsigned longs, the trap DPCRTLMM_HOOK_TRAPENABLEMENT was removed
+because
+it never worked, this is because the variable in question is externed
+so
+I can't monitor it.&nbsp; I could not support DPCRRLMM_HOOK_INSTHOOK
+and
+REMHOOK either, inst hook was too mashed, it even calls itself so
+hooking
 would be made very difficult indeed.
+</p>
 <p>24th August 2000 - Overlord:
-<br>Created a Makefile for Borland C++
+<br>
+Created a Makefile for Borland C++
+</p>
 <p>29th August 2000 - Overlord:
-<br>The GNU C compiler does not support line continuation characters ('\'),
+<br>
+The GNU C compiler does not support line continuation characters ('\'),
 I believed my source was all ANSI C because I use the -A switch on the
 Borland compiler.&nbsp; To get rid of line continuations I made changes
 to dpcrtlmm.h and safelist.h.&nbsp; Of course this does not effect the
-use of the library and it certainly is not worth releasing a new version
-for.&nbsp; Other porting issues still exist in dpccap.cpp (my C++ encapsulation
-layer), it seems that GNU are right up to date with ANSI/ISO C++ and have
-removed except.h, the new version is simply called except, I have not changes
-these yet as xalloc is still used in this module, it works with warnings
-on Borland C++.&nbsp; Today I added a clean section to the makefile.&nbsp;
+use of the library and it certainly is not worth releasing a new
+version
+for.&nbsp; Other porting issues still exist in dpccap.cpp (my C++
+encapsulation
+layer), it seems that GNU are right up to date with ANSI/ISO C++ and
+have
+removed except.h, the new version is simply called except, I have not
+changes
+these yet as xalloc is still used in this module, it works with
+warnings
+on Borland C++.&nbsp; Today I added a clean section to the
+makefile.&nbsp;
 Attention programmers! There was a typo 'dpcinstalltrapcallback' in the
-lazy lazy section of dpcrtlmm.h was actually typed 'dpcinstallrrapcallback',
+lazy lazy section of dpcrtlmm.h was actually typed
+'dpcinstallrrapcallback',
 sorry about that!
+</p>
 <p>5th September 2000 - Overlord:
-<br>I had two different versions of the isbad.c functions, in the C file
-they were constant and in dpcrtlmm.h they were not, caused me two warnings
-on Visual C++ so I corrected the copy on dpcrtlmm.h, so the formal version
+<br>
+I had two different versions of the isbad.c functions, in the C file
+they were constant and in dpcrtlmm.h they were not, caused me two
+warnings
+on Visual C++ so I corrected the copy on dpcrtlmm.h, so the formal
+version
 is constant, people.
+</p>
 <p>November 2000 - Overlord:
-<br>A variety of changes, strtstop.c was renamed husk.c but then removed
-all together and put the startup and shutdown functions from husk.c into
-dpcrtlmm.c.&nbsp; dpcrtlmm.c contained a #pragma use which caused a warning,
+<br>
+A variety of changes, strtstop.c was renamed husk.c but then removed
+all together and put the startup and shutdown functions from husk.c
+into
+dpcrtlmm.c.&nbsp; dpcrtlmm.c contained a #pragma use which caused a
+warning,
 I got rid of that and got rid of all copyright notices from dpcrtlmm.c
-which would end up in the library.&nbsp; Changed all files to GPL license.&nbsp;
-Virtually rewrote dpccap.cpp, it's now completely ANSI/ISO C++.&nbsp; I'm
-not so sure of my '\' line continutation problems in September, whatever
-now, it works.&nbsp; realloc() issues resolved!&nbsp; I found out recently
-that realloc(NULL, 1024); for example won't neccersarily allocate memory
-so I've added a run-time warning printed to stderr if somebody tries this
-with DPCRTLMM.&nbsp; Also if somebody tried to use realloc() as a free-er.
+which would end up in the library.&nbsp; Changed all files to GPL
+license.&nbsp;
+Virtually rewrote dpccap.cpp, it's now completely ANSI/ISO C++.&nbsp;
+I'm
+not so sure of my '\' line continutation problems in September,
+whatever
+now, it works.&nbsp; realloc() issues resolved!&nbsp; I found out
+recently
+that realloc(NULL, 1024); for example won't neccersarily allocate
+memory
+so I've added a run-time warning printed to stderr if somebody tries
+this
+with DPCRTLMM.&nbsp; Also if somebody tried to use realloc() as a
+free-er.
+</p>
 <p>11th December 2000 - Overlord:
-<br>Fixed a bug which I saw by reading the source, statistics for block
-flags were not being returned to the caller from the function dpcrtlmm_GetStats(
+<br>
+Fixed a bug which I saw by reading the source, statistics for block
+flags were not being returned to the caller from the function
+dpcrtlmm_GetStats(
 ).&nbsp; Also got rid of an unneccersary structure.&nbsp; Is was this,
 forgetting to copy from the structure back to the stats structure which
 was the bug.
-<br>Fixed bug in C++ example (example2.cpp), it an instance of Overlord::TDPCRTLMM_MemManager,
+<br>
+Fixed bug in C++ example (example2.cpp), it an instance of
+Overlord::TDPCRTLMM_MemManager,
 which is illegal and probally a mistake many users will make.&nbsp; The
-real version is global and called MemManager, storage reference dpccap.cpp.
-<br>Another bug found:&nbsp; Installed trap handler (which displays the
-stats again as a test) in example2.cpp, does not work in example1.c.&nbsp;
+real version is global and called MemManager, storage reference
+dpccap.cpp.
+<br>
+Another bug found:&nbsp; Installed trap handler (which displays the
+stats again as a test) in example2.cpp, does not work in
+example1.c.&nbsp;
 It's unclear as to what differs at the moment.
-<br>Managed to get rid of two unneccersary integers in dpcrtlmm.c.&nbsp;
+<br>
+Managed to get rid of two unneccersary integers in dpcrtlmm.c.&nbsp;
 Functions can use _libStarted (an internal variable).&nbsp; This would
-mean the library could be restarted from the same session and save a little
+mean the library could be restarted from the same session and save a
+little
 memory.
+</p>
 <p>12th December 2000 - Overlord:
-<br>Fixed yesterdays bug with the C++ example not running the trap handler
+<br>
+Fixed yesterdays bug with the C++ example not running the trap handler
 after it had installed it when a trap was fired from the library.&nbsp;
-Turned out that the library was started after the trap handler was installed.&nbsp;
+Turned out that the library was started after the trap handler was
+installed.&nbsp;
 My fault. oh yeah, all bugs in DPCRTLMM are my fault, damn.
-<br>Seems not even the GNU C compiler's -ansi -pedantic -Wall mode spots
-all warnings, on Micro$oft Visual C++ it spotted the missing const in parameter
-1 of the trap handler.&nbsp; This only effected the examples not the library.&nbsp;
-Be clear about my meaning of resetting the library in a session by starting
-it up and shutting it down.&nbsp; I'm not sure everything would be cleared,
-indeed at the moment it probally wouldn't be and I will fix this later.&nbsp;
+<br>
+Seems not even the GNU C compiler's -ansi -pedantic -Wall mode spots
+all warnings, on Micro$oft Visual C++ it spotted the missing const in
+parameter
+1 of the trap handler.&nbsp; This only effected the examples not the
+library.&nbsp;
+Be clear about my meaning of resetting the library in a session by
+starting
+it up and shutting it down.&nbsp; I'm not sure everything would be
+cleared,
+indeed at the moment it probally wouldn't be and I will fix this
+later.&nbsp;
 Also I wouldn't advocate such a thing.
+</p>
 <p>7th June 2001 - Overlord:
-<br>From now on read the ChangeLog, which will list all patches since the
+<br>
+From now on read the ChangeLog, which will list all patches since the
 last release.&nbsp; Important postings (like the above but only if they
 are of consequence) now go to the mailing list instead.
+</p>
 <p>1st August 2001 - Overlord:
-<br>Release DPCRTLMM 1.1.5b&nbsp; as source.
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Plans"></a><b><u>4.1&nbsp; Plans for next version</u></b>
-<br>The internal debug hook executive seems to use a parameter which it
+Release DPCRTLMM 1.1.5b&nbsp; as source.
+<br>
+</p>
+<p>22nd February 2006 - DDRP:<br>
+Release DPCRTLMM 1.2.0 as source under new BSD-style license.<br>
+</p>
+<hr width="100%"><br>
+<a name="Plans"></a><b><u>4.1&nbsp; Plans for next version</u></b>
+<br>
+The internal debug hook executive seems to use a parameter which it
 could get from the debug info structure passed to it, the hook type is
-not used and is a waste.&nbsp; This does not effect callers of the library,
+not used and is a waste.&nbsp; This does not affect callers of the
+library,
 since the debug hook executive cannot be called from outside.
 <p>Swapping to disk should be implemented with an LRU algortihm, based
-on the flag in block descriptor (unswappable, bit 1) and the block descriptor
+on the flag in block descriptor (unswappable, bit 1) and the block
+descriptor
 may have to be extended with more fields to support this.
-<p>The library is a bit slow due to an excessive amount of calls to _VerifyPtrs(
-), which an internal routine called to check the user's pointers are valid,
-however it's also called when functions call other functions, even though
-they already know the pointers are safe, to avoid this I may make an inner
+</p>
+<p>The library is a bit slow due to an excessive amount of calls to
+_VerifyPtrs(
+), which an internal routine called to check the user's pointers are
+valid,
+however it's also called when functions call other functions, even
+though
+they already know the pointers are safe, to avoid this I may make an
+inner
 shell, where the user calls safety wrappers around the real library and
-all functions call the inner shell functions and not the entrypoints the
+all functions call the inner shell functions and not the entrypoints
+the
 users sees.
 <br>
-<hr WIDTH="100%">
-<br><a NAME="Listings"></a><b><u>5.0 Function listings</u></b>
-<br>No documentation is supplied or can be found that I have written for
-the hidden functions which I believe it is not worth library users trying
+</p>
+<hr width="100%"><br>
+<a name="Listings"></a><b><u>5.0 Function listings</u></b>
+<br>
+No documentation is supplied or can be found that I have written for
+the hidden functions which I believe it is not worth library users
+trying
 to access.&nbsp; The file DPCRTLMM.H contains most structures that will
-be of any interest too.&nbsp; If you have the library source you can read
+be of any interest too.&nbsp; If you have the library source you can
+read
 all the other headers to discover the hidden interface if you are that
 nosey.
 <p><a href="#InstallDebugHook">dpcrtlmm_InstallDebugHook( )</a>
-<br><a href="#GetDebugHookChainCount">dpcrtlmm_GetDebugHookChainCount(
-)</a>
-<br><a href="#GetDebugHookMatrixCount">dpcrtlmm_GetDebugHookMatrixCount(
-)</a>
-<br><a href="#UninstallDebugHook">dpcrtlmm_UninstallDebugHook( )</a>
-<br><a href="#Alloc">dpcrtlmm_Alloc( )</a>
-<br><a href="#Free">dpcrtlmm_Free( )</a>
-<br><a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray( )</a>
-<br><a href="#DestroyBlockArray">dpcrtlmm_DestroyBlockArray( )</a>
-<br><a href="#IsDefaultBlockArray">dpcrtlmm_IsDefaultBlockArray( )</a>
-<br><a href="#Startup">dpcrtlmm_Startup( )</a>
-<br><a href="#Shutdown">dpcrtlmm_Shutdown( )</a>
-<br><a href="#IsStarted">dpcrtlmm_IsStarted( )</a>
-<br><a href="#GetBlockSize">dpcrtlmm_GetBlockSize( )</a>
-<br><a href="#IsBasBlockPtr">dpcrtlmm_IsBadBlockPtr( )</a>
-<br><a href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr( )</a>
-<br><a href="#Realloc">dpcrtlmm_Realloc( )</a>
-<br><a href="#Calloc">dpcrtlmm_Calloc( )</a>
-<br><a href="#InstallTrapCallback">dpcrtlmm_InstallTrapCallback( )</a>
-<br><a href="#RemoveTrapCallback">dpcrtlmm_RemoveTrapCallback( )</a>
-<br><a href="#GetTrapCallbackInfo">dpcrtlmm_GetTrapCallbackInfo( )</a>
-<br><a href="#ModifyDescriptorFlags">dpcrtlmm_ModifyDescriptorFlags( )</a>
-<br><a href="#SetBlockLockingFlag">dpcrtlmm_SetBlockLockingFlag( )</a>
-<br><a href="#IsBlockLocked">dpcrtlmm_IsBlockLocked( )</a>
-<br><a href="#LockBlock">dpcrtlmm_LockBlock( ) &amp; dpcrtlmm_UnlockBlock(
-)</a>
-<br><a href="#ToggleBlockLockingStatus">dpcrtlmm_ToggleBlockLockingStatus(
-)</a>
-<br><a href="#EnableTraps">dpcrtlmm_EnableTraps( )</a>
-<br><a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a>
-<br><a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled( )</a>
-<br><a href="#GetStats">dpcrtlmm_GetStats( )</a>
-<br><a href="#GetBlockCount">dpcrtlmm_GetBlockCount( )</a>
-<br><a href="#Ver">dpcrtlmm_Ver( )</a>
-<br><a href="#Dump">dpcrtlmm_Dump( )</a>
-<p>External variables
-<br><a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>
 <br>
-<hr WIDTH="100%">
-<br><a NAME="FuncDescs"></a><b><u>5.1&nbsp; Descriptions of all functions
+<a href="#GetDebugHookChainCount">dpcrtlmm_GetDebugHookChainCount(
+)</a>
+<br>
+<a href="#GetDebugHookMatrixCount">dpcrtlmm_GetDebugHookMatrixCount(
+)</a>
+<br>
+<a href="#UninstallDebugHook">dpcrtlmm_UninstallDebugHook( )</a>
+<br>
+<a href="#Alloc">dpcrtlmm_Alloc( )</a>
+<br>
+<a href="#Free">dpcrtlmm_Free( )</a>
+<br>
+<a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray( )</a>
+<br>
+<a href="#DestroyBlockArray">dpcrtlmm_DestroyBlockArray( )</a>
+<br>
+<a href="#IsDefaultBlockArray">dpcrtlmm_IsDefaultBlockArray( )</a>
+<br>
+<a href="#Startup">dpcrtlmm_Startup( )</a>
+<br>
+<a href="#Shutdown">dpcrtlmm_Shutdown( )</a>
+<br>
+<a href="#IsStarted">dpcrtlmm_IsStarted( )</a>
+<br>
+<a href="#GetBlockSize">dpcrtlmm_GetBlockSize( )</a>
+<br>
+<a href="#IsBasBlockPtr">dpcrtlmm_IsBadBlockPtr( )</a>
+<br>
+<a href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr( )</a>
+<br>
+<a href="#Realloc">dpcrtlmm_Realloc( )</a>
+<br>
+<a href="#Calloc">dpcrtlmm_Calloc( )</a>
+<br>
+<a href="#InstallTrapCallback">dpcrtlmm_InstallTrapCallback( )</a>
+<br>
+<a href="#RemoveTrapCallback">dpcrtlmm_RemoveTrapCallback( )</a>
+<br>
+<a href="#GetTrapCallbackInfo">dpcrtlmm_GetTrapCallbackInfo( )</a>
+<br>
+<a href="#ModifyDescriptorFlags">dpcrtlmm_ModifyDescriptorFlags( )</a>
+<br>
+<a href="#SetBlockLockingFlag">dpcrtlmm_SetBlockLockingFlag( )</a>
+<br>
+<a href="#IsBlockLocked">dpcrtlmm_IsBlockLocked( )</a>
+<br>
+<a href="#LockBlock">dpcrtlmm_LockBlock( ) &amp; dpcrtlmm_UnlockBlock(
+)</a>
+<br>
+<a href="#ToggleBlockLockingStatus">dpcrtlmm_ToggleBlockLockingStatus(
+)</a>
+<br>
+<a href="#EnableTraps">dpcrtlmm_EnableTraps( )</a>
+<br>
+<a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a>
+<br>
+<a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled( )</a>
+<br>
+<a href="#GetStats">dpcrtlmm_GetStats( )</a>
+<br>
+<a href="#GetBlockCount">dpcrtlmm_GetBlockCount( )</a>
+<br>
+<a href="#Ver">dpcrtlmm_Ver( )</a>
+<br>
+<a href="#Dump">dpcrtlmm_Dump( )</a>
+</p>
+<p>External variables
+<br>
+<a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>
+<br>
+</p>
+<hr width="100%"><br>
+<a name="FuncDescs"></a><b><u>5.1&nbsp; Descriptions of all functions
 and their use</u></b>
-<br><a NAME="InstallDebugHook"></a>
-<br><font color="#3333FF">unsigned int dpcrtlmm_InstallDebugHook(const
-unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));</font>
-<br><font color="#FFFFFF">Installs a new debug hook into the internal debug
-hook chain, read DPCRTLMM.H for a complete list of hook types.&nbsp; The
-debug hook handler will accept a pointer to a structure full of information
-which will be of use for debugging, some of this information will be debug
-hook type dependant.&nbsp; If the hook is installed correctly the function
-returns 1 (true), if the hook is of bad type or cannot be installed the
+<br>
+<a name="InstallDebugHook"></a><br>
+<font color="#3333ff">unsigned int dpcrtlmm_InstallDebugHook(const
+unsigned short HookType, unsigned
+int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));</font>
+<br>
+<font color="#ffffff">Installs a new debug hook into the internal debug
+hook chain, see <a href="#Enumerations">enumerations</a> for a
+complete list of hook types.&nbsp; The
+debug hook handler will accept a pointer to a structure full of
+information
+which will be of use for debugging, some of this information will be
+debug
+hook type dependant.&nbsp; If the hook is installed correctly the
+function
+returns 1 (true), if the hook is of a bad type or cannot be installed
+the
 return value is 0 (false).&nbsp; Your user defined hook routine should
 take one of these actions, return 0U if you do not wish for other hooks
 which follow you in the chain to be notified and called also, return 1U
 if I may call following hooks.</font>
-<br><a NAME="GetDebugHookChainCount"></a>
-<br><font color="#3366FF">unsigned int dpcrtlmm_GetDebugHookChainCount(const
+<br>
+Do not call the library from your hook routine because this may
+deadlock the library under threaded builds where mutual exclusion locks
+do not support recursion.<br>
+<a name="GetDebugHookChainCount"></a><br>
+<font color="#3366ff">unsigned int
+dpcrtlmm_GetDebugHookChainCount(const
 unsigned int HookType);</font>
-<br><font color="#FFFFFF">Returns the number of hooks installed for this
-hook type, it is not valid to use DPCRTLMM_HOOK_ALL for this functionalliy
+<br>
+<font color="#ffffff">Returns the number of hooks installed for this
+hook type, it is not valid to use DPCRTLMM_HOOK_ALL, for this
+functionalliy
 use <a href="#GetDebugHookMatrixCount">dpcrtlmm_GetDebugHookMatrixCount(
 )</a></font>
-<br><a NAME="GetDebugHookMatrixCount"></a>
-<br><font color="#3366FF">unsigned int dpcrtlmm_GetDebugHookMatrixCount(void);</font>
-<br>Counts the number of hooks in the entire debug hook matrix, that is
-the total number of hooks for all types, it is very unlikely that a program
-will have a practical use for this, I just thought I'd add it really, plus
+<br>
+<a name="GetDebugHookMatrixCount"></a><br>
+<font color="#3366ff">unsigned int
+dpcrtlmm_GetDebugHookMatrixCount(void);</font>
+<br>
+Counts the number of hooks in the entire debug hook matrix, that is
+the total number of hooks for all types, it is very unlikely that a
+program
+will have a practical use for this, I just thought I'd add it really,
+plus
 it has a cool name!
-<br><a NAME="UninstallDebugHook"></a>
-<br><font color="#3366FF">unsigned int dpcrtlmm_UninstallDebugHook(const
-unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO));</font>
-<br>Remove the said hook, type of hook should be specified in order to
-find it, although the same hook handler can be installed for many hooks,
+<br>
+<a name="UninstallDebugHook"></a><br>
+<font color="#3366ff">unsigned int dpcrtlmm_UninstallDebugHook(const
+unsigned short HookType, unsigned
+int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO));</font>
+<br>
+Remove the said hook, type of hook should be specified in order to
+find it, although the same hook handler can be installed for many
+hooks,
 so DPCRTLMM_HOOK_ALL is allowed.
-<br>It's not allowed to uninstall hooks by index, the address of the hook
-handler must be specified.&nbsp; On success 1 (true) is returned otherwise
+<br>
+It's not allowed to uninstall hooks by index, the address of the hook
+handler must be specified.&nbsp; On success 1 (true) is returned
+otherwise
 0 (false) is returned.
-<br><a NAME="Alloc"></a>
-<br><font color="#3366FF">void* dpcrtlmm_Alloc(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="Alloc"></a><br>
+<font color="#3366ff">void* dpcrtlmm_Alloc(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, const size_t NewBlockSize);</font>
-<br>This function is the main allocation function, the equivillant to malloc(
-) in the C Run time library.&nbsp; It's prototype seems more complex only
-because of the block descriptor array.&nbsp; Block descriptor arrays are
-for organization purposes, use <a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray(
+<br>
+This function is the main allocation function, the equivillant to
+malloc(
+) in the C Run time library.&nbsp; It's prototype seems more complex
+only
+because of the block descriptor array.&nbsp; Block descriptor arrays
+are
+for organisation purposes, use <a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray(
 )</a> to get one before allocating any blocks of memory or specify NULL
-to use the define array provided by DPCRTLMM.&nbsp; The size in bytes of
-the desired block should be specified.&nbsp; NULL is returned if the block
+to use the array provided by DPCRTLMM (the NULL array is not available
+if the library is configured --with-no-null-array).&nbsp; The size in
+bytes of
+the desired block should be specified.&nbsp; NULL is returned if the
+block
 cannot be allocated, check the log to make sure this is what caused the
 error, any non-zero return is a pointer to the newly allocated block of
-memory.&nbsp; Debug hooks installed and watching activities with this event
-will not see allocation requests unless they are valid, I'll fix this by
+memory.&nbsp; Debug hooks installed and watching activities with this
+event
+will not see allocation requests unless they are valid, I'll fix this
+by
 the next version.
-<br><a NAME="Free"></a>
-<br><font color="#3366FF">void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="Free"></a><br>
+<font color="#3366ff">void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, void* Ptr);</font>
-<br>This function is the main deallocation function, the equivilant to
+<br>
+This function is the main deallocation function, the equivilant to
 free( ) in the C Run time library.&nbsp; The block descriptor array in
-which the block was allocated must be specified, even if it is NULL, which
-represents the default internal library array, if the block did not belong
+which the block was allocated must be specified, even if it is NULL,
+which
+represents the default internal library array, if the block did not
+belong
 to the array you specify a trap will be executed.&nbsp; If a debug hook
-is installed on this type of event, remember that it must never dereference
+is installed on this type of event, remember that it must never
+dereference
 the PRelDesc field, the descriptor will have already been released.
-<br><a NAME="CreateBlockArray"></a>
-<br><font color="#3366FF">PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray(void);</font>
-<br>Creates a new block descriptor array.&nbsp; A block descriptor array
-is returned and should be kept.&nbsp; Then during allocations one can use
+<br>
+<a name="CreateBlockArray"></a><br>
+<font color="#3366ff">PS_DPCRTLMM_BLOCKDESCARRAY
+dpcrtlmm_CreateBlockArray(void);</font>
+<br>
+Creates a new block descriptor array.&nbsp; A block descriptor array
+is returned and should be kept.&nbsp; Then during allocations one can
+use
 the returned pointer in the first parameter.&nbsp; Don't forget to free
-all blocks from an array and destroy it with <a href="#DestroyBlockArray">dpcrtlmm_DestroyBlockArray(
+all blocks from an array and destroy it with <a
+ href="#DestroyBlockArray">dpcrtlmm_DestroyBlockArray(
 )</a> before the returned pointer goes out of scope.&nbsp; I recommend
-each module, or each major section of a large project has it's own block
-descriptor array.&nbsp; I also recommend that the main module of the program
-and any shared memory should use the "NULL" block array, when <a href="#Alloc">dpcrtlmm_Alloc(
-)</a> asks for a pointer to a block array just supply NULL to use it.&nbsp;
-Hooking this event is allowed, hooks will be executed whether this function
-succeeds or fails, check the Success indicator of the debug hook info your
+each module, or each major section of a large project has it's own
+block
+descriptor array.&nbsp; I also recommend that the main module of the
+program
+and any shared memory should use the "NULL" block array, when <a
+ href="#Alloc">dpcrtlmm_Alloc(
+)</a> asks for a pointer to a block array just supply NULL to use
+it.&nbsp;
+Hooking this event is allowed, hooks will be executed whether this
+function
+succeeds or fails, check the Success indicator of the debug hook info
+your
 hook is passed.
-<br><a NAME="DestroyBlockArray"></a>
-<br><font color="#3366FF">void dpcrtlmm_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="DestroyBlockArray"></a><br>
+<font color="#3366ff">void dpcrtlmm_DestroyBlockArray(
+PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray );</font>
-<br>Destroys the said block descriptor array.&nbsp; NULL is <b>not</b>
+<br>
+Destroys the said block descriptor array.&nbsp; NULL is <b>not</b>
 allowed, the reason is NULL for a block descriptor array represents an
 internal default array which the user is not allowed to destroy.&nbsp;
-If the pointer supplied is not in the internal safety list as a valid block
+If the pointer supplied is not in the internal safety list as a valid
+block
 array allocated by <a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray(
-)</a>, a trap will be executed.&nbsp; There is no return value.&nbsp; Hooks
+)</a>, a trap will be executed.&nbsp; There is no return value.&nbsp;
+Hooks
 will normally see both success and failure, check the Success entry of
 the debug hook info.
-<br><a NAME="IsDefaultBlockArray"></a>
-<br><font color="#3333FF">unsigned int dpcrtlmm_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="IsDefaultBlockArray"></a><br>
+<font color="#3333ff">unsigned int dpcrtlmm_IsDefaultBlockArray(
+PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray );</font>
-<br>In debug hooks and the like, the user may be returned a pointer which
-does not corrospond to any of the pointers which were allocated, in this
-case it may be the resolved NULL pointer to the default array because the
-array is not directly available for comparison use this function to determine
+<br>
+In debug hooks and the like, the user may be returned a pointer which
+does not corrospond to any of the pointers which were allocated, in
+this
+case it may be the resolved NULL pointer to the default array because
+the
+array is not directly available for comparison use this function to
+determine
 if that is the case, it will also report 1U (TRUE) for NULL since this
-is the unresolved user version.&nbsp; Hooking this function is not supported,
+is the unresolved user version.&nbsp; Hooking this function is not
+supported,
 if you want it, call me.
-<br><a NAME="Startup"></a>
-<br><font color="#3366FF">void dpcrtlmm_Startup(void);</font>
-<br>Before one calls any other functions in this library, the library must
-be started, this allows various initialization tasks, there are currently
-no tests applied to ensure the library is started before any other functions
-are called, it's too time consuming as every function would have to call
+<br>
+<a name="Startup"></a><br>
+<font color="#3366ff">void dpcrtlmm_Startup(void);</font>
+<br>
+Before one calls any other functions in this library, the library must
+be started, this allows various initialization tasks, there are
+currently
+no tests applied to ensure the library is started before any other
+functions
+are called, it's too time consuming as every function would have to
+call
 the test, the behaviour of the program calling the library before it is
 started is undefined and could end in disaster.
-<br><a NAME="Shutdown"></a>
-<br><font color="#3366FF">void dpcrtlmm_Shutdown(void);</font>
-<br>If one ends the program without shutting down the library the whole
-point of this library becomes hidden, calling this function does not just
+<br>
+<a name="Shutdown"></a><br>
+<font color="#3366ff">void dpcrtlmm_Shutdown(void);</font>
+<br>
+If one ends the program without shutting down the library the whole
+point of this library becomes hidden, calling this function does not
+just
 allow internal library cleanup but will activate the search for unfreed
 memory and is the point at which all the leaks will be revealed.&nbsp;
 I can't make sure the program writer calls this unfortunately, I would
 recommend setting it up with atexit( ) as soon as the program to starts
-just incase the program ends from somewhere other than main( ).&nbsp; Personally
-I keep a routine called GlobalShutdown( ) or whatever in the main module
+just incase the program ends from somewhere other than main( ).&nbsp;
+Personally
+I keep a routine called GlobalShutdown( ) or whatever in the main
+module
 of my programs which lists all global libraries to shutdown and global
-memory to cleanup etc. and then just register that one function with atexit(
-), thus overcoming the 32 entry limit in atext( ).&nbsp; Also my programs
-contain GlobalStartup( ) which, as it's first function installs GlobalShutdown(
-) with atext( ) and then inits all the libraries, I then call GlobalStartup(
-) as the first thing to do in main( ) and then I don't have to worry about
+memory to cleanup etc. and then just register that one function with
+atexit(
+), thus overcoming the 32 entry limit in atext( ).&nbsp; Also my
+programs
+contain GlobalStartup( ) which, as it's first function installs
+GlobalShutdown(
+) with atext( ) and then inits all the libraries, I then call
+GlobalStartup(
+) as the first thing to do in main( ) and then I don't have to worry
+about
 it.
-<br><a NAME="IsStarted"></a>
-<br><font color="#3333FF">unsigned int dpcrtlmm_IsStarted(void);</font>
-<br>Version: 1.1.6
-<br>This function returns nonzero if DPCRTLMM has been started.&nbsp; It
-is intended to be used by libraries which rely on DPCRTLMM for debugging
+<br>
+<a name="IsStarted"></a><br>
+<font color="#3333ff">unsigned int dpcrtlmm_IsStarted(void);</font>
+<br>
+Version: 1.1.6
+<br>
+This function returns nonzero if DPCRTLMM has been started.&nbsp; It
+is intended to be used by libraries which rely on DPCRTLMM for
+debugging
 memory but need to know whether the program which uses it already uses
 DPCRTLMM in oder to know when to start or stop the library or to leave
 well alone.
-<br><a NAME="GetBlockSize"></a>
-<br><font color="#3366FF">size_t dpcrtlmm_GetBlockSize( PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="GetBlockSize"></a><br>
+<font color="#3366ff">size_t dpcrtlmm_GetBlockSize(
+PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, void* BlockPtr);</font>
-<br>Returns the size of a block which one allocated earlier.&nbsp; The
-address of the allocated block must be specified also.&nbsp; The size will
+<br>
+Returns the size of a block which one allocated earlier.&nbsp; The
+address of the allocated block must be specified also.&nbsp; The size
+will
 be returned.
-<br><a NAME="IsBasBlockPtr"></a>
-<br><font color="#3366FF">unsigned int dpcrtlmm_IsBadBlockPtr( PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="IsBasBlockPtr"></a><br>
+<font color="#3366ff">unsigned int dpcrtlmm_IsBadBlockPtr(
+PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, const void* BlockPtr);</font>
-<br>Normally calling a function in this library with invalid details will
-cause a trap, this function is designed to test the validity of the block
+<br>
+Normally calling a function in this library with invalid details will
+cause a trap, this function is designed to test the validity of the
+block
 pointer within the block descriptor array.&nbsp; Calling this function
-with an invalid array will still cause a trap but if BlockPtr is not valid
-for a valid block array (supplied) the function returns 1U (true), meaning
+with an invalid array will still cause a trap but if BlockPtr is not
+valid
+for a valid block array (supplied) the function returns 1U (true),
+meaning
 "yes, this block ptr is bad".&nbsp; If the block is valid 0U (false) is
-returned.&nbsp; To avoid a trap and test an array pointer call <a href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr(
+returned.&nbsp; To avoid a trap and test an array pointer call <a
+ href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr(
 )</a>
-<br><a NAME="IsBadArrayPtr"></a>
-<br><font color="#3366FF">unsigned int dpcrtlmm_IsBadArrayPtr( PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="IsBadArrayPtr"></a><br>
+<font color="#3366ff">unsigned int dpcrtlmm_IsBadArrayPtr(
+PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray );</font>
-<br>Verifies the validity of a block descriptor array without causing a
-trap, the return value is 1 (true) if the array pointer is bad, 0 (false)
-for a good array pointer.&nbsp; NULL is accepted as a valid array pointer,
-so is the resolved version but it's unlikely you'll see that unless your
+<br>
+Verifies the validity of a block descriptor array without causing a
+trap, the return value is 1 (true) if the array pointer is bad, 0
+(false)
+for a good array pointer.&nbsp; NULL is accepted as a valid array
+pointer,
+so is the resolved version but it's unlikely you'll see that unless
+your
 code is a hook.
-<br><a NAME="Realloc"></a>
-<br><font color="#3366FF">void* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="Realloc"></a><br>
+<font color="#3366ff">void* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, void* OldBlockPtr, const size_t NewSize);</font>
-<br>Reallocates a block, equivilant to C runtime library call realloc(
-), this is used for resizing a block of memory.&nbsp; The block array must
-be specified, it can be NULL to specify the default array.&nbsp; The pointer
+<br>
+Reallocates a block, equivilant to C runtime library call realloc(
+), this is used for resizing a block of memory.&nbsp; The block array
+must
+be specified, it can be NULL to specify the default array.&nbsp; The
+pointer
 to the block of memory to resize should be specified next, followed by
 the desired new size.&nbsp; Attempting to resize to 0 is equivillant to
 <a href="#Free">dpcrtlmm_Free(
-)</a> I rely on your run-time library supporting this bahaviour however,
-in the next version I want to make sure it will work whether your run-time
+)</a> I rely on your run-time library supporting this bahaviour
+however,
+in the next version I want to make sure it will work whether your
+run-time
 library supports it or not.&nbsp; The block of memory might be moved by
-the operating system's memory manager the return value should be used and
-replaces OldBlockPtr which should now be considered invalid.&nbsp; Don't
-replace your old pointer with the new one until you are sure it is non-zero,
-if it is NULL the block could not be resized, most probally because there
-is not enough continuous free memory.&nbsp; Note that NULL is also returned
-when a block is freed (providing your run-time library supports it).&nbsp;
-If a debug hook is installed it will currently only see the event if the
+the operating system's memory manager the return value should be used
+and
+replaces OldBlockPtr which should now be considered invalid.&nbsp;
+Don't
+replace your old pointer with the new one until you are sure it is
+non-zero,
+if it is NULL the block could not be resized, most probally because
+there
+is not enough continuous free memory.&nbsp; Note that NULL is also
+returned
+when a block is freed (providing your run-time library supports
+it).&nbsp;
+If a debug hook is installed it will currently only see the event if
+the
 reallocation is successful, therefore the hook routine(s) will only see
 Success = 1.
-<br><a NAME="Calloc"></a>
-<br><font color="#3366FF">void* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="Calloc"></a><br>
+<font color="#3366ff">void* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, const unsigned int N, const size_t NewBlockSize);</font>
-<br>Equivilant to C run time library calloc( ) purely a wrapper around
-alloc( N * NewBlockSize ) everything else is the same.&nbsp; See <a href="#Alloc">dpcrtlmm_Alloc(
+<br>
+Equivilant to C run time library calloc( ) purely a wrapper around
+alloc( N * NewBlockSize ) everything else is the same.&nbsp; See <a
+ href="#Alloc">dpcrtlmm_Alloc(
 )</a> for more information
-<br><a NAME="InstallTrapCallback"></a>
-<br><font color="#3366FF">void dpcrtlmm_InstallTrapCallback( void(*UserCallbackProc)(const
-unsigned int TrapID, const char* TrapMessage), const unsigned int AsHook
+<br>
+<a name="InstallTrapCallback"></a><br>
+<font color="#3366ff">void dpcrtlmm_InstallTrapCallback(
+void(*UserCallbackProc)(const
+unsigned int TrapID, const char* TrapMessage), const unsigned int
+AsHook
 );</font>
-<br>When a trap is fired, the default behaviour of the program is to put
+<br>
+When a trap is fired, the default behaviour of the program is to put
 the message on stderr and call abort, this behaviour can be changed to
 call (for example) the Daybo Logic fatal trap handler (which puts up a
-blue screen), or something like that.&nbsp; The trap handler takes a constant
-pointer to a string (const char*), it should not return it should always
+blue screen), or something like that.&nbsp; The trap handler takes a
+constant
+pointer to a string (const char*), it should not return it should
+always
 terminate the program.&nbsp; Perhaps memory errors could be ignored by
-not doing so but behaviour of the program afterwards might be undefined.&nbsp;
-If the specified function is installed as a hook it is called when a trap
-is fired but if it returns the default library handler is called anyway.&nbsp;
+not doing so but behaviour of the program afterwards might be
+undefined.&nbsp;
+If the specified function is installed as a hook it is called when a
+trap
+is fired but if it returns the default library handler is called
+anyway.&nbsp;
 It just gets a preview.&nbsp; Do not try to remove a handler by passing
 NULL to this function, use <a href="#RemoveTrapCallback">dpcrtlmm_RemoveTrapCallback(
 )</a>
-<br><a NAME="RemoveTrapCallback"></a>
-<br><font color="#3366FF">void dpcrtlmm_RemoveTrapCallback( void(*CurrentCallbackProc)(const
+<br>
+<a name="RemoveTrapCallback"></a><br>
+<font color="#3366ff">void dpcrtlmm_RemoveTrapCallback(
+void(*CurrentCallbackProc)(const
 unsigned int TrapID, const char* TrapDesc) );</font>
-<br>Removes a trap handler which was installed by <a href="#InstallTrapCallback">dpcrtlmm_InstallTrapHandler(
-)</a>, must pass address so we know you know and are not making a dreadful
+<br>
+Removes a trap handler which was installed by <a
+ href="#InstallTrapCallback">dpcrtlmm_InstallTrapHandler(
+)</a>, must pass address so we know you know and are not making a
+dreadful
 mistake, there is no return value.
-<br><a NAME="GetTrapCallbackInfo"></a>
-<br><font color="#3366FF">signed char dpcrtlmm_GetTrapCallbackInfo(void);</font>
-<br>Sometimes the user of the library has installed a handler for traps
-instead of the default library handler, the function returns very simple
+<br>
+<a name="GetTrapCallbackInfo"></a><br>
+<font color="#3366ff">signed char dpcrtlmm_GetTrapCallbackInfo(void);</font>
+<br>
+Sometimes the user of the library has installed a handler for traps
+instead of the default library handler, the function returns very
+simple
 information about it.&nbsp; There are three possible values, the other
 values won't be used.&nbsp; The three possible values are
-<br>-1 for no user trap handler
-<br>0 for a handler which is installed as a handler
-<br>1 for a handler which acts as a hook.
-<br>The important thing about a hook is that it gets preview of the trap
-but the default one is called afterwards and therefore the hook is expected
+<br>
+-1 for no user trap handler
+<br>
+0 for a handler which is installed as a handler
+<br>
+1 for a handler which acts as a hook.
+<br>
+The important thing about a hook is that it gets preview of the trap
+but the default one is called afterwards and therefore the hook is
+expected
 to return.&nbsp; A handler should terminate the program, if it returns
-the default handler will not be called, the user handler has replaced it.&nbsp;
-So if a handler returns the program may continue after a trap which could
+the default handler will not be called, the user handler has replaced
+it.&nbsp;
+So if a handler returns the program may continue after a trap which
+could
 lead to unpredictable results.
-<br><a NAME="ModifyDescriptorFlags"></a>
-<br><font color="#3366FF">unsigned char dpcrtlmm_ModifyDescriptorFlags(const
+<br>
+<a name="ModifyDescriptorFlags"></a><br>
+<font color="#3366ff">unsigned char
+dpcrtlmm_ModifyDescriptorFlags(const
 PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void* Ptr, const unsigned
 char* PNewFlags);</font>
-<br>This function implements direct flag access (not reconmended except
-for advanced programmers who have the library source so they know the descriptor
-flag meanings), casual programmers should use the specialist locking functions
+<br>
+This function implements direct flag access (not reconmended except
+for advanced programmers who have the library source so they know the
+descriptor
+flag meanings), casual programmers should use the specialist locking
+functions
 or other functions which change the flags but don't actually explictly
-state that is what they are doing, this flag modifying function is usually
-used by the library internally and not by the users of the library, I have
-only made it available to the users because of the possibility of unforeseen
+state that is what they are doing, this flag modifying function is
+usually
+used by the library internally and not by the users of the library, I
+have
+only made it available to the users because of the possibility of
+unforeseen
 circumstances arising, it's not very likely that users will need to use
 this function.
 <p>Pass pointer to new flags for the block, old flags are returned, to
 get the flags without modifying them, pass NULL as the
-<br>pointer PNewFlags.&nbsp; It is feasible that the function could return
+<br>
+pointer PNewFlags.&nbsp; It is feasible that the function could return
 after a trap if traps are off or a user handler is called for the trap,
-which returned.&nbsp; It is not possible to tell, if anything is suspected
+which returned.&nbsp; It is not possible to tell, if anything is
+suspected
 on running the program, at redesign your code so that it does not use a
-user trap (just comment out the line installing the handler, or don't turn
+user trap (just comment out the line installing the handler, or don't
+turn
 off trapping).
-<br><a NAME="SetBlockLockingFlag"></a>
-<br><font color="#3366FF">void dpcrtlmm_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="SetBlockLockingFlag"></a><br>
+<font color="#3366ff">void
+dpcrtlmm_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, const void* Ptr, const unsigned int NewStatus);</font>
-<br>Locks or unlocks a block of memory.&nbsp; When a block of memory is
+<br>
+Locks or unlocks a block of memory.&nbsp; When a block of memory is
 locked, it means it cannot be freed or resized, if a trap is fired as a
 result of the call, the function <a href="#ModifyDescriptorFlags">ModifyDescriptorFlags(
 )</a> is mentioned as the location of the trap, so don't get confused!
-<br>NewStatus is a boolean, nonzero = true, zero = false.
-<br><a NAME="IsBlockLocked"></a>
-<br><font color="#3366FF">unsigned int dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+NewStatus is a boolean, nonzero = true, zero = false.
+<br>
+<a name="IsBlockLocked"></a><br>
+<font color="#3366ff">unsigned int
+dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);</font>
-<br>Simply returns the boolean status 1 if the block specified has been
-locked or 0 if it has not.&nbsp; When a block is locked, it cannot be freed
+<br>
+Simply returns the boolean status 1 if the block specified has been
+locked or 0 if it has not.&nbsp; When a block is locked, it cannot be
+freed
 or resized.
-<br><a NAME="LockBlock"></a>
-<br><font color="#3366FF">#define dpcrtlmm_LockBlock(pArr, pBlock) dpcrtlmm_SetBlockLockingFlag(pArr,
+<br>
+<a name="LockBlock"></a><br>
+<font color="#3366ff">#define dpcrtlmm_LockBlock(pArr, pBlock)
+dpcrtlmm_SetBlockLockingFlag(pArr,
 pBlock, (1U));</font>
-<br><font color="#3366FF">#define dpcrtlmm_UnlockBlock(pArr, pBlock) dpcrtlmm_SetBlockLockingFlag(pArr,
+<br>
+<font color="#3366ff">#define dpcrtlmm_UnlockBlock(pArr, pBlock)
+dpcrtlmm_SetBlockLockingFlag(pArr,
 pBlock, (0U));</font>
-<br>Both of these functions are simple macros to lock and unlock blocks
+<br>
+Both of these functions are simple macros to lock and unlock blocks
 of memory see <a href="#SetBlockLockingFlag">dpcrtlmm_SetBlockLockingFlag(
 )</a>
-<br><a NAME="ToggleBlockLockingStatus"></a>
-<br><font color="#3366FF">void dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY
+<br>
+<a name="ToggleBlockLockingStatus"></a><br>
+<font color="#3366ff">void
+dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);</font>
-<br>If the said block is locked, it will be unlocked and vice versa, not
+<br>
+If the said block is locked, it will be unlocked and vice versa, not
 sure if anyone will bother to use this function really
-<br><a NAME="EnableTraps"></a>
-<br><font color="#3366FF">void dpcrtlmm_EnableTraps(void);</font>
-<br>See <a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a>, normally
-only that will be used in a program for the reasons described.&nbsp; The
+<br>
+<a name="EnableTraps"></a><br>
+<font color="#3366ff">void dpcrtlmm_EnableTraps(void);</font>
+<br>
+See <a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a>, normally
+only that will be used in a program for the reasons described.&nbsp;
+The
 only reason one might want to use this function is for temporary things
-say like, disable traps, perform actions, re-enable traps.&nbsp; Implemented
+say like, disable traps, perform actions, re-enable traps.&nbsp;
+Implemented
 as a macro, see dpcrtlmm__EnableTraps
-<br><a NAME="DisableTraps"></a>
-<br><font color="#3333FF">void dpcrtlmm_DisableTraps(void);</font>
-<br>Normally when the library starts traps are enabled, however let's say
-that the program is massive, a deadline is coming and it must be released.&nbsp;
-Although there are a few leaks that can't be tracked down it's stable and
-users would have nothing to complain about.&nbsp; They won't be too happy
-if DPCRTLMM keeps outputting all the mistakes at the end.&nbsp; Removing
-the library may not be feasible if the program is designed intimately around
+<br>
+<a name="DisableTraps"></a><br>
+<font color="#3333ff">void dpcrtlmm_DisableTraps(void);</font>
+<br>
+Normally when the library starts traps are enabled, however let's say
+that the program is massive, a deadline is coming and it must be
+released.&nbsp;
+Although there are a few leaks that can't be tracked down it's stable
+and
+users would have nothing to complain about.&nbsp; They won't be too
+happy
+if DPCRTLMM keeps outputting all the mistakes at the end.&nbsp;
+Removing
+the library may not be feasible if the program is designed intimately
+around
 it so the answer is to disable the traps, just call this function once
-after starting the library to avoid traps.&nbsp; Implemented as a macro,
+after starting the library to avoid traps.&nbsp; Implemented as a
+macro,
 see dpcrtlmm__EnableTraps
-<br><a NAME="AreTrapsEnabled"></a>
-<br><font color="#3333FF">unsigned char dpcrtlmm_AreTrapsEnabled(void);</font>
-<br>Returns whether traps are enabled or not, 1U means enabled 0U if not.&nbsp;
+<br>
+<a name="AreTrapsEnabled"></a><br>
+<font color="#3333ff">unsigned char dpcrtlmm_AreTrapsEnabled(void);</font>
+<br>
+Returns whether traps are enabled or not, 1U means enabled 0U if
+not.&nbsp;
 Implemented as a macro, see <a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>
-<br><a NAME="GetStats"></a>
-<br><font color="#3333FF">void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS PReadStats);</font>
-<br>Returns memory statistics for the library, such as, number of allocated
+<br>
+<a name="GetStats"></a><br>
+<font color="#3333ff">void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS
+PReadStats);</font>
+<br>
+Returns memory statistics for the library, such as, number of allocated
 blocks, amount of memory used (charge) and peaks, pass a pointer to the
-structure to read the data, forgetting to pass the pointer will do absolutely
-nothing.&nbsp; Most of the information can be returned directly from internal
+structure to read the data, forgetting to pass the pointer will do
+absolutely
+nothing.&nbsp; Most of the information can be returned directly from
+internal
 counts, most statistics are modified at the time they are changed, for
 example allocating a block would increment the count of blocks and the
-amount you added would be added to the total allocation charge.&nbsp; However,
+amount you added would be added to the total allocation charge.&nbsp;
+However,
 because I made it possible to modify the flags of a descriptor I cannot
-tell how many locks etc. there are, for these I had to implement a nested
-loop to check the flags of all descriptors, shouldn't reduce performance
+tell how many locks etc. there are, for these I had to implement a
+nested
+loop to check the flags of all descriptors, shouldn't reduce
+performance
 too much but remember that the function should not be called too often.
-<br><a NAME="GetBlockCount"></a>
-<br><font color="#3333FF">unsigned long dpcrtlmm_GetBlockCount(void);</font>
-<br>Returns the number of blocks allocated, don't worry I'm not completely
-mad, the count is stored internally it is not worked out by this function,
+<br>
+<a name="GetBlockCount"></a><br>
+<font color="#3333ff">unsigned long dpcrtlmm_GetBlockCount(void);</font>
+<br>
+Returns the number of blocks allocated, don't worry I'm not completely
+mad, the count is stored internally it is not worked out by this
+function,
 I don't go mad, looping through all the arrays looking for blocks!
-<br><a NAME="Ver"></a>
-<br><font color="#3333FF">PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION
+<br>
+<a name="Ver"></a><br>
+<font color="#3333ff">PS_DPCRTLMM_VERSION
+dpcrtlmm_Ver(PS_DPCRTLMM_VERSION
 PVerStruct);</font>
-<br>Returns library version info, the caller supplies the structure and
+<br>
+Returns library version info, the caller supplies the structure and
 I return them the same structure, passing NULL does nothing.
-<br><a NAME="Dump"></a>
-<br><font color="#3333FF">void dpcrtlmm_Dump(FILE* Target);</font>
-<br>Dumps a listing of all allocated blocks of memory which are currently
+<br>
+<a name="Dump"></a><br>
+<font color="#3333ff">void dpcrtlmm_Dump(FILE* Target);</font>
+<br>
+Dumps a listing of all allocated blocks of memory which are currently
 managed by DPCRTLMM. Target may be any stream which allows writing, for
-example stdout, stderr or a writable file. The output may be used for knowing
+example stdout, stderr or a writable file. The output may be used for
+knowing
 what state memory is in at any time without having to wait until a trap
 for a leak dump.
-<br><a NAME="_EnableTraps"></a>
-<br><font color="#3333FF">extern unsigned char dpcrtlmm__EnableTraps;</font>
-<br>This can be used to disable/enable traps, while it is off no trap will
-be executed and if the program makes a mistake it could crash, if can either
+<br>
+<a name="_EnableTraps"></a><br>
+<font color="#3333ff">extern unsigned char dpcrtlmm__EnableTraps;</font>
+<br>
+This can be used to disable/enable traps, while it is off no trap will
+be executed and if the program makes a mistake it could crash, if can
+either
 be modified directly or with the macros <a href="#EnableTraps">dpcrtlmm_EnableTraps(
-)</a>, <a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a> and <a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled(
+)</a>, <a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a> and <a
+ href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled(
 )</a>.&nbsp; Generally one will want to switch it off when releasing a
 program, simple start the program with a call to <a href="#Startup">dpcrtlmm_Startup(
-)</a> and then set this variable to 0U, the two valid states are 0U = no
-traps, 1U = traps will be used.&nbsp; 1U is the default.&nbsp; If you have
+)</a> and then set this variable to 0U, the two valid states are 0U =
+no
+traps, 1U = traps will be used.&nbsp; 1U is the default.&nbsp; If you
+have
 the absoluetely version (source) this variable is store in dpcrtlmm.c
-<br>&nbsp;
-<p>If you want to make sales enquires please contact <a href="mailto:sales@daybologic.co.uk">sales@daybologic.co.uk</a>,
-for lastest news check the&nbsp; <a href="http://www.daybologic.co.uk/dev/dpcrtlmm">web
-page</a>&nbsp; and update your documentation &amp; library regularly, remember
-updates cost nothing.&nbsp; If you have an equiry of a more technical nature
-you can contact me directly at <a href="mailto:Overlord@DayboLogic.co.uk">Overlord@DayboLogic.co.uk</a>
+<br>
+&nbsp;
+</p>
+<p>For the lastest news check the&nbsp; <a
+ href="http://www.daybologic.co.uk/dev/dpcrtlmm">web
+page</a>&nbsp; and update your documentation &amp; library regularly,
+remember
+updates cost nothing.&nbsp; If you have an equiry of a more technical
+nature
+you can contact me directly at <a
+ href="http://www.daybologic.co.uk/mailddrp/">http://www.daybologic.co.uk/mailddrp/</a><a
+ href="mailto:Overlord@DayboLogic.co.uk"></a>
+</p>
 <center>
-<p><font color="#FF0000"><font size=-2>(C)Copyright 2000-2001 David Duncan
-Ross Palmer, Daybo Logic. The library may only be used in accordence with
-the GPL license, which should be supplied.</font></font></center>
-
+<p><font color="#ff0000"><font size="-2">(C)Copyright 2000-2006 David
+Duncan
+Ross Palmer, Daybo Logic. The library may only be used in accordence
+with
+the license, which can be ready by reading the COPYING file.<br>
+</font></font></p>
+</center>
 </body>
 </html>

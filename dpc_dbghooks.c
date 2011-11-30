@@ -1,37 +1,49 @@
 /*
-    DPCRTLMM Memory Management Library : Debug hooks
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*
+  The debug hook executive and supporting code
+  written (and perfomed by David Duncan Ross Palmer.
+
+  File DBGHOOKS.C
+  Library: DPCRTLMM Memory Manager
+  Date of creation: 24th February 2000
+  Last modified: 21st February 2006 by David Duncan Ross Palmer
+*/
+
 #define DPCRTLMM_SOURCE
-/* The debug hook executive and supporting code
-written (and perfomed by Overlord David
-Duncan Ross Palmer.
-
-File DBGHOOKS.C
-Library: DPCRTLMM Memory Manager
-Date of creation: 24th Feb 2000
-Last modified by Overlord David Duncan Ross Palmer on 31st July 2001
-*/
-
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -47,15 +59,36 @@ Last modified by Overlord David Duncan Ross Palmer on 31st July 2001
 #include "dpc_dbghooks.h"
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-static unsigned int BadHookType(const unsigned int HookType);
-static unsigned int dpcrtlmm_int_InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));
-static unsigned int dpcrtlmm_int_GetDebugHookChainCount(const unsigned int HookType);
-static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(void);
-static unsigned int dpcrtlmm_int_UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO));
+
+static unsigned int BadHookType(
+  const unsigned int HookType
+);
+
+static unsigned int dpcrtlmm_int_InstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO)
+);
+
+static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
+  const unsigned int HookType
+);
+
+static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(
+  void
+);
+
+static unsigned int dpcrtlmm_int_UninstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)
+);
+
 #endif /*DPCRTLMM_DEBUGHOOKS*/
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-unsigned int dpcrtlmm_InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO))
+unsigned int dpcrtlmm_InstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO)
+)
 {
   unsigned int ret;
 
@@ -68,7 +101,9 @@ unsigned int dpcrtlmm_InstallDebugHook(const unsigned short HookType, unsigned i
 #endif /*DPCRTLMM_DEBUGHOOKS*/
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-unsigned int dpcrtlmm_GetDebugHookChainCount(const unsigned int HookType)
+unsigned int dpcrtlmm_GetDebugHookChainCount(
+  const unsigned int HookType
+)
 {
   unsigned int ret;
 
@@ -94,7 +129,10 @@ unsigned int dpcrtlmm_GetDebugHookMatrixCount()
 #endif /*DPCRTLMM_DEBUGHOOKS*/
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-unsigned int dpcrtlmm_UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO))
+unsigned int dpcrtlmm_UninstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)
+)
 {
   unsigned int ret;
 
@@ -128,7 +166,10 @@ void dpcrtlmm_int_InitDebugHookMatrix()
 #endif /*DPCRTLMM_DEBUGHOOKS*/
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-void dpcrtlmm_int_CallDebugHook(const unsigned short HookType, const PS_DPCRTLMM_DEBUGHOOKINFO PDebugHookInfo)
+void dpcrtlmm_int_CallDebugHook(
+  const unsigned short HookType,
+  const PS_DPCRTLMM_DEBUGHOOKINFO PDebugHookInfo
+)
 {
   /* locals */
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo; /* Local copy of caller's stuff */
@@ -148,8 +189,7 @@ void dpcrtlmm_int_CallDebugHook(const unsigned short HookType, const PS_DPCRTLMM
 
   debugHookInfo = *PDebugHookInfo; /* Copy details by auto C deref */
 
-  for ( allHooksLoop = 0U; allHooksLoop < DPCRTLMM_HOOKCHAIN_SIZE; allHooksLoop++ ) /* All viable hook locations in the chain */
-  {
+  for ( allHooksLoop = 0U; allHooksLoop < DPCRTLMM_HOOKCHAIN_SIZE; allHooksLoop++ ) { /* All viable hook locations in the chain */
     unsigned int (*HookProc)(PS_DPCRTLMM_DEBUGHOOKINFO) = _debugHookMatrix[allHooksLoop][HookType]; /* Get hook function pointer from chain */
 
     if ( !HookProc ) /* No hook info */
@@ -163,7 +203,10 @@ void dpcrtlmm_int_CallDebugHook(const unsigned short HookType, const PS_DPCRTLMM
 #endif /*DPCRTLMM_DEBUGHOOKS*/
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-static unsigned int dpcrtlmm_int_InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO))
+static unsigned int dpcrtlmm_int_InstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO)
+)
 {
   /* This function has added support for DPCRTLMM_HOOK_ALL */
   unsigned int i; /* looping */
@@ -187,10 +230,8 @@ static unsigned int dpcrtlmm_int_InstallDebugHook(const unsigned short HookType,
   {
     unsigned short nextHook;
 
-    for ( nextHook = (unsigned short)0x0000U; nextHook < DPCRTLMM_DEBUGHOOK_LASTHOOK; nextHook++ ) /* Go through all valid hook types */
-    {
-      if ( !dpcrtlmm_InstallDebugHook(nextHook, NewHookProc) ) /* Call ourselves back to sort it out */
-      {
+    for ( nextHook = (unsigned short)0x0000U; nextHook < DPCRTLMM_DEBUGHOOK_LASTHOOK; nextHook++ ) { /* Go through all valid hook types */
+      if ( !dpcrtlmm_InstallDebugHook(nextHook, NewHookProc) ) { /* Call ourselves back to sort it out */
         /* Failed to install a hook? */
         dpcrtlmm_UninstallDebugHook(DPCRTLMM_HOOK_ALL, NewHookProc); /* Remove all of the hooks which are for this address */
         return 0U; /* Report failure for the whole lot, FALSE return */
@@ -204,7 +245,9 @@ static unsigned int dpcrtlmm_int_InstallDebugHook(const unsigned short HookType,
 #endif /*DPCRTLMM_DEBUGHOOKS*/
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-static unsigned int dpcrtlmm_int_GetDebugHookChainCount(const unsigned int HookType)
+static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
+  const unsigned int HookType
+)
 {
   unsigned int i;
   unsigned total = 0U;
@@ -233,7 +276,10 @@ static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(void)
 }
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_DEBUGHOOKS
-static unsigned int dpcrtlmm_int_UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO))
+static unsigned int dpcrtlmm_int_UninstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)
+)
 {
   /* This function has added support for DPCRTLMM_HOOK_ALL */
 
@@ -244,10 +290,8 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(const unsigned short HookTyp
   {
     if (BadHookType(HookType)) return 0U;
 
-    for ( i = 0U; i < DPCRTLMM_DEBUGHOOK_LASTHOOK; i++ ) /* Process all entries in the chain */
-    {
-      if ( _debugHookMatrix[i][HookType] == HookProc2Remove ) /* Found entry */
-      {
+    for ( i = 0U; i < DPCRTLMM_DEBUGHOOK_LASTHOOK; i++ ) { /* Process all entries in the chain */
+      if ( _debugHookMatrix[i][HookType] == HookProc2Remove ) { /* Found entry */
         retStatus = 1U; /* We found it! Return TRUE */
         _debugHookMatrix[i][HookType] = NULL; /* Delete address of hook proc */
         /* Not breaking the loop so we can remove duplicates too, say for
@@ -255,8 +299,7 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(const unsigned short HookTyp
       }
     }
   }
-  else /* HookType is general */
-  {
+  else { /* HookType is general */
     unsigned short si; /* Used for loop */
     retStatus = 1U; /* We always say success */
 

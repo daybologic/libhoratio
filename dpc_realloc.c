@@ -1,25 +1,33 @@
 /*
-    DPCRTLMM Memory Manager Library reallocator
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 #define DPCRTLMM_SOURCE
 /* Created: UNKNOWN
@@ -33,17 +41,29 @@ My official site: http://www.daybologic.co.uk/overlord
                  that realloc() will allocate when called with NULL, newSize
 
    31st July 2001: Added support for using the big library lock.
+   21st Feb 2006: License change
 */
+
+#define DPCRTLMM_SOURCE
+
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef DPCRTLMM_WANTFARDATA
+# ifdef HAVE_ALLOC_H
+#  include <alloc.h>
+# endif /*HAVE_ALLOC_H*/
+#endif /*DPCRTLMM_WANTFARDATA*/
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#ifdef DPCRTLMM_WANTFARDATA
-#  include <alloc.h>
-#endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_vptrap.h" /* _VerifyPtrs() */
@@ -53,11 +73,19 @@ My official site: http://www.daybologic.co.uk/overlord
 #include "dpc_log.h"
 #include "dpc_biglock.h" /* Mutual exclusion */
 /*-------------------------------------------------------------------------*/
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize);
+static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *OldBlockPtr,
+  const size_t NewSize
+);
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize)
+void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *OldBlockPtr,
+  const size_t NewSize
+)
 {
-  void DPCRTLMM_FARDATA* ret;
+  void DPCRTLMM_FARDATA *ret;
 
   LOCK
   ret = dpcrtlmm_int_Realloc(PBlockArray, OldBlockPtr, NewSize);
@@ -66,9 +94,14 @@ void DPCRTLMM_FARDATA* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* OldBlockPtr, const size_t NewSize)
+static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *OldBlockPtr,
+  const size_t NewSize
+)
 {
-  void DPCRTLMM_FARDATA* ptr = OldBlockPtr; /* Pointer that is returned to the caller (modified later) */
+  /* ptr is returned to the caller (modified later) */
+  void DPCRTLMM_FARDATA *ptr = OldBlockPtr;
   const char funcName[] = "Realloc()"; /* Name of our function */
   unsigned int blockIndex; /* Index of block in the array */
   char DPCRTLMM_FARDATA* sizePtr; /* Pointer used during resizing */

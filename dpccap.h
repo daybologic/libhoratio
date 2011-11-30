@@ -1,30 +1,38 @@
 /*
-    DPCRTLMM C++ user's interface header
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 // DPCRTLMM 1.2 compatible encapsulation header for C++
 // include this and add dpccap.cpp to your project
 // You can have this particular module, it's free
-// Last update: December 2000
+// Last update: August 2005
 // I'm writing this in ANSI/ISO C++, that doesn't mean it'll work on all
 // old compilers!  define __NO_NAMESPACES__ if you don't want the namespace.
 // I've got rid of all inline functions as a wicked article on C++
@@ -32,8 +40,8 @@ My official site: http://daybologic.com/overlord
 // know, look how far Mozilla and Netscape has been ported!
 // I know the keyword bool is new, so I'm not using it, I'll use int thanks
 
-#ifndef __INC_DPCRTLMM_CAP_H
-#define __INC_DPCRTLMM_CAP_H
+#ifndef INC_DPCRTLMM_CAP_H
+#define INC_DPCRTLMM_CAP_H
 //---------------------------------------------------------------------------
 // main object, don't create more than one, the object is externed
 
@@ -43,10 +51,14 @@ namespace Overlord
 #endif /*!__NO_NAMESPACES__*/
   class TDPCRTLMM_MemManager
   {
+  private:
+    int firstAccess;
   public:
     TDPCRTLMM_MemManager();
 
     ~TDPCRTLMM_MemManager();
+
+    void Startup(); // Explicit startup (not necessary but you can call it)
 
     int InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));
 
@@ -67,9 +79,9 @@ namespace Overlord
 
     // I shouldn't have been using void* in this function really, correct that
     // for the C++ layer
-    size_t GetBlockSize(const void* BlockPtr) const;
+    size_t GetBlockSize(const void* BlockPtr);
 
-    int IsBadBlockPtr(const void* BlockPtr) const;
+    int IsBadBlockPtr(const void* BlockPtr);
 
     void* Realloc(void* OldBlockPtr, const size_t NewSize);
 
@@ -85,9 +97,9 @@ namespace Overlord
 
     unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags);
 
-    void SetBlockLockingFlag(const void* Ptr, int NewStatus);
+    void SetBlockLockingFlag(const void* Ptr, const int NewStatus);
 
-    int IsBlockLocked(const void* Ptr) const;
+    int IsBlockLocked(const void* Ptr);
 
     void LockBlock(const void* pBlock);
 
@@ -113,7 +125,9 @@ namespace Overlord
   private:
       PS_DPCRTLMM_BLOCKDESCARRAY _PblockArray;
   public:
-    TDPCRTLMM_BlockArray(); // Constructs the object, creates the block array
+    TDPCRTLMM_BlockArray(bool Init);
+    TDPCRTLMM_BlockArray();
+    int Init();
 
     // Destroys the block array, destructs the object
     ~TDPCRTLMM_BlockArray();
@@ -148,7 +162,7 @@ namespace Overlord
     void ToggleBlockLockingStatus(const void* Ptr);
   };
 #ifndef __NO_NAMESPACES__
-}; /*namespace Overlord*/
+} /*namespace Overlord*/
 #endif
 
 extern
@@ -157,4 +171,4 @@ Overlord::
 #endif
 TDPCRTLMM_MemManager MemManager; /* This is the object you should use */
 //---------------------------------------------------------------------------
-#endif //__INC_DPCRTLMM_CAP_H
+#endif //!INC_DPCRTLMM_CAP_H

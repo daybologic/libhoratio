@@ -1,27 +1,35 @@
 /*
-    DPCRTLMM Memory management library : Block array controls
-    Copyright (C) 2000-2002 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
+
 /*
 #############################################################################
 # Block array creation and destruction functions                            #
@@ -35,28 +43,38 @@ My official site: http://www.daybologic.co.uk/overlord
 #############################################################################
 */
 
+#define DPCRTLMM_SOURCE
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h> /* memset() */
+
+#ifdef DPCRTLMM_WANTFARDATA
+# ifdef HAVE_ALLOC_H
+#  include <alloc.h>
+# endif /*HAVE_ALLOC_H*/
+#endif /*DPCRTLMM_WANTFARDATA*/
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#ifdef DPCRTLMM_WANTFARDATA
-#  include <alloc.h>
-#endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Access to internal data */
 #include "dpc_log.h" /* LOG macro */
-#include "dpc_trap.h" /* _Trap() */
+#include "dpc_trap.h" /* Trap() */
 #include "dpc_safelist.h" /* Safety list support functions */
 #include "dpc_dbghooks.h" /* For the debug hook executive */
 #include "dpc_biglock.h" /* For total library mutual exclusion */
 #include "dpc_blkarray.h"
 /*-------------------------------------------------------------------------*/
 static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray(void);
-static unsigned int dpcrtlmm_int_IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
+static unsigned int dpcrtlmm_int_IsDefaultBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+);
 /*-------------------------------------------------------------------------*/
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
 {
@@ -70,7 +88,9 @@ PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_DestroyBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+void dpcrtlmm_DestroyBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+)
 {
   /* Thread safe wrapper for DestroyBlockArray() */
 
@@ -79,7 +99,9 @@ void dpcrtlmm_DestroyBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray)
+unsigned int dpcrtlmm_IsDefaultBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+)
 {
   /* Thread safe wrapper for IsDefaultBlockArray() */
 
@@ -103,12 +125,17 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
   #ifdef DPCRTLMM_DEBUGHOOKS
-  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO)); /* Init debug hook info */
+  /* Init debug hook info */
+  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
   debugHookInfo.HookType = DPCRTLMM_HOOK_CREATEBLOCKARRAY;
-  debugHookInfo.AllocReq = (unsigned int)sizeof(S_DPCRTLMM_BLOCKDESCARRAY); /* Ha, this is only vaugly relavant, this will do */
+  /* Ha, this is only vaugely relevant, this will do */
+  debugHookInfo.AllocReq = (unsigned int)sizeof(S_DPCRTLMM_BLOCKDESCARRAY);
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  Parray = (S_DPCRTLMM_BLOCKDESCARRAY*)malloc( sizeof(S_DPCRTLMM_BLOCKDESCARRAY) ); /* Alloc the array for the caller */
+  /*
+    Alloc the array for the caller
+  */
+  Parray = (S_DPCRTLMM_BLOCKDESCARRAY*)malloc( sizeof(S_DPCRTLMM_BLOCKDESCARRAY) );
   if (!Parray) /* Failed to alloc */
   {
     /* Memory outages while in memory manager mode must be warned about! */
@@ -138,7 +165,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
 
   #ifdef DPCRTLMM_LOG
   /* Safe, log progress */
-  sprintf(logMsg, "CreateBlockArray() returns base 0x%p", Parray);
+  sprintf(logMsg, "CreateBlockArray() returns base 0x%p", (void*)Parray);
   MESSAGE(__FILE__, __LINE__, logMsg);
   #endif /*DPCRTLMM_LOG*/
 
@@ -184,25 +211,33 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
             totBytes += _safetyList[sli]->Descriptors[li].Size; /* Add size of block to total */
           }
 
-          sprintf(trapStr, "DestroyBlockArray(): %u blocks of memory not freed from array based at 0x%p\n                      Total bytes leakage for this array: %lu",
-                  _safetyList[sli]->Count,
-                  _safetyList[sli],
-                  totBytes
+          sprintf(
+            trapStr,
+            "DestroyBlockArray(): %u blocks of memory not freed from array based at 0x%p\n                      Total bytes leakage for this array: %lu",
+            _safetyList[sli]->Count,
+            (void*)_safetyList[sli],
+            totBytes
           );
-          _Trap(DPCRTLMM_TRAP_UNFREED_BLOCKS, trapStr);
+          Trap(DPCRTLMM_TRAP_UNFREED_BLOCKS, trapStr);
         }
         if (_safetyList[sli]->Descriptors) /* Descriptors not zero? */
         {
-          sprintf(trapStr, "DestroyBlockArray(): Base of raw descriptor array not freed!\n0x%p->0x%p (PBlockArray->Descriptors must be NULL)",
-                  _safetyList[sli],
-                  _safetyList[sli]->Descriptors
+          sprintf(
+            trapStr,
+            "DestroyBlockArray(): Base of raw descriptor array not freed!\n0x%p->0x%p (PBlockArray->Descriptors must be NULL)",
+            (void*)_safetyList[sli],
+            (void*)_safetyList[sli]->Descriptors
           );
-          _Trap(DPCRTLMM_TRAP_BASENONZERO, trapStr);
+          Trap(DPCRTLMM_TRAP_BASENONZERO, trapStr);
         }
         DPCRTLMM_FREE(_safetyList[sli]); /* BUG FIX: Forgot to release the memory for the array block pointer */
         _safetyList[sli] = NULL; /* Remove this array from the safety list */
         #ifdef DPCRTLMM_LOG
-        sprintf(trapStr, "DestroyBlockArray(): The array at base 0x%p was destroyed", PBlockArray); /* Prepare log message */
+        sprintf(
+          trapStr,
+          "DestroyBlockArray(): The array at base 0x%p was destroyed",
+          (void*)PBlockArray
+        ); /* Prepare log message */
         MESSAGE(__FILE__, __LINE__, trapStr);
         #endif /*DPCRTLMM_LOG*/
 
@@ -222,10 +257,12 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
   dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_DESTROYBLOCKARRAY, &debugHookInfo);
   #endif /*DPCRTLMM_DEBUGHOOKS*/
   /* Fire trap */
-  sprintf(trapStr, "DestroyBlockArray(): Attempt to destroy unknown array (0x%p)!",
-          PBlockArray
+  sprintf(
+    trapStr,
+    "DestroyBlockArray(): Attempt to destroy unknown array (0x%p)!\n",
+    (void*)PBlockArray
   );
-  _Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapStr);
+  Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapStr);
   return;
 }
 /*-------------------------------------------------------------------------*/

@@ -1,86 +1,145 @@
 /*
-    DPCRTLMM Memory Manager Library : Big library thread safe lock.
-    Copyright (C) 2000 Overlord David Duncan Ross Palmer, Daybo Logic.
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 
 #define DPCRTLMM_SOURCE
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
+#ifndef _RECURSIVE
+# define _RECURSIVE
+#endif /*!_RECURSIVE*/
+
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif /*!_GNU_SOURCE*/
+
 #include <stdio.h>
-#include "dpcrtlmm.h"
+#ifdef DPCRTLMM_HDRSTOP
+#  pragma hdrstop
+#endif /*DPCRTLMM_HDRSTOP*/
+
 #include "dpc_build.h"
+#include "dpcrtlmm.h"
+#include "dpc_biglock.h"
+
 #ifdef DPCRTLMM_THREADS
 
-#if ( !defined(__UNIX__) && !defined(__WIN32__) )
-#  error ("Not currently a supported platform, build as config --disable-threads")
-#endif
+#ifdef DPCRTLMM_THREADS_PTHREAD
+#  ifndef DPCRTLMM_THREADS_PTHREAD_NP
+#    pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for DPCRTLMM access from user callbacks.  Callbacks have the power to deadlock a thread"
+#  endif /*!DPCRTLMM_THREADS_PTHREAD_NP*/
+#endif /*DPCRTLMM_THREADS_PTHREAD*/
 
-#if ( defined(__UNIX__) && defined(DPCRTLMM_MAXPORT) )
-#  pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for DPCRTLMM access from user callbacks.  Callbacks have the power to deadlock a thread"
-#endif
-
-#ifdef __WIN32__
+#if defined(DPCRTLMM_THREADS_NT)
 #  include <windows.h>
-#else
+#elif defined(DPCRTLMM_THREADS_PTH)
+#  include <pth.h>
+#elif defined(DPCRTLMM_THREADS_PTHREAD)
+#  include <errno.h>
 #  include <pthread.h>
-#endif /*__WIN32__*/
+#endif
+
+/*
+  Sometimes configure tells us we have non-portable functions available
+  but the macro PTHREAD_MUTEX_RECURSIVE_NP is not really available at
+  all.  If that is the case, revoke what configure set up for us
+*/
+#ifdef DPCRTLMM_THREADS_PTHREAD
+#  ifdef DPCRTLMM_THREADS_PTHREAD_NP
+#    ifndef PTHREAD_MUTEX_RECURSIVE_NP
+#      undef DPCRTLMM_THREADS_PTHREAD_NP
+#    endif /*!PTHREAD_MUTEX_RECURSIVE_NP*/
+#  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
+#endif /*DPCRTLMM_THREADS_PTHREAD*/
 /*--------------------------------------------------------------------------*/
-#ifdef __WIN32__
+#ifdef DPCRTLMM_THREADS_NT
+
 #  define Mutant CRITICAL_SECTION
 #  define InitialiseMutant(x) InitializeCriticalSection((x))
 #  define LockMutant(x) EnterCriticalSection((x))
 #  define UnlockMutant(x) LeaveCriticalSection((x))
 #  define DestroyMutant(x) DeleteCriticalSection((x))
-#else
+
+#elif defined(DPCRTLMM_THREADS_PTH)
+
+#  define Mutant pth_mutex_t
+#  define InitialiseMutant(x) pth_mutex_init((x))
+#  define LockMutant(x) pth_mutex_acquire((x), (0), (NULL))
+#  define UnlockMutant(x) pth_mutex_release((x))
+#  define DestroyMutant(x) pth_mutex_init((x))
+
+#elif defined(DPCRTLMM_THREADS_PTHREAD)
+
 #  define Mutant pthread_mutex_t
-#  ifdef DPCRTLMM_MAXPORT /* Maxport, use POSIX fast mutex */
-#    define InitialiseMutant(x) pthread_mutex_init((x), NULL)
-#  else /* Use nonportable extension */
+#  ifdef DPCRTLMM_THREADS_PTHREAD_NP /* Supporting non-portable extension? */
 #    define InitialiseMutant(x) InitNPMutant((x))
+#  else
+#    define InitialiseMutant(x) pthread_mutex_init((x), NULL)
 #  endif /*DPCRTLMM_MAXPORT*/
 #  define LockMutant(x) pthread_mutex_lock((x))
 #  define UnlockMutant(x) pthread_mutex_unlock((x))
 #  define DestroyMutant(x) pthread_mutex_destroy((x))
-#endif /*__WIN32__*/
-/*--------------------------------------------------------------------------*/
-static Mutant _bigLock;
 
-#if ( defined(__UNIX__) && !defined(DPCRTLMM_MAXPORT) )
-void InitNPMutant(pthread_mutex_t* PMutant);
-#endif /*__UNIX__ && !DPCRTLMM_MAXPORT*/
+#endif /*DPCRTLMM_THREADS_NT*/
+/*--------------------------------------------------------------------------*/
+static Mutant bigLock;
+
+#ifdef DPCRTLMM_THREADS_PTHREAD
+#  ifdef DPCRTLMM_THREADS_PTHREAD_NP
+    void InitNPMutant(pthread_mutex_t* PMutant);
+#  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
+#endif /*DPCRTLMM_THREADS_PTHREAD*/
 /*--------------------------------------------------------------------------*/
 void dpcrtlmm_int_BigLockInit()
 {
-  InitialiseMutant(&_bigLock);
+  InitialiseMutant(&bigLock);
 }
 /*--------------------------------------------------------------------------*/
 void dpcrtlmm_int_BigLockUninit()
 {
-  DestroyMutant(&_bigLock);
+  DestroyMutant(&bigLock);
 }
 /*--------------------------------------------------------------------------*/
 void dpcrtlmm_int_BigLock(int LockState)
 {
   if ( LockState )
-    LockMutant(&_bigLock);
+    LockMutant(&bigLock);
   else
-    UnlockMutant(&_bigLock);
+    UnlockMutant(&bigLock);
 }
 /*--------------------------------------------------------------------------*/
-#if ( defined(__UNIX__) && !defined(DPCRTLMM_MAXPORT) )
+#ifdef DPCRTLMM_THREADS_PTHREAD
+#ifdef DPCRTLMM_THREADS_PTHREAD_NP
 void InitNPMutant(pthread_mutex_t* PMutant)
 {
   pthread_mutexattr_t attributes;
@@ -90,8 +149,9 @@ void InitNPMutant(pthread_mutex_t* PMutant)
   pthread_mutex_init(PMutant, &attributes);
   pthread_mutexattr_destroy(&attributes);
 }
-#endif /*__UNIX__ && !DPCRTLMM_MAXPORT*/
+#endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
+#endif /*DPCRTLMM_THREADS_PTHREAD*/
 /*--------------------------------------------------------------------------*/
-#else /* Threads not required */
+#else /* !DPCRTLMM_THREADS -- Threads not required */
   char dpcrtlmm_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */
 #endif /*DPCRTLMM_THREADS*/

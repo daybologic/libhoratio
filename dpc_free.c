@@ -1,44 +1,60 @@
 /*
-    DPCRTLMM Memory Management library : Primary block freeer
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://www.daybologic.co.uk/dev/dpcrtlmm
-My official site: http://www.daybologic.co.uk/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
+
 #define DPCRTLMM_SOURCE
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#ifdef DPCRTLMM_WANTFARDATA
+# ifdef HAVE_ALLOC_H
+#  include <alloc.c>
+# endif /*HAVE_ALLOC_H*/
+#endif /*DPCRTLMM_WANTFARDATA*/
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#ifdef DPCRTLMM_WANTFARDATA
-#  include <alloc.h>
-#endif /*DPCRTLMM_WANTFARDATA*/
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal data */
 #include "dpc_vptrap.h" /* _VerifyPtrs() */
 #include "dpc_locktrap.h" /* _LockTrap() */
 #include "dpc_log.h" /* LOG macro */
-#include "dpc_trap.h" /* _Trap() */
+#include "dpc_trap.h" /* Trap() */
 #include "dpc_dbghooks.h" /* Debug hook executive */
 #include "dpc_biglock.h" /* For mutual exclusion */
 #include "dpc_isbad.h" /* Internal interface to block testers */
@@ -47,18 +63,46 @@ My official site: http://www.daybologic.co.uk/overlord
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-#define OURLOG_POS(sev, msg) OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG(f, l, sev, msg) \
+  OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG_POS(sev, msg) \
+  OURLOG(__FILE__, __LINE__, (sev), (msg))
 
 /* Function under the locked version */
-static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr);
+static void dpcrtlmm_int_Free(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *Ptr
+);
 
-/* Always make sure to pass resolved arrays to these functions */
-static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int StartPos); /* Moveup following blocks descriptors in array to remove blank space.  StartPos is the item just deleted when moveup will be started from */
-static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int Amount); /* Shrink array, trap is fired on an attempt to shrink more than the current size */
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Msg);
+/*
+  Always make sure to pass resolved arrays to these functions:-
+  Moveup following blocks descriptors in array to remove blank
+  space.  StartPos is the item just deleted when moveup will be
+  started from
+*/
+static void Moveup(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int StartPos
+);
+/*
+  Shrink array, trap is fired on an attempt to shrink more
+  than the current size.
+*/
+static void ShrinkBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int Amount
+);
+static void OurLog(
+  const char *File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Msg
+);
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr)
+void dpcrtlmm_Free(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *Ptr
+)
 {
   /* Thread safe wrapper around Free() */
 
@@ -67,7 +111,10 @@ void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA* Ptr)
+static void dpcrtlmm_int_Free(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *Ptr
+)
 {
   /* locals */
   unsigned int i; /* For the finder loop */
@@ -82,11 +129,13 @@ static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRT
   _VerifyPtrs(funcName, PBlockArray, NULL); /* Don't check if bad block in this trap, use own trap... */
   if ( dpcrtlmm_int_IsBadBlockPtr(PBlockArray, Ptr) ) /* Block pointer not valid? */
   {
-    sprintf(trapMsg, "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: 0x%p, block 0x%p",
-	    PBlockArray,
-	    Ptr
+    sprintf(
+      trapMsg,
+      "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: 0x%p, block 0x%p",
+      (void*)PBlockArray,
+      Ptr
     );
-    _Trap(DPCRTLMM_TRAP_UNOWNED_FREE, trapMsg);
+    Trap(DPCRTLMM_TRAP_UNOWNED_FREE, trapMsg);
   }
 
   if (_LockTrap(funcName, PBlockArray, Ptr)) /* Do trap if block is locked */
@@ -98,7 +147,12 @@ static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRT
     if ( PRArr->Descriptors[i].PBase == Ptr ) /* This is the one */
     {
       #ifdef DPCRTLMM_LOG
-      sprintf(trapMsg, "Freeing block %p from array %p", PRArr->Descriptors[i].PBase, PRArr);
+      sprintf(
+        trapMsg,
+        "Freeing block %p from array %p",
+        PRArr->Descriptors[i].PBase,
+        (void*)PRArr
+      );
       OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
       #endif /*DPCRTLMM_LOG*/
 
@@ -132,7 +186,10 @@ static void dpcrtlmm_int_Free(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRT
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int StartPos)
+static void Moveup(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int StartPos
+)
 {
   /* locals */
   unsigned int i; /* Loop control */
@@ -140,7 +197,7 @@ static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int St
   if ( PBlockArray->Count < 2) /* Only one or no items, can't do a moveup */
   {
     /* Do trap */
-    _Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, "Free()/Moveup: Can\'t move up one item or no items.\n");
+    Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, "Free()/Moveup: Can\'t move up one item or no items.\n");
     return;
   }
   if ( StartPos >= PBlockArray->Count ) /* StartPos out of range? */
@@ -148,12 +205,14 @@ static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int St
     /* Do trap */
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* Space for trap message */
 
-    sprintf(trapMsg, "Free()/Moveup: StartPos is not valid. StartPos=%u, 0x%p->Count=%u",
-                     StartPos,
-                     PBlockArray,
-                     PBlockArray->Count
+    sprintf(
+      trapMsg,
+      "Free()/Moveup: StartPos is not valid. StartPos=%u, 0x%p->Count=%u",
+      StartPos,
+      (void*)PBlockArray,
+      PBlockArray->Count
     );
-    _Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, trapMsg);
+    Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, trapMsg);
     return;
   }
 
@@ -168,14 +227,21 @@ static void Moveup(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int St
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int Amount)
+static void ShrinkBlockArray(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int Amount
+)
 {
   _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
   if (!Amount)
   {
     char logMsg[MAX_TRAP_STRING_LENGTH+1];
 
-    sprintf(logMsg, "Attempt to ShrinkBlockArray(0x%p) by nothing, ignored (internal DPCRTLMM error)", PBlockArray);
+    sprintf(
+      logMsg,
+      "Attempt to ShrinkBlockArray(0x%p) by nothing, ignored (internal DPCRTLMM error)",
+      (void*)PBlockArray
+    );
     OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
     return;
   }
@@ -183,23 +249,30 @@ static void ShrinkBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsig
   {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1];
 
-    sprintf(trapMsg, "ShrinkBlockArray(): 0x%p->Count=0U, can\'t shrink the array any more!", PBlockArray);
-    _Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, trapMsg);
+    sprintf(
+      trapMsg,
+      "ShrinkBlockArray(): 0x%p->Count=0U, can\'t shrink the array any more!",
+      (void*)PBlockArray
+    );
+    Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, trapMsg);
     return;
   }
   if (Amount > PBlockArray->Count) /* Shrink further than size?! */
   {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1];
-    sprintf(trapMsg, "ShrinkBlockArray(): Amount=%u, greater than original size in elements (0x%p->Count=%u)",
-            Amount,
-            PBlockArray,
-            PBlockArray->Count
+    sprintf(
+      trapMsg,
+      "ShrinkBlockArray(): Amount=%u, greater than original size in elements (0x%p->Count=%u)",
+      Amount,
+      (void*)PBlockArray,
+      PBlockArray->Count
     );
-    _Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, trapMsg);
+    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, trapMsg);
     return;
   }
 
-  if (!(PBlockArray->Count - Amount)) /* Reducing to zero? */
+  /* Reducing to zero? */
+  if ( !(PBlockArray->Count - Amount) )
   {
     DPCRTLMM_FREE(PBlockArray->Descriptors); /* Release entire descriptor array */
     PBlockArray->Descriptors = NULL; /* Mark as no allocation in entire array */

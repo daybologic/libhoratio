@@ -1,35 +1,54 @@
 /*
-    DPCRTLMM Memory Management Library example program (C++)
-    Copyright (C) 2000 David Duncan Ross Palmer, Daybo Logic.
+Daybo Logic C RTL Memory Manager
+Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+      
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      
+    * Neither the name of the Daybo Logic nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Contact me: Overlord@DayboLogic.co.uk
-Get updates: http://daybologic.com/Dev/dpcrtlmm
-My official site: http://daybologic.com/overlord
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 */
 
 
 /* This is my little test app for my DPCRTLMM library
    I use it to simmulate a caller to debug my library - C++ version */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+
+#ifdef DPCRTLMM_THREADS_PTH
+# ifdef HAVE_PTH_H
+#  include <pth.h>
+# endif /*HAVE_PTH_H*/
+#endif /*DPCRTLMM_THREADS_PTH*/
+
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
@@ -41,8 +60,8 @@ static void PrintStats(const PS_DPCRTLMM_STATS PStats);
 static void InitArrays(void);
 static void PrintVersion(void);
 static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg);
-static void* _nullarrptrs[32]; /* 32 * 32k = 1MB */
-static void* _arrptrs[64]; /* 64 * 16k = 1MB */
+static void* nullarrptrs[4];
+static void* arrptrs[16];
 
 #ifndef __NO_NAMESPACES__
   using namespace Overlord;
@@ -52,24 +71,31 @@ int main()
 {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
-  TDPCRTLMM_BlockArray blockDesc;
+  TDPCRTLMM_BlockArray blockDesc(false);
 
+#ifdef DPCRTLMM_THREADS_PTH
+  if ( !pth_init() ) {
+    puts("Can\'t initialise GNU Portable Threads\n");
+    return EXIT_FAILURE;
+  }
+#endif /*DPCRTLMM_THREADS_PTH*/
+
+  MemManager.Startup();
+  blockDesc.Init();
   InitArrays();
   MemManager.InstallTrapCallback(myTrapHandler, 1U); /* Wow, a hook for a change ;-), I just wanted the stats on trap */
   printf("DPCRTLMM TEST\n");
   printf("-------------\n\n");
   printf("starting library\n");
   PrintVersion();
-
-  printf("ATTENTION! ATTENTION! 2MB test + leaks!!!!\n\n");
   printf("NULL array test: ");
-  printf("Allocating 32 blocks of 32KB (1MB) - in NULL block array\n");
+  printf("Allocating blocks in NULL block array\n");
   printf("Block: ");
-  for ( i = 0U; i < sizeof(_nullarrptrs)/sizeof(_nullarrptrs[0]); i++ )
+  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
   {
     printf("#%d ", i);
-    _nullarrptrs[i] = MemManager.Calloc(32, 1024); /* Allocate block */
-    if (!_nullarrptrs[i])
+    nullarrptrs[i] = MemManager.Calloc(32, 8); /* Allocate block */
+    if (!nullarrptrs[i])
       printf("Failure");
   }
   printf("\n\n");
@@ -78,13 +104,13 @@ int main()
   MemManager.GetStats(&stats);
   PrintStats(&stats);
 
-  printf("Allocating the explictly allocated block array, 64 16KB blocks\n");
+  printf("Allocating blocks in explictly allocated block array\n");
   printf("Block ");
-  for ( i = 0U; i < sizeof(_arrptrs)/sizeof(_arrptrs[0]); i++ )
+  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
   {
     printf("#%d ", i);
-    _arrptrs[i] = blockDesc.Calloc(16, 1024); /* Allocate block */
-    if (!_arrptrs[i])
+    arrptrs[i] = blockDesc.Calloc(8, 128); /* Allocate block */
+    if (!arrptrs[i])
       printf("Failure");
   }
   printf("\n\n");
@@ -93,18 +119,11 @@ int main()
   MemManager.GetStats(&stats);
   PrintStats(&stats);
 
-  printf("I'm freeing everything, if a random number is even I will \"forget\" to\n");
-  printf("to free the first block in the dynamic array\n");
+  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
+    MemManager.Free(nullarrptrs[i]);
 
-  for ( i = 0U; i < sizeof(_nullarrptrs)/sizeof(_nullarrptrs[0]); i++ )
-    MemManager.Free(_nullarrptrs[i]);
-
-  srand((unsigned)time(NULL));
-  for ( i = 0U; i < sizeof(_arrptrs)/sizeof(_arrptrs[0]); i++ )
-  {
-    if ( i == 0U && !(rand()%2) ) i++; /* Skip a block */
-    blockDesc.Free(_arrptrs[i]);
-  }
+  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
+    blockDesc.Free(arrptrs[i]);
 
   printf("stop (wait for info dump if applicable!!)\n");
   MemManager.GetStats(&stats);
@@ -129,11 +148,11 @@ static void InitArrays()
 {
   size_t i;
 
-  for ( i = 0U; i < sizeof(_nullarrptrs)/sizeof(_nullarrptrs[0]); i++ )
-    _nullarrptrs[i] = NULL;
+  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
+    nullarrptrs[i] = NULL;
 
-  for ( i = 0U; i < sizeof(_arrptrs)/sizeof(_arrptrs[0]); i++ )
-    _arrptrs[i] = NULL;
+  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
+    arrptrs[i] = NULL;
 }
 /*-------------------------------------------------------------------------*/
 static void PrintVersion()
@@ -143,7 +162,6 @@ static void PrintVersion()
   printf("Gathering library version info...");
   dpcrtlmm_Ver(&ver);
   printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
-  if ((ver.Flags) & 1) printf("b"); /* BETA */
   printf("\n");
 }
 /*-------------------------------------------------------------------------*/
