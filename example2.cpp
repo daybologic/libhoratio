@@ -53,6 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
+#define USING_DPCRTLMM /* Needed for calloc() re-definition */
 #include "dpcrtlmm.h"
 #include "dpccap.h"
 
@@ -94,7 +95,7 @@ int main()
   for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
   {
     printf("#%d ", i);
-    nullarrptrs[i] = MemManager.Calloc(32, 8); /* Allocate block */
+    nullarrptrs[i] = calloc(32, 8); /* Allocate block */
     if (!nullarrptrs[i])
       printf("Failure");
   }
@@ -109,7 +110,7 @@ int main()
   for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
   {
     printf("#%d ", i);
-    arrptrs[i] = blockDesc.Calloc(8, 128); /* Allocate block */
+    arrptrs[i] = dpcrtlmm_block_Calloc(blockDesc, 8, 128); /* Allocate block */
     if (!arrptrs[i])
       printf("Failure");
   }

@@ -589,6 +589,46 @@ to ignore certain traps. */
 #define DPCRTLMM_TRAP_BASENONZERO          (0xF)  /* A base pointer was expected to be zero (not valid) at this time.  (more likely an internal error or user tampering of the descriptor details) */
 #define DPCRTLMM_TRAP_LOCKINGVIOLATION     (0x10) /* This block is locked and so the specified operation is illegal */
 
+/* New in 1.1.4, define USING_DPCRTLMM before including this header if
+you wish to make normal C runtime using code switch to DPCRTLMM code
+without changing all the calls.  In some custom distributions this was
+done with usedpcrtlmm.h or similar */
+
+#ifdef USING_DPCRTLMM
+#  ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
+#    error ("You must configure as --enable-null-array to use USING_DPCRTLMM")
+#  else
+#    ifdef __cplusplus
+#      define malloc(s)     MemManager.Alloc((s), __FILE__, __LINE__)
+#      define free(p)       MemManager.Free(p)
+#      define calloc(n, s)  MemManager.Calloc((n), (s), __FILE__, __LINE__)
+#      define realloc(p, s) MemManager.Realloc((p), (s))
+#    else
+#      define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
+#      define free(p)       dpcrtlmm_Free(NULL, (p))
+#      define calloc(n, s)  dpcrtlmm_Calloc(NULL, (n), (s))
+#      define realloc(p, s) dpcrtlmm_Realloc(NULL, (p), (s))
+#    endif /*__cplusplus*/
+#  endif
+#endif /*USING_DPCRTLMM*/
+
+/*
+  These macros are available to C++ and C users, and were added in able
+  to easily and correctly record the __FILE__/__LINE__ information
+  associated with the allocation.
+*/
+#ifdef __cplusplus
+#  define dpcrtlmm_block_Alloc(bd, s) (bd).Alloc(s, __FILE__, __LINE__)
+#  define dpcrtlmm_block_Free(bd, p) (bd).Free(p)
+#  define dpcrtlmm_block_Calloc(bd, n, s) (bd).Calloc((n), (s), __FILE__, __LINE__)
+#  define dpcrtlmm_block_Realloc(bd, p, s) (bd).Realloc((p), (s))
+#else
+#  define dpcrtlmm_block_Alloc(bd, s) dpcrtlmm_Alloc((bd), (s))
+#  define dpcrtlmm_block_Free(bd, p) dpcrtlmm_Free((bd), (p))
+#  define dpcrtlmm_block_Calloc(bd, n, s) dpcrtlmm_Calloc((bd), (n), (s))
+#  define dpcrtlmm_block_Realloc(bd, p, s) dpcrtlmm_Realloc((bd), (p), (s))
+#endif /*__cplusplus*/
+
 /* Hacks for laziness in typing, to use these rather than the long names define
 DPCRTLMM_LAZYHACK just before including dpcrtlmm.h in the user source, these
 names are not used internally by the library and are intended solely for the
@@ -629,6 +669,10 @@ them it won't be hard to write your own hack table. */
 #  define dpcdump dpcrtlmm_Dump
 #  define dpcver dpcrtlmm_Ver
 #  define dpcisdefaultblockarray dpcrtlmm_IsDefaultBlockArray
+#  define dpcblockalloc dpcrtlmm_block_Alloc
+#  define dpcblockfree dpcrtlmm_block_Free
+#  define dpcblockcalloc dpcrtlmm_block_Calloc
+#  define dpcblockrealloc dpcrtlmm_block_Realloc
 
   /* Shorter structure names */
 #  define S_DPC_BLOCKDESCRIPTOR S_DPCRTLMM_BLOCKDESCRIPTOR
@@ -646,22 +690,6 @@ them it won't be hard to write your own hack table. */
 #  define S_DPC_VERSION S_DPCRTLMM_VERSION
 #  define PS_DPC_VERSION PS_DPCRTLMM_VERSION
 #endif /*DPCRTLMM_LAZYHACK*/
-
-/* New in 1.1.4, define USING_DPCRTLMM before including this header if
-you wish to make normal C runtime using code switch to DPCRTLMM code
-without changing all the calls.  In some custom distributions this was
-done with usedpcrtlmm.h or similar */
-
-#ifdef USING_DPCRTLMM
-#  ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
-#    error ("You must configure as --enable-null-array to use USING_DPCRTLMM")
-#  else
-#    define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
-#    define free(p)       dpcrtlmm_Free(NULL, (p))
-#    define calloc(n, s)  dpcrtlmm_Calloc(NULL, (n), (s))
-#    define realloc(p, s) dpcrtlmm_Realloc(NULL, (p), (s))
-#  endif
-#endif /*USING_DPCRTLMM*/
 
 #ifdef __cplusplus
 } /* extern "C" */
