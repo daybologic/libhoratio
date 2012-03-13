@@ -258,7 +258,7 @@ flags (bit 0) is enough to be able to monitor the locking status. */
 */
 
 #define DPCRTLMM_HOOK_ALL ((unsigned short)(~0U))
-/* This special valud can be sent to the trap installation / removal
+/* This special value can be sent to the trap installation / removal
 to install the trap handler into all hook types, the program could then
 have one handler which looks at HookType to determine the action, this
 minimizes function exit and entry code it the program installs all hooks,
