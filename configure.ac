@@ -33,8 +33,8 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(dpcrtlmm,1.2.0,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
-AM_INIT_AUTOMAKE(dpcrtlmm,1.2.0,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
+AC_INIT(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
+AM_INIT_AUTOMAKE(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
 AC_CONFIG_SRCDIR([dpcrtlmm.c])
 AM_CONFIG_HEADER([config.h])
 
