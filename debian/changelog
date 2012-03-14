@@ -1,3 +1,10 @@
+libdpcrtlmm (1.2.1) stable; urgency=low
+
+  * ac3ecdae1f53: Just fix a typo: valud -> value
+  * 527d382177c4: Add debian packaging, rebuild configure etc
+
+ -- David Palmer <palmer@overchat.org>  Tue, 13 Mar 2012 16:51:16 +0000
+
 libdpcrtlmm (1.2.0) stable; urgency=low
 
   * Applied Debian packaging to package which was already released at the time.
