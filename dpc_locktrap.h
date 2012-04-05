@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
   Internal header for a trap I prepared earlier for when a block locking
   violation ocours.
-  Date of creation: 23rd Feb 2000 - David Duncan Ross Palmer
+  Created 23rd Feb 2000
 */
 
 #ifndef INC_DPCRTLMM_LOCKTRAP_H

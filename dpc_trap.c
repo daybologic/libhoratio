@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
   Library: DPCRTLMM
   Created: Feb 2000
-  Last modified: 23rd February 2006
 */
 
 #define DPCRTLMM_SOURCE

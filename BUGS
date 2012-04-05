@@ -1,9 +1,11 @@
 This file is not a history of bugs but a list line by line of known
-issues in this release.  If you wish to comment on any of them or have
-patches to fix any of them please email Overlord@DayboLogic.co.uk
-(maintainer).
+issues in this release.
 
 ----------------------------------------------------------------------
-File/line reports in C++ report owner as dpccap.cpp not the true owner.
-Truely portable --maxport --enable-threads mutlithreaded builds on UNIX allow callbacks to deadlock the thread.  I am seeing this as just an unfortunate thing we have to accept and use the NP POSIX extensions for recursive mutexes if possible.  Unless you have a better idea?
-Library can lock the big lock after it destroyed it during shutdown.   <= I don't know if this still applies
+Issue #1: File/line reports in C++ report owner as dpccap.cpp not the true owner.
+
+Issue #2: Truely portable --maxport --enable-threads mutlithreaded builds on UNIX allow callbacks to deadlock
+the thread.  I am seeing this as just an unfortunate thing we have to accept and use the NP POSIX extensions
+for recursive mutexes if possible.  Unless you have a better idea?
+
+Issue #3: Library can lock the big lock after it is destroyed it during shutdown.
