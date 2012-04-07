@@ -103,7 +103,7 @@ static void TrapOnBadBlockArray(
 )
 {
   /* locals */
-  const char* cTrapMsg0 = ": The array base ptr 0x%p was not found in the internal safety list";
+  const char* cTrapMsg0 = "%s: The array base ptr 0x%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
 
   if ( !dpcrtlmm_int_IsBadArrayPtr(PBlockArray) )
@@ -112,14 +112,11 @@ static void TrapOnBadBlockArray(
   /* The array base is bad */
   dynMsg = (char*)malloc( ((FuncName) ? (strlen(FuncName)) : (0)) + strlen(cTrapMsg0) + 32 /* Enough space for address and NULL (and more) */ );
   if (dynMsg) {
-    if (FuncName)
-      strcpy(dynMsg, FuncName);
-
     sprintf(
-      (FuncName) ? (dynMsg + strlen(FuncName)) : (dynMsg),
-      "%s: %lX",
+      dynMsg,
       cTrapMsg0,
-      (unsigned long int)PBlockArray
+      (FuncName) ? (FuncName) : ("UNKNOWN"),
+      PBlockArray
     );
 
     Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, dynMsg);
