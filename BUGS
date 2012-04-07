@@ -9,3 +9,11 @@ the thread.  I am seeing this as just an unfortunate thing we have to accept and
 for recursive mutexes if possible.  Unless you have a better idea?
 
 Issue #3: Library can lock the big lock after it is destroyed it during shutdown.
+
+Issue #4: It is not possible to find out which block array we were talking about from a debug report.
+Despite the following message being printed to stderr;
+DPCRTLMM: "FATAL ERROR! dpc_trap.c, L111: Alloc(): The array base ptr 0x0x2aead87ebe98 was not found in the internal safety list: 11E17E0"
+The following message appears in DPCRTLMM.LOG:
+DPCRTLMM: "FATAL ERROR! dpc_trap.c, L111: Alloc(): The array base ptr 0x%p was not found in the internal safety list: 11E17E0"
+Which means it is not possible to find out what block array we were talking about from a debug report.
+Additionally, the 0x is duplicated, although that is library dependent.
