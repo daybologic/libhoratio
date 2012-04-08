@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,10 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 /*
   Module for handling memory block lock flags,
-  written by Overlord David Duncan Ross Palmer
-  Copyright (C)2000-2006 Daybo Logic, all rights reserved.
-  Creation: 22nd Feb 2000
-  Last modified: 23rd Feb 2006
+  Created 22nd Feb 2000
 */
 
 #define DPCRTLMM_SOURCE

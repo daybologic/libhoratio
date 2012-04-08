@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2006, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -33,10 +33,10 @@ POSSIBILITY OF SUCH DAMAGE.
 // DPCRTLMM 1.2 compatible encapsulation object for C++
 // Add this file to your C++ project
 // You can have this particular module it's free
-// Last modification: Dec 2000
 // I'm not going to use new style C++ casts, I want this module to port
 // to compilers pre-ANSI/ISO C++
-// If you have any warnings mail them to me at Overlord@DayboLogic.co.uk
+// If you have any warnings, please raise an issue via the bitbucket.org
+// web-site.
 // but please make sure it's the full compiler output with compiler name
 // and version.
 
