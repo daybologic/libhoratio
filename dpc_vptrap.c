@@ -103,7 +103,7 @@ static void TrapOnBadBlockArray(
 )
 {
   /* locals */
-  const char* cTrapMsg0 = "%s: The array base ptr 0x%p was not found in the internal safety list";
+  const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
 
   if ( !dpcrtlmm_int_IsBadArrayPtr(PBlockArray) )
@@ -116,7 +116,7 @@ static void TrapOnBadBlockArray(
       dynMsg,
       cTrapMsg0,
       (FuncName) ? (FuncName) : ("UNKNOWN"),
-      PBlockArray
+      DPCRTLMM_FMTPTRPFX, PBlockArray
     );
 
     Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, dynMsg);
@@ -146,10 +146,10 @@ static void TrapOnBadBlockPtr(
 
     sprintf(
       trapMsg,
-      "%s: The block pointer 0x%p is not valid for array 0x%p, cannot test block pointer validity.",
+      "%s: The block pointer %s%p is not valid for array %s%p, cannot test block pointer validity.",
       PusedFuncName,
-      BlockPtr,
-      (void*)PBlockArray
+      DPCRTLMM_FMTPTRPFX, BlockPtr,
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
 
     Trap(DPCRTLMM_TRAP_BAD_BLOCK, trapMsg);
@@ -180,10 +180,10 @@ static void TrapOnBadBlockPtr(
 
     sprintf(
       trapMsg,
-      "%s: Bad block pointer: 0x%p for array 0x%p",
+      "%s: Bad block pointer: %s%p for array %s%p",
       PusedFuncName,
-      BlockPtr,
-      (void *)PBlockArray
+      DPCRTLMM_FMTPTRPFX, BlockPtr,
+      DPCRTLMM_FMTPTRPFX, (void *)PBlockArray
     );
     Trap(DPCRTLMM_TRAP_BAD_BLOCK, trapMsg); /* Fire trap */
     if ( pusedDynamic )

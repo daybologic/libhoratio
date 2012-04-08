@@ -71,10 +71,10 @@ unsigned int dpcrtlmm_int_LockTrap(
 
     sprintf(
       trapMsg,
-      "%s: (locking violation) Block 0x%p in array 0x%p, flag dump: %X",
+      "%s: (locking violation) Block %s%p in array %s%p, flag dump: %X",
       FuncName,
-      (void*)PBlockArray,
-      BlockPtr,
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
+      DPCRTLMM_FMTPTRPFX, BlockPtr,
       (unsigned short)dpcrtlmm_int_ModifyDescriptorFlags(
         PBlockArray,
         BlockPtr,

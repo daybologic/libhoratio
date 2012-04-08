@@ -189,8 +189,8 @@ static void TrapUnFreedArrays()
       /* Make a log message that an array was not destroyed */
       sprintf(
         trapMsg,
-        "Shutdown(): The array 0x%p was not freed, any blocks unfreed in the array will be listed",
-        (void*)(_safetyList[sli])
+        "Shutdown(): The array %s%p was not freed, any blocks unfreed in the array will be listed",
+        DPCRTLMM_FMTPTRPFX, (void*)(_safetyList[sli])
       );
       WARNING(trapMsg);
       if (_safetyList[sli]->Count) /* Are there any unfreed blocks in the array? */
@@ -250,9 +250,9 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
       {
         sprintf(
           trapMsg,
-          "Block 0x%p in descriptor array 0x%p was not freed, size: %u bytes",
-          PArr->Descriptors[0].PBase,
-          (void*)PArr,
+          "Block %s%p in descriptor array %s%p was not freed, size: %u bytes",
+          DPCRTLMM_FMTPTRPFX, PArr->Descriptors[0].PBase,
+          DPCRTLMM_FMTPTRPFX, (void*)PArr,
           (unsigned int)PArr->Descriptors[0].Size
         );
         MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
@@ -262,8 +262,8 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
       /* Array leakage summary */
       sprintf(
         trapMsg,
-        "Array leakage summary: array 0x%p contained %u unfreed blocks, a total of %lu bytes",
-        (void*)PArr,
+        "Array leakage summary: array %s%p contained %u unfreed blocks, a total of %lu bytes",
+        DPCRTLMM_FMTPTRPFX, (void*)PArr,
         unfreedBlockCount,
         totalLeakage
       );
