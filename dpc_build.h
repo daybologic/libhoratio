@@ -78,6 +78,13 @@ by the config program and included in this file.
 
 #define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) - NOT USER CONFIGURABLE*/
 
+/* Handling for C libraries which prefix %p addresses with 0x, when others don't */
+#ifdef HAVE_FORMAT_POINTER_PREFIX
+# define DPCRTLMM_FMTPTRPFX ""
+#else
+# define DPCRTLMM_FMTPTRPFX "0x"
+#endif /*HAVE_FORMAT_POINTER_PREFIX*/
+
 /* To allow explicit far data pointers which are
 non-ANSI, configure with configure --enable-fardata */
 
