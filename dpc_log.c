@@ -55,6 +55,7 @@ causes a warning on your compiler, I aplogise!
 
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
+#include <sqlite3.h> /* For SQLite logging support */
 
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
@@ -63,6 +64,7 @@ causes a warning on your compiler, I aplogise!
 #include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library header */
+#include "dpc_trap.h" /* Trap() */
 #include "dpc_log.h"
 /*-------------------------------------------------------------------------*/
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
@@ -71,6 +73,23 @@ causes a warning on your compiler, I aplogise!
             (sourcestring), \
             (sizeof((buff))/sizeof((buff)[0])-1) \
             )
+/*-------------------------------------------------------------------------*/
+static sqlite3 *dpcrtlmm_int_sqlite3_open(void);
+/*-------------------------------------------------------------------------*/
+static sqlite3 *DBHandle = NULL;
+/*-------------------------------------------------------------------------*/
+static sqlite3 *dpcrtlmm_int_sqlite3_open()
+{
+  sqlite3 *dbh;
+  char *errMsgPtr = NULL;
+  int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
+  if ( rc ) { // Fail?
+    errMsgPtr = sqlite3_errmsg(dbh);
+    Trap(0, errMsgPtr);
+    sqlite3_close(dbh);
+  }
+  return dbh;
+}
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_Log(
   const char *File,
@@ -132,6 +151,8 @@ void dpcrtlmm_int_Log(
 
       if ( Severity > DPCRTLMM_LOG_MESSAGE ) /* Anything more severe than a warning */
         fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
+
+      if ( !DBHandle ) DBHandle = dpcrtlmm_int_sqlite3_open();
     }
   }
   return;
