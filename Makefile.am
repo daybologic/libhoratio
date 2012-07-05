@@ -41,8 +41,9 @@ AM_CFLAGS=
 
 TESTS = example1 example2 example3
 check_PROGRAMS = $(TESTS)
-examples_LDADD = -ldpcrtlmm
+examples_LDADD = -ldpcrtlmm -lsqlite3
 
+AM_LDFLAGS= -lsqlite3
 if DPCRTLMM_THREADS_PTH
 AM_LDFLAGS= -lpth
 endif
