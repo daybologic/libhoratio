@@ -91,6 +91,18 @@ static sqlite3 *dpcrtlmm_int_sqlite3_open()
   return dbh;
 }
 /*-------------------------------------------------------------------------*/
+static dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
+{
+  int rc;
+  sqlite3_stmt *stmt;
+  const char *q = "INSERT INTO messages (msg) VALUES('FIXME')";
+  if ( !DBHandle ) return;
+
+  rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
+  printf("Got database message %s\n", Msg);
+  // FIXME
+}
+/*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_Log(
   const char *File,
   const unsigned int Line,
@@ -153,6 +165,7 @@ void dpcrtlmm_int_Log(
         fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
 
       if ( !DBHandle ) DBHandle = dpcrtlmm_int_sqlite3_open();
+      dpcrtlmm_int_sqlite3_logmsg(formatMsg);
     }
   }
   return;
