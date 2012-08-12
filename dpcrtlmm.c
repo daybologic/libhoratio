@@ -127,7 +127,7 @@ void dpcrtlmm_Startup()
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     Trap(DPCRTLMM_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
   }
-  MESSAGE(NULL, 0, "Library started");
+  MESSAGE(DPCRTLMM_LOG_CODE_STARTUP, NULL, 0, "Library started");
   return;
 }
 /*-------------------------------------------------------------------------*/
@@ -154,7 +154,7 @@ void dpcrtlmm_Shutdown()
       dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     TrapUnFreedArrays(); /* Output log information if memory has not been released */
-    MESSAGE(NULL, 0, "Library shutdown");
+    MESSAGE(DPCRTLMM_LOG_CODE_SHUTDOWN, NULL, 0, "Library shutdown");
   }
   else /* This has been done before! */
   {
@@ -192,7 +192,7 @@ static void TrapUnFreedArrays()
         "Shutdown(): The array 0x%p was not freed, any blocks unfreed in the array will be listed",
         (void*)(_safetyList[sli])
       );
-      WARNING(trapMsg);
+      WARNING(DPCRTLMM_LOG_CODE_UNFREED_ARRAY, trapMsg);
       if (_safetyList[sli]->Count) /* Are there any unfreed blocks in the array? */
       {
         totalBytesLeaked += TrapUnFreedBlocks(_safetyList[sli]);
@@ -214,7 +214,7 @@ static void TrapUnFreedArrays()
   if (numArraysUnfreed)
   {
     sprintf(trapMsg, "%lu arrays were not freed", numArraysUnfreed);
-    WARNING(trapMsg);
+    WARNING(DPCRTLMM_LOG_CODE_UNFREED_ARRAY, trapMsg);
   }
   /* Entire list was processed, if there were any leaks report general message */
   if (totalBytesLeaked) /* So, were there any unfreed arrays or blocks? */
@@ -255,7 +255,7 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
           (void*)PArr,
           (unsigned int)PArr->Descriptors[0].Size
         );
-        MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
+        MESSAGE(DPCRTLMM_LOG_CODE_UNFREED_BLOCK, PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
         totalLeakage += PArr->Descriptors[0].Size; /* Add size of this block to the total leakage value */
         dpcrtlmm_Free(PArr, PArr->Descriptors[0].PBase); /* Automatically collect the garbage */
       }
@@ -267,7 +267,7 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
         unfreedBlockCount,
         totalLeakage
       );
-      WARNING(trapMsg);
+      WARNING(DPCRTLMM_LOG_CODE_UNFREED_BLOCK, trapMsg);
     }
   } /*(PArr)*/
   return totalLeakage; /* Caller gets to know this so they can add it to a total */
