@@ -86,6 +86,11 @@ static sqlite3 *DBHandle = NULL;
 /*-------------------------------------------------------------------------*/
 static sqlite3 *dpcrtlmm_int_sqlite3_open()
 {
+  /* TODO:
+  This scema must be created
+  CREATE TABLE debug_log ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ts DATETIME NOT NULL, file CHAR(32) NOT NULL, line INTEGER NOT NULL, severity INTEGER NOT NULL default 0, msg VARCHAR(255) NOT NULL);
+  */
+
   sqlite3 *dbh;
   char *errMsgPtr = NULL;
   int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
