@@ -75,7 +75,12 @@ causes a warning on your compiler, I aplogise!
             )
 /*-------------------------------------------------------------------------*/
 static sqlite3 *dpcrtlmm_int_sqlite3_open(void);
-static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg);
+static void dpcrtlmm_int_sqlite3_logmsg(
+  const char *,
+  const unsigned int,
+  const unsigned short,
+  const char *
+);
 /*-------------------------------------------------------------------------*/
 static sqlite3 *DBHandle = NULL;
 /*-------------------------------------------------------------------------*/
@@ -92,11 +97,19 @@ static sqlite3 *dpcrtlmm_int_sqlite3_open()
   return dbh;
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
-{
+static void dpcrtlmm_int_sqlite3_logmsg(
+  const char *File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Msg
+) {
   int rc;
   sqlite3_stmt *stmt;
-  const char *q = "INSERT INTO debug_log (ts, msg) VALUES(DATETIME('NOW', 'localtime'), ?)";
+  const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+    "VALUES(\n"
+    "  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+    ")";
+
   if ( !DBHandle ) return;
 
   fprintf(stderr, "Got database message %s\n", Msg);
@@ -106,7 +119,10 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
     fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
     return;
   }
-  rc = sqlite3_bind_text(stmt, 1, Msg, -1, SQLITE_STATIC);
+  rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
+  rc = sqlite3_bind_int(stmt, 2, Line);
+  rc = sqlite3_bind_int(stmt, 3, Severity);
+  rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
   if ( rc != SQLITE_OK )
     fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
   rc = sqlite3_step(stmt);
@@ -179,7 +195,7 @@ void dpcrtlmm_int_Log(
         fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
 
       if ( !DBHandle ) DBHandle = dpcrtlmm_int_sqlite3_open();
-      dpcrtlmm_int_sqlite3_logmsg(formatMsg);
+      dpcrtlmm_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
     }
   }
   return;
