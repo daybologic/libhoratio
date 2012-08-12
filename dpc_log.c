@@ -96,7 +96,7 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
 {
   int rc;
   sqlite3_stmt *stmt;
-  const char *q = "INSERT INTO debug_log (msg) VALUES(?)";
+  const char *q = "INSERT INTO debug_log (ts, msg) VALUES(DATETIME('NOW', 'localtime'), ?)";
   if ( !DBHandle ) return;
 
   fprintf(stderr, "Got database message %s\n", Msg);
