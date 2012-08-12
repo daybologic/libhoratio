@@ -96,12 +96,22 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
 {
   int rc;
   sqlite3_stmt *stmt;
-  const char *q = "INSERT INTO messages (msg) VALUES('FIXME')";
+  const char *q = "INSERT INTO debug_log (msg) VALUES('FIXME')";
   if ( !DBHandle ) return;
 
+  fprintf(stderr, "Got database message %s\n", Msg);
+  fprintf(stderr, "Executing query: %s\n", q);
   rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
-  printf("Got database message %s\n", Msg);
-  // FIXME
+  if ( rc != SQLITE_OK ) {
+    fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+    return;
+  }
+  rc = sqlite3_step(stmt);
+  if ( rc != SQLITE_OK )
+    fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+  rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
+  if ( rc != SQLITE_OK )
+    fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_Log(
