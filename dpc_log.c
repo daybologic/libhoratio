@@ -96,7 +96,7 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
 {
   int rc;
   sqlite3_stmt *stmt;
-  const char *q = "INSERT INTO debug_log (msg) VALUES('FIXME')";
+  const char *q = "INSERT INTO debug_log (msg) VALUES(?)";
   if ( !DBHandle ) return;
 
   fprintf(stderr, "Got database message %s\n", Msg);
@@ -106,6 +106,9 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
     fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
     return;
   }
+  rc = sqlite3_bind_text(stmt, 1, Msg, -1, SQLITE_STATIC);
+  if ( rc != SQLITE_DONE )
+    fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
   rc = sqlite3_step(stmt);
   if ( rc != SQLITE_DONE )
     fprintf(stderr, "Error %u from sqlite3_step\n", rc);
