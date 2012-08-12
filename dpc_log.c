@@ -107,7 +107,7 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
     return;
   }
   rc = sqlite3_step(stmt);
-  if ( rc != SQLITE_OK )
+  if ( rc != SQLITE_DONE )
     fprintf(stderr, "Error %u from sqlite3_step\n", rc);
   rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
   if ( rc != SQLITE_OK )
