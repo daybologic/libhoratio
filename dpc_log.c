@@ -75,6 +75,7 @@ causes a warning on your compiler, I aplogise!
             )
 /*-------------------------------------------------------------------------*/
 static sqlite3 *dpcrtlmm_int_sqlite3_open(void);
+static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg);
 /*-------------------------------------------------------------------------*/
 static sqlite3 *DBHandle = NULL;
 /*-------------------------------------------------------------------------*/
@@ -91,7 +92,7 @@ static sqlite3 *dpcrtlmm_int_sqlite3_open()
   return dbh;
 }
 /*-------------------------------------------------------------------------*/
-static dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
+static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
 {
   int rc;
   sqlite3_stmt *stmt;
