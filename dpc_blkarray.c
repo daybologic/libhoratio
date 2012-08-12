@@ -139,7 +139,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   if (!Parray) /* Failed to alloc */
   {
     /* Memory outages while in memory manager mode must be warned about! */
-    WARNING("CreateBlockArray(): Couldn\'t allocate the new block array!");
+    WARNING(DPCRTLMM_LOG_CODE_ALLOC_ARRAY_FAIL, "CreateBlockArray(): Couldn\'t allocate the new block array!");
     #ifdef DPCRTLMM_DEBUGHOOKS
     /* PRelArr is nothing, we couldn't allocate one :( */
     /* PRelDesc is nothing, there is no related descriptor */
@@ -158,7 +158,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   if ( !SafetyList_AddBase(Parray) ) /* Add to safety list */
   {
     /* Failed to add to the list?!  Memory outages while in memory manager must be warned about */
-    WARNING("CreateBlockArray(): The array base address could not be added to the safety list");
+    WARNING(DPCRTLMM_LOG_CODE_SL_ADD_FAIL, "CreateBlockArray(): The array base address could not be added to the safety list");
     DPCRTLMM_FREE(Parray); /* Free the array again */
     Parray = NULL; /* So caller sees there's nothing allocated */
   }
@@ -166,7 +166,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   #ifdef DPCRTLMM_LOG
   /* Safe, log progress */
   sprintf(logMsg, "CreateBlockArray() returns base 0x%p", (void*)Parray);
-  MESSAGE(__FILE__, __LINE__, logMsg);
+  MESSAGE(DPCRTLMM_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
   #endif /*DPCRTLMM_LOG*/
 
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -238,7 +238,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
           "DestroyBlockArray(): The array at base 0x%p was destroyed",
           (void*)PBlockArray
         ); /* Prepare log message */
-        MESSAGE(__FILE__, __LINE__, trapStr);
+        MESSAGE(DPCRTLMM_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
         #endif /*DPCRTLMM_LOG*/
 
         #ifdef DPCRTLMM_DEBUGHOOKS

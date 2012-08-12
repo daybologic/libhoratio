@@ -65,6 +65,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Internal functions (local) */
 
 static void OurLog(
+  const unsigned short Code,
   const char * File,
   const unsigned int Line,
   const unsigned short Severity,
@@ -93,11 +94,11 @@ static unsigned int GrowBlockArray(
 #endif /*OURLOG_POS*/
 
 /* Shortcut for typecast */
-#define OURLOG(f, l, sev, msg) \
-  OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG(lcode, f, l, sev, msg) \
+  OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
 
-#define OURLOG_POS(sev, msg) \
-  OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG_POS(lcode, sev, msg) \
+  OURLOG((lcode), __FILE__, __LINE__, (sev), (msg))
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
@@ -139,7 +140,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
     (unsigned int)NewBlockSize,
     (void*)PBlockArray
   );
-  OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
+  OURLOG(DPCRTLMM_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
   genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
   if (!genBlockPtr) /* Out of memory? */
@@ -151,7 +152,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
       (unsigned int)NewBlockSize,
       (void*)PBlockArray
     );
-    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
+    OURLOG(DPCRTLMM_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
     return NULL; /* No pointer generated */
   }
 
@@ -167,7 +168,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
       (void*)PBlockArray
     );
     /* This could be quite critical, if the memory manager is running our of space */
-    OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
+    OURLOG_POS(DPCRTLMM_LOG_CODE_ENLARGE_ARRAY_FAIL, DPCRTLMM_LOG_WARNING, logMsg);
     return NULL; /* Give up */
   }
 
@@ -223,7 +224,7 @@ static unsigned int GrowBlockArray(
 
   if (!GrowByElems) /* Want to grow by nothing? */
   {
-    OURLOG_POS(DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
+    OURLOG_POS(DPCRTLMM_LOG_CODE_ENLARGE_ARRAY_ZERO, DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
     return 1U; /* Success, already this size, it's great when there's nothing to do isn't it, programmer's are lazy */
   }
 
@@ -248,6 +249,7 @@ static unsigned int GrowBlockArray(
 }
 /*-------------------------------------------------------------------------*/
 static void OurLog(
+  const unsigned short Code,
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
@@ -270,7 +272,7 @@ static void OurLog(
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(Code, File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }
