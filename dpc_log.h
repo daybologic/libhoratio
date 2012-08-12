@@ -43,6 +43,20 @@ extern "C" {
 /* 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
 messages, warnings and errors */
 
+/* Specific log codes */
+#define DPCRTLMM_LOG_CODE_STARTUP (1)
+#define DPCRTLMM_LOG_CODE_SHUTDOWN (2)
+#define DPCRTLMM_LOG_CODE_UNFREED_ARRAY (3)
+#define DPCRTLMM_LOG_CODE_UNFREED_BLOCK (4)
+#define DPCRTLMM_LOG_CODE_ALLOC_BLOCK_REQ (5)
+#define DPCRTLMM_LOG_CODE_ALLOC_BLOCK_FAIL (6)
+#define DPCRTLMM_LOG_CODE_ENLARGE_ARRAY_FAIL (7)
+#define DPCRTLMM_LOG_CODE_ENLARGE_ARRAY_ZERO (8)
+#define DPCRTLMM_LOG_CODE_ALLOC_ARRAY_FAIL (9)
+#define DPCRTLMM_LOG_CODE_SL_ADD_FAIL (10)
+#define DPCRTLMM_LOG_CODE_ALLOC_ARRAY_INFO (11)
+#define DPCRTLMM_LOG_CODE_DESTROY_ARRAY (12)
+
 /* Types of logging messages */
 #define DPCRTLMM_LOG_MESSAGE (0U) /* Only put in log */
 #define DPCRTLMM_LOG_WARNING (1U) /* stderr and log */
@@ -56,6 +70,7 @@ messages, warnings and errors */
   Write the message to the log (or do nothing if the log macro is undefined
 */
 void dpcrtlmm_int_Log(
+  const unsigned short Code,
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
@@ -64,13 +79,13 @@ void dpcrtlmm_int_Log(
 
 /* To make my life easier... but MESSAGE is only defined for logging builds */
 #ifdef DPCRTLMM_LOG
-#  define MESSAGE(sfn, sfl, msg) dpcrtlmm_int_Log((sfn), (sfl), (const unsigned short)DPCRTLMM_LOG_MESSAGE, (msg))
+#  define MESSAGE(lcode, sfn, sfl, msg) dpcrtlmm_int_Log((lcode), (sfn), (sfl), (const unsigned short)DPCRTLMM_LOG_MESSAGE, (msg))
 #else /* Non logging build */
-#  define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
+#  define MESSAGE(lcode, sfn, sfl, msg) /* Do nothing with it */
 #endif /*DPCRTLMM_LOG*/
 
-#define WARNING(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_WARNING, (msg))
-#define ERROR(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_ERROR, (msg))
+#define WARNING(lcode, msg) dpcrtlmm_int_Log((lcode), (__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_WARNING, (msg))
+#define ERROR(lcode, msg) dpcrtlmm_int_Log((lcode), (__FILE__), (__LINE__), (const unsigned short)DPCRTLMM_LOG_ERROR, (msg))
 
 #ifdef __cplusplus
 } /* extern "C" */
