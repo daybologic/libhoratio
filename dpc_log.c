@@ -107,7 +107,7 @@ static void dpcrtlmm_int_sqlite3_logmsg(const char *Msg)
     return;
   }
   rc = sqlite3_bind_text(stmt, 1, Msg, -1, SQLITE_STATIC);
-  if ( rc != SQLITE_DONE )
+  if ( rc != SQLITE_OK )
     fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
   rc = sqlite3_step(stmt);
   if ( rc != SQLITE_DONE )
