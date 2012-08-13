@@ -73,6 +73,7 @@ causes a warning on your compiler, I aplogise!
             )
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_Log(
+  const unsigned short Code,
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
