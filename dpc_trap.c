@@ -107,7 +107,8 @@ void dpcrtlmm_int_Trap(
   char* trapsCopy;
   const char preFix[] = "DPCRTLMM_UNHANDLED_TRAP: ";
 
-  ERROR(Message); /* Pass on to the logger automatically */
+  /* FIXME: Trap codes and log error codes overlap; this should be fixed */
+  ERROR(Id, Message); /* Pass on to the logger automatically */
   if ( !dpcrtlmm__EnableTraps ) return; /* Don't execute traps if traps have been switched off */
 
   /* The message is prefixed with "DPCRTLMM (Trap): " by copying it */
