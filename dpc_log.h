@@ -43,7 +43,7 @@ extern "C" {
 /* 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
 messages, warnings and errors */
 
-/* Specific log codes */
+/* Specific log codes: These are all draft and subject to change */
 #define DPCRTLMM_LOG_CODE_STARTUP (1)
 #define DPCRTLMM_LOG_CODE_SHUTDOWN (2)
 #define DPCRTLMM_LOG_CODE_UNFREED_ARRAY (3)
