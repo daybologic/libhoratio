@@ -173,7 +173,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
       (AsHook) ? ("hook") : ("handler"),
       (unsigned long int)NewTrapCallback
     );
-    MESSAGE(NULL, 0, logStr);
+    MESSAGE(DPCRTLMM_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
     #endif /*DPCRTLMM_LOG*/
 
     #ifdef DPCRTLMM_DEBUGHOOKS
@@ -213,7 +213,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(
 
     /* Log the removal */
     sprintf(logStr, "RemoveTrapCallback(): %s removed.", (_userTrapCallbackIsHook) ? ("Hook") : ("Handler"));
-    MESSAGE(NULL, 0, logStr);
+    MESSAGE(DPCRTLMM_LOG_CODE_REMOVE_TRAP, NULL, 0, logStr);
 
     #ifdef DPCRTLMM_DEBUGHOOKS
     debugHookInfo.Success = 1U;

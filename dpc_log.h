@@ -64,6 +64,8 @@ messages, warnings and errors */
 #define DPCRTLMM_LOG_CODE_REDUCE_ARRAY_ZERO (18)
 #define DPCRTLMM_LOG_CODE_REALLOC_NP_1 (19)
 #define DPCRTLMM_LOG_CODE_REALLOC_NP_2 (20)
+#define DPCRTLMM_LOG_CODE_INSTALL_TRAP (21)
+#define DPCRTLMM_LOG_CODE_REMOVE_TRAP (22)
 
 /* Types of logging messages */
 #define DPCRTLMM_LOG_MESSAGE (0U) /* Only put in log */
