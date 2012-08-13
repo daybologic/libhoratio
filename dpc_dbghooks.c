@@ -182,7 +182,7 @@ void dpcrtlmm_int_CallDebugHook(
 
   if (BadHookType(HookType)) /* Bad hook type (out of range in matrix) */
   {
-    ERROR("CallDebugHook: Internal library error, HookType out of range!");
+    ERROR(DPCRTLMM_LOG_CODE_HOOK_RANGE, "CallDebugHook: Internal library error, HookType out of range!");
     return;
   }
 
