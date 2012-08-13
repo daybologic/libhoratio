@@ -63,10 +63,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(f, l, sev, msg) \
-  OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-#define OURLOG_POS(sev, msg) \
-  OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG(lcode, f, l, sev, msg) \
+  OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG_POS(lcode, sev, msg) \
+  OURLOG((lcode), __FILE__, __LINE__, (sev), (msg))
 
 /* Function under the locked version */
 static void dpcrtlmm_int_Free(
@@ -93,6 +93,7 @@ static void ShrinkBlockArray(
   const unsigned int Amount
 );
 static void OurLog(
+  const unsigned short Code,
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
@@ -153,7 +154,7 @@ static void dpcrtlmm_int_Free(
         PRArr->Descriptors[i].PBase,
         (void*)PRArr
       );
-      OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
+      OURLOG(DPCRTLMM_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
       #endif /*DPCRTLMM_LOG*/
 
       DPCRTLMM_FREE( PRArr->Descriptors[i].PBase ); /* Free the block */
@@ -242,7 +243,7 @@ static void ShrinkBlockArray(
       "Attempt to ShrinkBlockArray(0x%p) by nothing, ignored (internal DPCRTLMM error)",
       (void*)PBlockArray
     );
-    OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
+    OURLOG_POS(DPCRTLMM_LOG_CODE_REDUCE_ARRAY_ZERO, DPCRTLMM_LOG_WARNING, logMsg);
     return;
   }
   if (!PBlockArray->Count)
@@ -286,8 +287,13 @@ static void ShrinkBlockArray(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
-{
+static void OurLog(
+  const unsigned short Code,
+  const char* File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char* Str
+) {
   /* Our job is to add "Free() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't call _Log() twice because the information will be put on different
@@ -304,7 +310,7 @@ static void OurLog(const char* File, const unsigned int Line, const unsigned sho
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(Code, File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }
