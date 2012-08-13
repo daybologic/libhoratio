@@ -52,10 +52,11 @@ POSSIBILITY OF SUCH DAMAGE.
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
 static void OurLog(
-  const char *File,
+  const unsigned short Code,
+  const char* File,
   const unsigned int Line,
   const unsigned short Severity,
-  const char *Str
+  const char* Str
 );
 #endif /*DPCRTLMM_LOG*/
 
@@ -63,7 +64,7 @@ static void OurLog(
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG(lcode, f, l, sev, msg) OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
 static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
 /*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
@@ -95,7 +96,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
     N,
     (unsigned int)NewBlockSize
   );
-  OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
+  OURLOG(DPCRTLMM_LOG_CODE_CALLOC_REQ, File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
   #endif /*DPCRTLMM_LOG*/
 
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -115,7 +116,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
     #endif /*DPCRTLMM_DEBUGHOOKS*/
 
     #ifdef DPCRTLMM_LOG
-    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation successful");
+    OURLOG(DPCRTLMM_LOG_CODE_CALLOC_DONE, File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation successful");
     #endif /*DPCRTLMM_LOG*/
 
     /* Bug fix: I didn't realize this but the specification for for calloc()
@@ -128,7 +129,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
     /*blockDescArray.Success = 0U;   - optimized away */
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     #ifdef DPCRTLMM_LOG
-    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation failed");
+    OURLOG(DPCRTLMM_LOG_CODE_CALLOC_FAIL, File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation failed");
     #endif /*DPCRTLMM_LOG*/
   }
 
@@ -139,8 +140,13 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
 }
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
-{
+static void OurLog(
+  const unsigned short Code,
+  const char* File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char* Str
+) {
   /* Our job is to add "Calloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't call _Log() twice because the information will be put on different
@@ -157,7 +163,7 @@ static void OurLog(const char* File, const unsigned int Line, const unsigned sho
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
+      dpcrtlmm_int_Log(Code, File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

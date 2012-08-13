@@ -56,6 +56,9 @@ messages, warnings and errors */
 #define DPCRTLMM_LOG_CODE_SL_ADD_FAIL (10)
 #define DPCRTLMM_LOG_CODE_ALLOC_ARRAY_INFO (11)
 #define DPCRTLMM_LOG_CODE_DESTROY_ARRAY (12)
+#define DPCRTLMM_LOG_CODE_CALLOC_REQ (13)
+#define DPCRTLMM_LOG_CODE_CALLOC_DONE (14)
+#define DPCRTLMM_LOG_CODE_CALLOC_FAIL (15)
 
 /* Types of logging messages */
 #define DPCRTLMM_LOG_MESSAGE (0U) /* Only put in log */
