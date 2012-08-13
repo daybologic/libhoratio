@@ -116,14 +116,14 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
 
   if (!NewSize) /* No new size, hmm, must be wanting free() really */
   {
-    WARNING("Dynamic possibly non-portable use of realloc() as a free-er");
+    WARNING(DPCRTLMM_LOG_CODE_REALLOC_NP_1, "Dynamic possibly non-portable use of realloc() as a free-er");
     dpcrtlmm_Free(PBlockArray, OldBlockPtr); /* Give the caller what they want */
     return NULL;
   }
 
   if ( !OldBlockPtr ) /* This is a non-portable attempt to use realloc as an initial allocator */
   {
-    WARNING("Dynamic possibly non-portable use of realloc() as an initial allocator");
+    WARNING(DPCRTLMM_LOG_CODE_REALLOC_NP_2, "Dynamic possibly non-portable use of realloc() as an initial allocator");
     return dpcrtlmm_Alloc(PBlockArray, NewSize);
   }
 
