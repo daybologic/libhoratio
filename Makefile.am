@@ -41,9 +41,9 @@ AM_CFLAGS=
 
 TESTS = example1 example2 example3
 check_PROGRAMS = $(TESTS)
-examples_LDADD = -lsqlite3 -ldpcrtlmm
+examples_LDADD = -lmysqlclient -ldpcrtlmm
 
-AM_LDFLAGS= -lsqlite3
+AM_LDFLAGS= -lmysqlclient
 if DPCRTLMM_THREADS_PTH
 AM_LDFLAGS= -lpth
 endif
