@@ -52,6 +52,9 @@ static void suite_core_Ver(void);
 
 /* Test suite trap */
 static void suite_trap_InstallTrapCallback(void);
+
+/* Incidental functions */
+static void test_TrapCallback(const unsigned int, const char*);
 /*-------------------------------------------------------------------------*/
 static char *GlueStrs[10]; /* A small cache used by the Glue() and Unglue() functions */
 static bool SandboxStarted = false;
@@ -229,7 +232,6 @@ int main(int argc, char *argv[])
 /*-------------------------------------------------------------------------*/
 static void suite_core_Ver()
 {
-	//CU_ASSERT_STRING_EQUAL(GWFEATURES_VERSION, gwfeatures_Version());
 	S_DPCRTLMM_VERSION ver;
 	PS_DPCRTLMM_VERSION pver;
 
@@ -243,6 +245,10 @@ static void suite_core_Ver()
 /*-------------------------------------------------------------------------*/
 static void suite_trap_InstallTrapCallback()
 {
-	//CU_ASSERT_STRING_EQUAL(GWFEATURES_VERSION, gwfeatures_Version());
+	dpcrtlmm_InstallTrapCallback(test_TrapCallback, 0);
+}
+/*-------------------------------------------------------------------------*/
+static void test_TrapCallback(const unsigned int tn, const char* str)
+{
 }
 /*-------------------------------------------------------------------------*/
