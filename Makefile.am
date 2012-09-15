@@ -39,9 +39,10 @@ AUTOMAKE_OPTIONS=
 # Add any explicit flags here, or on the configure command line.
 CFLAGS=
 
-TESTS = example1 example2 example3
+TESTS = example1 example2 example3 tests1
 check_PROGRAMS = $(TESTS)
 examples_LDADD = -ldpcrtlmm
+tests_LDADD = -ldpcrtlmm -lcunit
 
 if DPCRTLMM_THREADS_PTH
 AM_LDFLAGS= -lpth
@@ -58,6 +59,10 @@ example2_LDADD = $(examples_LDADD)
 example3_SOURCES = example3.c
 example3_INCLUDES = dpcrtlmm.h
 example3_LDADD = $(examples_LDADD)
+
+tests1_SOURCES = tests1.c
+tests1_INCLUDES = dpcrtlmm.h
+tests1_LDADD = $(tests_LDADD)
 
 INCLUDES = \
   -I.

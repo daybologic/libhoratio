@@ -2,7 +2,7 @@ Source: libdpcrtlmm
 Section: utils
 Priority: extra
 Maintainer: David Palmer <david.palmer@gradwell.com>
-Build-Depends: debhelper (>= 7.0.15), autoconf
+Build-Depends: debhelper (>= 7.0.15), autoconf, libcunit1-dev
 Standards-Version: 3.7.3
 Homepage: http://www.daybologic.co.uk/software.php?content=dpcrtlmm
 Vcs-Browser: http://svn.daybologic.co.uk/trac/dpcrtlmm/
