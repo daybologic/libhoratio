@@ -55,7 +55,7 @@ causes a warning on your compiler, I aplogise!
 
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
-#include <sqlite3.h> /* For SQLite logging support */
+#include <mysql/mysql.h> /* For MySQL logging support */
 
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
@@ -74,35 +74,34 @@ causes a warning on your compiler, I aplogise!
             (sizeof((buff))/sizeof((buff)[0])-1) \
             )
 /*-------------------------------------------------------------------------*/
-static sqlite3 *dpcrtlmm_int_sqlite3_open(void);
-static void dpcrtlmm_int_sqlite3_logmsg(
+static MYSQL *dpcrtlmm_int_mysql_open(void);
+static void dpcrtlmm_int_mysql_logmsg(
   const char *,
   const unsigned int,
   const unsigned short,
   const char *
 );
 /*-------------------------------------------------------------------------*/
-static sqlite3 *DBHandle = NULL;
+static MYSQL DBHandle;
 /*-------------------------------------------------------------------------*/
-static sqlite3 *dpcrtlmm_int_sqlite3_open()
+static MYSQL *dpcrtlmm_int_mysql_open()
 {
   /* TODO:
   This scema must be created
   CREATE TABLE debug_log ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ts DATETIME NOT NULL, file CHAR(32) NOT NULL, line INTEGER NOT NULL, severity INTEGER NOT NULL default 0, msg VARCHAR(255) NOT NULL);
   */
 
-  sqlite3 *dbh;
   char *errMsgPtr = NULL;
-  int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
-  if ( rc ) { // Fail?
-    errMsgPtr = sqlite3_errmsg(dbh);
+  if ( mysql_real_connect(&DBHandle, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
+    errMsgPtr = "FIXME";
     Trap(0, errMsgPtr);
-    sqlite3_close(dbh);
+    return 0;
   }
-  return dbh;
+
+  return &DBHandle;
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_sqlite3_logmsg(
+static void dpcrtlmm_int_mysql_logmsg(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
@@ -124,6 +123,11 @@ static void dpcrtlmm_int_sqlite3_logmsg(
     fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
     return;
   }
+  if (mysql_query(&dbh, querystring) != 0) {
+    mysql_close(&con);
+    return 0;
+  }
+
   rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
   rc = sqlite3_bind_int(stmt, 2, Line);
   rc = sqlite3_bind_int(stmt, 3, Severity);
@@ -199,8 +203,8 @@ void dpcrtlmm_int_Log(
       if ( Severity > DPCRTLMM_LOG_MESSAGE ) /* Anything more severe than a warning */
         fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
 
-      if ( !DBHandle ) DBHandle = dpcrtlmm_int_sqlite3_open();
-      dpcrtlmm_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
+      if ( !DBHandle ) DBHandle = dpcrtlmm_int_mysql_open();
+      dpcrtlmm_int_mysql_logmsg(File, Line, Severity, formatMsg);
     }
   }
   return;
