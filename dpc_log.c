@@ -55,6 +55,7 @@ causes a warning on your compiler, I aplogise!
 
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
+#include <sqlite3.h> /* For SQLite logging support */
 
 #ifdef DPCRTLMM_HDRSTOP
 #  pragma hdrstop
@@ -63,6 +64,7 @@ causes a warning on your compiler, I aplogise!
 #include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library header */
+#include "dpc_trap.h" /* Trap() */
 #include "dpc_log.h"
 /*-------------------------------------------------------------------------*/
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
@@ -71,6 +73,70 @@ causes a warning on your compiler, I aplogise!
             (sourcestring), \
             (sizeof((buff))/sizeof((buff)[0])-1) \
             )
+/*-------------------------------------------------------------------------*/
+static sqlite3 *dpcrtlmm_int_sqlite3_open(void);
+static void dpcrtlmm_int_sqlite3_logmsg(
+  const char *,
+  const unsigned int,
+  const unsigned short,
+  const char *
+);
+/*-------------------------------------------------------------------------*/
+static sqlite3 *DBHandle = NULL;
+/*-------------------------------------------------------------------------*/
+static sqlite3 *dpcrtlmm_int_sqlite3_open()
+{
+  /* TODO:
+  This scema must be created
+  CREATE TABLE debug_log ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ts DATETIME NOT NULL, file CHAR(32) NOT NULL, line INTEGER NOT NULL, severity INTEGER NOT NULL default 0, msg VARCHAR(255) NOT NULL);
+  */
+
+  sqlite3 *dbh;
+  char *errMsgPtr = NULL;
+  int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
+  if ( rc ) { // Fail?
+    errMsgPtr = sqlite3_errmsg(dbh);
+    Trap(0, errMsgPtr);
+    sqlite3_close(dbh);
+  }
+  return dbh;
+}
+/*-------------------------------------------------------------------------*/
+static void dpcrtlmm_int_sqlite3_logmsg(
+  const char *File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Msg
+) {
+  int rc;
+  sqlite3_stmt *stmt;
+  const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+    "VALUES(\n"
+    "  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+    ")";
+
+  if ( !DBHandle ) return;
+
+  fprintf(stderr, "Got database message %s\n", Msg);
+  fprintf(stderr, "Executing query: %s\n", q);
+  rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
+  if ( rc != SQLITE_OK ) {
+    fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+    return;
+  }
+  rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
+  rc = sqlite3_bind_int(stmt, 2, Line);
+  rc = sqlite3_bind_int(stmt, 3, Severity);
+  rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
+  if ( rc != SQLITE_OK )
+    fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
+  rc = sqlite3_step(stmt);
+  if ( rc != SQLITE_DONE )
+    fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+  rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
+  if ( rc != SQLITE_OK )
+    fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+}
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_Log(
   const char *File,
@@ -132,6 +198,9 @@ void dpcrtlmm_int_Log(
 
       if ( Severity > DPCRTLMM_LOG_MESSAGE ) /* Anything more severe than a warning */
         fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
+
+      if ( !DBHandle ) DBHandle = dpcrtlmm_int_sqlite3_open();
+      dpcrtlmm_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
     }
   }
   return;
