@@ -1,5 +1,7 @@
 /*
 */
+#define DPCRTLMM_SOURCE /* We need to pretend to be internal */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif /*HAVE_CONFIG_H*/
@@ -15,6 +17,7 @@
 #endif /*HDRSTOP*/
 
 #include "dpcrtlmm.h"
+#include "dpc_build.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
 
@@ -227,6 +230,15 @@ int main(int argc, char *argv[])
 static void suite_core_Ver()
 {
 	//CU_ASSERT_STRING_EQUAL(GWFEATURES_VERSION, gwfeatures_Version());
+	S_DPCRTLMM_VERSION ver;
+	PS_DPCRTLMM_VERSION pver;
+
+	pver = dpcrtlmm_Ver(&ver);
+	CU_ASSERT_PTR_EQUAL(pver, &ver);
+	CU_ASSERT_EQUAL(pver->Major, DPCRTLMM_VERSION_MAJOR);
+	CU_ASSERT_EQUAL(pver->Minor, DPCRTLMM_VERSION_MINOR);
+	CU_ASSERT_EQUAL(pver->Minor, DPCRTLMM_VERSION_MINOR);
+	CU_ASSERT_EQUAL(pver->Patch, DPCRTLMM_VERSION_PATCH);
 }
 /*-------------------------------------------------------------------------*/
 static void suite_trap_InstallTrapCallback()
