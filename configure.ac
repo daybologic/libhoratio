@@ -72,7 +72,7 @@ AC_TYPE_SIZE_T
 
 # Checks for standard library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([atexit memset])
+AC_CHECK_FUNCS([atexit memset snprintf])
 
 
 # Extra configuration
