@@ -165,7 +165,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
 
   #ifdef DPCRTLMM_LOG
   /* Safe, log progress */
-  sprintf(logMsg, "CreateBlockArray() returns base 0x%p", (void*)Parray);
+  sprintf(logMsg, "CreateBlockArray() returns base %s%p", DPCRTLMM_FMTPTRPFX, (void*)Parray);
   MESSAGE(__FILE__, __LINE__, logMsg);
   #endif /*DPCRTLMM_LOG*/
 
@@ -213,9 +213,9 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
 
           sprintf(
             trapStr,
-            "DestroyBlockArray(): %u blocks of memory not freed from array based at 0x%p\n                      Total bytes leakage for this array: %lu",
+            "DestroyBlockArray(): %u blocks of memory not freed from array based at %s%p\n                      Total bytes leakage for this array: %lu",
             _safetyList[sli]->Count,
-            (void*)_safetyList[sli],
+            DPCRTLMM_FMTPTRPFX, (void*)_safetyList[sli],
             totBytes
           );
           Trap(DPCRTLMM_TRAP_UNFREED_BLOCKS, trapStr);
@@ -224,9 +224,9 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
         {
           sprintf(
             trapStr,
-            "DestroyBlockArray(): Base of raw descriptor array not freed!\n0x%p->0x%p (PBlockArray->Descriptors must be NULL)",
-            (void*)_safetyList[sli],
-            (void*)_safetyList[sli]->Descriptors
+            "DestroyBlockArray(): Base of raw descriptor array not freed!\n%s%p->%s%p (PBlockArray->Descriptors must be NULL)",
+            DPCRTLMM_FMTPTRPFX, (void*)_safetyList[sli],
+            DPCRTLMM_FMTPTRPFX, (void*)_safetyList[sli]->Descriptors
           );
           Trap(DPCRTLMM_TRAP_BASENONZERO, trapStr);
         }
@@ -235,8 +235,8 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
         #ifdef DPCRTLMM_LOG
         sprintf(
           trapStr,
-          "DestroyBlockArray(): The array at base 0x%p was destroyed",
-          (void*)PBlockArray
+          "DestroyBlockArray(): The array at base %s%p was destroyed",
+          DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
         ); /* Prepare log message */
         MESSAGE(__FILE__, __LINE__, trapStr);
         #endif /*DPCRTLMM_LOG*/
@@ -259,8 +259,8 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
   /* Fire trap */
   sprintf(
     trapStr,
-    "DestroyBlockArray(): Attempt to destroy unknown array (0x%p)!\n",
-    (void*)PBlockArray
+    "DestroyBlockArray(): Attempt to destroy unknown array (%s%p)!\n",
+    DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
   );
   Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapStr);
   return;

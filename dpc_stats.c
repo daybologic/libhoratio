@@ -196,9 +196,9 @@ static void DumpOnArray(
 
     fprintf(
       Target,
-      "Address: %p, (Array: %p), owner: %s, line %u is %u bytes. ",
-      CurrentArray->Descriptors[j].PBase,
-      (void*)CurrentArray,
+      "Address: %s%p, (Array: %s%p), owner: %s, line %u is %u bytes. ",
+      DPCRTLMM_FMTPTRPFX, CurrentArray->Descriptors[j].PBase,
+      DPCRTLMM_FMTPTRPFX, (void*)CurrentArray,
       filename,
       CurrentArray->Descriptors[j].SourceLine,
       (unsigned int)CurrentArray->Descriptors[j].Size

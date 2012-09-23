@@ -60,7 +60,7 @@ AC_CHECK_LIB(pth, pth_init, [pth_init="yes"])
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stddef.h stdlib.h string.h pth.h pthread.h windows.h])
+AC_CHECK_HEADERS([stdio.h stddef.h stdlib.h string.h pth.h pthread.h windows.h])
 AC_CHECK_HEADERS([alloc.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -81,6 +81,8 @@ if test "$pthread_mutexattr_setkind_np" = "yes"; then
   AC_DEFINE([DPCRTLMM_THREADS_PTHREAD_NP], [], [Non-portable POSIX thread extensions])
 fi
 
+dnl Test whether %p prefixes addresses with 0x
+AC_CHECK_FORMAT_POINTER_PREFIX
 
 # Optional arguments
 

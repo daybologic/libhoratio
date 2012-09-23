@@ -168,9 +168,9 @@ static void dpcrtlmm_int_InstallTrapCallback(
     /* Log that we did that */
     sprintf(
       logStr,
-      "InstallTrapCallback(): Installed the trap %s 0x%lX",
+      "InstallTrapCallback(): Installed the trap %s %s%lX",
       (AsHook) ? ("hook") : ("handler"),
-      (unsigned long int)NewTrapCallback
+      DPCRTLMM_FMTPTRPFX, (unsigned long int)NewTrapCallback
     );
     MESSAGE(NULL, 0, logStr);
     #endif /*DPCRTLMM_LOG*/
@@ -227,8 +227,8 @@ static void dpcrtlmm_int_RemoveTrapCallback(
 
     sprintf(
       logStr,
-      "RemoveTrapCallback(): The handler is NOT 0x%lX !!!",
-      (unsigned long int)CurrentCallback
+      "RemoveTrapCallback(): The handler is NOT %s%lX !!!",
+      DPCRTLMM_FMTPTRPFX, (unsigned long int)CurrentCallback
     );
 
     Trap(DPCRTLMM_TRAP_UNAUTH_REMOVE, logStr);

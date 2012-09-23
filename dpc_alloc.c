@@ -135,9 +135,9 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
 
   sprintf(
     logMsg,
-    "Program Requested to allocate %u byte block for array 0x%p",
+    "Program Requested to allocate %u byte block for array %s%p",
     (unsigned int)NewBlockSize,
-    (void*)PBlockArray
+    DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
   );
   OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
@@ -147,9 +147,9 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
     /* Use buffer for log messages, it's the same size as for traps */
     sprintf(
       logMsg,
-      "Attempt to allocate block of %u bytes for array at base 0x%p has failed",
+      "Attempt to allocate block of %u bytes for array at base %s%p has failed",
       (unsigned int)NewBlockSize,
-      (void*)PBlockArray
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
     OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
     return NULL; /* No pointer generated */
@@ -163,8 +163,8 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
 
     sprintf(
       logMsg,
-      "Attempt to enlarge array at base 0x%p by one element failed",
-      (void*)PBlockArray
+      "Attempt to enlarge array at base %s%p by one element failed",
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
     /* This could be quite critical, if the memory manager is running our of space */
     OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
