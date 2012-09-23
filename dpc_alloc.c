@@ -129,16 +129,25 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
+  #ifdef HAVE_SNPRINTF
+  size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray); /* Resolving is done because of a possible NULL */
 
   _VerifyPtrs("Alloc()", PBlockArray, NULL); /* Haults program if array not valid, third arg is not applicable here */
 
   sprintf(
     logMsg,
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining,
+    #endif /*HAVE_SNPRINTF*/
     "Program Requested to allocate %u byte block for array %s%p",
     (unsigned int)NewBlockSize,
     DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
   );
+  #ifdef HAVE_SNPRINTF
+  logMsgRemaining -= strlen(logMsg);
+  #endif /*HAVE_SNPRINTF*/
   OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
   genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
@@ -147,10 +156,16 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
     /* Use buffer for log messages, it's the same size as for traps */
     sprintf(
       logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "Attempt to allocate block of %u bytes for array at base %s%p has failed",
       (unsigned int)NewBlockSize,
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
     OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
     return NULL; /* No pointer generated */
   }
@@ -163,9 +178,15 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
 
     sprintf(
       logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "Attempt to enlarge array at base %s%p by one element failed",
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
     /* This could be quite critical, if the memory manager is running our of space */
     OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
     return NULL; /* Give up */
