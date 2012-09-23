@@ -30,14 +30,14 @@
 
 AUTOMAKE_OPTIONS=
 
-#CFLAGS= -g -Wall -W -Wcast-qual -Wcast-align -Waggregate-return -Wpointer-arith \
+#AM_CFLAGS= -g -Wall -W -Wcast-qual -Wcast-align -Waggregate-return -Wpointer-arith \
 # -Wshadow -Wmissing-prototypes -Winline -Wstrict-prototypes \
 # -Wredundant-decls -Wwrite-strings -Wformat=2 -Wformat-security \
 # -Wformat-nonliteral -Wundef -Wredundant-decls -Wbad-function-cast \
 # -Wnested-externs -Wmissing-declarations -Wunknown-pragmas
 
 # Add any explicit flags here, or on the configure command line.
-CFLAGS=
+AM_CFLAGS=
 
 TESTS = example1 example2 example3
 check_PROGRAMS = $(TESTS)
