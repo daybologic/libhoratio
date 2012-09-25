@@ -256,14 +256,14 @@ static void ShrinkBlockArray(
   const unsigned int Amount
 )
 {
+  char logMsg[MAX_TRAP_STRING_LENGTH +1];
+  #ifdef HAVE_SNPRINTF
+  size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
+
   _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
   if (!Amount)
   {
-    char logMsg[MAX_TRAP_STRING_LENGTH+1];
-    #ifdef HAVE_SNPRINTF
-    size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
-    #endif /*HAVE_SNPRINTF*/
-
     sprintf(
       logMsg,
       #ifdef HAVE_SNPRINTF
@@ -280,8 +280,6 @@ static void ShrinkBlockArray(
   }
   if (!PBlockArray->Count)
   {
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
-
     sprintf(
       logMsg,
       #ifdef HAVE_SNPRINTF
@@ -298,9 +296,8 @@ static void ShrinkBlockArray(
   }
   if (Amount > PBlockArray->Count) /* Shrink further than size?! */
   {
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
     sprintf(
-      trapMsg,
+      logMsg,
       #ifdef HAVE_SNPRINTF
       logMsgRemaining,
       #endif /*HAVE_SNPRINTF*/
@@ -312,7 +309,7 @@ static void ShrinkBlockArray(
     #ifdef HAVE_SNPRINTF
     logMsgRemaining -= strlen(logMsg);
     #endif /*HAVE_SNPRINTF*/
-    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, trapMsg);
+    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, logMsg);
     return;
   }
 
