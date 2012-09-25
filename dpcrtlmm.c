@@ -219,13 +219,7 @@ static void TrapUnFreedArrays()
   /* Entire list was processed, if there were any leaks report general message */
   if (totalBytesLeaked) /* So, were there any unfreed arrays or blocks? */
   {
-    sprintf(trapMsg, "%lu bytes of memory leaked in total,\n", totalBytesLeaked);
-    if (totalBytesLeaked >= 524288UL) /* >= 500K!? */
-      strcat(trapMsg, "that\'s terrible!!");
-    else if (totalBytesLeaked < 1024UL)
-      strcat(trapMsg, "only solve this problem if it will not take too much development time and does not increase with time.");
-    else
-      strcat(trapMsg, "You should use the log as an aid to resolving this.");
+    sprintf(trapMsg, "%lu bytes of memory leaked in total.", totalBytesLeaked);
     Trap(DPCRTLMM_TRAP_UNFREED_DATA, trapMsg);
   }
   return;
