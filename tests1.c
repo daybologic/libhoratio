@@ -87,6 +87,7 @@ static void suite_trap_InstallTrapCallback(void);
 
 /* Test suite allloc */
 static void suite_alloc_AllocSimple(void);
+static void suite_alloc_AllocLoop(void);
 
 /* Incidental functions */
 static void test_TrapCallback(const unsigned int, const char*);
@@ -238,6 +239,9 @@ int main(int argc, char *argv[])
 	} AllocTests[] = {
 		{ "AllocSimple",
 		  &suite_alloc_AllocSimple
+		}, {
+		  "AllocLoop",
+		  &suite_alloc_AllocLoop
 		}
 	};
 
@@ -333,6 +337,20 @@ static void suite_alloc_AllocSimple()
 
 	dpcrtlmm_Free(NULL, ptrDefault);
 	dpcrtlmm_Free(BDASharedSingle, ptrSharedSingle);
+}
+/*-------------------------------------------------------------------------*/
+static void suite_alloc_AllocLoop()
+{
+	unsigned int blockI;
+	void DPCRTLMM_FARDATA *blocks[128];
+
+	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
+		blocks[blockI] = dpcrtlmm_int_AllocEx(NULL, blockI * 64, __FILE__, __LINE__);
+		CU_ASSERT_PTR_NOT_NULL(blocks[blockI]);
+	}
+	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
+		dpcrtlmm_Free(NULL, blocks[blockI]);
+	}
 }
 /*-------------------------------------------------------------------------*/
 static void test_TrapCallback(const unsigned int tn, const char* str)
