@@ -344,14 +344,24 @@ static void suite_alloc_AllocSimple()
 static void suite_alloc_AllocLoop()
 {
 	unsigned int blockI;
-	void DPCRTLMM_FARDATA *blocks[128];
+	void DPCRTLMM_FARDATA *blocksDefault[48];
+	void DPCRTLMM_FARDATA *blocksSharedSingle[64];
 
-	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
-		blocks[blockI] = dpcrtlmm_Alloc(NULL, blockI * 64);
-		CU_ASSERT_PTR_NOT_NULL(blocks[blockI]);
+	for ( blockI = 0U; blockI < sizeof(blocksDefault)/sizeof(blocksDefault[0]); blockI++ ) {
+		blocksDefault[blockI] = dpcrtlmm_Alloc(NULL, blockI * 32);
+		CU_ASSERT_PTR_NOT_NULL(blocksDefault[blockI]);
 	}
-	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
-		dpcrtlmm_Free(NULL, blocks[blockI]);
+	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
+		blocksSharedSingle[blockI] = dpcrtlmm_Alloc(BDASharedSingle, blockI * 96);
+		CU_ASSERT_PTR_NOT_NULL(blocksSharedSingle[blockI]);
+	}
+
+	/* Cleanup */
+	for ( blockI = 0U; blockI < sizeof(blocksDefault)/sizeof(blocksDefault[0]); blockI++ ) {
+		dpcrtlmm_Free(NULL, blocksDefault[blockI]);
+	}
+	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
+		dpcrtlmm_Free(BDASharedSingle, blocksSharedSingle[blockI]);
 	}
 }
 /*-------------------------------------------------------------------------*/
