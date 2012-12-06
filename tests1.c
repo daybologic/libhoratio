@@ -94,6 +94,7 @@ static void test_TrapCallback(const unsigned int, const char*);
 static char *GlueStrs[10]; /* A small cache used by the Glue() and Unglue() functions */
 static bool SandboxStarted = false;
 static unsigned short int DebugLevel = 0U;
+static PS_DPCRTLMM_BLOCKDESCARRAY BDASharedSingle = NULL;
 /*-------------------------------------------------------------------------*/
 static bool ProcessOptions(int ArgC, char **ArgV)
 {
@@ -127,7 +128,13 @@ static int init_suite_trap()
 /*-------------------------------------------------------------------------*/
 static int init_suite_alloc()
 {
-	return 0;
+	if ( !BDASharedSingle ) {
+		BDASharedSingle = dpcrtlmm_CreateBlockArray();
+		if ( !BDASharedSingle ) return 1;
+		return 0;
+	}
+
+	return 1;
 }
 /*-------------------------------------------------------------------------*/
 static int clean_suite_core()
@@ -142,7 +149,13 @@ static int clean_suite_trap()
 /*-------------------------------------------------------------------------*/
 static int clean_suite_alloc()
 {
-	return 0;
+	if ( BDASharedSingle ) {
+		dpcrtlmm_DestroyBlockArray(BDASharedSingle);
+		BDASharedSingle = NULL;
+		return 0;
+	}
+
+	return 1;
 }
 /*-------------------------------------------------------------------------*/
 static void Die(const char *File, const unsigned int Line, const char *Message)
@@ -311,8 +324,15 @@ static void suite_trap_InstallTrapCallback()
 /*-------------------------------------------------------------------------*/
 static void suite_alloc_AllocSimple()
 {
-	void DPCRTLMM_FARDATA* ptr = dpcrtlmm_int_AllocEx(NULL, 1024, __FILE__, __LINE__);
-	CU_ASSERT_PTR_NOT_NULL(ptr);
+	void DPCRTLMM_FARDATA *ptrDefault, *ptrSharedSingle;
+
+	ptrDefault = dpcrtlmm_int_AllocEx(NULL, 1024, __FILE__, __LINE__);
+	CU_ASSERT_PTR_NOT_NULL(ptrDefault);
+	ptrSharedSingle = dpcrtlmm_int_AllocEx(BDASharedSingle, 1024, __FILE__, __LINE__);
+	CU_ASSERT_PTR_NOT_NULL(ptrSharedSingle);
+
+	dpcrtlmm_Free(NULL, ptrDefault);
+	dpcrtlmm_Free(BDASharedSingle, ptrSharedSingle);
 }
 /*-------------------------------------------------------------------------*/
 static void test_TrapCallback(const unsigned int tn, const char* str)
