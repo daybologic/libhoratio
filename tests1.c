@@ -330,9 +330,9 @@ static void suite_alloc_AllocSimple()
 {
 	void DPCRTLMM_FARDATA *ptrDefault, *ptrSharedSingle;
 
-	ptrDefault = dpcrtlmm_int_AllocEx(NULL, 1024, __FILE__, __LINE__);
+	ptrDefault = dpcrtlmm_AllocEx(NULL, 1024, __FILE__, __LINE__);
 	CU_ASSERT_PTR_NOT_NULL(ptrDefault);
-	ptrSharedSingle = dpcrtlmm_int_AllocEx(BDASharedSingle, 1024, __FILE__, __LINE__);
+	ptrSharedSingle = dpcrtlmm_AllocEx(BDASharedSingle, 1024, __FILE__, __LINE__);
 	CU_ASSERT_PTR_NOT_NULL(ptrSharedSingle);
 
 	dpcrtlmm_Free(NULL, ptrDefault);
@@ -345,7 +345,7 @@ static void suite_alloc_AllocLoop()
 	void DPCRTLMM_FARDATA *blocks[128];
 
 	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
-		blocks[blockI] = dpcrtlmm_int_AllocEx(NULL, blockI * 64, __FILE__, __LINE__);
+		blocks[blockI] = dpcrtlmm_AllocEx(NULL, blockI * 64, __FILE__, __LINE__);
 		CU_ASSERT_PTR_NOT_NULL(blocks[blockI]);
 	}
 	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
