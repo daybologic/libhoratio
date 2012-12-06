@@ -299,10 +299,12 @@ int main(int argc, char *argv[])
 
 	/* Run all tests using the CUnit Basic interface */
 	CU_basic_set_mode(CU_BRM_VERBOSE);
+	dpcrtlmm_Startup();
 	CU_basic_run_tests();
 	failCount = CU_get_number_of_failure_records();
 	CU_cleanup_registry();
 	err = CU_get_error();
+	dpcrtlmm_Shutdown();
 	if ( err != CUE_SUCCESS ) return err;
 	if ( failCount ) return EXIT_FAILURE;
 	return EXIT_SUCCESS;
