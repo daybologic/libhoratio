@@ -60,8 +60,7 @@ Created May 3rd 2000
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
   const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase
-)
-{
+) {
   if (ArrayBase) {
     unsigned int sli; /* Used for processing of the list */
     for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
@@ -70,8 +69,7 @@ unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
   return 0U; /* Not present or bad params */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_SafetyList_Init()
-{
+void dpcrtlmm_SafetyList_Init() {
   unsigned int i;
 
   /* All possible entries in list */
@@ -81,8 +79,7 @@ void dpcrtlmm_SafetyList_Init()
   return;
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_SafetyList_CountUsed()
-{
+unsigned int dpcrtlmm_SafetyList_CountUsed() {
   unsigned int sli, slc = 0U;
 
   for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
@@ -95,8 +92,7 @@ unsigned int dpcrtlmm_SafetyList_CountUsed()
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_SafetyList_AddBase(
   const PS_DPCRTLMM_BLOCKDESCARRAY PArrayBase
-)
-{
+) {
   unsigned int sli;
 
   /*
@@ -123,8 +119,7 @@ unsigned int dpcrtlmm_SafetyList_AddBase(
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_SafetyList_RemoveBase(
   const PS_DPCRTLMM_BLOCKDESCARRAY PArrayBase
-)
-{
+) {
   unsigned int sli;
 
   /* This is faster than adding because we have no need for a separate search,

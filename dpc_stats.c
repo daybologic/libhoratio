@@ -85,8 +85,7 @@ static void CrackAndPrintFlags(
   unsigned char Flags
 );
 /*-------------------------------------------------------------------------*/
-unsigned long dpcrtlmm_GetBlockCount()
-{
+unsigned long dpcrtlmm_GetBlockCount() {
   unsigned long ret;
 
   LOCK
@@ -98,8 +97,7 @@ unsigned long dpcrtlmm_GetBlockCount()
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_GetStats(
   PS_DPCRTLMM_STATS PReadStats
-)
-{
+) {
   LOCK
   if (PReadStats)
   {
@@ -115,8 +113,7 @@ void dpcrtlmm_GetStats(
 /*-------------------------------------------------------------------------*/
 static void CountFlagsInUse(
   PS_DPCRTLMM_STATS PFlagsStats
-)
-{
+) {
   if (PFlagsStats)
   {
     unsigned int i;
@@ -159,8 +156,7 @@ static void CountFlagsInUse(
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Dump(
   FILE *Target
-)
-{
+) {
   LOCK
   if ( Target ) {
     unsigned int i;
@@ -180,8 +176,7 @@ void dpcrtlmm_Dump(
 static void DumpOnArray(
   FILE *Target,
   PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
-)
-{
+) {
   unsigned int j; /* Just so I don't get confused with the other function */
 
   for ( j = 0U; j < CurrentArray->Count; j++ ) {
@@ -208,8 +203,10 @@ static void DumpOnArray(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void CrackAndPrintFlags(FILE *Target, unsigned char Flags)
-{
+static void CrackAndPrintFlags(
+  FILE *Target,
+  unsigned char Flags
+) {
   if ( Target ) {
     int comma = 0;
     fprintf(Target, "Flags=");

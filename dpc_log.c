@@ -77,8 +77,7 @@ void dpcrtlmm_int_Log(
   const unsigned int Line,
   const unsigned short Severity,
   const char *Message
-)
-{
+) {
   /*
     String + safety for addons,
     note that mallocations should not be made here

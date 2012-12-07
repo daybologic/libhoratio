@@ -64,8 +64,7 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
   const unsigned char *PNewFlags
-)
-{
+) {
   unsigned char ret;
 
   LOCK
@@ -83,8 +82,7 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
   const unsigned char *PNewFlags
-)
-{
+) {
   /* locals */
   const char funcName[] = "ModifyDescriptorFlags()"; /* Name of this function */
   unsigned int blockIndex; /* Index of block descriptor into the array */

@@ -64,10 +64,21 @@ static void OurLog(
 #endif /*OURLOG*/
 
 #define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char* File,
+  const unsigned int Line
+);
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
-{
+void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char* File,
+  const unsigned int Line
+) {
   void DPCRTLMM_FARDATA* ret;
 
   LOCK
@@ -77,8 +88,13 @@ void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
-{
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char* File,
+  const unsigned int Line
+) {
   void DPCRTLMM_FARDATA* resultantPtr;
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
@@ -139,8 +155,12 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
 }
 /*-------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_LOG
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
-{
+static void OurLog(
+  const char* File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char* Str
+) {
   /* Our job is to add "Calloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't call _Log() twice because the information will be put on different

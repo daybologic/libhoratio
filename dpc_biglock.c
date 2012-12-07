@@ -120,18 +120,15 @@ static Mutant bigLock;
 #  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
 #endif /*DPCRTLMM_THREADS_PTHREAD*/
 /*--------------------------------------------------------------------------*/
-void dpcrtlmm_int_BigLockInit()
-{
+void dpcrtlmm_int_BigLockInit() {
   InitialiseMutant(&bigLock);
 }
 /*--------------------------------------------------------------------------*/
-void dpcrtlmm_int_BigLockUninit()
-{
+void dpcrtlmm_int_BigLockUninit() {
   DestroyMutant(&bigLock);
 }
 /*--------------------------------------------------------------------------*/
-void dpcrtlmm_int_BigLock(int LockState)
-{
+void dpcrtlmm_int_BigLock(int LockState) {
   if ( LockState )
     LockMutant(&bigLock);
   else
@@ -140,8 +137,7 @@ void dpcrtlmm_int_BigLock(int LockState)
 /*--------------------------------------------------------------------------*/
 #ifdef DPCRTLMM_THREADS_PTHREAD
 #ifdef DPCRTLMM_THREADS_PTHREAD_NP
-void InitNPMutant(pthread_mutex_t* PMutant)
-{
+void InitNPMutant(pthread_mutex_t* PMutant) {
   pthread_mutexattr_t attributes;
 
   pthread_mutexattr_init(&attributes);

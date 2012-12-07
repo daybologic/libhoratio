@@ -63,8 +63,7 @@ unsigned int dpcrtlmm_int_LockTrap(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* Block locked? */
   if (dpcrtlmm_int_IsBlockLocked(PBlockArray, BlockPtr)) {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For this trap message */

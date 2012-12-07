@@ -72,8 +72,7 @@ static void DefHandler(
 void dpcrtlmm_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
-)
-{
+) {
   LOCK
   dpcrtlmm_int_InstallTrapCallback(NewTrapCallback, AsHook);
   UNLOCK
@@ -81,15 +80,13 @@ void dpcrtlmm_InstallTrapCallback(
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
-)
-{
+) {
   LOCK
   dpcrtlmm_int_RemoveTrapCallback(CurrentCallback);
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-signed char dpcrtlmm_GetTrapCallbackInfo()
-{
+signed char dpcrtlmm_GetTrapCallbackInfo() {
   signed char ret;
 
   LOCK
@@ -102,8 +99,7 @@ signed char dpcrtlmm_GetTrapCallbackInfo()
 void dpcrtlmm_int_Trap(
   const unsigned int Id,
   const char *Message
-)
-{
+) {
   char* trapsCopy;
   const char preFix[] = "DPCRTLMM_UNHANDLED_TRAP: ";
 
@@ -138,8 +134,7 @@ trapRecover:
 static void dpcrtlmm_int_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
-)
-{
+) {
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
 
@@ -195,8 +190,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
 /*-------------------------------------------------------------------------*/
 static void dpcrtlmm_int_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
-)
-{
+) {
   char logStr[MAX_TRAP_STRING_LENGTH+1];
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
@@ -236,8 +230,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static signed char dpcrtlmm_int_GetTrapCallbackInfo()
-{
+static signed char dpcrtlmm_int_GetTrapCallbackInfo() {
   if (!_UserTrapCallback) /* No user handler installed */
     return (signed char)-1;
   if (!_userTrapCallbackIsHook) /* Installed but not hook */
@@ -246,22 +239,19 @@ static signed char dpcrtlmm_int_GetTrapCallbackInfo()
   return (signed char)1; /* Hook installed */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_EnableTraps()
-{
+void dpcrtlmm_EnableTraps() {
   LOCK
   dpcrtlmm__EnableTraps = '\x1';
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_DisableTraps()
-{
+void dpcrtlmm_DisableTraps() {
   LOCK
   dpcrtlmm__EnableTraps = '\x0';
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-unsigned char dpcrtlmm_AreTrapsEnabled()
-{
+unsigned char dpcrtlmm_AreTrapsEnabled() {
   unsigned char ret;
 
   LOCK
@@ -273,8 +263,7 @@ unsigned char dpcrtlmm_AreTrapsEnabled()
 /*-------------------------------------------------------------------------*/
 static void DefHandler(
   const char *TrapMsg
-)
-{
+) {
   /*
     Output trap's message on the standard error stream
   */

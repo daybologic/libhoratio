@@ -63,8 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
 unsigned int dpcrtlmm_IsBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* Thread safe wrapper for IsBadBlockPtr() */
   unsigned int ret;
 
@@ -77,8 +76,7 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_IsBadArrayPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* Thread safe wrapper for IsBadArrayPtr() */
   unsigned int ret;
 
@@ -92,8 +90,7 @@ unsigned int dpcrtlmm_IsBadArrayPtr(
 unsigned int dpcrtlmm_int_IsBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* locals */
   unsigned int i; /* List/loop control */
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
@@ -125,8 +122,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_int_IsBadArrayPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* I've rewritten this function so that is can support NULL arrays
   and it does not matter whether PBlockArray is resolved or not */
 

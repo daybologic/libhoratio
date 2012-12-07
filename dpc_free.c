@@ -102,8 +102,7 @@ static void OurLog(
 void dpcrtlmm_Free(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   /* Thread safe wrapper around Free() */
 
   LOCK
@@ -114,8 +113,7 @@ void dpcrtlmm_Free(
 static void dpcrtlmm_int_Free(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   /* locals */
   unsigned int i; /* For the finder loop */
   char trapMsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
@@ -189,8 +187,7 @@ static void dpcrtlmm_int_Free(
 static void Moveup(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int StartPos
-)
-{
+) {
   /* locals */
   unsigned int i; /* Loop control */
 
@@ -230,8 +227,7 @@ static void Moveup(
 static void ShrinkBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int Amount
-)
-{
+) {
   _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
   if (!Amount)
   {
@@ -286,8 +282,12 @@ static void ShrinkBlockArray(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
-{
+static void OurLog(
+  const char* File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char* Str
+) {
   /* Our job is to add "Free() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't call _Log() twice because the information will be put on different

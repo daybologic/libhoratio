@@ -69,8 +69,7 @@ static void InitVector(char** vector, unsigned int n);
 static void Title(void); /* Just displays some information */
 static void Version(void); /* Prints the library version */
 
-int main(const int argc, const char *argv[])
-{
+int main(const int argc, const char *argv[]) {
   if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
     printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
     return EXIT_FAILURE;
@@ -87,8 +86,7 @@ int main(const int argc, const char *argv[])
   return my_main(argc, argv);
 }
 
-static int my_main(const int argc, const char* argv[])
-{
+static int my_main(const int argc, const char* argv[]) {
   /* This is where the original program will begin, here's a
   quick example of your program, allocating all the arguments,
   using the dpcrtlmm_Dump and then releasing them. */
@@ -127,8 +125,7 @@ static int my_main(const int argc, const char* argv[])
   return EXIT_SUCCESS;
 }
 
-static void handler(char** vector)
-{
+static void handler(char** vector) {
   /* Vector cleaner */
   if ( vector ) {
     size_t i = 0U;
@@ -141,8 +138,7 @@ static void handler(char** vector)
   }
 }
 
-static void PrintInfo(char** vector)
-{
+static void PrintInfo(char** vector) {
   if ( vector ) {
     size_t i = 0U;
 
@@ -153,8 +149,7 @@ static void PrintInfo(char** vector)
   }
 }
 
-static void InitVector(char** vector, unsigned int n)
-{
+static void InitVector(char** vector, unsigned int n) {
   if ( vector ) {
     unsigned int i;
 
@@ -163,8 +158,7 @@ static void InitVector(char** vector, unsigned int n)
   }
 }
 
-static void Title()
-{
+static void Title() {
   printf("DPCRTLMM ");
   Version();
   printf(" example program.\n");
@@ -173,8 +167,7 @@ static void Title()
   printf("of the individual addresses.\n\n");
 }
 
-static void Version()
-{
+static void Version() {
   S_DPCRTLMM_VERSION version;
 
   dpcrtlmm_Ver(&version); /* Call lib to get version */

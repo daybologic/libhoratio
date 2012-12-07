@@ -77,8 +77,7 @@ add this to the total leakage */
 static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr);
 unsigned char dpcrtlmm__EnableTraps = 1U;
 /*-------------------------------------------------------------------------*/
-PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
-{
+PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct) {
   /* No need to lock the big global lock for this, only reading readonly data. */
   if (PVerStruct)
   {
@@ -103,8 +102,7 @@ PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
   return PVerStruct;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_Startup()
-{
+void dpcrtlmm_Startup() {
   if (!_libStarted)
   {
     /* Initialization of internal library data */
@@ -131,8 +129,7 @@ void dpcrtlmm_Startup()
   return;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_Shutdown()
-{
+void dpcrtlmm_Shutdown() {
   /* Don't moan about my double use of the define, I like it this
   way, it feels cleaner, declarations separated! */
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -168,13 +165,11 @@ void dpcrtlmm_Shutdown()
   return;
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsStarted()
-{
+unsigned int dpcrtlmm_IsStarted() {
   return _libStarted;
 }
 /*-------------------------------------------------------------------------*/
-static void TrapUnFreedArrays()
-{
+static void TrapUnFreedArrays() {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)]; /* Reserved for trap/log messages */
   long unsigned int numArraysUnfreed = 0U; /* Count of number of arrays the programmer failed to free (excludes built-in one which doesn't get destroyed) */
   unsigned long totalBytesLeaked = 0UL; /* The total bytes leaked for the whole program */
@@ -225,8 +220,7 @@ static void TrapUnFreedArrays()
   return;
 }
 /*-------------------------------------------------------------------------*/
-static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
-{
+static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)];
   unsigned int unfreedBlockCount;
   unsigned long totalLeakage = 0U; /* Total byte leakage for this array (blocks summed) */

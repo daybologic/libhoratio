@@ -61,8 +61,7 @@ static size_t dpcrtlmm_int_GetBlockSize(
 size_t dpcrtlmm_GetBlockSize(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   size_t ret;
 
   LOCK
@@ -73,9 +72,9 @@ size_t dpcrtlmm_GetBlockSize(
 }
 /*-------------------------------------------------------------------------*/
 static size_t dpcrtlmm_int_GetBlockSize(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  void DPCRTLMM_FARDATA *BlockPtr
+) {
   /* First test pointers */
   _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
 

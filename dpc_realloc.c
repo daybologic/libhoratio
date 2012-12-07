@@ -82,8 +82,7 @@ void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
   const size_t NewSize
-)
-{
+) {
   void DPCRTLMM_FARDATA *ret;
 
   LOCK
@@ -97,8 +96,7 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
   const size_t NewSize
-)
-{
+) {
   /* ptr is returned to the caller (modified later) */
   void DPCRTLMM_FARDATA *ptr = OldBlockPtr;
   const char funcName[] = "Realloc()"; /* Name of our function */

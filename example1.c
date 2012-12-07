@@ -66,8 +66,7 @@ static void myTrapHandler(
 static void *nullarrptrs[16];
 static void *arrptrs[8];
 /*-------------------------------------------------------------------------*/
-int main()
-{
+int main() {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
   PS_DPCRTLMM_BLOCKDESCARRAY Parr;
@@ -133,8 +132,7 @@ int main()
   return 0;
 }
 /*-------------------------------------------------------------------------*/
-static void PrintStats(const PS_DPCRTLMM_STATS PStats)
-{
+static void PrintStats(const PS_DPCRTLMM_STATS PStats) {
   if (PStats)
   {
     printf(
@@ -158,8 +156,7 @@ static void PrintStats(const PS_DPCRTLMM_STATS PStats)
   }
 }
 /*-------------------------------------------------------------------------*/
-static void InitArrays()
-{
+static void InitArrays() {
   size_t i;
   for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
     nullarrptrs[i] = NULL;
@@ -167,8 +164,7 @@ static void InitArrays()
     arrptrs[i] = NULL;
 }
 /*-------------------------------------------------------------------------*/
-static void PrintVersion()
-{
+static void PrintVersion() {
   S_DPCRTLMM_VERSION ver;
   printf("Gathering library version info...");
   dpcrtlmm_Ver(&ver);
@@ -179,8 +175,7 @@ static void PrintVersion()
 static void myTrapHandler(
   const unsigned int TrapID,
   const char *TrapMsg
-)
-{
+) {
   /*
     Why the hell am I handling this trap?  I'm not, I install this as
     a hook only.  Which means control is returned to the DPCRTLMM rap

@@ -80,10 +80,9 @@ static void TrapOnBadBlockPtr(
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_VerifyPtrs(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* CAUTION: Do not pass a resolved array pointer to this function */
   /*
     First trap invalid array pointers
@@ -100,8 +99,7 @@ void dpcrtlmm_int_VerifyPtrs(
 static void TrapOnBadBlockArray(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* locals */
   const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
@@ -131,8 +129,7 @@ static void TrapOnBadBlockPtr(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* The pointer to the array is invalid */
   {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For trap message */

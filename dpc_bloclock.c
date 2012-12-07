@@ -55,8 +55,7 @@ void dpcrtlmm_SetBlockLockingFlag(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
   const unsigned int NewStatus
-)
-{
+) {
   LOCK
   dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
   UNLOCK
@@ -65,8 +64,7 @@ void dpcrtlmm_SetBlockLockingFlag(
 unsigned int dpcrtlmm_IsBlockLocked(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   unsigned int ret;
 
   LOCK
@@ -79,8 +77,7 @@ unsigned int dpcrtlmm_IsBlockLocked(
 void dpcrtlmm_ToggleBlockLockingStatus(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   LOCK
   dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
   UNLOCK
@@ -90,8 +87,7 @@ void dpcrtlmm_int_SetBlockLockingFlag(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
   const unsigned int NewStatus
-)
-{
+) {
   unsigned char flags;
 
   /* Get current flags */
@@ -109,8 +105,7 @@ void dpcrtlmm_int_SetBlockLockingFlag(
 unsigned int dpcrtlmm_int_IsBlockLocked(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   unsigned char flags;
 
   /* Get the flags for the descriptor */
@@ -123,8 +118,7 @@ unsigned int dpcrtlmm_int_IsBlockLocked(
 void dpcrtlmm_int_ToggleBlockLockingStatus(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   /* Get current status */
   unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);
   /* Set locking state as NOT current locking state */

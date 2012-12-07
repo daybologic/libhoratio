@@ -56,8 +56,7 @@ POSSIBILITY OF SUCH DAMAGE.
 unsigned int dpcrtlmm_int_IndexFromBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   unsigned int i;
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
 

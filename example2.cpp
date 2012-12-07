@@ -68,8 +68,7 @@ static void* arrptrs[16];
   using namespace Overlord;
 #endif /*!__NO_NAMESPACES__*/
 /*-------------------------------------------------------------------------*/
-int main()
-{
+int main() {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
   TDPCRTLMM_BlockArray blockDesc(false);
@@ -134,8 +133,9 @@ int main()
   return 0;
 }
 /*-------------------------------------------------------------------------*/
-static void PrintStats(const PS_DPCRTLMM_STATS PStats)
-{
+static void PrintStats(
+  const PS_DPCRTLMM_STATS PStats
+) {
   if (PStats)
   {
     printf("Blocks allocated: %lu (peaked at %lu)\n", PStats->Blocks.Allocated, PStats->Blocks.Peak);
@@ -145,8 +145,7 @@ static void PrintStats(const PS_DPCRTLMM_STATS PStats)
   }
 }
 /*-------------------------------------------------------------------------*/
-static void InitArrays()
-{
+static void InitArrays() {
   size_t i;
 
   for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
@@ -166,8 +165,10 @@ static void PrintVersion()
   printf("\n");
 }
 /*-------------------------------------------------------------------------*/
-static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg)
-{
+static void myTrapHandler(
+  const unsigned int TrapID,
+  const char* TrapMsg
+) {
   /* Why the hell am I handling this trap?  I'm not, I install this as a
   hook only.  Which means control is returned to the DPCRTLMM rap handler
   afterwards. */

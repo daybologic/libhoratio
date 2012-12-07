@@ -104,8 +104,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
-)
-{
+) {
   /* Thread safe wrapper for AllocEx() */
   void DPCRTLMM_FARDATA* ret;
 
@@ -121,8 +120,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
-)
-{
+) {
   /* locals */
   void DPCRTLMM_FARDATA* genBlockPtr; /* Generated block pointer */
   char logMsg[MAX_TRAP_STRING_LENGTH + 1];
@@ -209,8 +207,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
 static unsigned int GrowBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
   const unsigned int GrowByElems
-)
-{
+) {
   PS_DPCRTLMM_BLOCKDESCRIPTOR ptr; /* Pointer to block descriptors during enlargement */
   unsigned int oldCount; /* Count before enlargement */
   unsigned int initi; /* Initialization interator */
@@ -252,8 +249,7 @@ static void OurLog(
   const unsigned int Line,
   const unsigned short Severity,
   const char *Str
-)
-{
+) {
    /* Our job is to add "Alloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't use LOG() twice because the information will be put on different
