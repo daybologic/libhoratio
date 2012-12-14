@@ -132,8 +132,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
     Alloc the array for the caller
   */
   Parray = (S_DPCRTLMM_BLOCKDESCARRAY*)malloc( sizeof(S_DPCRTLMM_BLOCKDESCARRAY) );
-  if (!Parray) /* Failed to alloc */
-  {
+  if (!Parray) { /* Failed to alloc */
     /* Memory outages while in memory manager mode must be warned about! */
     WARNING("CreateBlockArray(): Couldn\'t allocate the new block array!");
     #ifdef DPCRTLMM_DEBUGHOOKS
@@ -151,8 +150,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
   /* The array base must be added to the list of acceptable arrays,
      (the so called safety list)
   */
-  if ( !SafetyList_AddBase(Parray) ) /* Add to safety list */
-  {
+  if ( !SafetyList_AddBase(Parray) ) { /* Add to safety list */
     /* Failed to add to the list?!  Memory outages while in memory manager must be warned about */
     WARNING("CreateBlockArray(): The array base address could not be added to the safety list");
     DPCRTLMM_FREE(Parray); /* Free the array again */
@@ -190,19 +188,14 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   /* There is no allocation request */
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) /* For all the possible items in the safety list */
-  {
-    if (_safetyList[sli]) /* Is this entry used? */
-    {
-      if (_safetyList[sli] == PBlockArray) /* Pointer match! */
-      {
-        if (_safetyList[sli]->Count) /* Any descriptors remaining? */
-        {
+  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) { /* For all the possible items in the safety list */
+    if (_safetyList[sli]) { /* Is this entry used? */
+      if (_safetyList[sli] == PBlockArray) { /* Pointer match! */
+        if (_safetyList[sli]->Count) { /* Any descriptors remaining? */
           unsigned long totBytes = 0UL;
           unsigned int li;
 
-          for ( li = 0; li < _safetyList[sli]->Count; li++ ) /* All blocks */
-          {
+          for ( li = 0; li < _safetyList[sli]->Count; li++ ) { /* All blocks */
             totBytes += _safetyList[sli]->Descriptors[li].Size; /* Add size of block to total */
           }
 
@@ -215,8 +208,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
           );
           Trap(DPCRTLMM_TRAP_UNFREED_BLOCKS, trapStr);
         }
-        if (_safetyList[sli]->Descriptors) /* Descriptors not zero? */
-        {
+        if (_safetyList[sli]->Descriptors) { /* Descriptors not zero? */
           sprintf(
             trapStr,
             "DestroyBlockArray(): Base of raw descriptor array not freed!\n%s%p->%s%p (PBlockArray->Descriptors must be NULL)",

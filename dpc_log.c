@@ -89,22 +89,17 @@ void dpcrtlmm_int_Log(
   FILE* HLogFile; /* Handle for log file */
   #endif /*DPCRTLMM_LOG*/
 
-  if (Message)
-  {
-    if (Message[0])
-    {
+  if (Message) {
+    if (Message[0]) {
       formatMsg[0] = '\0'; /* so strncat() knows where to begin */
       STRNCAT_FIXEDBUFF(formatMsg, "DPCRTLMM: \"");
       if ( File ) sprintf(number, "%u", Line); /* Convert line number to string */
-      switch ( Severity )
-      {
-        case DPCRTLMM_LOG_WARNING :
-        {
+      switch ( Severity ) {
+        case DPCRTLMM_LOG_WARNING : {
           STRNCAT_FIXEDBUFF(formatMsg, "Warning! ");
           break;
         }
-        case DPCRTLMM_LOG_ERROR :
-        {
+        case DPCRTLMM_LOG_ERROR : {
           STRNCAT_FIXEDBUFF(formatMsg, "FATAL ERROR! ");
           break;
         }
@@ -122,8 +117,7 @@ void dpcrtlmm_int_Log(
       /* Everything goes in the log... */
       #ifdef DPCRTLMM_LOG
       HLogFile = fopen("DPCRTLMM.LOG", "at"); /* Append/overwrite text file */
-      if (HLogFile) /* Log opened? */
-      {
+      if (HLogFile) { /* Log opened? */
         fputs(formatMsg, HLogFile); /* Output log msg to log file */
         fclose(HLogFile); /* Close the log file */
       }

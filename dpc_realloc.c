@@ -112,22 +112,19 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   if (_LockTrap(funcName, PBlockArray, OldBlockPtr)) /* Do trap if block is locked */
     return NULL;
 
-  if (!NewSize) /* No new size, hmm, must be wanting free() really */
-  {
+  if (!NewSize) { /* No new size, hmm, must be wanting free() really */
     WARNING("Dynamic possibly non-portable use of realloc() as a free-er");
     dpcrtlmm_Free(PBlockArray, OldBlockPtr); /* Give the caller what they want */
     return NULL;
   }
 
-  if ( !OldBlockPtr ) /* This is a non-portable attempt to use realloc as an initial allocator */
-  {
+  if ( !OldBlockPtr ) { /* This is a non-portable attempt to use realloc as an initial allocator */
     WARNING("Dynamic possibly non-portable use of realloc() as an initial allocator");
     return dpcrtlmm_Alloc(PBlockArray, NewSize);
   }
 
   blockIndex = dpcrtlmm_int_IndexFromBlockPtr(PRArr, OldBlockPtr);
-  if ( PRArr->Descriptors[blockIndex].Size == NewSize ) /* Same size ?! */
-  {
+  if ( PRArr->Descriptors[blockIndex].Size == NewSize ) { /* Same size ?! */
     /* The block is already the requested size! */
     return ptr; /* Give present pointer back to caller wihout touching it */
   }
@@ -143,12 +140,9 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   debugHookInfo.HookType = DPCRTLMM_HOOK_REALLOC;
   /* Set AllocReq to size difference */
   debugHookInfo.AllocReq = DPCRTLMM_MAX(PRArr->Descriptors[blockIndex].Size, NewSize) - DPCRTLMM_MIN(PRArr->Descriptors[blockIndex].Size, NewSize);
-  if ( NewSize < PRArr->Descriptors[blockIndex].Size ) /* Negate number */
-  {
+  if ( NewSize < PRArr->Descriptors[blockIndex].Size ) { /* Negate number */
     debugHookInfo.Misc0 |= 1; /* Set bit 0 */
-  }
-  else /* Positive number */
-  {
+  } else { /* Positive number */
     debugHookInfo.Misc0 &= ~1; /* Clear bit 0 */
   }
   /* Misc1 points to the new block, the hook routine can dereference it if it wants to */

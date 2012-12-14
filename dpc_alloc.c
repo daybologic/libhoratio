@@ -140,8 +140,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
   genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
-  if (!genBlockPtr) /* Out of memory? */
-  {
+  if (!genBlockPtr) { /* Out of memory? */
     /* Use buffer for log messages, it's the same size as for traps */
     sprintf(
       logMsg,
@@ -154,8 +153,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   }
 
   /* Now add the block to the array, first grow array */
-  if (!GrowBlockArray(PRArr, 1))
-  {
+  if (!GrowBlockArray(PRArr, 1)) {
     /* Attempt to enlarge the array failed? */
     DPCRTLMM_FREE(genBlockPtr); /* Release the new block of memory */
 
@@ -218,8 +216,7 @@ static unsigned int GrowBlockArray(
     assert(PCurrentBlockArray);
   #endif /*NDEBUG*/
 
-  if (!GrowByElems) /* Want to grow by nothing? */
-  {
+  if (!GrowByElems) { /* Want to grow by nothing? */
     OURLOG_POS(DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
     return 1U; /* Success, already this size, it's great when there's nothing to do isn't it, programmer's are lazy */
   }
@@ -233,8 +230,7 @@ static unsigned int GrowBlockArray(
   PCurrentBlockArray->Count += GrowByElems;
   PCurrentBlockArray->Descriptors = ptr; /* Possible relocation might mean the pointer to the descriptors may need updating, make it so */
 
-  for ( initi = oldCount; initi < PCurrentBlockArray->Count; initi++ ) /* All new descriptors in the array that we just created */
-  {
+  for ( initi = oldCount; initi < PCurrentBlockArray->Count; initi++ ) { /* All new descriptors in the array that we just created */
     PCurrentBlockArray->Descriptors[initi].PBase = NULL; /* No block assigned to this new descriptor yet */
     PCurrentBlockArray->Descriptors[initi].Size = (size_t)0U; /* Therefore no size either */
     PCurrentBlockArray->Descriptors[initi].Flags = 0U; /* No flags set */
@@ -255,14 +251,12 @@ static void OurLog(
   We can't use LOG() twice because the information will be put on different
   lines so a copy is needed. */
 
-  if (Str && Str[0]) /* Valid string of at least on character sent to us? */
-  {
+  if (Str && Str[0]) { /* Valid string of at least on character sent to us? */
     char* PcopyStr;
     const char FuncName[] = "Alloc(): "; /* Prefix */
 
     PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) ); /* Allocate space for copy, note that NULL termination is automatic because using sizeof() */
-    if (PcopyStr)
-    {
+    if (PcopyStr) {
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 

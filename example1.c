@@ -92,8 +92,7 @@ int main() {
   printf("NULL array test: ");
   printf("Allocating 32 blocks of 32KB (1MB) - in NULL block array\n");
   printf("Block: ");
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-  {
+  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
     printf("#%d ", i);
     nullarrptrs[i] = dpcrtlmm_Calloc(NULL, 4, 256); /* Allocate block */
     if (!nullarrptrs[i])
@@ -105,8 +104,7 @@ int main() {
   PrintStats(&stats);
   printf("Allocating the explictly allocated block array, 8 2KB blocks\n");
   printf("Block ");
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-  {
+  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
     printf("#%d ", i);
     arrptrs[i] = dpcrtlmm_Calloc(Parr, 2, 1024); /* Allocate block */
     if (!arrptrs[i])
@@ -133,8 +131,7 @@ int main() {
 }
 /*-------------------------------------------------------------------------*/
 static void PrintStats(const PS_DPCRTLMM_STATS PStats) {
-  if (PStats)
-  {
+  if (PStats) {
     printf(
       "Blocks allocated: %lu (peaked at %lu)\n",
       PStats->Blocks.Allocated,

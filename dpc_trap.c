@@ -108,14 +108,12 @@ void dpcrtlmm_int_Trap(
 
   /* The message is prefixed with "DPCRTLMM (Trap): " by copying it */
   trapsCopy = (char*)malloc( sizeof(preFix) + strlen(Message) ); /* No NULL terminator because sizeof() includes this */
-  if (trapsCopy)
-  {
+  if (trapsCopy) {
     strcpy(trapsCopy, preFix);
     strcat(trapsCopy, Message);
 
     /* The Overlord had to work this out by means of a flow chart */
-    if (_UserTrapCallback) /* Is user callback installed? */
-    {
+    if (_UserTrapCallback) { /* Is user callback installed? */
       _UserTrapCallback(Id, Message); /* Call user's callback */
       if (!_userTrapCallbackIsHook) /* Is handler, not hook? */
         goto trapRecover; /* Recover from trap */
@@ -142,8 +140,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
   debugHookInfo.HookType = DPCRTLMM_HOOK_INSTTRAPCALLBACK;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  if (NewTrapCallback)
-  {
+  if (NewTrapCallback) {
     #ifdef DPCRTLMM_LOG
     char logStr[MAX_TRAP_STRING_LENGTH+sizeof(char)];
     #endif /*DPCRTLMM_LOG*/
@@ -173,9 +170,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-  }
-  else /* Pointer to trap handler not passed */
-  {
+  } else { /* Pointer to trap handler not passed */
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
@@ -200,8 +195,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(
   debugHookInfo.Misc0 = (unsigned long)CurrentCallback;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  if (CurrentCallback == _UserTrapCallback) /* Make sure user knows */
-  {
+  if (CurrentCallback == _UserTrapCallback) { /* Make sure user knows */
     _UserTrapCallback = NULL; /* Remove handler or hook */
 
     /* Log the removal */
@@ -212,9 +206,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(
     debugHookInfo.Success = 1U;
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-  }
-  else /* The user does not know the address! */
-  {
+  } else { /* The user does not know the address! */
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/

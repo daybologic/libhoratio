@@ -118,9 +118,7 @@ static void TrapOnBadBlockArray(
     );
 
     Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, dynMsg);
-  }
-  else /* malloc() failed */
-  {
+  } else { /* malloc() failed */
     if ( dpcrtlmm__EnableTraps ) abort();
   }
 }
@@ -130,8 +128,7 @@ static void TrapOnBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
 ) {
-  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* The pointer to the array is invalid */
-  {
+  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* The pointer to the array is invalid */
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For trap message */
     char blankStr[] = "";
     const char *PusedFuncName; /* Points to function name to use (not dynamic) */
@@ -154,8 +151,7 @@ static void TrapOnBadBlockPtr(
 
   /* The array is a valid and acceptable pointer, pass on to IsBadBlockPtr()
   and if it's bad fire a trap. */
-  if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) /* Is bad block pointer? */
-  {
+  if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) { /* Is bad block pointer? */
     char trapMsg[128]; /* Space for trap message */
     char *PusedFuncName;
     int pusedDynamic;
@@ -169,8 +165,7 @@ static void TrapOnBadBlockPtr(
         PusedFuncName[0] = '\0';
         strncat(PusedFuncName, FuncName, lenUsedFuncName);
       }
-    }
-    else {
+    } else {
       pusedDynamic = 0;
       PusedFuncName = blankStr;
     }

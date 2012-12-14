@@ -99,8 +99,7 @@ void dpcrtlmm_GetStats(
   PS_DPCRTLMM_STATS PReadStats
 ) {
   LOCK
-  if (PReadStats)
-  {
+  if (PReadStats) {
     PReadStats->Blocks.Allocated = _blockCount;
     /* Loop through the entire load counting us flags */
     CountFlagsInUse(PReadStats);
@@ -114,8 +113,7 @@ void dpcrtlmm_GetStats(
 static void CountFlagsInUse(
   PS_DPCRTLMM_STATS PFlagsStats
 ) {
-  if (PFlagsStats)
-  {
+  if (PFlagsStats) {
     unsigned int i;
 
     /* First reset the counts in the stats struct */
@@ -123,13 +121,10 @@ static void CountFlagsInUse(
     PFlagsStats->Blocks.Unswappable = 0UL;
 
     /* Go through normal arrays */
-    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ )
-    {
-      if (_safetyList[i]) /* Used entry? */
-      {
+    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) {
+      if (_safetyList[i]) { /* Used entry? */
         unsigned int j;
-        for ( j = 0U; j < _safetyList[i]->Count; j++ )
-        {
+        for ( j = 0U; j < _safetyList[i]->Count; j++ ) {
           unsigned char flags = _safetyList[i]->Descriptors[j].Flags;
 
           if ( (flags & 1) == 1) /* Lock bit set */
@@ -141,8 +136,7 @@ static void CountFlagsInUse(
     }
     /* Extra support for the "NULL array" */
     #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
-    for ( i = 0U; i < _defaultArray.Count; i++ )
-    {
+    for ( i = 0U; i < _defaultArray.Count; i++ ) {
       unsigned char flags = _defaultArray.Descriptors[i].Flags;
 
       if ( (flags & 1) == 1) /* Lock bit set */

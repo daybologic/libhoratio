@@ -91,8 +91,7 @@ int main() {
   printf("NULL array test: ");
   printf("Allocating blocks in NULL block array\n");
   printf("Block: ");
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-  {
+  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
     printf("#%d ", i);
     nullarrptrs[i] = calloc(32, 8); /* Allocate block */
     if (!nullarrptrs[i])
@@ -106,8 +105,7 @@ int main() {
 
   printf("Allocating blocks in explictly allocated block array\n");
   printf("Block ");
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-  {
+  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
     printf("#%d ", i);
     arrptrs[i] = dpcrtlmm_block_Calloc(blockDesc, 8, 128); /* Allocate block */
     if (!arrptrs[i])
@@ -136,8 +134,7 @@ int main() {
 static void PrintStats(
   const PS_DPCRTLMM_STATS PStats
 ) {
-  if (PStats)
-  {
+  if (PStats) {
     printf("Blocks allocated: %lu (peaked at %lu)\n", PStats->Blocks.Allocated, PStats->Blocks.Peak);
     printf("Amount locked: %lu\n", PStats->Blocks.Locked);
     printf("Amount marked as unswappable: %lu\n", PStats->Blocks.Unswappable);

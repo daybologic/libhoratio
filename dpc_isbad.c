@@ -96,8 +96,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
   /* Test for bad block array */
-  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* Block array bad? */
-  {
+  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* Block array bad? */
     /* Fire a trap */
     char trapmsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
 
@@ -110,8 +109,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
     Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapmsg);
   }
 
-  for ( i = 0U; i < PRArr->Count; i++ ) /* For all the block descriptors in the list */
-  {
+  for ( i = 0U; i < PRArr->Count; i++ ) { /* For all the block descriptors in the list */
     if (BlockPtr == PRArr->Descriptors[i].PBase) /* Block base match */
       return 0U; /* Block is not bad */
   }

@@ -144,12 +144,10 @@ void dpcrtlmm_int_InitDebugHookMatrix() {
   /* Initialize or clear the debug hook matrix */
   unsigned int chainI; /* Used during initialization of chains loop */
 
-  for ( chainI = 0U; chainI < DPCRTLMM_HOOKCHAIN_SIZE; chainI++ )
-  {
+  for ( chainI = 0U; chainI < DPCRTLMM_HOOKCHAIN_SIZE; chainI++ ) {
     unsigned int hookTypeI; /* Nested loop to process chains for other hook types */
 
-    for ( hookTypeI = 0U; hookTypeI < DPCRTLMM_DEBUGHOOK_LASTHOOK+1; hookTypeI++ )
-    {
+    for ( hookTypeI = 0U; hookTypeI < DPCRTLMM_DEBUGHOOK_LASTHOOK+1; hookTypeI++ ) {
       unsigned int (*NULLHookPtr)(PS_DPCRTLMM_DEBUGHOOKINFO) = NULL; /* Make NULL pointer */
 
       dpcrtlmm_int__debugHookMatrix[(size_t)chainI][(size_t)hookTypeI] = NULLHookPtr; /* Init element */
@@ -174,8 +172,7 @@ void dpcrtlmm_int_CallDebugHook(
   trap executive (incase they use the original pointers somehow), though I
   can't think how they can offhand, still... */
 
-  if (BadHookType(HookType)) /* Bad hook type (out of range in matrix) */
-  {
+  if (BadHookType(HookType)) { /* Bad hook type (out of range in matrix) */
     ERROR("CallDebugHook: Internal library error, HookType out of range!");
     return;
   }
@@ -204,22 +201,17 @@ static unsigned int dpcrtlmm_int_InstallDebugHook(
   unsigned int i; /* looping */
   unsigned int set = 0U; /* set = FALSE */
 
-  if (HookType != DPCRTLMM_HOOK_ALL) /* Specific hook, not general hook */
-  {
+  if (HookType != DPCRTLMM_HOOK_ALL) { /* Specific hook, not general hook */
     if (BadHookType(HookType)) return 0U; /* Ensure hook type is valid */
     /* Find the first free entry in the chain */
-    for ( i = 0U; i < DPCRTLMM_HOOKCHAIN_SIZE; i++ )
-    {
-      if ( !_debugHookMatrix[i][HookType] ) /* Found free entry? */
-      {
+    for ( i = 0U; i < DPCRTLMM_HOOKCHAIN_SIZE; i++ ) {
+      if ( !_debugHookMatrix[i][HookType] ) { /* Found free entry? */
         _debugHookMatrix[i][HookType] = NewHookProc; /* Install hook proc */
         set = 1U; /* Remember at least one hook was installed: set 'set' TRUE */
         break; /* Don't keep looping */
       }
     }
-  }
-  else /* General hook that wants everything! */
-  {
+  } else { /* General hook that wants everything! */
     unsigned short nextHook;
 
     for ( nextHook = (unsigned short)0x0000U; nextHook < DPCRTLMM_DEBUGHOOK_LASTHOOK; nextHook++ ) { /* Go through all valid hook types */
@@ -243,10 +235,8 @@ static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
   unsigned int i;
   unsigned total = 0U;
 
-  if (!BadHookType(HookType))
-  {
-    for ( i = 0U; i < DPCRTLMM_HOOKCHAIN_SIZE; i++ ) /* All hook positions */
-    {
+  if (!BadHookType(HookType)) {
+    for ( i = 0U; i < DPCRTLMM_HOOKCHAIN_SIZE; i++ ) { /* All hook positions */
       if ( _debugHookMatrix[i][HookType] ) /* Hook installed at this point in the chain? */
         total++; /* Increment count */
     }
@@ -275,8 +265,7 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(
   unsigned int i;
   unsigned int retStatus = 0U; /* Return status FALSE by default */
 
-  if (HookType != DPCRTLMM_HOOK_ALL) /* Specific hook type request */
-  {
+  if (HookType != DPCRTLMM_HOOK_ALL) { /* Specific hook type request */
     if (BadHookType(HookType)) return 0U;
 
     for ( i = 0U; i < DPCRTLMM_DEBUGHOOK_LASTHOOK; i++ ) { /* Process all entries in the chain */
@@ -287,8 +276,7 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(
         example the user installed the same hook proc twice for the same type */
       }
     }
-  }
-  else { /* HookType is general */
+  } else { /* HookType is general */
     unsigned short si; /* Used for loop */
     retStatus = 1U; /* We always say success */
 
