@@ -1,6 +1,10 @@
 2006-02-23
 ----------
-  * int_data.c - General tidy up for new configure system
+  * General tidy up for new configure system
+
+2006-02-21
+----------
+  * License change
 
 1.2.0 - 2006-02-22
 ------------------
@@ -10,6 +14,14 @@ DDRP - Change license to a BSD-style license for all code.
 DDRP - Examples no longer cause leaks on purpose because automated
        calls to make check might be taking place by something
        bigger than us.
+
+2005-04-14
+----------
+  * Fix %p printing warning, some re-formatting.
+
+2002-09-16
+----------
+  * Fix infinite loop in dpcrtlmm_Dump() and add array pointer to dump.
 
 1.1.6
 -----
@@ -72,11 +84,19 @@ DDRP - Made stderr usage optional, defaults to stdout
 DDRP - Bug fix: Disabling the NULL array from the configurator caused code to try to access the default array even so, used ifdefs around such code.
 NOTICE! Changes to user source might be needed, include stdio.h!
 
+2001-07-31
+----------
+  * Added support for big lock (thread safety).
+
 2001-06-07
 ----------
 From now on read the ChangeLog, which will list all patches since the
 last release.  Important postings (like the above but only if they are
 of consequence) now go to the mailing list instead.
+
+2001-05-24
+----------
+  * Added dump and supported functions.
 
 2000-12-12
 ----------
@@ -110,6 +130,17 @@ Managed to get rid of two unneccersary integers in dpcrtlmm.c.
 Functions can use _libStarted (an internal variable).  This would mean
 the library could be restarted from the same session and save a little
 memory.
+
+  11th Dec 2000 : Removed the structure that communicated between both
+                  functions to carry counts of flags.  Bug fix, the
+                  swappable and locked block counts in the statistics
+                  didn't make it back to the caller's structure.
+
+
+2000-12-01
+----------
+  * To fix a possible porting problem I no longer assume
+    that realloc() will allocate when called with NULL, newSize
 
 2000-11
 -------

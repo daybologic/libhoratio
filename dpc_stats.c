@@ -38,21 +38,6 @@ POSSIBILITY OF SUCH DAMAGE.
   Library: DPCRTLMM 1.0
   Language: ANSI C (1990)
   Revision #5
-
-  11th Dec 2000 : Removed the structure that communicated between both
-                  functions to carry counts of flags.  Bug fix, the
-                  swappable and locked block counts in the statistics
-                  didn't make it back to the caller's structure.
-
-  24th May 2001 : Added dump and supported functions.
-
-  31st Jul 2001 : Added support for big lock (thread safety).
-
-  16th Sep 2002 : Fix infinite loop in dpcrtlmm_Dump() and add array
-                  pointer to dump.
-
-  14th Apr 2005:  Fix %p printing warning, some re-formatting.
-  23rd Feb 2006:  General tidy up; license change
 */
 
 #define DPCRTLMM_SOURCE
