@@ -1,3 +1,7 @@
+2006-02-23
+----------
+  * int_data.c - General tidy up for new configure system
+
 1.2.0 - 2006-02-22
 ------------------
 DDRP - Add GNU autoconf support, remove old configurator.
@@ -235,6 +239,11 @@ Got Alloc()/Free() to update statistics, got code to work to nag user
 and terminate the program if more than DPCRTLMM_STDBLOCKLIMIT blocks
 are used in the program, oh and no worries it doesn't nag registered
 users.
+  * int_data.c: Added dpcrtlmm_int__blockCount, it's used instead of a time consuming
+    loop through all blockarrays, for the call dpcrtlmm_GetBlockCount()
+  * Added dpcrtlmm_int__blockCountPeak
+  * Added dpcrtlmm_int__allocCharge & dpcrtlmm_int__allocPeak
+
 
 2000-07-26
 ----------
@@ -275,6 +284,8 @@ I define in my source only.
 to define DPCRTLMM_LOG for an experiment, filtered them all out, all
 the #ifdef DPCRTLMM_LOG #endif /*DPCRTLMM_LOG*/ stuff everywhere looks
 a right mess though.
+  * Just added DPCRTLMM_SOURCE at the top of int_data.c
+
 
 2000-07-20
 ----------
@@ -320,6 +331,7 @@ crash the program.
     Added a hack table for shorter function names, this was suggested
 by [24]Jeremy and will also shorten the structure names.  Developers
 already using the library can totally ignore this.
+  * Added dpcrtlmm_int__defaultArray (the NULL array) to int_data.c
 
 2000-06-14
 ----------
@@ -339,6 +351,7 @@ working, a single missing '!' (logical not).  Republishing the library.
 Wrote documentation for library and released it on the Daybo Logic web
 site
 http://www.daybologic.co.uk
+  *  Disabled defintion of hook traps while they are turned off in standard builds
 
 2000-05-04
 ----------
@@ -358,6 +371,7 @@ Also changed defintion of _safeList and all people who used it had to
 be
 altered to be aware of the new definition.
 Wrote a new page on the web site offering it for sale.
+  * Changed definition of _safetyList from S_GENLIST _safetyList
 
 2000-05-03
 ----------
