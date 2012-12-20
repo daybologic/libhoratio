@@ -321,12 +321,6 @@ crash the program.
 by [24]Jeremy and will also shorten the structure names.  Developers
 already using the library can totally ignore this.
 
-
-2000-07-18
-----------
-OK this isn't a technical note, it's just that today I set myself the
-deadline of August 1st for the version 1.0 release.
-
 2000-06-14
 ----------
 In 16-bit memory models on x86 processors, if the data segment is near
