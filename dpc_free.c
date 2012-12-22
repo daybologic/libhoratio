@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -102,8 +102,7 @@ static void OurLog(
 void dpcrtlmm_Free(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   /* Thread safe wrapper around Free() */
 
   LOCK
@@ -114,11 +113,13 @@ void dpcrtlmm_Free(
 static void dpcrtlmm_int_Free(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   /* locals */
   unsigned int i; /* For the finder loop */
   char trapMsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
+  #ifdef HAVE_SNPRINTF
+  size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
   const char funcName[] = "Free()"; /* Our function name */
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -127,14 +128,19 @@ static void dpcrtlmm_int_Free(
 
   PRArr = _ResolveArrayPtr(PBlockArray); /* Resolve incase block array is NULL */
   _VerifyPtrs(funcName, PBlockArray, NULL); /* Don't check if bad block in this trap, use own trap... */
-  if ( dpcrtlmm_int_IsBadBlockPtr(PBlockArray, Ptr) ) /* Block pointer not valid? */
-  {
+  if ( dpcrtlmm_int_IsBadBlockPtr(PBlockArray, Ptr) ) { /* Block pointer not valid? */
     sprintf(
       trapMsg,
-      "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: 0x%p, block 0x%p",
-      (void*)PBlockArray,
-      Ptr
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: %s%p, block %s%p",
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
+      DPCRTLMM_FMTPTRPFX, Ptr
     );
+    #ifdef HAVE_SNPRINTF
+    trapMsgRemaining -= strlen(trapMsg);
+    #endif /*HAVE_SNPRINTF*/
     Trap(DPCRTLMM_TRAP_UNOWNED_FREE, trapMsg);
   }
 
@@ -142,17 +148,21 @@ static void dpcrtlmm_int_Free(
     return;
 
   /* Find the block's descriptor using the block base address, have a caution to use the resolved array pointer */
-  for ( i = 0U; i < PRArr->Count; i++ )
-  {
-    if ( PRArr->Descriptors[i].PBase == Ptr ) /* This is the one */
-    {
+  for ( i = 0U; i < PRArr->Count; i++ ) {
+    if ( PRArr->Descriptors[i].PBase == Ptr ) { /* This is the one */
       #ifdef DPCRTLMM_LOG
       sprintf(
         trapMsg,
-        "Freeing block %p from array %p",
-        PRArr->Descriptors[i].PBase,
-        (void*)PRArr
+        #ifdef HAVE_SNPRINTF
+        trapMsgRemaining,
+        #endif /*HAVE_SNPRINTF*/
+        "Freeing block %s%p from array %s%p",
+        DPCRTLMM_FMTPTRPFX, PRArr->Descriptors[i].PBase,
+        DPCRTLMM_FMTPTRPFX, (void*)PRArr
       );
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining -= strlen(trapMsg);
+      #endif /*HAVE_SNPRINTF*/
       OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
       #endif /*DPCRTLMM_LOG*/
 
@@ -189,36 +199,41 @@ static void dpcrtlmm_int_Free(
 static void Moveup(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int StartPos
-)
-{
+) {
   /* locals */
   unsigned int i; /* Loop control */
 
-  if ( PBlockArray->Count < 2) /* Only one or no items, can't do a moveup */
-  {
+  if ( PBlockArray->Count < 2) { /* Only one or no items, can't do a moveup */
     /* Do trap */
     Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, "Free()/Moveup: Can\'t move up one item or no items.\n");
     return;
   }
-  if ( StartPos >= PBlockArray->Count ) /* StartPos out of range? */
-  {
+  if ( StartPos >= PBlockArray->Count ) { /* StartPos out of range? */
     /* Do trap */
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* Space for trap message */
+    #ifdef HAVE_SNPRINTF
+    size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
+    #endif /*HAVE_SNPRINTF*/
 
     sprintf(
       trapMsg,
-      "Free()/Moveup: StartPos is not valid. StartPos=%u, 0x%p->Count=%u",
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "Free()/Moveup: StartPos is not valid. StartPos=%u, %s%p->Count=%u",
       StartPos,
-      (void*)PBlockArray,
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
       PBlockArray->Count
     );
+    #ifdef HAVE_SNPRINTF
+    trapMsgRemaining -= strlen(trapMsg);
+    #endif /*HAVE_SNPRINTF*/
     Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, trapMsg);
     return;
   }
 
   /* Moving elements left to fill a gap */
-  for ( i = StartPos+1; i < PBlockArray->Count; i++ )
-  {
+  for ( i = StartPos+1; i < PBlockArray->Count; i++ ) {
     S_DPCRTLMM_BLOCKDESCRIPTOR blockDesc;
 
     blockDesc = PBlockArray->Descriptors[i];
@@ -230,55 +245,66 @@ static void Moveup(
 static void ShrinkBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int Amount
-)
-{
-  _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
-  if (!Amount)
-  {
-    char logMsg[MAX_TRAP_STRING_LENGTH+1];
+) {
+  char logMsg[MAX_TRAP_STRING_LENGTH +1];
+  #ifdef HAVE_SNPRINTF
+  size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
 
+  _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
+  if (!Amount) {
     sprintf(
       logMsg,
-      "Attempt to ShrinkBlockArray(0x%p) by nothing, ignored (internal DPCRTLMM error)",
-      (void*)PBlockArray
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "Attempt to ShrinkBlockArray(%s%p) by nothing, ignored (internal DPCRTLMM error)",
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
     OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
     return;
   }
-  if (!PBlockArray->Count)
-  {
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
-
+  if (!PBlockArray->Count) {
     sprintf(
-      trapMsg,
-      "ShrinkBlockArray(): 0x%p->Count=0U, can\'t shrink the array any more!",
-      (void*)PBlockArray
+      logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "ShrinkBlockArray(): %s%p->Count=0U, can\'t shrink the array any more!",
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
-    Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, trapMsg);
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
+    Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, logMsg);
     return;
   }
-  if (Amount > PBlockArray->Count) /* Shrink further than size?! */
-  {
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
+  if (Amount > PBlockArray->Count) { /* Shrink further than size?! */
     sprintf(
-      trapMsg,
-      "ShrinkBlockArray(): Amount=%u, greater than original size in elements (0x%p->Count=%u)",
+      logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "ShrinkBlockArray(): Amount=%u, greater than original size in elements (%s%p->Count=%u)",
       Amount,
-      (void*)PBlockArray,
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
       PBlockArray->Count
     );
-    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, trapMsg);
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
+    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, logMsg);
     return;
   }
 
   /* Reducing to zero? */
-  if ( !(PBlockArray->Count - Amount) )
-  {
+  if ( !(PBlockArray->Count - Amount) ) {
     DPCRTLMM_FREE(PBlockArray->Descriptors); /* Release entire descriptor array */
     PBlockArray->Descriptors = NULL; /* Mark as no allocation in entire array */
-  }
-  else /* Reducing somewhat but not completely */
-  {
+  } else { /* Reducing somewhat but not completely */
     /* Shrink array */
     PBlockArray->Descriptors = DPCRTLMM_REALLOC( PBlockArray->Descriptors, (PBlockArray->Count - Amount)*sizeof(S_DPCRTLMM_BLOCKDESCRIPTOR) );
   }
@@ -286,21 +312,23 @@ static void ShrinkBlockArray(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void OurLog(const char* File, const unsigned int Line, const unsigned short Severity, const char* Str)
-{
+static void OurLog(
+  const char* File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char* Str
+) {
   /* Our job is to add "Free() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't call _Log() twice because the information will be put on different
   lines so a copy is needed. */
 
-  if (Str && Str[0]) /* Valid string of at least on character sent to us? */
-  {
+  if (Str && Str[0]) { /* Valid string of at least on character sent to us? */
     char* PcopyStr;
     const char FuncName[] = "Free(): "; /* Prefix */
 
     PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) ); /* Allocate space for copy using xmalloc(), pointer allocation can't fail because if it does xmalloc() ends the program.  Note that NULL termination is automatic because using sizeof() */
-    if (PcopyStr)
-    {
+    if (PcopyStr) {
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 

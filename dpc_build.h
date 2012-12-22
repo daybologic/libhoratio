@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -77,6 +77,18 @@ by the config program and included in this file.
 #endif /*MAX_TRAP_STRING_LENGTH*/
 
 #define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) - NOT USER CONFIGURABLE*/
+
+/* Force internal calls to sprintf() over to snprintf() */
+#ifdef HAVE_SNPRINTF
+# define sprintf snprintf
+#endif /*HAVE_SNPRINTF*/
+
+/* Handling for C libraries which prefix %p addresses with 0x, when others don't */
+#ifdef HAVE_FORMAT_POINTER_PREFIX
+# define DPCRTLMM_FMTPTRPFX ""
+#else
+# define DPCRTLMM_FMTPTRPFX "0x"
+#endif /*HAVE_FORMAT_POINTER_PREFIX*/
 
 /* To allow explicit far data pointers which are
 non-ANSI, configure with configure --enable-fardata */

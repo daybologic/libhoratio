@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 # Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+# Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -10,11 +10,11 @@
 #
 #    * Redistributions of source code must retain the above copyright notice,
 #      this list of conditions and the following disclaimer.
-#      
+#
 #    * Redistributions in binary form must reproduce the above copyright
 #      notice, this list of conditions and the following disclaimer in the
 #      documentation and/or other materials provided with the distribution.
-#      
+#
 #    * Neither the name of the Daybo Logic nor the names of its contributors
 #      may be used to endorse or promote products derived from this software
 #      without specific prior written permission.
@@ -33,8 +33,8 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
-AM_INIT_AUTOMAKE(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
+AC_INIT(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
+AM_INIT_AUTOMAKE(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
 AC_CONFIG_SRCDIR([dpcrtlmm.c])
 AM_CONFIG_HEADER([config.h])
 
@@ -60,7 +60,7 @@ AC_CHECK_LIB(pth, pth_init, [pth_init="yes"])
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stddef.h stdlib.h string.h pth.h pthread.h windows.h])
+AC_CHECK_HEADERS([stdio.h stddef.h stdlib.h string.h pth.h pthread.h windows.h])
 AC_CHECK_HEADERS([alloc.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -69,11 +69,45 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 
+# Custom function definitions
+#----------------------------------------------------------------------------
+AC_DEFUN([AC_CHECK_FORMAT_POINTER_PREFIX],
+[AC_CACHE_CHECK([printf %p prefixes 0x],
+  ac_cv_format_pointer_prefix,
+[
+  if test "$ac_cv_header_stdio_h" = "yes"; then
+    AC_RUN_IFELSE(
+    [
+#include <stdio.h>
+static char addr[[32]];
+int main() {
+  sprintf(addr, "%p", addr);
+  if ( strncmp(addr, "0x", 2) == 0 )
+    return 0;
+  return 1;
+}
+    ],[
+      ac_cv_format_pointer_prefix=yes
+    ],[
+      ac_cv_format_pointer_prefix=no
+    ],[
+      dnl Where we don't know, assume yes, and don't modify address strings
+      ac_cv_format_pointer_prefix=yes
+    ])
+  else
+    ac_cv_format_pointer_prefix=no
+  fi
+])
 
+if test "$ac_cv_format_pointer_prefix" = "yes"; then
+  AC_DEFINE(HAVE_FORMAT_POINTER_PREFIX, 1, [printf prefixes %p 0x])
+fi
+dnl AC_MSG_RESULT($ac_cv_format_pointer_prefix)
+])
+#----------------------------------------------------------------------------
 # Checks for standard library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([atexit memset])
-
+AC_CHECK_FUNCS([atexit memset snprintf])
 
 # Extra configuration
 dnl pthread non-portable support
@@ -81,6 +115,8 @@ if test "$pthread_mutexattr_setkind_np" = "yes"; then
   AC_DEFINE([DPCRTLMM_THREADS_PTHREAD_NP], [], [Non-portable POSIX thread extensions])
 fi
 
+dnl Test whether %p prefixes addresses with 0x
+AC_CHECK_FORMAT_POINTER_PREFIX
 
 # Optional arguments
 
