@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -35,18 +35,6 @@ POSSIBILITY OF SUCH DAMAGE.
   functions in the memory manager library. - Overlord David Duncan Ross
   Palmer.  Oh, and init of this data is not done here, it is done within
   dpcrtlmm.c : dpcrtlmm_Startup().
-
-Modifications
--------------
-20000504 - Changed definition of _safetyList from S_GENLIST _safetyList
-20000505 - Disabled defintion of hook traps while they are turned off in standard builds
-20000719 - Added dpcrtlmm_int__defaultArray (the NULL array)
-20000721 - Just added DPCRTLMM_SOURCE at the top
-20000727 - Added dpcrtlmm_int__blockCount, it's used instead of a time consuming
-           loop through all blockarrays, for the call dpcrtlmm_GetBlockCount()
-           Added dpcrtlmm_int__blockCountPeak
-           Added dpcrtlmm_int__allocCharge & dpcrtlmm_int__allocPeak
-20060223 - General tidy up for new configure system
 */
 
 #define DPCRTLMM_SOURCE

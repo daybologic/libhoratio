@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -35,12 +35,6 @@ POSSIBILITY OF SUCH DAMAGE.
    Library: DPCRTLMM
    Language: ANSI C (1990 implementation)
    Purpose: DPCRTLMM's memory user-memory reallocation
-
-   1st Dec 2000: To fix a possible porting problem I no longer assume
-                 that realloc() will allocate when called with NULL, newSize
-
-   31st July 2001: Added support for using the big library lock.
-   21st Feb 2006: License change
 */
 
 #define DPCRTLMM_SOURCE
@@ -82,8 +76,7 @@ void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
   const size_t NewSize
-)
-{
+) {
   void DPCRTLMM_FARDATA *ret;
 
   LOCK
@@ -97,8 +90,7 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
   const size_t NewSize
-)
-{
+) {
   /* ptr is returned to the caller (modified later) */
   void DPCRTLMM_FARDATA *ptr = OldBlockPtr;
   const char funcName[] = "Realloc()"; /* Name of our function */
@@ -114,22 +106,19 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   if (_LockTrap(funcName, PBlockArray, OldBlockPtr)) /* Do trap if block is locked */
     return NULL;
 
-  if (!NewSize) /* No new size, hmm, must be wanting free() really */
-  {
+  if (!NewSize) { /* No new size, hmm, must be wanting free() really */
     WARNING(DPCRTLMM_LOG_CODE_REALLOC_NP_1, "Dynamic possibly non-portable use of realloc() as a free-er");
     dpcrtlmm_Free(PBlockArray, OldBlockPtr); /* Give the caller what they want */
     return NULL;
   }
 
-  if ( !OldBlockPtr ) /* This is a non-portable attempt to use realloc as an initial allocator */
-  {
+  if ( !OldBlockPtr ) { /* This is a non-portable attempt to use realloc as an initial allocator */
     WARNING(DPCRTLMM_LOG_CODE_REALLOC_NP_2, "Dynamic possibly non-portable use of realloc() as an initial allocator");
     return dpcrtlmm_Alloc(PBlockArray, NewSize);
   }
 
   blockIndex = dpcrtlmm_int_IndexFromBlockPtr(PRArr, OldBlockPtr);
-  if ( PRArr->Descriptors[blockIndex].Size == NewSize ) /* Same size ?! */
-  {
+  if ( PRArr->Descriptors[blockIndex].Size == NewSize ) { /* Same size ?! */
     /* The block is already the requested size! */
     return ptr; /* Give present pointer back to caller wihout touching it */
   }
@@ -145,12 +134,9 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   debugHookInfo.HookType = DPCRTLMM_HOOK_REALLOC;
   /* Set AllocReq to size difference */
   debugHookInfo.AllocReq = DPCRTLMM_MAX(PRArr->Descriptors[blockIndex].Size, NewSize) - DPCRTLMM_MIN(PRArr->Descriptors[blockIndex].Size, NewSize);
-  if ( NewSize < PRArr->Descriptors[blockIndex].Size ) /* Negate number */
-  {
+  if ( NewSize < PRArr->Descriptors[blockIndex].Size ) { /* Negate number */
     debugHookInfo.Misc0 |= 1; /* Set bit 0 */
-  }
-  else /* Positive number */
-  {
+  } else { /* Positive number */
     debugHookInfo.Misc0 &= ~1; /* Clear bit 0 */
   }
   /* Misc1 points to the new block, the hook routine can dereference it if it wants to */

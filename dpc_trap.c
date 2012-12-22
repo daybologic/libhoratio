@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -72,8 +72,7 @@ static void DefHandler(
 void dpcrtlmm_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
-)
-{
+) {
   LOCK
   dpcrtlmm_int_InstallTrapCallback(NewTrapCallback, AsHook);
   UNLOCK
@@ -81,15 +80,13 @@ void dpcrtlmm_InstallTrapCallback(
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
-)
-{
+) {
   LOCK
   dpcrtlmm_int_RemoveTrapCallback(CurrentCallback);
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-signed char dpcrtlmm_GetTrapCallbackInfo()
-{
+signed char dpcrtlmm_GetTrapCallbackInfo() {
   signed char ret;
 
   LOCK
@@ -102,8 +99,7 @@ signed char dpcrtlmm_GetTrapCallbackInfo()
 void dpcrtlmm_int_Trap(
   const unsigned int Id,
   const char *Message
-)
-{
+) {
   char* trapsCopy;
   const char preFix[] = "DPCRTLMM_UNHANDLED_TRAP: ";
 
@@ -113,14 +109,12 @@ void dpcrtlmm_int_Trap(
 
   /* The message is prefixed with "DPCRTLMM (Trap): " by copying it */
   trapsCopy = (char*)malloc( sizeof(preFix) + strlen(Message) ); /* No NULL terminator because sizeof() includes this */
-  if (trapsCopy)
-  {
+  if (trapsCopy) {
     strcpy(trapsCopy, preFix);
     strcat(trapsCopy, Message);
 
     /* The Overlord had to work this out by means of a flow chart */
-    if (_UserTrapCallback) /* Is user callback installed? */
-    {
+    if (_UserTrapCallback) { /* Is user callback installed? */
       _UserTrapCallback(Id, Message); /* Call user's callback */
       if (!_userTrapCallbackIsHook) /* Is handler, not hook? */
         goto trapRecover; /* Recover from trap */
@@ -139,8 +133,7 @@ trapRecover:
 static void dpcrtlmm_int_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
-)
-{
+) {
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
 
@@ -148,8 +141,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
   debugHookInfo.HookType = DPCRTLMM_HOOK_INSTTRAPCALLBACK;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  if (NewTrapCallback)
-  {
+  if (NewTrapCallback) {
     #ifdef DPCRTLMM_LOG
     char logStr[MAX_TRAP_STRING_LENGTH+sizeof(char)];
     #endif /*DPCRTLMM_LOG*/
@@ -169,9 +161,9 @@ static void dpcrtlmm_int_InstallTrapCallback(
     /* Log that we did that */
     sprintf(
       logStr,
-      "InstallTrapCallback(): Installed the trap %s 0x%lX",
+      "InstallTrapCallback(): Installed the trap %s %s%lX",
       (AsHook) ? ("hook") : ("handler"),
-      (unsigned long int)NewTrapCallback
+      DPCRTLMM_FMTPTRPFX, (unsigned long int)NewTrapCallback
     );
     MESSAGE(DPCRTLMM_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
     #endif /*DPCRTLMM_LOG*/
@@ -179,9 +171,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-  }
-  else /* Pointer to trap handler not passed */
-  {
+  } else { /* Pointer to trap handler not passed */
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
@@ -196,8 +186,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
 /*-------------------------------------------------------------------------*/
 static void dpcrtlmm_int_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
-)
-{
+) {
   char logStr[MAX_TRAP_STRING_LENGTH+1];
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
@@ -207,29 +196,36 @@ static void dpcrtlmm_int_RemoveTrapCallback(
   debugHookInfo.Misc0 = (unsigned long)CurrentCallback;
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  if (CurrentCallback == _UserTrapCallback) /* Make sure user knows */
-  {
+  if (CurrentCallback == _UserTrapCallback) { /* Make sure user knows */
     _UserTrapCallback = NULL; /* Remove handler or hook */
 
     /* Log the removal */
-    sprintf(logStr, "RemoveTrapCallback(): %s removed.", (_userTrapCallbackIsHook) ? ("Hook") : ("Handler"));
+    sprintf(
+      logStr,
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
+      "RemoveTrapCallback(): %s removed.",
+      (_userTrapCallbackIsHook) ? ("Hook") : ("Handler")
+    );
     MESSAGE(DPCRTLMM_LOG_CODE_REMOVE_TRAP, NULL, 0, logStr);
 
     #ifdef DPCRTLMM_DEBUGHOOKS
     debugHookInfo.Success = 1U;
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
-  }
-  else /* The user does not know the address! */
-  {
+  } else { /* The user does not know the address! */
     #ifdef DPCRTLMM_DEBUGHOOKS
     dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*DPCRTLMM_DEBUGHOOKS*/
 
     sprintf(
       logStr,
-      "RemoveTrapCallback(): The handler is NOT 0x%lX !!!",
-      (unsigned long int)CurrentCallback
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
+      "RemoveTrapCallback(): The handler is NOT %s%lX !!!",
+      DPCRTLMM_FMTPTRPFX, (unsigned long int)CurrentCallback
     );
 
     Trap(DPCRTLMM_TRAP_UNAUTH_REMOVE, logStr);
@@ -237,8 +233,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static signed char dpcrtlmm_int_GetTrapCallbackInfo()
-{
+static signed char dpcrtlmm_int_GetTrapCallbackInfo() {
   if (!_UserTrapCallback) /* No user handler installed */
     return (signed char)-1;
   if (!_userTrapCallbackIsHook) /* Installed but not hook */
@@ -247,22 +242,19 @@ static signed char dpcrtlmm_int_GetTrapCallbackInfo()
   return (signed char)1; /* Hook installed */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_EnableTraps()
-{
+void dpcrtlmm_EnableTraps() {
   LOCK
   dpcrtlmm__EnableTraps = '\x1';
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_DisableTraps()
-{
+void dpcrtlmm_DisableTraps() {
   LOCK
   dpcrtlmm__EnableTraps = '\x0';
   UNLOCK
 }
 /*-------------------------------------------------------------------------*/
-unsigned char dpcrtlmm_AreTrapsEnabled()
-{
+unsigned char dpcrtlmm_AreTrapsEnabled() {
   unsigned char ret;
 
   LOCK
@@ -274,8 +266,7 @@ unsigned char dpcrtlmm_AreTrapsEnabled()
 /*-------------------------------------------------------------------------*/
 static void DefHandler(
   const char *TrapMsg
-)
-{
+) {
   /*
     Output trap's message on the standard error stream
   */

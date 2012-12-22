@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -56,7 +56,7 @@ static void OurLog(
   const char* File,
   const unsigned int Line,
   const unsigned short Severity,
-  const char* Str
+  const char *Str
 );
 #endif /*DPCRTLMM_LOG*/
 
@@ -65,10 +65,21 @@ static void OurLog(
 #endif /*OURLOG*/
 
 #define OURLOG(lcode, f, l, sev, msg) OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char* File,
+  const unsigned int Line
+);
 /*-------------------------------------------------------------------------*/
-void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
-{
+void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char* File,
+  const unsigned int Line
+) {
   void DPCRTLMM_FARDATA* ret;
 
   LOCK
@@ -78,8 +89,13 @@ void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line)
-{
+static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char* File,
+  const unsigned int Line
+) {
   void DPCRTLMM_FARDATA* resultantPtr;
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
@@ -106,8 +122,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
   resultantPtr = dpcrtlmm_int_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
-  if (resultantPtr)
-  {
+  if (resultantPtr) {
     #ifdef DPCRTLMM_DEBUGHOOKS
     /* Ahh damn it, I'll have to look up the descriptor for this block */
     unsigned int blkIndex = dpcrtlmm_int_IndexFromBlockPtr(PBlockArray, resultantPtr);
@@ -122,9 +137,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(PS_DPCRTLMM_BLOCKDESCARRAY P
     /* Bug fix: I didn't realize this but the specification for for calloc()
        requires that the new memory is zeroed. Fix DPCRTLMM Version 1.1.2 or 1.1.3 */
     memset(resultantPtr, 0, N*NewBlockSize);
-  }
-  else
-  {
+  } else {
     #ifdef DPCRTLMM_DEBUGHOOKS
     /*blockDescArray.Success = 0U;   - optimized away */
     #endif /*DPCRTLMM_DEBUGHOOKS*/
@@ -152,14 +165,12 @@ static void OurLog(
   We can't call _Log() twice because the information will be put on different
   lines so a copy is needed. */
 
-  if (Str && Str[0]) /* Valid string of at least on character sent to us? */
-  {
+  if (Str && Str[0]) { /* Valid string of at least on character sent to us? */
     char* PcopyStr;
     const char FuncName[] = "Calloc(): "; /* Prefix */
 
     PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) ); /* Allocate space for copy.  Note that NULL termination is automatic because using sizeof() */
-    if (PcopyStr)
-    {
+    if (PcopyStr) {
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
