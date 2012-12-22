@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -55,8 +55,7 @@ void dpcrtlmm_SetBlockLockingFlag(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
   const unsigned int NewStatus
-)
-{
+) {
   LOCK
   dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
   UNLOCK
@@ -65,8 +64,7 @@ void dpcrtlmm_SetBlockLockingFlag(
 unsigned int dpcrtlmm_IsBlockLocked(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   unsigned int ret;
 
   LOCK
@@ -79,8 +77,7 @@ unsigned int dpcrtlmm_IsBlockLocked(
 void dpcrtlmm_ToggleBlockLockingStatus(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   LOCK
   dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
   UNLOCK
@@ -90,8 +87,7 @@ void dpcrtlmm_int_SetBlockLockingFlag(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
   const unsigned int NewStatus
-)
-{
+) {
   unsigned char flags;
 
   /* Get current flags */
@@ -109,8 +105,7 @@ void dpcrtlmm_int_SetBlockLockingFlag(
 unsigned int dpcrtlmm_int_IsBlockLocked(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   unsigned char flags;
 
   /* Get the flags for the descriptor */
@@ -123,8 +118,7 @@ unsigned int dpcrtlmm_int_IsBlockLocked(
 void dpcrtlmm_int_ToggleBlockLockingStatus(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
-)
-{
+) {
   /* Get current status */
   unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);
   /* Set locking state as NOT current locking state */

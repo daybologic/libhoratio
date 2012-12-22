@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -68,8 +68,7 @@ static void* arrptrs[16];
   using namespace Overlord;
 #endif /*!__NO_NAMESPACES__*/
 /*-------------------------------------------------------------------------*/
-int main()
-{
+int main() {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
   TDPCRTLMM_BlockArray blockDesc(false);
@@ -92,8 +91,7 @@ int main()
   printf("NULL array test: ");
   printf("Allocating blocks in NULL block array\n");
   printf("Block: ");
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-  {
+  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
     printf("#%d ", i);
     nullarrptrs[i] = calloc(32, 8); /* Allocate block */
     if (!nullarrptrs[i])
@@ -107,8 +105,7 @@ int main()
 
   printf("Allocating blocks in explictly allocated block array\n");
   printf("Block ");
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-  {
+  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
     printf("#%d ", i);
     arrptrs[i] = dpcrtlmm_block_Calloc(blockDesc, 8, 128); /* Allocate block */
     if (!arrptrs[i])
@@ -134,10 +131,10 @@ int main()
   return 0;
 }
 /*-------------------------------------------------------------------------*/
-static void PrintStats(const PS_DPCRTLMM_STATS PStats)
-{
-  if (PStats)
-  {
+static void PrintStats(
+  const PS_DPCRTLMM_STATS PStats
+) {
+  if (PStats) {
     printf("Blocks allocated: %lu (peaked at %lu)\n", PStats->Blocks.Allocated, PStats->Blocks.Peak);
     printf("Amount locked: %lu\n", PStats->Blocks.Locked);
     printf("Amount marked as unswappable: %lu\n", PStats->Blocks.Unswappable);
@@ -145,8 +142,7 @@ static void PrintStats(const PS_DPCRTLMM_STATS PStats)
   }
 }
 /*-------------------------------------------------------------------------*/
-static void InitArrays()
-{
+static void InitArrays() {
   size_t i;
 
   for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
@@ -166,8 +162,10 @@ static void PrintVersion()
   printf("\n");
 }
 /*-------------------------------------------------------------------------*/
-static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg)
-{
+static void myTrapHandler(
+  const unsigned int TrapID,
+  const char* TrapMsg
+) {
   /* Why the hell am I handling this trap?  I'm not, I install this as a
   hook only.  Which means control is returned to the DPCRTLMM rap handler
   afterwards. */

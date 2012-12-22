@@ -1,7 +1,7 @@
 Source: libdpcrtlmm
 Section: utils
 Priority: extra
-Maintainer: David Palmer <david.palmer@gradwell.com>
+Maintainer: David Duncan Ross Palmer <palmer@overchat.org>
 Build-Depends: debhelper (>= 7.0.15), autoconf,
  libsqlite3-dev, libsqlite3-0
 Standards-Version: 3.7.3

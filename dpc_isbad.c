@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -63,8 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
 unsigned int dpcrtlmm_IsBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* Thread safe wrapper for IsBadBlockPtr() */
   unsigned int ret;
 
@@ -77,8 +76,7 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_IsBadArrayPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* Thread safe wrapper for IsBadArrayPtr() */
   unsigned int ret;
 
@@ -92,29 +90,29 @@ unsigned int dpcrtlmm_IsBadArrayPtr(
 unsigned int dpcrtlmm_int_IsBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* locals */
   unsigned int i; /* List/loop control */
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
   /* Test for bad block array */
-  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* Block array bad? */
-  {
+  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* Block array bad? */
     /* Fire a trap */
     char trapmsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
 
     sprintf(
       trapmsg,
-      "The block array address 0x%p is unknown, unable to search for blocks.",
-      (void*)PBlockArray
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
+      "The block array address %s%p is unknown, unable to search for blocks.",
+      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
 
     Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapmsg);
   }
 
-  for ( i = 0U; i < PRArr->Count; i++ ) /* For all the block descriptors in the list */
-  {
+  for ( i = 0U; i < PRArr->Count; i++ ) { /* For all the block descriptors in the list */
     if (BlockPtr == PRArr->Descriptors[i].PBase) /* Block base match */
       return 0U; /* Block is not bad */
   }
@@ -125,8 +123,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_int_IsBadArrayPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* I've rewritten this function so that is can support NULL arrays
   and it does not matter whether PBlockArray is resolved or not */
 

@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -143,8 +143,7 @@ void dpcrtlmm_int_Log(
   const unsigned int Line,
   const unsigned short Severity,
   const char *Message
-)
-{
+) {
   /*
     String + safety for addons,
     note that mallocations should not be made here
@@ -156,22 +155,26 @@ void dpcrtlmm_int_Log(
   FILE* HLogFile; /* Handle for log file */
   #endif /*DPCRTLMM_LOG*/
 
-  if (Message)
-  {
-    if (Message[0])
-    {
+  if (Message) {
+    if (Message[0]) {
       formatMsg[0] = '\0'; /* so strncat() knows where to begin */
       STRNCAT_FIXEDBUFF(formatMsg, "DPCRTLMM: \"");
-      if ( File ) sprintf(number, "%u", Line); /* Convert line number to string */
-      switch ( Severity )
-      {
-        case DPCRTLMM_LOG_WARNING :
-        {
+      if ( File ) { /* Convert line number to string */
+        sprintf(
+          number,
+          #ifdef HAVE_SNPRINTF
+          sizeof(number)-1,
+          #endif /*HAVE_SNPRINTF*/
+          "%u",
+          Line
+        );
+      }
+      switch ( Severity ) {
+        case DPCRTLMM_LOG_WARNING : {
           STRNCAT_FIXEDBUFF(formatMsg, "Warning! ");
           break;
         }
-        case DPCRTLMM_LOG_ERROR :
-        {
+        case DPCRTLMM_LOG_ERROR : {
           STRNCAT_FIXEDBUFF(formatMsg, "FATAL ERROR! ");
           break;
         }
@@ -189,8 +192,7 @@ void dpcrtlmm_int_Log(
       /* Everything goes in the log... */
       #ifdef DPCRTLMM_LOG
       HLogFile = fopen("DPCRTLMM.LOG", "at"); /* Append/overwrite text file */
-      if (HLogFile) /* Log opened? */
-      {
+      if (HLogFile) { /* Log opened? */
         fputs(formatMsg, HLogFile); /* Output log msg to log file */
         fclose(HLogFile); /* Close the log file */
       }
