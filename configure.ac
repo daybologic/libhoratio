@@ -69,11 +69,45 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 
+# Custom function definitions
+#----------------------------------------------------------------------------
+AC_DEFUN([AC_CHECK_FORMAT_POINTER_PREFIX],
+[AC_CACHE_CHECK([printf %p prefixes 0x],
+  ac_cv_format_pointer_prefix,
+[
+  if test "$ac_cv_header_stdio_h" = "yes"; then
+    AC_RUN_IFELSE(
+    [
+#include <stdio.h>
+static char addr[[32]];
+int main() {
+  sprintf(addr, "%p", addr);
+  if ( strncmp(addr, "0x", 2) == 0 )
+    return 0;
+  return 1;
+}
+    ],[
+      ac_cv_format_pointer_prefix=yes
+    ],[
+      ac_cv_format_pointer_prefix=no
+    ],[
+      dnl Where we don't know, assume yes, and don't modify address strings
+      ac_cv_format_pointer_prefix=yes
+    ])
+  else
+    ac_cv_format_pointer_prefix=no
+  fi
+])
 
+if test "$ac_cv_format_pointer_prefix" = "yes"; then
+  AC_DEFINE(HAVE_FORMAT_POINTER_PREFIX, 1, [printf prefixes %p 0x])
+fi
+dnl AC_MSG_RESULT($ac_cv_format_pointer_prefix)
+])
+#----------------------------------------------------------------------------
 # Checks for standard library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([atexit memset])
-
 
 # Extra configuration
 dnl pthread non-portable support
