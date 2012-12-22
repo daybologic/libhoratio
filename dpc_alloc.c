@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -104,8 +104,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
-)
-{
+) {
   /* Thread safe wrapper for AllocEx() */
   void DPCRTLMM_FARDATA* ret;
 
@@ -121,8 +120,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
-)
-{
+) {
   /* locals */
   void DPCRTLMM_FARDATA* genBlockPtr; /* Generated block pointer */
   char logMsg[MAX_TRAP_STRING_LENGTH + 1];
@@ -151,8 +149,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
 
   genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
-  if (!genBlockPtr) /* Out of memory? */
-  {
+  if (!genBlockPtr) { /* Out of memory? */
     /* Use buffer for log messages, it's the same size as for traps */
     sprintf(
       logMsg,
@@ -171,8 +168,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   }
 
   /* Now add the block to the array, first grow array */
-  if (!GrowBlockArray(PRArr, 1))
-  {
+  if (!GrowBlockArray(PRArr, 1)) {
     /* Attempt to enlarge the array failed? */
     DPCRTLMM_FREE(genBlockPtr); /* Release the new block of memory */
 
@@ -230,8 +226,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
 static unsigned int GrowBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
   const unsigned int GrowByElems
-)
-{
+) {
   PS_DPCRTLMM_BLOCKDESCRIPTOR ptr; /* Pointer to block descriptors during enlargement */
   unsigned int oldCount; /* Count before enlargement */
   unsigned int initi; /* Initialization interator */
@@ -242,8 +237,7 @@ static unsigned int GrowBlockArray(
     assert(PCurrentBlockArray);
   #endif /*NDEBUG*/
 
-  if (!GrowByElems) /* Want to grow by nothing? */
-  {
+  if (!GrowByElems) { /* Want to grow by nothing? */
     OURLOG_POS(DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
     return 1U; /* Success, already this size, it's great when there's nothing to do isn't it, programmer's are lazy */
   }
@@ -257,8 +251,7 @@ static unsigned int GrowBlockArray(
   PCurrentBlockArray->Count += GrowByElems;
   PCurrentBlockArray->Descriptors = ptr; /* Possible relocation might mean the pointer to the descriptors may need updating, make it so */
 
-  for ( initi = oldCount; initi < PCurrentBlockArray->Count; initi++ ) /* All new descriptors in the array that we just created */
-  {
+  for ( initi = oldCount; initi < PCurrentBlockArray->Count; initi++ ) { /* All new descriptors in the array that we just created */
     PCurrentBlockArray->Descriptors[initi].PBase = NULL; /* No block assigned to this new descriptor yet */
     PCurrentBlockArray->Descriptors[initi].Size = (size_t)0U; /* Therefore no size either */
     PCurrentBlockArray->Descriptors[initi].Flags = 0U; /* No flags set */
@@ -273,21 +266,18 @@ static void OurLog(
   const unsigned int Line,
   const unsigned short Severity,
   const char *Str
-)
-{
+) {
    /* Our job is to add "Alloc() to the start of the string, saves data space
   if everybody in this module calls this instead of _Log() directly.
   We can't use LOG() twice because the information will be put on different
   lines so a copy is needed. */
 
-  if (Str && Str[0]) /* Valid string of at least on character sent to us? */
-  {
+  if (Str && Str[0]) { /* Valid string of at least on character sent to us? */
     char* PcopyStr;
     const char FuncName[] = "Alloc(): "; /* Prefix */
 
     PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) ); /* Allocate space for copy, note that NULL termination is automatic because using sizeof() */
-    if (PcopyStr)
-    {
+    if (PcopyStr) {
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 

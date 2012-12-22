@@ -1,7 +1,7 @@
 Source: libdpcrtlmm
 Section: utils
 Priority: extra
-Maintainer: David Palmer <david.palmer@gradwell.com>
+Maintainer: David Duncan Ross Palmer <palmer@overchat.org>
 Build-Depends: debhelper (>= 7.0.15), autoconf
 Standards-Version: 3.7.3
 Homepage: http://www.daybologic.co.uk/software.php?content=dpcrtlmm

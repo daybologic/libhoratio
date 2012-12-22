@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -77,11 +77,9 @@ add this to the total leakage */
 static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr);
 unsigned char dpcrtlmm__EnableTraps = 1U;
 /*-------------------------------------------------------------------------*/
-PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
-{
+PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct) {
   /* No need to lock the big global lock for this, only reading readonly data. */
-  if (PVerStruct)
-  {
+  if (PVerStruct) {
     /* Load version information into the caller's structure */
     PVerStruct->Major = DPCRTLMM_VERSION_MAJOR;
     PVerStruct->Minor = DPCRTLMM_VERSION_MINOR;
@@ -103,10 +101,8 @@ PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct)
   return PVerStruct;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_Startup()
-{
-  if (!_libStarted)
-  {
+void dpcrtlmm_Startup() {
+  if (!_libStarted) {
     /* Initialization of internal library data */
     _libStarted = 1U; /* The library is started now */
     _UserTrapCallback = NULL; /* No user trap handler installed */
@@ -117,9 +113,7 @@ void dpcrtlmm_Startup()
     #ifdef DPCRTLMM_THREADS
       dpcrtlmm_int_BigLockInit();
     #endif /*DPCRTLMM_THREADS*/
-  }
-  else /* This has been done before! */
-  {
+  } else { /* This has been done before! */
     #ifdef DPCRTLMM_DEBUGHOOKS
     S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
     memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
@@ -131,8 +125,7 @@ void dpcrtlmm_Startup()
   return;
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_Shutdown()
-{
+void dpcrtlmm_Shutdown() {
   /* Don't moan about my double use of the define, I like it this
   way, it feels cleaner, declarations separated! */
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -142,8 +135,7 @@ void dpcrtlmm_Shutdown()
   memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  if (_libStarted)
-  {
+  if (_libStarted) {
     /* Cleanup of internal library data */
     _libStarted = 0U; /* The library has been shut down */
     #ifdef DPCRTLMM_THREADS
@@ -155,9 +147,7 @@ void dpcrtlmm_Shutdown()
     #endif /*DPCRTLMM_DEBUGHOOKS*/
     TrapUnFreedArrays(); /* Output log information if memory has not been released */
     MESSAGE(NULL, 0, "Library shutdown");
-  }
-  else /* This has been done before! */
-  {
+  } else { /* This has been done before! */
     /* Call hooks and fire trap */
     #ifdef DPCRTLMM_DEBUGHOOKS
     debugHookInfo.Success = 0U; /* Failed */
@@ -168,23 +158,19 @@ void dpcrtlmm_Shutdown()
   return;
 }
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_IsStarted()
-{
+unsigned int dpcrtlmm_IsStarted() {
   return _libStarted;
 }
 /*-------------------------------------------------------------------------*/
-static void TrapUnFreedArrays()
-{
+static void TrapUnFreedArrays() {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)]; /* Reserved for trap/log messages */
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   long unsigned int numArraysUnfreed = 0U; /* Count of number of arrays the programmer failed to free (excludes built-in one which doesn't get destroyed) */
   unsigned long totalBytesLeaked = 0UL; /* The total bytes leaked for the whole program */
   unsigned int sli;
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) /* All entries in the safety list */
-  {
+  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) { /* All entries in the safety list */
     unsigned int oldTrapEnablement; /* Temporary used while traps are supressed */
-    if (_safetyList[sli]) /* Discovered non-freed array? */
-    {
+    if (_safetyList[sli]) { /* Discovered non-freed array? */
       /* numArraysUnfreed is used for a log message */
       numArraysUnfreed++; /* Increment count of failures to free an array */
       /* Make a log message that an array was not destroyed */
@@ -197,8 +183,7 @@ static void TrapUnFreedArrays()
         DPCRTLMM_FMTPTRPFX, (void*)(_safetyList[sli])
       );
       WARNING(trapMsg);
-      if (_safetyList[sli]->Count) /* Are there any unfreed blocks in the array? */
-      {
+      if (_safetyList[sli]->Count) { /* Are there any unfreed blocks in the array? */
         totalBytesLeaked += TrapUnFreedBlocks(_safetyList[sli]);
       }
       /* The specified array must be automatically released */
@@ -210,13 +195,11 @@ static void TrapUnFreedArrays()
     }
   }
   #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
-  if (_defaultArray.Count) /* Any unfreed blocks in the default ("NULL") array? */
-  {
+  if (_defaultArray.Count) { /* Any unfreed blocks in the default ("NULL") array? */
     totalBytesLeaked += TrapUnFreedBlocks(&_defaultArray);
   }
   #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
-  if (numArraysUnfreed)
-  {
+  if (numArraysUnfreed) {
     sprintf(
       trapMsg,
       #ifdef HAVE_SNPRINTF
@@ -228,57 +211,34 @@ static void TrapUnFreedArrays()
     WARNING(trapMsg);
   }
   /* Entire list was processed, if there were any leaks report general message */
-  if (totalBytesLeaked) /* So, were there any unfreed arrays or blocks? */
-  {
+  if (totalBytesLeaked) { /* So, were there any unfreed arrays or blocks? */
     sprintf(
       trapMsg,
       #ifdef HAVE_SNPRINTF
       trapMsgRemaining,
       #endif /*HAVE_SNPRINTF*/
-      "%lu bytes of memory leaked in total,\n",
+      "%lu bytes of memory leaked in total.\n",
       totalBytesLeaked
     );
-    #ifdef HAVE_SNPRINTF
-    trapMsgRemaining -= strlen(trapMsg);
-    #endif /*HAVE_SNPRINTF*/
-    if (totalBytesLeaked >= 524288UL) { /* >= 500K!? */
-      strncat(trapMsg, "that\'s terrible!!", trapMsgRemaining);
-      trapMsgRemaining -= strlen(trapMsg);
-    } else if (totalBytesLeaked < 1024UL) {
-      strncat(
-        trapMsg,
-        "only solve this problem if it will not take too much development time "
-        "and does not increase with time.",
-        trapMsgRemaining
-      );
-      trapMsgRemaining -= strlen(trapMsg);
-    } else {
-      strncat(trapMsg, "You should use the log as an aid to resolving this.", trapMsgRemaining);
-      trapMsgRemaining -= strlen(trapMsg);
-    }
     Trap(DPCRTLMM_TRAP_UNFREED_DATA, trapMsg);
   }
   return;
 }
 /*-------------------------------------------------------------------------*/
-static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr)
-{
+static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)];
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   unsigned int unfreedBlockCount;
   unsigned long totalLeakage = 0U; /* Total byte leakage for this array (blocks summed) */
-  if (PArr)
-  {
-    if (PArr->Count)
-    {
+  if (PArr) {
+    if (PArr->Count) {
       if (!PArr->Descriptors) /* The descriptor base is NULL when the count is nonzero */
         abort(); /* This is not a normal trap event, internal error or user tamper of array information */
       unfreedBlockCount = PArr->Count; /* Save count of blocks which weren't freed in this array */
       /* I discovered I could not transend the list normally, after all dpcrtlmm_Free() reduces the count
       the best way of dealing with this is to remove the top element, therefore, while the block array
       contains descriptors I shall remove the top one (0) */
-      while ( PArr->Count )
-      {
+      while ( PArr->Count ) {
         sprintf(
           trapMsg,
           #ifdef HAVE_SNPRINTF

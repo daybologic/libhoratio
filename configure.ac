@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 # Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+# Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -10,11 +10,11 @@
 #
 #    * Redistributions of source code must retain the above copyright notice,
 #      this list of conditions and the following disclaimer.
-#      
+#
 #    * Redistributions in binary form must reproduce the above copyright
 #      notice, this list of conditions and the following disclaimer in the
 #      documentation and/or other materials provided with the distribution.
-#      
+#
 #    * Neither the name of the Daybo Logic nor the names of its contributors
 #      may be used to endorse or promote products derived from this software
 #      without specific prior written permission.
@@ -33,8 +33,8 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
-AM_INIT_AUTOMAKE(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <http://www.daybologic.co.uk/mailddrp/>])
+AC_INIT(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
+AM_INIT_AUTOMAKE(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
 AC_CONFIG_SRCDIR([dpcrtlmm.c])
 AM_CONFIG_HEADER([config.h])
 

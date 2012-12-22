@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -80,10 +80,9 @@ static void TrapOnBadBlockPtr(
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_int_VerifyPtrs(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, 
+  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   /* CAUTION: Do not pass a resolved array pointer to this function */
   /*
     First trap invalid array pointers
@@ -100,8 +99,7 @@ void dpcrtlmm_int_VerifyPtrs(
 static void TrapOnBadBlockArray(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* locals */
   const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
@@ -123,9 +121,7 @@ static void TrapOnBadBlockArray(
     );
 
     Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, dynMsg);
-  }
-  else /* malloc() failed */
-  {
+  } else { /* malloc() failed */
     if ( dpcrtlmm__EnableTraps ) abort();
   }
 }
@@ -134,15 +130,13 @@ static void TrapOnBadBlockPtr(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
-)
-{
+) {
   char trapMsg[MAX_TRAP_STRING_LENGTH +1]; /* For trap message */
   #ifdef HAVE_SNPRINTF
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   #endif /*HAVE_SNPRINTF*/
 
-  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) /* The pointer to the array is invalid */
-  {
+  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* The pointer to the array is invalid */
     char blankStr[] = "";
     const char *PusedFuncName; /* Points to function name to use (not dynamic) */
 
@@ -167,8 +161,7 @@ static void TrapOnBadBlockPtr(
 
   /* The array is a valid and acceptable pointer, pass on to IsBadBlockPtr()
   and if it's bad fire a trap. */
-  if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) /* Is bad block pointer? */
-  {
+  if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) { /* Is bad block pointer? */
     char *PusedFuncName;
     int pusedDynamic;
     char blankStr[] = "";
@@ -181,8 +174,7 @@ static void TrapOnBadBlockPtr(
         PusedFuncName[0] = '\0';
         strncat(PusedFuncName, FuncName, lenUsedFuncName);
       }
-    }
-    else {
+    } else {
       pusedDynamic = 0;
       PusedFuncName = blankStr;
     }

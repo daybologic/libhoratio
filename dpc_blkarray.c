@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -76,8 +76,7 @@ static unsigned int dpcrtlmm_int_IsDefaultBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
 );
 /*-------------------------------------------------------------------------*/
-PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
-{
+PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray() {
   /* Thread safe wrapper for CreateBlockArray() */
   PS_DPCRTLMM_BLOCKDESCARRAY ret;
 
@@ -90,8 +89,7 @@ PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray()
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_DestroyBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* Thread safe wrapper for DestroyBlockArray() */
 
   LOCK
@@ -101,8 +99,7 @@ void dpcrtlmm_DestroyBlockArray(
 /*-------------------------------------------------------------------------*/
 unsigned int dpcrtlmm_IsDefaultBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
-)
-{
+) {
   /* Thread safe wrapper for IsDefaultBlockArray() */
 
   unsigned int ret;
@@ -114,8 +111,7 @@ unsigned int dpcrtlmm_IsDefaultBlockArray(
   return ret;
 }
 /*-------------------------------------------------------------------------*/
-static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
-{
+static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
   PS_DPCRTLMM_BLOCKDESCARRAY Parray; /* Pointer for caller */
   #ifdef DPCRTLMM_LOG
   char logMsg[MAX_TRAP_STRING_LENGTH+1];
@@ -136,8 +132,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
     Alloc the array for the caller
   */
   Parray = (S_DPCRTLMM_BLOCKDESCARRAY*)malloc( sizeof(S_DPCRTLMM_BLOCKDESCARRAY) );
-  if (!Parray) /* Failed to alloc */
-  {
+  if (!Parray) { /* Failed to alloc */
     /* Memory outages while in memory manager mode must be warned about! */
     WARNING("CreateBlockArray(): Couldn\'t allocate the new block array!");
     #ifdef DPCRTLMM_DEBUGHOOKS
@@ -155,8 +150,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   /* The array base must be added to the list of acceptable arrays,
      (the so called safety list)
   */
-  if ( !SafetyList_AddBase(Parray) ) /* Add to safety list */
-  {
+  if ( !SafetyList_AddBase(Parray) ) { /* Add to safety list */
     /* Failed to add to the list?!  Memory outages while in memory manager must be warned about */
     WARNING("CreateBlockArray(): The array base address could not be added to the safety list");
     DPCRTLMM_FREE(Parray); /* Free the array again */
@@ -178,8 +172,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray()
   return Parray; /* Give new pointer to the caller */
 }
 /*-------------------------------------------------------------------------*/
-void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
-{
+void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   /* locals */
   unsigned int sli; /* Safety list loop processing */
   char trapStr[MAX_TRAP_STRING_LENGTH+1]; /* Sometimes used for creating trap strings */
@@ -195,19 +188,14 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
   /* There is no allocation request */
   #endif /*DPCRTLMM_DEBUGHOOKS*/
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) /* For all the possible items in the safety list */
-  {
-    if (_safetyList[sli]) /* Is this entry used? */
-    {
-      if (_safetyList[sli] == PBlockArray) /* Pointer match! */
-      {
-        if (_safetyList[sli]->Count) /* Any descriptors remaining? */
-        {
+  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) { /* For all the possible items in the safety list */
+    if (_safetyList[sli]) { /* Is this entry used? */
+      if (_safetyList[sli] == PBlockArray) { /* Pointer match! */
+        if (_safetyList[sli]->Count) { /* Any descriptors remaining? */
           unsigned long totBytes = 0UL;
           unsigned int li;
 
-          for ( li = 0; li < _safetyList[sli]->Count; li++ ) /* All blocks */
-          {
+          for ( li = 0; li < _safetyList[sli]->Count; li++ ) { /* All blocks */
             totBytes += _safetyList[sli]->Descriptors[li].Size; /* Add size of block to total */
           }
 
@@ -220,8 +208,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
           );
           Trap(DPCRTLMM_TRAP_UNFREED_BLOCKS, trapStr);
         }
-        if (_safetyList[sli]->Descriptors) /* Descriptors not zero? */
-        {
+        if (_safetyList[sli]->Descriptors) { /* Descriptors not zero? */
           sprintf(
             trapStr,
             "DestroyBlockArray(): Base of raw descriptor array not freed!\n%s%p->%s%p (PBlockArray->Descriptors must be NULL)",
@@ -266,8 +253,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
   return;
 }
 /*-------------------------------------------------------------------------*/
-static unsigned int dpcrtlmm_int_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray )
-{
+static unsigned int dpcrtlmm_int_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   #ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
   return 0; /* Default (NULL) array does not exist */
   #else
