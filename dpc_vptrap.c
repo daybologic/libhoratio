@@ -103,15 +103,18 @@ static void TrapOnBadBlockArray(
   /* locals */
   const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
-
+  size_t dynMsgSize = ((FuncName) ? (strlen(FuncName)) : (0)) + strlen(cTrapMsg0) + 32; /* Enough space for address and NULL (and more) */ 
   if ( !dpcrtlmm_int_IsBadArrayPtr(PBlockArray) )
     return;
 
   /* The array base is bad */
-  dynMsg = (char*)malloc( ((FuncName) ? (strlen(FuncName)) : (0)) + strlen(cTrapMsg0) + 32 /* Enough space for address and NULL (and more) */ );
+  dynMsg = (char*)malloc(dynMsgSize);
   if (dynMsg) {
     sprintf(
       dynMsg,
+      #ifdef HAVE_SNPRINTF
+      dynMsgSize-1,
+      #endif /*HAVE_SNPRINTF*/
       cTrapMsg0,
       (FuncName) ? (FuncName) : ("UNKNOWN"),
       DPCRTLMM_FMTPTRPFX, PBlockArray
@@ -128,8 +131,12 @@ static void TrapOnBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
 ) {
+  char trapMsg[MAX_TRAP_STRING_LENGTH +1]; /* For trap message */
+  #ifdef HAVE_SNPRINTF
+  size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
+
   if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* The pointer to the array is invalid */
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For trap message */
     char blankStr[] = "";
     const char *PusedFuncName; /* Points to function name to use (not dynamic) */
 
@@ -140,6 +147,9 @@ static void TrapOnBadBlockPtr(
 
     sprintf(
       trapMsg,
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "%s: The block pointer %s%p is not valid for array %s%p, cannot test block pointer validity.",
       PusedFuncName,
       DPCRTLMM_FMTPTRPFX, BlockPtr,
@@ -152,7 +162,6 @@ static void TrapOnBadBlockPtr(
   /* The array is a valid and acceptable pointer, pass on to IsBadBlockPtr()
   and if it's bad fire a trap. */
   if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) { /* Is bad block pointer? */
-    char trapMsg[128]; /* Space for trap message */
     char *PusedFuncName;
     int pusedDynamic;
     char blankStr[] = "";
@@ -172,6 +181,9 @@ static void TrapOnBadBlockPtr(
 
     sprintf(
       trapMsg,
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "%s: Bad block pointer: %s%p for array %s%p",
       PusedFuncName,
       DPCRTLMM_FMTPTRPFX, BlockPtr,

@@ -117,6 +117,9 @@ static void dpcrtlmm_int_Free(
   /* locals */
   unsigned int i; /* For the finder loop */
   char trapMsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
+  #ifdef HAVE_SNPRINTF
+  size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
   const char funcName[] = "Free()"; /* Our function name */
   PS_DPCRTLMM_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
   #ifdef DPCRTLMM_DEBUGHOOKS
@@ -128,10 +131,16 @@ static void dpcrtlmm_int_Free(
   if ( dpcrtlmm_int_IsBadBlockPtr(PBlockArray, Ptr) ) { /* Block pointer not valid? */
     sprintf(
       trapMsg,
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: %s%p, block %s%p",
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
       DPCRTLMM_FMTPTRPFX, Ptr
     );
+    #ifdef HAVE_SNPRINTF
+    trapMsgRemaining -= strlen(trapMsg);
+    #endif /*HAVE_SNPRINTF*/
     Trap(DPCRTLMM_TRAP_UNOWNED_FREE, trapMsg);
   }
 
@@ -144,10 +153,16 @@ static void dpcrtlmm_int_Free(
       #ifdef DPCRTLMM_LOG
       sprintf(
         trapMsg,
+        #ifdef HAVE_SNPRINTF
+        trapMsgRemaining,
+        #endif /*HAVE_SNPRINTF*/
         "Freeing block %s%p from array %s%p",
         DPCRTLMM_FMTPTRPFX, PRArr->Descriptors[i].PBase,
         DPCRTLMM_FMTPTRPFX, (void*)PRArr
       );
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining -= strlen(trapMsg);
+      #endif /*HAVE_SNPRINTF*/
       OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
       #endif /*DPCRTLMM_LOG*/
 
@@ -196,14 +211,23 @@ static void Moveup(
   if ( StartPos >= PBlockArray->Count ) { /* StartPos out of range? */
     /* Do trap */
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* Space for trap message */
+    #ifdef HAVE_SNPRINTF
+    size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
+    #endif /*HAVE_SNPRINTF*/
 
     sprintf(
       trapMsg,
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "Free()/Moveup: StartPos is not valid. StartPos=%u, %s%p->Count=%u",
       StartPos,
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
       PBlockArray->Count
     );
+    #ifdef HAVE_SNPRINTF
+    trapMsgRemaining -= strlen(trapMsg);
+    #endif /*HAVE_SNPRINTF*/
     Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, trapMsg);
     return;
   }
@@ -222,39 +246,57 @@ static void ShrinkBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int Amount
 ) {
+  char logMsg[MAX_TRAP_STRING_LENGTH +1];
+  #ifdef HAVE_SNPRINTF
+  size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+  #endif /*HAVE_SNPRINTF*/
+
   _VerifyPtrs("ShrinkBlockArray()", PBlockArray, NULL); /* Ensure array is valid */
   if (!Amount) {
-    char logMsg[MAX_TRAP_STRING_LENGTH+1];
-
     sprintf(
       logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "Attempt to ShrinkBlockArray(%s%p) by nothing, ignored (internal DPCRTLMM error)",
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
     OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
     return;
   }
   if (!PBlockArray->Count) {
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
-
     sprintf(
-      trapMsg,
+      logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "ShrinkBlockArray(): %s%p->Count=0U, can\'t shrink the array any more!",
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );
-    Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, trapMsg);
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
+    Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, logMsg);
     return;
   }
   if (Amount > PBlockArray->Count) { /* Shrink further than size?! */
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
     sprintf(
-      trapMsg,
+      logMsg,
+      #ifdef HAVE_SNPRINTF
+      logMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
       "ShrinkBlockArray(): Amount=%u, greater than original size in elements (%s%p->Count=%u)",
       Amount,
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
       PBlockArray->Count
     );
-    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, trapMsg);
+    #ifdef HAVE_SNPRINTF
+    logMsgRemaining -= strlen(logMsg);
+    #endif /*HAVE_SNPRINTF*/
+    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, logMsg);
     return;
   }
 

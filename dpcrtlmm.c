@@ -164,6 +164,7 @@ unsigned int dpcrtlmm_IsStarted() {
 /*-------------------------------------------------------------------------*/
 static void TrapUnFreedArrays() {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)]; /* Reserved for trap/log messages */
+  size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   long unsigned int numArraysUnfreed = 0U; /* Count of number of arrays the programmer failed to free (excludes built-in one which doesn't get destroyed) */
   unsigned long totalBytesLeaked = 0UL; /* The total bytes leaked for the whole program */
   unsigned int sli;
@@ -175,6 +176,9 @@ static void TrapUnFreedArrays() {
       /* Make a log message that an array was not destroyed */
       sprintf(
         trapMsg,
+        #ifdef HAVE_SNPRINTF
+        trapMsgRemaining,
+        #endif /*HAVE_SNPRINTF*/
         "Shutdown(): The array %s%p was not freed, any blocks unfreed in the array will be listed",
         DPCRTLMM_FMTPTRPFX, (void*)(_safetyList[sli])
       );
@@ -196,12 +200,26 @@ static void TrapUnFreedArrays() {
   }
   #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
   if (numArraysUnfreed) {
-    sprintf(trapMsg, "%lu arrays were not freed", numArraysUnfreed);
+    sprintf(
+      trapMsg,
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "%lu arrays were not freed",
+      numArraysUnfreed
+    );
     WARNING(trapMsg);
   }
   /* Entire list was processed, if there were any leaks report general message */
   if (totalBytesLeaked) { /* So, were there any unfreed arrays or blocks? */
-    sprintf(trapMsg, "%lu bytes of memory leaked in total.", totalBytesLeaked);
+    sprintf(
+      trapMsg,
+      #ifdef HAVE_SNPRINTF
+      trapMsgRemaining,
+      #endif /*HAVE_SNPRINTF*/
+      "%lu bytes of memory leaked in total.\n",
+      totalBytesLeaked
+    );
     Trap(DPCRTLMM_TRAP_UNFREED_DATA, trapMsg);
   }
   return;
@@ -209,6 +227,7 @@ static void TrapUnFreedArrays() {
 /*-------------------------------------------------------------------------*/
 static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)];
+  size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   unsigned int unfreedBlockCount;
   unsigned long totalLeakage = 0U; /* Total byte leakage for this array (blocks summed) */
   if (PArr) {
@@ -222,6 +241,9 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
       while ( PArr->Count ) {
         sprintf(
           trapMsg,
+          #ifdef HAVE_SNPRINTF
+          trapMsgRemaining,
+          #endif /*HAVE_SNPRINTF*/
           "Block %s%p in descriptor array %s%p was not freed, size: %u bytes",
           DPCRTLMM_FMTPTRPFX, PArr->Descriptors[0].PBase,
           DPCRTLMM_FMTPTRPFX, (void*)PArr,
@@ -234,6 +256,9 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
       /* Array leakage summary */
       sprintf(
         trapMsg,
+        #ifdef HAVE_SNPRINTF
+        trapMsgRemaining,
+        #endif /*HAVE_SNPRINTF*/
         "Array leakage summary: array %s%p contained %u unfreed blocks, a total of %lu bytes",
         DPCRTLMM_FMTPTRPFX, (void*)PArr,
         unfreedBlockCount,

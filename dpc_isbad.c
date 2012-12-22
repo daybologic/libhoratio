@@ -102,6 +102,9 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
 
     sprintf(
       trapmsg,
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
       "The block array address %s%p is unknown, unable to search for blocks.",
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
     );

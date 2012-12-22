@@ -78,6 +78,11 @@ by the config program and included in this file.
 
 #define MAX_TRAP_STRING_LENGTH (191) /* Maximum length of a trap string (excluding space for NULL terminator) - NOT USER CONFIGURABLE*/
 
+/* Force internal calls to sprintf() over to snprintf() */
+#ifdef HAVE_SNPRINTF
+# define sprintf snprintf
+#endif /*HAVE_SNPRINTF*/
+
 /* Handling for C libraries which prefix %p addresses with 0x, when others don't */
 #ifdef HAVE_FORMAT_POINTER_PREFIX
 # define DPCRTLMM_FMTPTRPFX ""

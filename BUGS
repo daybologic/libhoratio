@@ -17,3 +17,9 @@ The following message appears in DPCRTLMM.LOG:
 DPCRTLMM: "FATAL ERROR! dpc_trap.c, L111: Alloc(): The array base ptr 0x%p was not found in the internal safety list: 11E17E0"
 Which means it is not possible to find out what block array we were talking about from a debug report.
 Additionally, the 0x is duplicated, although that is library dependent.
+
+
+Issue #6:
+OpenBSD 4.2 complains about the following functions, for security reasons:
+strcpy() (recommending strlcpy), sprintf() (recommending snprintf), strcat(), (recommending strlcat).
+If these functions exists, they should be used.

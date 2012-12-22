@@ -93,7 +93,16 @@ void dpcrtlmm_int_Log(
     if (Message[0]) {
       formatMsg[0] = '\0'; /* so strncat() knows where to begin */
       STRNCAT_FIXEDBUFF(formatMsg, "DPCRTLMM: \"");
-      if ( File ) sprintf(number, "%u", Line); /* Convert line number to string */
+      if ( File ) { /* Convert line number to string */
+        sprintf(
+          number,
+          #ifdef HAVE_SNPRINTF
+          sizeof(number)-1,
+          #endif /*HAVE_SNPRINTF*/
+          "%u",
+          Line
+        );
+      }
       switch ( Severity ) {
         case DPCRTLMM_LOG_WARNING : {
           STRNCAT_FIXEDBUFF(formatMsg, "Warning! ");
