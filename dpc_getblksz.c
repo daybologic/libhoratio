@@ -83,6 +83,9 @@ static size_t dpcrtlmm_int_GetBlockSize(
 
     sprintf(
       trapMsg,
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
       "Attempt to GetBlockSize() unknown block at base %s%p, in array base: %s%p",
       DPCRTLMM_FMTPTRPFX, BlockPtr,
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray

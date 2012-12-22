@@ -176,6 +176,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   /* locals */
   unsigned int sli; /* Safety list loop processing */
   char trapStr[MAX_TRAP_STRING_LENGTH+1]; /* Sometimes used for creating trap strings */
+  size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   #ifdef DPCRTLMM_DEBUGHOOKS
   S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo; /* Used for calling the debug hook executive */
   #endif /*DPCRTLMM_DEBUGHOOKS*/
@@ -201,6 +202,9 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
 
           sprintf(
             trapStr,
+            #ifdef HAVE_SNPRINTF
+            trapMsgRemaining,
+            #endif /*HAVE_SNPRINTF*/
             "DestroyBlockArray(): %u blocks of memory not freed from array based at %s%p\n                      Total bytes leakage for this array: %lu",
             _safetyList[sli]->Count,
             DPCRTLMM_FMTPTRPFX, (void*)_safetyList[sli],
@@ -211,6 +215,9 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
         if (_safetyList[sli]->Descriptors) { /* Descriptors not zero? */
           sprintf(
             trapStr,
+            #ifdef HAVE_SNPRINTF
+            trapMsgRemaining,
+            #endif /*HAVE_SNPRINTF*/
             "DestroyBlockArray(): Base of raw descriptor array not freed!\n%s%p->%s%p (PBlockArray->Descriptors must be NULL)",
             DPCRTLMM_FMTPTRPFX, (void*)_safetyList[sli],
             DPCRTLMM_FMTPTRPFX, (void*)_safetyList[sli]->Descriptors
@@ -222,6 +229,9 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
         #ifdef DPCRTLMM_LOG
         sprintf(
           trapStr,
+          #ifdef HAVE_SNPRINTF
+          trapMsgRemaining,
+          #endif /*HAVE_SNPRINTF*/
           "DestroyBlockArray(): The array at base %s%p was destroyed",
           DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
         ); /* Prepare log message */
@@ -246,6 +256,9 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   /* Fire trap */
   sprintf(
     trapStr,
+    #ifdef HAVE_SNPRINTF
+    trapMsgRemaining,
+    #endif /*HAVE_SNPRINTF*/
     "DestroyBlockArray(): Attempt to destroy unknown array (%s%p)!\n",
     DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
   );

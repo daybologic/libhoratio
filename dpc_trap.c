@@ -199,7 +199,14 @@ static void dpcrtlmm_int_RemoveTrapCallback(
     _UserTrapCallback = NULL; /* Remove handler or hook */
 
     /* Log the removal */
-    sprintf(logStr, "RemoveTrapCallback(): %s removed.", (_userTrapCallbackIsHook) ? ("Hook") : ("Handler"));
+    sprintf(
+      logStr,
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
+      "RemoveTrapCallback(): %s removed.",
+      (_userTrapCallbackIsHook) ? ("Hook") : ("Handler")
+    );
     MESSAGE(NULL, 0, logStr);
 
     #ifdef DPCRTLMM_DEBUGHOOKS
@@ -213,6 +220,9 @@ static void dpcrtlmm_int_RemoveTrapCallback(
 
     sprintf(
       logStr,
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
       "RemoveTrapCallback(): The handler is NOT %s%lX !!!",
       DPCRTLMM_FMTPTRPFX, (unsigned long int)CurrentCallback
     );

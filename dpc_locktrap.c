@@ -70,6 +70,9 @@ unsigned int dpcrtlmm_int_LockTrap(
 
     sprintf(
       trapMsg,
+      #ifdef HAVE_SNPRINTF
+      MAX_TRAP_STRING_LENGTH,
+      #endif /*HAVE_SNPRINTF*/
       "%s: (locking violation) Block %s%p in array %s%p, flag dump: %X",
       FuncName,
       DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
