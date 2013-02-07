@@ -299,10 +299,12 @@ int main(int argc, char *argv[])
 
 	/* Run all tests using the CUnit Basic interface */
 	CU_basic_set_mode(CU_BRM_VERBOSE);
+	dpcrtlmm_Startup();
 	CU_basic_run_tests();
 	failCount = CU_get_number_of_failure_records();
 	CU_cleanup_registry();
 	err = CU_get_error();
+	dpcrtlmm_Shutdown();
 	if ( err != CUE_SUCCESS ) return err;
 	if ( failCount ) return EXIT_FAILURE;
 	return EXIT_SUCCESS;
@@ -330,9 +332,9 @@ static void suite_alloc_AllocSimple()
 {
 	void DPCRTLMM_FARDATA *ptrDefault, *ptrSharedSingle;
 
-	ptrDefault = dpcrtlmm_int_AllocEx(NULL, 1024, __FILE__, __LINE__);
+	ptrDefault = dpcrtlmm_Alloc(NULL, 1024);
 	CU_ASSERT_PTR_NOT_NULL(ptrDefault);
-	ptrSharedSingle = dpcrtlmm_int_AllocEx(BDASharedSingle, 1024, __FILE__, __LINE__);
+	ptrSharedSingle = dpcrtlmm_Alloc(BDASharedSingle, 1024);
 	CU_ASSERT_PTR_NOT_NULL(ptrSharedSingle);
 
 	dpcrtlmm_Free(NULL, ptrDefault);
@@ -342,14 +344,24 @@ static void suite_alloc_AllocSimple()
 static void suite_alloc_AllocLoop()
 {
 	unsigned int blockI;
-	void DPCRTLMM_FARDATA *blocks[128];
+	void DPCRTLMM_FARDATA *blocksDefault[48];
+	void DPCRTLMM_FARDATA *blocksSharedSingle[64];
 
-	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
-		blocks[blockI] = dpcrtlmm_int_AllocEx(NULL, blockI * 64, __FILE__, __LINE__);
-		CU_ASSERT_PTR_NOT_NULL(blocks[blockI]);
+	for ( blockI = 0U; blockI < sizeof(blocksDefault)/sizeof(blocksDefault[0]); blockI++ ) {
+		blocksDefault[blockI] = dpcrtlmm_Alloc(NULL, blockI * 32);
+		CU_ASSERT_PTR_NOT_NULL(blocksDefault[blockI]);
 	}
-	for ( blockI = 0U; blockI < sizeof(blocks)/sizeof(blocks[0]); blockI++ ) {
-		dpcrtlmm_Free(NULL, blocks[blockI]);
+	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
+		blocksSharedSingle[blockI] = dpcrtlmm_Alloc(BDASharedSingle, blockI * 96);
+		CU_ASSERT_PTR_NOT_NULL(blocksSharedSingle[blockI]);
+	}
+
+	/* Cleanup */
+	for ( blockI = 0U; blockI < sizeof(blocksDefault)/sizeof(blocksDefault[0]); blockI++ ) {
+		dpcrtlmm_Free(NULL, blocksDefault[blockI]);
+	}
+	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
+		dpcrtlmm_Free(BDASharedSingle, blocksSharedSingle[blockI]);
 	}
 }
 /*-------------------------------------------------------------------------*/
