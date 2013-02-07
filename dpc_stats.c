@@ -1,6 +1,6 @@
 /*
 Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -8,11 +8,11 @@ modification, are permitted provided that the following conditions are met:
 
     * Redistributions of source code must retain the above copyright notice,
       this list of conditions and the following disclaimer.
-      
+
     * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-      
+
     * Neither the name of the Daybo Logic nor the names of its contributors
       may be used to endorse or promote products derived from this software
       without specific prior written permission.
@@ -38,21 +38,6 @@ POSSIBILITY OF SUCH DAMAGE.
   Library: DPCRTLMM 1.0
   Language: ANSI C (1990)
   Revision #5
-
-  11th Dec 2000 : Removed the structure that communicated between both
-                  functions to carry counts of flags.  Bug fix, the
-                  swappable and locked block counts in the statistics
-                  didn't make it back to the caller's structure.
-
-  24th May 2001 : Added dump and supported functions.
-
-  31st Jul 2001 : Added support for big lock (thread safety).
-
-  16th Sep 2002 : Fix infinite loop in dpcrtlmm_Dump() and add array
-                  pointer to dump.
-
-  14th Apr 2005:  Fix %p printing warning, some re-formatting.
-  23rd Feb 2006:  General tidy up; license change
 */
 
 #define DPCRTLMM_SOURCE
@@ -85,8 +70,7 @@ static void CrackAndPrintFlags(
   unsigned char Flags
 );
 /*-------------------------------------------------------------------------*/
-unsigned long dpcrtlmm_GetBlockCount()
-{
+unsigned long dpcrtlmm_GetBlockCount() {
   unsigned long ret;
 
   LOCK
@@ -98,11 +82,9 @@ unsigned long dpcrtlmm_GetBlockCount()
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_GetStats(
   PS_DPCRTLMM_STATS PReadStats
-)
-{
+) {
   LOCK
-  if (PReadStats)
-  {
+  if (PReadStats) {
     PReadStats->Blocks.Allocated = _blockCount;
     /* Loop through the entire load counting us flags */
     CountFlagsInUse(PReadStats);
@@ -115,24 +97,19 @@ void dpcrtlmm_GetStats(
 /*-------------------------------------------------------------------------*/
 static void CountFlagsInUse(
   PS_DPCRTLMM_STATS PFlagsStats
-)
-{
-  if (PFlagsStats)
-  {
+) {
+  if (PFlagsStats) {
     unsigned int i;
 
     /* First reset the counts in the stats struct */
     PFlagsStats->Blocks.Locked = 0UL;
     PFlagsStats->Blocks.Unswappable = 0UL;
- 
+
     /* Go through normal arrays */
-    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ )
-    {
-      if (_safetyList[i]) /* Used entry? */
-      {
+    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) {
+      if (_safetyList[i]) { /* Used entry? */
         unsigned int j;
-        for ( j = 0U; j < _safetyList[i]->Count; j++ )
-        {
+        for ( j = 0U; j < _safetyList[i]->Count; j++ ) {
           unsigned char flags = _safetyList[i]->Descriptors[j].Flags;
 
           if ( (flags & 1) == 1) /* Lock bit set */
@@ -144,8 +121,7 @@ static void CountFlagsInUse(
     }
     /* Extra support for the "NULL array" */
     #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
-    for ( i = 0U; i < _defaultArray.Count; i++ )
-    {
+    for ( i = 0U; i < _defaultArray.Count; i++ ) {
       unsigned char flags = _defaultArray.Descriptors[i].Flags;
 
       if ( (flags & 1) == 1) /* Lock bit set */
@@ -159,8 +135,7 @@ static void CountFlagsInUse(
 /*-------------------------------------------------------------------------*/
 void dpcrtlmm_Dump(
   FILE *Target
-)
-{
+) {
   LOCK
   if ( Target ) {
     unsigned int i;
@@ -180,8 +155,7 @@ void dpcrtlmm_Dump(
 static void DumpOnArray(
   FILE *Target,
   PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
-)
-{
+) {
   unsigned int j; /* Just so I don't get confused with the other function */
 
   for ( j = 0U; j < CurrentArray->Count; j++ ) {
@@ -196,9 +170,9 @@ static void DumpOnArray(
 
     fprintf(
       Target,
-      "Address: %p, (Array: %p), owner: %s, line %u is %u bytes. ",
-      CurrentArray->Descriptors[j].PBase,
-      (void*)CurrentArray,
+      "Address: %s%p, (Array: %s%p), owner: %s, line %u is %u bytes. ",
+      DPCRTLMM_FMTPTRPFX, CurrentArray->Descriptors[j].PBase,
+      DPCRTLMM_FMTPTRPFX, (void*)CurrentArray,
       filename,
       CurrentArray->Descriptors[j].SourceLine,
       (unsigned int)CurrentArray->Descriptors[j].Size
@@ -208,8 +182,10 @@ static void DumpOnArray(
   return;
 }
 /*-------------------------------------------------------------------------*/
-static void CrackAndPrintFlags(FILE *Target, unsigned char Flags)
-{
+static void CrackAndPrintFlags(
+  FILE *Target,
+  unsigned char Flags
+) {
   if ( Target ) {
     int comma = 0;
     fprintf(Target, "Flags=");

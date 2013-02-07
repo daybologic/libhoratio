@@ -1,5 +1,5 @@
 # Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2012, David Duncan Ross Palmer, Daybo Logic
+# Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -7,11 +7,11 @@
 #
 #    * Redistributions of source code must retain the above copyright notice,
 #      this list of conditions and the following disclaimer.
-#      
+#
 #    * Redistributions in binary form must reproduce the above copyright
 #      notice, this list of conditions and the following disclaimer in the
 #      documentation and/or other materials provided with the distribution.
-#      
+#
 #    * Neither the name of the Daybo Logic nor the names of its contributors
 #      may be used to endorse or promote products derived from this software
 #      without specific prior written permission.
@@ -30,14 +30,14 @@
 
 AUTOMAKE_OPTIONS=
 
-#CFLAGS= -g -Wall -W -Wcast-qual -Wcast-align -Waggregate-return -Wpointer-arith \
+#AM_CFLAGS= -g -Wall -W -Wcast-qual -Wcast-align -Waggregate-return -Wpointer-arith \
 # -Wshadow -Wmissing-prototypes -Winline -Wstrict-prototypes \
 # -Wredundant-decls -Wwrite-strings -Wformat=2 -Wformat-security \
 # -Wformat-nonliteral -Wundef -Wredundant-decls -Wbad-function-cast \
 # -Wnested-externs -Wmissing-declarations -Wunknown-pragmas
 
 # Add any explicit flags here, or on the configure command line.
-CFLAGS=
+AM_CFLAGS=
 
 TESTS = example1 example2 example3 tests1
 check_PROGRAMS = $(TESTS)
