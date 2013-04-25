@@ -4,6 +4,8 @@
 % (c) Gunnar Wolf <gwolf@gwolf.org> 2005-2010
 % Version : 0.4.
 \documentclass{article}
+\usepackage{etoolbox}
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
 \usepackage{hyperref}
 \begin{document}
 \title{DPCRTLMM Programmers\' Guide}\author{Daybo Logic}
@@ -46,14 +48,10 @@ library}
 
 \href{#Plans}{4.0~ Plans for next version}
 
-\par \href{#Listings}{5.0~ Function listings}
-\\
-\href{#FuncDescs}{5.1~ Descriptions of all functions and their
-use}
-\\
+\par \href{#Listings}{5.0~ Function listings}\\
+\href{#FuncDescs}{5.1~ Descriptions of all functions and their use}
 
-\\
-}\textbf{\underline{1.~ About the library}}
+\textbf{1.~ About the library}
 \\
 This could be used as an alternative to
 \\
@@ -85,18 +83,16 @@ it contains memory bugs, the traps can be turned off or passed to
 \\
 a handler which will only execute the serious ones.
 \\
-
 \\
-}\textbf{\underline{1.1~ So who are Daybo Logic?}}
+\textbf{1.1~ So who are Daybo Logic?}
 \\
 Daybo Logic started in 1997 as a software development company.~ It
 then became a general troubleshooting company, as a sole trader, David
 Duncan Ross Palmer and in 2006, it reverted to being purely a
 programming hobby of mine.~ I still release all my software,
 including source code on the Daybo Logic web-site at \href{http://www.daybologic.co.uk/}{www.daybologic.co.uk}.\\
-
 \\
-}\textbf{\underline{1.2~ Contacting the author}}
+\textbf{1.2~ Contacting the author}
 \\
 The author of this library is David Duncan Ross Palmer, a C/C++
 programmer
@@ -117,9 +113,9 @@ license.~ The author of the library can be conacted by visiting
 the following web-site: \href{http://www.daybologic.co.uk/mailddrp/}{\url{http://www.daybologic.co.uk/mailddrp/}}.~
 I especially welcome bug reports, feature requests and technical
 questions.\\
-
 \\
-}1.3~ FAQ -
+\textbf{1.3~ FAQ}
+\\
 Frequently Asked Questions and common
 compile problems
 \par Q - I am using ./configure -$\,$-enable-threads -$\,$-with-gnu-pth to link
@@ -197,9 +193,7 @@ version of the library, Configure with -$\,$-enable-fardata.~ If this
 does not solve
 the problem please send me all details possible.
 \\
-
-\\
-}\textbf{\underline{1.4~ Compiling the sources}}
+\textbf{1.4~ Compiling the sources}
 \\
 The way in which the library is
 built can change from time to time,
@@ -266,9 +260,8 @@ to get things to work.~ I found that things generally worked only
 if built with a large memory model.~ This is generally what you\\
 will need to do nowadays anyway, as people don't tend to explicitly use
 far or near pointers any more.\\
-
 \\
-}\textbf{\underline{1.5~ Configuration options explained}}
+\textbf{1.5~ Configuration options explained}
 \\
 Since version 1.2.0, the old config program has been removed.~ It
 has been replaced with a GNU autoconf generated configure script.~
@@ -398,12 +391,11 @@ A file called DPCRTLMM.LOG wil be created and record the activity of
 every library call.~ This is an alternative to installing debug
 hooks.~ Do not forget to disable this feature before releasing
 your program!~ DPCRTLMM.LOG can grow very quickly!\\
-
 \\
-}\textbf{\underline{2.0~ Enumerations and detail}}\\
+\textbf{2.0~ Enumerations and detail}\\
 Blah\\
 \\
-}\textbf{\underline{2.1~ How much does it cost?}}
+\textbf{2.1~ How much does it cost?}
 \\
 Nothing, but I do accept donations via the web-site.~ If you have
 found this software useful, please donate.~ If you can't afford to
@@ -411,19 +403,15 @@ donate (which I wholly understand), please send me an email letting me
 know what you are using the library with.~ I really would be
 interested to know!~ I get quite a bit of email but I do enjoy
 reading email from folk who are using my software.\\
-
 \\
-}\textbf{\underline{2.2~ What platforms is the library
-available for}}
+\textbf{2.2~ What platforms is the library available for}
 \\
 The library has been tested on the following platforms: Win16, Win32,
 DOS (16-bit and 32-bit builds), GNU/Linux and FreeBSD.\\
 I aim to make sure this library can be built anywhere and if you have
 any specfic problems building it, please let me know.\\
-
 \\
-}\textbf{\underline{3.0~ Concepts and structures used
-by the library}}
+\textbf{3.0~ Concepts and structures used by the library}
 \\
 The primary memory managment structure is called a block descriptor,
 it contains basic information about a block of memory allocated by the
@@ -482,9 +470,7 @@ library is shut down to ensure all blocks have been released, it is
 therefore
 is the primary structure for producing a leak report.
 \\
-
-\\
-}\textbf{\underline{3.1~ Getting started}}
+\textbf{3.1~ Getting started}
 \\
 If you already have a program to convert to use the library I suggest
 this.~ Download at least version 1.1.4 and define USING\_DPCRTLMM
@@ -505,9 +491,8 @@ the array with the dedicated function and shutdown the library.~
 These
 destroy and shutdown routines are the main ones which check if anything
 was not freed from the array.\\
-
 \\
-}\textbf{\underline{3.2~ Portablilty issues}}
+\textbf{3.2~ Portablilty issues}
 \\
 This library will slow the program down but not make it any less
 portable
@@ -529,9 +514,7 @@ Most instructions for changes are in build.h, please use the configure
 script
 where appropriate.\\
 \\
-
-\\
-}\textbf{\underline{3.3~ 8086 builds}}
+\textbf{3.3~ 8086 builds}
 \\
 When building the library for the 8086-80286 (16-bit versions of
 Intel's
@@ -548,9 +531,7 @@ this if you really want to use a smaller memory model, build with
 -$\,$-enable-fardata.~ This is non-ANSI and you're on your own if your
 compiler can't support the '\_\_far' keyword.\\
 \\
-
-\\
-}\textbf{\underline{3.4~ Precompiled headers}}
+\textbf{3.4~ Precompiled headers}
 \\
 My compiler (Borland C++) supports this pragma:
 \\
@@ -560,7 +541,7 @@ However using it on other compilers might cause a warning, to avoid
 annoyance to people, it is disabled by default.~ To enable it,
 re-configure with ./configure -$\,$-enable-hdrstop.\\
 \\
-}\textbf{\underline{4.0~ Plans for next version}}
+\textbf{4.0~ Plans for next version}
 \\
 The internal debug hook executive seems to use a parameter which it
 could get from the debug info structure passed to it, the hook type is
@@ -585,9 +566,7 @@ all functions call the inner shell functions and not the entrypoints
 the
 users sees.
 \\
-
-\\
-}\textbf{\underline{5.0 Function listings}}
+\textbf{5.0 Function listings}
 \\
 No documentation is supplied or can be found that I have written for
 the hidden functions which I believe it is not worth library users
@@ -667,14 +646,10 @@ nosey.
 
 \par External variables
 \\
-\href{#_EnableTraps}{dpcrtlmm\_\_EnableTraps}
+\href{#\_EnableTraps}{dpcrtlmm\_\_EnableTraps}
 \\
-
+\textbf{5.1~ Descriptions of all functions and their use}
 \\
-}\textbf{\underline{5.1~ Descriptions of all functions
-and their use}}
-\\
-}\\
 unsigned int dpcrtlmm\_InstallDebugHook(const
 unsigned short HookType, unsigned
 int(*NewHookProc)(PS\_DPCRTLMM\_DEBUGHOOKINFO));
@@ -697,8 +672,8 @@ if I may call following hooks.
 \\
 Do not call the library from your hook routine because this may
 deadlock the library under threaded builds where mutual exclusion locks
-do not support recursion.\\
-}\\
+do not support recursion.
+\\
 unsigned int
 dpcrtlmm\_GetDebugHookChainCount(const
 unsigned int HookType);
@@ -709,7 +684,6 @@ functionalliy
 use \href{#GetDebugHookMatrixCount}{dpcrtlmm\_GetDebugHookMatrixCount(
 )}
 \\
-}\\
 unsigned int
 dpcrtlmm\_GetDebugHookMatrixCount(void);
 \\
@@ -720,7 +694,6 @@ will have a practical use for this, I just thought I'd add it really,
 plus
 it has a cool name!
 \\
-}\\
 unsigned int dpcrtlmm\_UninstallDebugHook(const
 unsigned short HookType, unsigned
 int(*HookProc2Remove)(PS\_DPCRTLMM\_DEBUGHOOKINFO));
@@ -735,7 +708,6 @@ handler must be specified.~ On success 1 (true) is returned
 otherwise
 0 (false) is returned.
 \\
-}\\
 void* dpcrtlmm\_Alloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const size\_t NewBlockSize);
 \\
@@ -760,7 +732,6 @@ will not see allocation requests unless they are valid, I'll fix this
 by
 the next version.
 \\
-}\\
 void dpcrtlmm\_Free(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, void* Ptr);
 \\
@@ -775,7 +746,6 @@ is installed on this type of event, remember that it must never
 dereference
 the PRelDesc field, the descriptor will have already been released.
 \\
-}\\
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 dpcrtlmm\_CreateBlockArray(void);
 \\
@@ -798,7 +768,6 @@ succeeds or fails, check the Success indicator of the debug hook info
 your
 hook is passed.
 \\
-}\\
 void dpcrtlmm\_DestroyBlockArray(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray );
@@ -814,7 +783,6 @@ Hooks
 will normally see both success and failure, check the Success entry of
 the debug hook info.
 \\
-}\\
 unsigned int dpcrtlmm\_IsDefaultBlockArray(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray );
@@ -831,7 +799,6 @@ is the unresolved user version.~ Hooking this function is not
 supported,
 if you want it, call me.
 \\
-}\\
 void dpcrtlmm\_Startup(void);
 \\
 Before one calls any other functions in this library, the library must
@@ -844,7 +811,6 @@ call
 the test, the behaviour of the program calling the library before it is
 started is undefined and could end in disaster.
 \\
-}\\
 void dpcrtlmm\_Shutdown(void);
 \\
 If one ends the program without shutting down the library the whole
@@ -871,7 +837,6 @@ GlobalStartup(
 about
 it.
 \\
-}\\
 unsigned int dpcrtlmm\_IsStarted(void);
 \\
 Version: 1.1.6
@@ -883,7 +848,6 @@ memory but need to know whether the program which uses it already uses
 DPCRTLMM in oder to know when to start or stop the library or to leave
 well alone.
 \\
-}\\
 size\_t dpcrtlmm\_GetBlockSize(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, void* BlockPtr);
@@ -893,7 +857,6 @@ address of the allocated block must be specified also.~ The size
 will
 be returned.
 \\
-}\\
 unsigned int dpcrtlmm\_IsBadBlockPtr(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* BlockPtr);
@@ -910,7 +873,6 @@ meaning
 returned.~ To avoid a trap and test an array pointer call \href{#IsBadArrayPtr}{dpcrtlmm\_IsBadArrayPtr(
 )}
 \\
-}\\
 unsigned int dpcrtlmm\_IsBadArrayPtr(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray );
@@ -924,7 +886,6 @@ so is the resolved version but it's unlikely you'll see that unless
 your
 code is a hook.
 \\
-}\\
 void* dpcrtlmm\_Realloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, void* OldBlockPtr, const size\_t NewSize);
 \\
@@ -958,7 +919,6 @@ the
 reallocation is successful, therefore the hook routine(s) will only see
 Success = 1.
 \\
-}\\
 void* dpcrtlmm\_Calloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const unsigned int N, const size\_t NewBlockSize);
 \\
@@ -966,7 +926,6 @@ Equivilant to C run time library calloc( ) purely a wrapper around
 alloc( N * NewBlockSize ) everything else is the same.~ See \href{#Alloc}{dpcrtlmm\_Alloc(
 )} for more information
 \\
-}\\
 void dpcrtlmm\_InstallTrapCallback(
 void(*UserCallbackProc)(const
 unsigned int TrapID, const char* TrapMessage), const unsigned int
@@ -991,7 +950,6 @@ It just gets a preview.~ Do not try to remove a handler by passing
 NULL to this function, use \href{#RemoveTrapCallback}{dpcrtlmm\_RemoveTrapCallback(
 )}
 \\
-}\\
 void dpcrtlmm\_RemoveTrapCallback(
 void(*CurrentCallbackProc)(const
 unsigned int TrapID, const char* TrapDesc) );
@@ -1001,7 +959,6 @@ Removes a trap handler which was installed by \href{#InstallTrapCallback}{dpcrtl
 dreadful
 mistake, there is no return value.
 \\
-}\\
 signed char dpcrtlmm\_GetTrapCallbackInfo(void);
 \\
 Sometimes the user of the library has installed a handler for traps
@@ -1026,7 +983,6 @@ So if a handler returns the program may continue after a trap which
 could
 lead to unpredictable results.
 \\
-}\\
 unsigned char
 dpcrtlmm\_ModifyDescriptorFlags(const
 PS\_DPCRTLMM\_BLOCKDESCARRAY PBlockArray, const void* Ptr, const unsigned
@@ -1058,7 +1014,6 @@ user trap (just comment out the line installing the handler, or don't
 turn
 off trapping).
 \\
-}\\
 void
 dpcrtlmm\_SetBlockLockingFlag(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* Ptr, const unsigned int NewStatus);
@@ -1070,7 +1025,6 @@ result of the call, the function \href{#ModifyDescriptorFlags}{ModifyDescriptorF
 \\
 NewStatus is a boolean, nonzero = true, zero = false.
 \\
-}\\
 unsigned int
 dpcrtlmm\_IsBlockLocked(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);
@@ -1080,7 +1034,6 @@ locked or 0 if it has not.~ When a block is locked, it cannot be
 freed
 or resized.
 \\
-}\\
 \#define dpcrtlmm\_LockBlock(pArr, pBlock)
 dpcrtlmm\_SetBlockLockingFlag(pArr,
 pBlock, (1U));
@@ -1093,7 +1046,6 @@ Both of these functions are simple macros to lock and unlock blocks
 of memory see \href{#SetBlockLockingFlag}{dpcrtlmm\_SetBlockLockingFlag(
 )}
 \\
-}\\
 void
 dpcrtlmm\_ToggleBlockLockingStatus(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);
@@ -1101,7 +1053,6 @@ PBlockArray, const void* Ptr);
 If the said block is locked, it will be unlocked and vice versa, not
 sure if anyone will bother to use this function really
 \\
-}\\
 void dpcrtlmm\_EnableTraps(void);
 \\
 See \href{#DisableTraps}{dpcrtlmm\_DisableTraps( )}, normally
@@ -1112,7 +1063,6 @@ say like, disable traps, perform actions, re-enable traps.~
 Implemented
 as a macro, see dpcrtlmm\_\_EnableTraps
 \\
-}\\
 void dpcrtlmm\_DisableTraps(void);
 \\
 Normally when the library starts traps are enabled, however let's say
@@ -1131,14 +1081,12 @@ after starting the library to avoid traps.~ Implemented as a
 macro,
 see dpcrtlmm\_\_EnableTraps
 \\
-}\\
 unsigned char dpcrtlmm\_AreTrapsEnabled(void);
 \\
 Returns whether traps are enabled or not, 1U means enabled 0U if
 not.~
 Implemented as a macro, see \href{#_EnableTraps}{dpcrtlmm\_\_EnableTraps}
 \\
-}\\
 void dpcrtlmm\_GetStats(PS\_DPCRTLMM\_STATS
 PReadStats);
 \\
@@ -1159,7 +1107,6 @@ loop to check the flags of all descriptors, shouldn't reduce
 performance
 too much but remember that the function should not be called too often.
 \\
-}\\
 unsigned long dpcrtlmm\_GetBlockCount(void);
 \\
 Returns the number of blocks allocated, don't worry I'm not completely
@@ -1167,7 +1114,6 @@ mad, the count is stored internally it is not worked out by this
 function,
 I don't go mad, looping through all the arrays looking for blocks!
 \\
-}\\
 PS\_DPCRTLMM\_VERSION
 dpcrtlmm\_Ver(PS\_DPCRTLMM\_VERSION
 PVerStruct);
@@ -1175,7 +1121,6 @@ PVerStruct);
 Returns library version info, the caller supplies the structure and
 I return them the same structure, passing NULL does nothing.
 \\
-}\\
 void dpcrtlmm\_Dump(FILE* Target);
 \\
 Dumps a listing of all allocated blocks of memory which are currently
@@ -1185,7 +1130,6 @@ knowing
 what state memory is in at any time without having to wait until a trap
 for a leak dump.
 \\
-}\\
 extern unsigned char dpcrtlmm\_\_EnableTraps;
 \\
 This can be used to disable/enable traps, while it is off no trap will
