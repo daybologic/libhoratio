@@ -40,10 +40,9 @@ Description: David Duncan Ross Palmer's
              C-RunTime Library
              Memory Manager
 Comments:
-          What the hell is this?  This could be used as an alternative to
-          memory tracking tools such as CodeGuard of MemorySleuth,
-          it's not as thorough as them however, it can't detect memory over
-          runs on pointer accesses or anything like that.  It can be used
+          What is the purpose of this library?
+          It is a memory tracking tool.  Although it can't detect memory
+          over runs on pointer accesses or corruption.  It can be used
           to detect failures to release memory (as long as it's allocated
           by us) and attempts to release memory which we do not own.
           It has an automatic garbage collection feature to free up all
