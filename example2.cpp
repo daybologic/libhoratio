@@ -166,7 +166,7 @@ static void myTrapHandler(
   const unsigned int TrapID,
   const char* TrapMsg
 ) {
-  /* Why the hell am I handling this trap?  I'm not, I install this as a
+  /* Why am I handling this trap?  I'm not, I install this as a
   hook only.  Which means control is returned to the DPCRTLMM rap handler
   afterwards. */
 

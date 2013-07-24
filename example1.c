@@ -174,7 +174,7 @@ static void myTrapHandler(
   const char *TrapMsg
 ) {
   /*
-    Why the hell am I handling this trap?  I'm not, I install this as
+    Why am I handling this trap?  I'm not, I install this as
     a hook only.  Which means control is returned to the DPCRTLMM rap
     handler afterwards.
   */
