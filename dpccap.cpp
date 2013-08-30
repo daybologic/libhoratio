@@ -56,7 +56,7 @@ POSSIBILITY OF SUCH DAMAGE.
 Overlord::
 #endif
 TDPCRTLMM_MemManager MemManager;
-//----------------------------------------------------------------------------
+
 // Overlord::TDPCRTLMM_MemManager
 
 // Constructor, starts DPCRTLMM
@@ -67,7 +67,7 @@ TDPCRTLMM_MemManager::TDPCRTLMM_MemManager()
   : firstAccess(1)
 {
 }
-//----------------------------------------------------------------------------
+
 // Destructor, shuts down DPCRTLMM
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -78,7 +78,7 @@ TDPCRTLMM_MemManager::~TDPCRTLMM_MemManager() {
     this->firstAccess = 1;
   }
 }
-//----------------------------------------------------------------------------
+
 // Explicit startup function
 void
 #ifndef __NO_NAMESPACES__
@@ -90,7 +90,7 @@ TDPCRTLMM_MemManager::Startup() {
     this->firstAccess = 0;
   }
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -105,7 +105,7 @@ TDPCRTLMM_MemManager::InstallDebugHook(
   }
   return dpcrtlmm_InstallDebugHook(HookType, NewHookProc);
 }
-//----------------------------------------------------------------------------
+
 unsigned
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -119,7 +119,7 @@ TDPCRTLMM_MemManager::GetDebugHookChainCount(
   }
   return dpcrtlmm_GetDebugHookChainCount(HookType);
 }
-//----------------------------------------------------------------------------
+
 unsigned
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -131,7 +131,7 @@ TDPCRTLMM_MemManager::GetDebugHookMatrixCount() {
   }
   return dpcrtlmm_GetDebugHookMatrixCount();
 }
-//----------------------------------------------------------------------------
+
 unsigned int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -146,7 +146,7 @@ TDPCRTLMM_MemManager::UninstallDebugHook(
   }
   return dpcrtlmm_UninstallDebugHook(HookType, HookProc2Remove);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -160,7 +160,7 @@ TDPCRTLMM_MemManager::Alloc(
   }
   return dpcrtlmm_Alloc(NULL, NewBlockSize);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -176,7 +176,7 @@ TDPCRTLMM_MemManager::Alloc(
   }
   return dpcrtlmm_AllocEx(NULL, NewBlockSize, File, Line);
 }
-//----------------------------------------------------------------------------
+
 // Don't bother shielding the library from NULLs, the library
 // is perfectly capable of finding and reporting all the programmer's
 // mistakes without this little fancy layer playing at being DPCRTLMM
@@ -193,7 +193,7 @@ TDPCRTLMM_MemManager::Free(
   }
   dpcrtlmm_Free(NULL, Ptr);
 }
-//---------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -207,7 +207,7 @@ TDPCRTLMM_MemManager::IsDefaultBlockArray(
   }
   return dpcrtlmm_IsDefaultBlockArray(PBlockArray);
 }
-//----------------------------------------------------------------------------
+
 size_t
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -221,7 +221,7 @@ TDPCRTLMM_MemManager::GetBlockSize(
   }
   return dpcrtlmm_GetBlockSize(NULL, (void*)BlockPtr);
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -235,7 +235,7 @@ TDPCRTLMM_MemManager::IsBadBlockPtr(
   }
   return dpcrtlmm_IsBadBlockPtr(NULL, BlockPtr);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -250,7 +250,7 @@ TDPCRTLMM_MemManager::Realloc(
   }
   return dpcrtlmm_Realloc(NULL, OldBlockPtr, NewSize);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -265,7 +265,7 @@ TDPCRTLMM_MemManager::Calloc(
   }
   return dpcrtlmm_Calloc(NULL, N, NewBlockSize);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -282,7 +282,7 @@ TDPCRTLMM_MemManager::Calloc(
   }
   return dpcrtlmm_CallocEx(NULL, N, NewBlockSize, File, Line);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -297,7 +297,7 @@ TDPCRTLMM_MemManager::InstallTrapCallback(
   }
   dpcrtlmm_InstallTrapCallback(UserCallbackProc, AsHook);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -311,7 +311,7 @@ TDPCRTLMM_MemManager::RemoveTrapCallback(
   }
   dpcrtlmm_RemoveTrapCallback(CurrentCallbackProc);
 }
-//----------------------------------------------------------------------------
+
 signed char
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -323,7 +323,7 @@ TDPCRTLMM_MemManager::GetTrapCallbackInfo() {
   }
   return dpcrtlmm_GetTrapCallbackInfo();
 }
-//----------------------------------------------------------------------------
+
 unsigned char
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -338,7 +338,7 @@ TDPCRTLMM_MemManager::ModifyDescriptorFlags(
   }
   return dpcrtlmm_ModifyDescriptorFlags(NULL, Ptr, PNewFlags);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -353,7 +353,7 @@ TDPCRTLMM_MemManager::SetBlockLockingFlag(
   }
   dpcrtlmm_SetBlockLockingFlag(NULL, Ptr, (const unsigned int)NewStatus);
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -367,7 +367,7 @@ TDPCRTLMM_MemManager::IsBlockLocked(
   }
   return dpcrtlmm_IsBlockLocked(NULL, Ptr);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -381,7 +381,7 @@ TDPCRTLMM_MemManager::LockBlock(
   }
   dpcrtlmm_SetBlockLockingFlag(NULL, pBlock, (1U));
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -395,7 +395,7 @@ TDPCRTLMM_MemManager::UnlockBlock(
   }
   dpcrtlmm_SetBlockLockingFlag(NULL, pBlock, (0U));
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -409,7 +409,7 @@ TDPCRTLMM_MemManager::ToggleBlockLockingStatus(
   }
   dpcrtlmm_ToggleBlockLockingStatus(NULL, Ptr);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -422,7 +422,7 @@ TDPCRTLMM_MemManager::EnableTraps() {
   // Change DPCRTLMM externed variable, quicker than a library call
   dpcrtlmm__EnableTraps = 1U;
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -434,7 +434,7 @@ TDPCRTLMM_MemManager::DisableTraps() {
   }
   dpcrtlmm__EnableTraps = 0U;
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -446,7 +446,7 @@ TDPCRTLMM_MemManager::AreTrapsEnabled() {
   }
   return dpcrtlmm__EnableTraps;
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -460,7 +460,7 @@ TDPCRTLMM_MemManager::GetStats(
   }
   dpcrtlmm_GetStats(PReadStats);
 }
-//----------------------------------------------------------------------------
+
 unsigned long
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -472,7 +472,7 @@ TDPCRTLMM_MemManager::GetBlockCount() {
   }
   return dpcrtlmm_GetBlockCount();
 }
-//----------------------------------------------------------------------------
+
 PS_DPCRTLMM_VERSION
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -486,7 +486,7 @@ TDPCRTLMM_MemManager::Ver(
   }
   return dpcrtlmm_Ver(PVerStruct);
 } 
-//---------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -500,7 +500,7 @@ TDPCRTLMM_MemManager::Dump(
   }
   dpcrtlmm_Dump(Target);
 }
-//---------------------------------------------------------------------------
+
 
 
 // Overlord::TDPCRTLMM_BlockArray
@@ -517,7 +517,7 @@ TDPCRTLMM_BlockArray::TDPCRTLMM_BlockArray(
   if ( Init )
     this->Init();
 }
-//----------------------------------------------------------------------------
+
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
@@ -527,7 +527,7 @@ TDPCRTLMM_BlockArray::TDPCRTLMM_BlockArray()
 {
   this->Init();
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -541,14 +541,14 @@ TDPCRTLMM_BlockArray::Init() {
   }
   return ret;
 }
-//----------------------------------------------------------------------------
+
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
 TDPCRTLMM_BlockArray::~TDPCRTLMM_BlockArray() {
   dpcrtlmm_DestroyBlockArray(_PblockArray);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -558,7 +558,7 @@ TDPCRTLMM_BlockArray::Alloc(
 ) {
   return dpcrtlmm_Alloc(_PblockArray, NewBlockSize);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -570,7 +570,7 @@ TDPCRTLMM_BlockArray::Alloc(
 ) {
   return dpcrtlmm_AllocEx(_PblockArray, NewBlockSize, File, Line);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -580,7 +580,7 @@ TDPCRTLMM_BlockArray::Free(
 ) {
   dpcrtlmm_Free(_PblockArray, Ptr);
 }
-//----------------------------------------------------------------------------
+
 size_t
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -590,7 +590,7 @@ TDPCRTLMM_BlockArray::GetBlockSize(
 ) const {
   return dpcrtlmm_GetBlockSize(_PblockArray, (void*)BlockPtr);
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -600,7 +600,7 @@ TDPCRTLMM_BlockArray::IsBadBlockPtr(
 ) const {
   return dpcrtlmm_IsBadBlockPtr(_PblockArray, BlockPtr);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -611,7 +611,7 @@ TDPCRTLMM_BlockArray::Realloc(
 ) {
   return dpcrtlmm_Realloc(_PblockArray, OldBlockPtr, NewSize);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -622,7 +622,7 @@ TDPCRTLMM_BlockArray::Calloc(
 ) {
   return dpcrtlmm_Calloc(_PblockArray, N, NewBlockSize);
 }
-//----------------------------------------------------------------------------
+
 void*
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -635,7 +635,7 @@ TDPCRTLMM_BlockArray::Calloc(
 ) {
   return dpcrtlmm_CallocEx(_PblockArray, N, NewBlockSize, File, Line);
 }
-//----------------------------------------------------------------------------
+
 unsigned char
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -646,7 +646,7 @@ TDPCRTLMM_BlockArray::ModifyDescriptorFlags(
 ) {
   return dpcrtlmm_ModifyDescriptorFlags(_PblockArray, Ptr, PNewFlags);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -657,7 +657,7 @@ TDPCRTLMM_BlockArray::SetBlockLockingFlag(
 ) {
   dpcrtlmm_SetBlockLockingFlag(_PblockArray, Ptr, (const unsigned int)NewStatus);
 }
-//----------------------------------------------------------------------------
+
 int
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -667,7 +667,7 @@ TDPCRTLMM_BlockArray::IsBlockLocked(
 ) const {
   return dpcrtlmm_IsBlockLocked(_PblockArray, Ptr);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -677,7 +677,7 @@ TDPCRTLMM_BlockArray::LockBlock(
 ) {
   dpcrtlmm_LockBlock(_PblockArray, pBlock);
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -687,7 +687,7 @@ TDPCRTLMM_BlockArray::UnlockBlock(
 ) {
   dpcrtlmm_SetBlockLockingFlag(_PblockArray, pBlock, (0U));
 }
-//----------------------------------------------------------------------------
+
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
@@ -697,4 +697,4 @@ TDPCRTLMM_BlockArray::ToggleBlockLockingStatus(
 ) {
   dpcrtlmm_ToggleBlockLockingStatus(_PblockArray, Ptr);
 }
-//----------------------------------------------------------------------------
+
