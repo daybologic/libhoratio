@@ -38,7 +38,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_LOCKTRAP_H
 #define INC_DPCRTLMM_LOCKTRAP_H
-/*-------------------------------------------------------------------------*/
+
 #ifndef DPCRTLMM_SOURCE
 #  error ("locktrap.h is for internal DPCRTLMM use")
 #endif /*DPCRTLMM_SOURCE*/
@@ -58,5 +58,5 @@ unsigned int dpcrtlmm_int_LockTrap(
 #ifdef INC_DPCRTLMM_INTDATA_H
 #  define _LockTrap dpcrtlmm_int_LockTrap
 #endif /*INC_DPCRTLMM_INTDATA_H*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_LOCKTRAP_H*/

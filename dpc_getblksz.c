@@ -52,12 +52,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_iblkptr.h" /* IndexFromBlockPtr() */
 #include "dpc_biglock.h" /* Library mutual exclusion */
 #include "dpc_isbad.h" /* Internal interface to block testers */
-/*-------------------------------------------------------------------------*/
+
 static size_t dpcrtlmm_int_GetBlockSize(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *BlockPtr
 );
-/*-------------------------------------------------------------------------*/
+
 size_t dpcrtlmm_GetBlockSize(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *BlockPtr
@@ -70,7 +70,7 @@ size_t dpcrtlmm_GetBlockSize(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 static size_t dpcrtlmm_int_GetBlockSize(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *BlockPtr
@@ -94,4 +94,4 @@ static size_t dpcrtlmm_int_GetBlockSize(
   }
   return _ResolveArrayPtr(PBlockArray)->Descriptors[ _IndexFromBlockPtr(PBlockArray, BlockPtr) ].Size;
 }
-/*-------------------------------------------------------------------------*/
+

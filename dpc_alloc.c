@@ -61,7 +61,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* Debug hook executive and support functions */
 #include "dpc_biglock.h" /* Mutual exclusion */
 #include "dpc_alloc.h"
-/*-------------------------------------------------------------------------*/
+
 /* Internal functions (local) */
 
 static void OurLog(
@@ -98,7 +98,7 @@ static unsigned int GrowBlockArray(
 
 #define OURLOG_POS(sev, msg) \
   OURLOG(__FILE__, __LINE__, (sev), (msg))
-/*-------------------------------------------------------------------------*/
+
 void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
@@ -114,7 +114,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
@@ -222,7 +222,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
 
   return genBlockPtr; /* Give pointer to the caller */
 }
-/*-------------------------------------------------------------------------*/
+
 static unsigned int GrowBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
   const unsigned int GrowByElems
@@ -260,7 +260,7 @@ static unsigned int GrowBlockArray(
   }
   return 1U; /* Success */
 }
-/*-------------------------------------------------------------------------*/
+
 static void OurLog(
   const char *File,
   const unsigned int Line,
@@ -288,4 +288,4 @@ static void OurLog(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+

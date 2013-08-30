@@ -58,7 +58,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* Debug hook executive */
 #include "dpc_biglock.h" /* For mutual exclusion */
 #include "dpc_isbad.h" /* Internal interface to block testers */
-/*-------------------------------------------------------------------------*/
+
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
@@ -98,7 +98,7 @@ static void OurLog(
   const unsigned short Severity,
   const char *Msg
 );
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_Free(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *Ptr
@@ -109,7 +109,7 @@ void dpcrtlmm_Free(
   dpcrtlmm_int_Free(PBlockArray, Ptr);
   UNLOCK
 }
-/*-------------------------------------------------------------------------*/
+
 static void dpcrtlmm_int_Free(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *Ptr
@@ -195,7 +195,7 @@ static void dpcrtlmm_int_Free(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static void Moveup(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int StartPos
@@ -241,7 +241,7 @@ static void Moveup(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static void ShrinkBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int Amount
@@ -311,7 +311,7 @@ static void ShrinkBlockArray(
   PBlockArray->Count -= Amount; /* Adjust count for descriptor array */
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static void OurLog(
   const char* File,
   const unsigned int Line,
@@ -339,4 +339,4 @@ static void OurLog(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+

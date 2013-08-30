@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_BIGLOCK_H
 #define INC_DPCRTLMM_BIGLOCK_H
-/*-------------------------------------------------------------------------*/
+
 #ifndef DPCRTLMM_SOURCE
 #  error ("biglock is for internal library use")
 #endif
@@ -60,5 +60,5 @@ void dpcrtlmm_int_BigLock(int LockState);
 #  define LOCK
 #  define UNLOCK
 #endif /*DPCRTLMM_THREADS*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_BIGLOCK_H*/

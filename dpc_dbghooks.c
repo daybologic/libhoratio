@@ -56,7 +56,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_log.h" /* LOG macro */
 #include "dpc_biglock.h" /* Mutual exclusion */
 #include "dpc_dbghooks.h"
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 
 static unsigned int BadHookType(
@@ -82,7 +82,7 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(
 );
 
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 unsigned int dpcrtlmm_InstallDebugHook(
   const unsigned short HookType,
@@ -97,7 +97,7 @@ unsigned int dpcrtlmm_InstallDebugHook(
   return ret;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 unsigned int dpcrtlmm_GetDebugHookChainCount(
   const unsigned int HookType
@@ -111,7 +111,7 @@ unsigned int dpcrtlmm_GetDebugHookChainCount(
   return ret;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
   unsigned int ret;
@@ -123,7 +123,7 @@ unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
   return ret;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 unsigned int dpcrtlmm_UninstallDebugHook(
   const unsigned short HookType,
@@ -138,7 +138,7 @@ unsigned int dpcrtlmm_UninstallDebugHook(
   return ret;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 void dpcrtlmm_int_InitDebugHookMatrix() {
   /* Initialize or clear the debug hook matrix */
@@ -156,7 +156,7 @@ void dpcrtlmm_int_InitDebugHookMatrix() {
   return;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 void dpcrtlmm_int_CallDebugHook(
   const unsigned short HookType,
@@ -191,7 +191,7 @@ void dpcrtlmm_int_CallDebugHook(
   return; /* All hook calls are done */
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 static unsigned int dpcrtlmm_int_InstallDebugHook(
   const unsigned short HookType,
@@ -227,7 +227,7 @@ static unsigned int dpcrtlmm_int_InstallDebugHook(
   return set; /* No space for handler */
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
   const unsigned int HookType
@@ -244,7 +244,7 @@ static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
   return total;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(void) {
   unsigned int i;
   unsigned total = 0U;
@@ -254,7 +254,7 @@ static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(void) {
 
   return total; /* Give total to caller */
 }
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 static unsigned int dpcrtlmm_int_UninstallDebugHook(
   const unsigned short HookType,
@@ -287,7 +287,7 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(
   return retStatus; /* Give status to caller */
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_DEBUGHOOKS
 static unsigned int BadHookType(const unsigned int HookType) {
   unsigned int bad = 0U; /* Not a bad hook type yet... */
@@ -302,4 +302,4 @@ static unsigned int BadHookType(const unsigned int HookType) {
   return bad;
 }
 #endif /*DPCRTLMM_DEBUGHOOKS*/
-/*-------------------------------------------------------------------------*/
+

@@ -58,7 +58,7 @@ trap.  Otherwise the function does not return. */
 #include "dpc_bloclock.h" /* For internal interfaces */
 #include "dpc_bdflags.h" /* For internal interface */
 #include "dpc_locktrap.h"
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_int_LockTrap(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,

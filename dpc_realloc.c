@@ -65,13 +65,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* Debug hooking routines, we use the executive */
 #include "dpc_log.h"
 #include "dpc_biglock.h" /* Mutual exclusion */
-/*-------------------------------------------------------------------------*/
+
 static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
   const size_t NewSize
 );
-/*-------------------------------------------------------------------------*/
+
 void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
@@ -85,7 +85,7 @@ void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   void DPCRTLMM_FARDATA *OldBlockPtr,
@@ -151,4 +151,4 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
 
   return ptr; /* Give new pointer to caller */
 }
-/*-------------------------------------------------------------------------*/
+

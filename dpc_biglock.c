@@ -81,7 +81,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #    endif /*!PTHREAD_MUTEX_RECURSIVE_NP*/
 #  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
 #endif /*DPCRTLMM_THREADS_PTHREAD*/
-/*--------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_THREADS_NT
 
 #  define Mutant CRITICAL_SECTION
@@ -111,7 +111,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  define DestroyMutant(x) pthread_mutex_destroy((x))
 
 #endif /*DPCRTLMM_THREADS_NT*/
-/*--------------------------------------------------------------------------*/
+
 static Mutant bigLock;
 
 #ifdef DPCRTLMM_THREADS_PTHREAD
@@ -119,22 +119,22 @@ static Mutant bigLock;
     void InitNPMutant(pthread_mutex_t* PMutant);
 #  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
 #endif /*DPCRTLMM_THREADS_PTHREAD*/
-/*--------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_BigLockInit() {
   InitialiseMutant(&bigLock);
 }
-/*--------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_BigLockUninit() {
   DestroyMutant(&bigLock);
 }
-/*--------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_BigLock(int LockState) {
   if ( LockState )
     LockMutant(&bigLock);
   else
     UnlockMutant(&bigLock);
 }
-/*--------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_THREADS_PTHREAD
 #ifdef DPCRTLMM_THREADS_PTHREAD_NP
 void InitNPMutant(pthread_mutex_t* PMutant) {
@@ -147,7 +147,7 @@ void InitNPMutant(pthread_mutex_t* PMutant) {
 }
 #endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
 #endif /*DPCRTLMM_THREADS_PTHREAD*/
-/*--------------------------------------------------------------------------*/
+
 #else /* !DPCRTLMM_THREADS -- Threads not required */
   char dpcrtlmm_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */
 #endif /*DPCRTLMM_THREADS*/

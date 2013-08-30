@@ -63,7 +63,7 @@ by the config program and included in this file.
 /*
   Below follows a non-user configuration ...
 */
-/*-------------------------------------------------------------------------*/
+
 /* Try to prevent users including this header */
 #ifndef DPCRTLMM_SOURCE
 #error this header is not intended for use outside of the library
@@ -119,5 +119,5 @@ non-ANSI, configure with configure --enable-fardata */
 #define DPCRTLMM_VERSION_MAJOR (1)
 #define DPCRTLMM_VERSION_MINOR (2)
 #define DPCRTLMM_VERSION_PATCH (1)
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_BUILD_H*/

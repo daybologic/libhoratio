@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_DPCRTLMM_IBLKPTR
 #define INC_DPCRTLMM_IBLKPTR
-/*-------------------------------------------------------------------------*/
+
 #ifndef DPCRTLMM_SOURCE
 #  error ("iblkptr.h is for internal DPCRTLMM usage only")
 #endif /*DPCRTLMM_SOURCE*/
@@ -49,5 +49,5 @@ unsigned int dpcrtlmm_int_IndexFromBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBl
 #else /* Build from outside? */
 #  error ("Clear off! This header is for internal library use")
 #endif /*INC_DPCRTLMM_INTDATA_H*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*INC_DPCRTLMM_IBLKPTR*/

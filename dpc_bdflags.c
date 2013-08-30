@@ -53,13 +53,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* The debug hook executive */
 #include "dpc_biglock.h" /* Library's mutual exclusion */
 #include "dpc_bdflags.h"
-/*-------------------------------------------------------------------------*/
+
 /*
   NOTE: Adding of the hook caller in here has caused two variables
   both holding the index of the block, this should be optimised away when
   I can be bothered
 */
-/*-------------------------------------------------------------------------*/
+
 unsigned char dpcrtlmm_ModifyDescriptorFlags(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
@@ -77,7 +77,7 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
@@ -121,5 +121,5 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
 
   return oldFlags; /* Give the old flags back to the caller */
 }
-/*-------------------------------------------------------------------------*/
+
 

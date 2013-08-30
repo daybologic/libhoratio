@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_BLKARRAY_H
 #define INC_DPCRTLMM_BLKARRAY_H
-/*-------------------------------------------------------------------------*/
+
 #ifndef DPCRTLMM_SOURCE
 # error ("Use DPCRTLMM.H not seperate, internal headers")
 #endif /*DPCRTLMM_SOURCE*/
@@ -48,5 +48,5 @@ void dpcrtlmm_int_DestroyBlockArray(
 #ifdef __cplusplus
   }
 #endif
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_BLKARRAY_H*/

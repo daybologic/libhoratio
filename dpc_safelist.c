@@ -57,7 +57,7 @@ Created May 3rd 2000
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_safelist.h"
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
   const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase
 ) {
@@ -68,7 +68,7 @@ unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
   }
   return 0U; /* Not present or bad params */
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_SafetyList_Init() {
   unsigned int i;
 
@@ -78,7 +78,7 @@ void dpcrtlmm_SafetyList_Init() {
 
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_SafetyList_CountUsed() {
   unsigned int sli, slc = 0U;
 
@@ -89,7 +89,7 @@ unsigned int dpcrtlmm_SafetyList_CountUsed() {
 
   return slc; /* Give count to caller */
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_SafetyList_AddBase(
   const PS_DPCRTLMM_BLOCKDESCARRAY PArrayBase
 ) {
@@ -116,7 +116,7 @@ unsigned int dpcrtlmm_SafetyList_AddBase(
   a bit of restructuring of the program but can reduce overhead, the other
   side effect is to make if more difficult to localize a leak, however. */
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_SafetyList_RemoveBase(
   const PS_DPCRTLMM_BLOCKDESCARRAY PArrayBase
 ) {
@@ -134,4 +134,4 @@ unsigned int dpcrtlmm_SafetyList_RemoveBase(
   }
   return 0U; /* Looks like the item was not present */
 }
-/*-------------------------------------------------------------------------*/
+

@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_DPCRTLMM_VPTRAP_H
 #define INC_DPCRTLMM_VPTRAP_H
-/*-------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
@@ -47,5 +47,5 @@ void dpcrtlmm_int_VerifyPtrs(
 #ifdef INC_DPCRTLMM_INTDATA_H
 # define _VerifyPtrs dpcrtlmm_int_VerifyPtrs
 #endif /*INC_DPCRTLMM_INTDATA_H*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_VPTRAP_H*/

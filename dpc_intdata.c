@@ -53,7 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_build.h" /* General build parameters */
 #include "dpcrtlmm.h" /* Main library header */
 #include "dpc_intdata.h"
-/*-------------------------------------------------------------------------*/
+
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int__safetyList[DPCRTLMM_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */
 #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY /* New NULL block array support enabled? */
   S_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int__defaultArray = { 0U, NULL }; /* This is the built-in array, it is never created or destroyed but it's contents must be what I'm setting them to now when the program ends! */

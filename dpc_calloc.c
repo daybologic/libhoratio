@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* Debug hook executive */
 #include "dpc_biglock.h" /* For entire library mutual exclusion */
 #include "dpc_alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_LOG
 static void OurLog(
   const char *File,
@@ -71,7 +71,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
   const char* File,
   const unsigned int Line
 );
-/*-------------------------------------------------------------------------*/
+
 void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
@@ -87,7 +87,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
@@ -150,7 +150,7 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
   #endif /*DPCRTLMM_DEBUGHOOKS*/
   return resultantPtr;
 }
-/*-------------------------------------------------------------------------*/
+
 #ifdef DPCRTLMM_LOG
 static void OurLog(
   const char* File,
@@ -180,4 +180,4 @@ static void OurLog(
   return;
 }
 #endif /*DPCRTLMM_LOG*/
-/*-------------------------------------------------------------------------*/
+

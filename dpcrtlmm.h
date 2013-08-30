@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_DPCRTLMM_H
 #define INC_DPCRTLMM_H
-/*-------------------------------------------------------------------------*/
+
 /*
 Created 15th Feb 2000
 Programmer: David Duncan Ross Palmer, Daybo Logic.
@@ -691,5 +691,5 @@ them it won't be hard to write your own hack table. */
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_H*/
