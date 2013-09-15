@@ -59,7 +59,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTMM_HDRSTOP*/
 
 #define USING_DPCRTLMM /* Activate malloc() etc as macros */
-#include "dpcrtlmm.h"
+#include "horatio.h"
 
 /* main() belongs to DPCRTLMM, rename your old main my_main or something */
 static int my_main(const int argc, const char* argv[]);

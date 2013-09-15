@@ -51,7 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "dpcrtlmm.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h"
 /*-------------------------------------------------------------------------*/
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int__safetyList[DPCRTLMM_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */

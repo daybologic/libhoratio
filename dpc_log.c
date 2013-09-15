@@ -61,7 +61,7 @@ causes a warning on your compiler, I aplogise!
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "dpcrtlmm.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library header */
 #include "dpc_log.h"
 /*-------------------------------------------------------------------------*/

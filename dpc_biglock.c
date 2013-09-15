@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h"
-#include "dpcrtlmm.h"
+#include "horatio.h"
 #include "dpc_biglock.h"
 
 #ifdef DPCRTLMM_THREADS

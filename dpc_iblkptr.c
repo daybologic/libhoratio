@@ -47,13 +47,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "dpcrtlmm.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal data */
 #include "dpc_trap.h" /* Trap support */
 #include "dpc_vptrap.h" /* For _VerifyPtrs() */
 #include "dpc_iblkptr.h"
 /*-------------------------------------------------------------------------*/
-unsigned int dpcrtlmm_int_IndexFromBlockPtr(
+unsigned int horatio_int_IndexFromBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
 ) {

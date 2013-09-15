@@ -57,7 +57,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "dpcrtlmm.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_trap.h" /* Trap() */
 #include "dpc_log.h" /* LOG macro */

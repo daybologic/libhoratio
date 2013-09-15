@@ -34,7 +34,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_DPCRTLMM_ALLOC_H
 /*-------------------------------------------------------------------------*/
 #ifndef DPCRTLMM_SOURCE
-#  error ("This header is for internal library use only, include dpcrtlmm.h")
+#  error ("This header is for internal library use only, include horatio.h")
 #endif /*DPCRTLMM_SOURCE*/
 
 #ifdef __cplusplus

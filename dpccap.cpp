@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif //DPCRTLMM_HDRSTOP
 
-#include "dpcrtlmm.h" // Library header
+#include "horatio.h" // Library header
 #include "dpccap.h" // Class definitions
 
 #ifndef __NO_NAMESPACES__

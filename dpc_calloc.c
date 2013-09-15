@@ -42,7 +42,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "dpcrtlmm.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_log.h" /* Main logging support */
 #include "dpc_iblkptr.h" /* dpcrtlmm_int_IndexFromBlockPtr() */
