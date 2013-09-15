@@ -53,7 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_vptrap.h" /* For _VerifyPtrs() */
 #include "dpc_iblkptr.h"
 /*-------------------------------------------------------------------------*/
-unsigned int horatio_int_IndexFromBlockPtr(
+unsigned int dpcrtlmm_int_IndexFromBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
 ) {
