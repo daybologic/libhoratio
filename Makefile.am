@@ -48,15 +48,15 @@ AM_LDFLAGS= -lpth
 endif
 
 example1_SOURCES = example1.c
-example1_INCLUDES = dpcrtlmm.h
+example1_INCLUDES = horatio.h
 example1_LDADD = $(examples_LDADD)
 
 example2_SOURCES = example2.cpp dpccap.cpp
-example2_INCLUDES = dpcrtlmm.h dpccap.h
+example2_INCLUDES = horatio.h dpccap.h
 example2_LDADD = $(examples_LDADD)
 
 example3_SOURCES = example3.c
-example3_INCLUDES = dpcrtlmm.h
+example3_INCLUDES = horatio.h
 example3_LDADD = $(examples_LDADD)
 
 INCLUDES = \
@@ -84,5 +84,5 @@ libdpcrtlmm_la_SOURCES += dpc_stats.c
 libdpcrtlmm_la_SOURCES += dpc_trap.c
 libdpcrtlmm_la_SOURCES += dpc_vptrap.c
 
-nobase_include_HEADERS = dpcrtlmm.h
+nobase_include_HEADERS = horatio.h
 
