@@ -84,5 +84,6 @@ libdpcrtlmm_la_SOURCES += dpc_stats.c
 libdpcrtlmm_la_SOURCES += dpc_trap.c
 libdpcrtlmm_la_SOURCES += dpc_vptrap.c
 
-nobase_include_HEADERS = horatio.h
+nobase_include_HEADERS =  horatio.h
+nobase_include_HEADERS += dpcrtlmm.h
 
