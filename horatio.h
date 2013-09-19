@@ -32,7 +32,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef INC_HORATIO_H
 # define INC_HORATIO_H
 # define INC_DPCRTLMM_H /* Legacy sentry */
-#endif /*!INC_HORATIO_H*/
 /*-------------------------------------------------------------------------*/
 /*
 Created 15th Feb 2000
@@ -84,9 +83,9 @@ extern "C" {
   following code.  Further investigation is necessary.
 */
 #ifndef HORATIO_FARDATA
-#  define DPCRTLMM_FARDATA /* Legacy */
 #  define HORATIO_FARDATA
-#endif
+#  define DPCRTLMM_FARDATA /* Legacy */
+#endif /*!HORATIO_FARDATA*/
 
 /* File / Line: This might be paranoia but I don't know if __FILE__ and
 __LINE__ are defined on every compiler.  I'm not taking the risk */
@@ -96,7 +95,7 @@ __LINE__ are defined on every compiler.  I'm not taking the risk */
 
 #ifndef __LINE__
 #  define __LINE__ (0)
-#endif /*__LINE__*/
+#endif /*!__LINE__*/
 
 
 /*
