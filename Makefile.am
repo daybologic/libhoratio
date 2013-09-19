@@ -39,7 +39,7 @@ AUTOMAKE_OPTIONS=
 # Add any explicit flags here, or on the configure command line.
 AM_CFLAGS=
 
-TESTS = example1 example2 example3
+TESTS = example1 example2 example3 newbrand
 check_PROGRAMS = $(TESTS)
 examples_LDADD = -ldpcrtlmm
 
@@ -50,6 +50,10 @@ endif
 example1_SOURCES = example1.c
 example1_INCLUDES = horatio.h
 example1_LDADD = $(examples_LDADD)
+
+newbrand_SOURCES = newbrand.c
+newbrand_INCLUDES = horatio.h
+newbrand_LDADD = $(examples_LDADD)
 
 example2_SOURCES = example2.cpp dpccap.cpp
 example2_INCLUDES = horatio.h dpccap.h
@@ -86,4 +90,3 @@ libdpcrtlmm_la_SOURCES += dpc_vptrap.c
 
 nobase_include_HEADERS =  horatio.h
 nobase_include_HEADERS += dpcrtlmm.h
-
