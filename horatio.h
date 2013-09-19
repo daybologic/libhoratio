@@ -110,7 +110,7 @@ typedef struct _S_HORATIO_BLOCKDESCRIPTOR { /* A block descriptor */
   unsigned int SourceLine; /* Line number at which the block was allocated */
   char *SourceFile; /* Dynamic, filename of place where allocation was requested */
 } S_HORATIO_BLOCKDESCRIPTOR, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCRIPTOR,
-  S_DPCRTLMM_BLOCKDESCRIPTOR, DPCRTLMM_FARDATA *PS_DPCRTLMM_BLOCKDESCTIPTOR;
+  S_DPCRTLMM_BLOCKDESCRIPTOR, DPCRTLMM_FARDATA *PS_DPCRTLMM_BLOCKDESCRIPTOR;
 
 typedef struct _S_HORATIO_BLOCKDESCARRAY { /* Array of block descriptors */
   unsigned int Count; /* Number of elements (block descriptors) */
@@ -591,8 +591,8 @@ PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
 #define HORATIO_MIN(a,b) (((a) < (b)) ? (a) : (b))
 #define HORATIO_MAX(a,b) (((a) > (b)) ? (a) : (b))
 /* Legacy MIN/MAX macros */
-#define DPCRTLMM_MIN (HORATIO_MIN)
-#define DPCRTLMM_MAX (HORATIO_MAX)
+#define DPCRTLMM_MIN(a,b) HORATIO_MIN((a),(b))
+#define DPCRTLMM_MAX(a,b) HORATIO_MAX((a),(b))
 
 /* Trap numbers, these aren't used by the default handler but if the
 user installs a user handler it could look at the number and decide
