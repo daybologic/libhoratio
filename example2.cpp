@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #define USING_DPCRTLMM /* Needed for calloc() re-definition */
-#include "horatio.h"
+#include "restricted_horatio.h"
 #include "dpccap.h"
 
 static void PrintStats(const PS_DPCRTLMM_STATS PStats);

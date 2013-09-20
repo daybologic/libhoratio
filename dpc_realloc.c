@@ -57,7 +57,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "horatio.h" /* Main library header */
+#include "restricted_horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_vptrap.h" /* _VerifyPtrs() */
 #include "dpc_locktrap.h" /* _LockTrap() */

@@ -52,7 +52,7 @@ trap.  Otherwise the function does not return. */
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "horatio.h" /* Main library header */
+#include "restricted_horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library header */
 #include "dpc_trap.h" /* Trap() */
 #include "dpc_bloclock.h" /* For internal interfaces */
