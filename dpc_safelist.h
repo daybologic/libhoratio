@@ -32,34 +32,34 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
 #############################################################################
 # Functions for handling the safety list                                    #
-# DPCRTLMM--The DayboLogic C-Runtime Memory Manager                         #
+# HORATIO--The DayboLogic C-Runtime Memory Manager                         #
 # No functions here are for calling by the user, they are only for internal #
 # library use.                                                              #
 #############################################################################
 */
 
-#ifndef INC_DPCRTLMM_SAFETYLIST_H
-#define INC_DPCRTLMM_SAFETYLIST_H
+#ifndef INC_HORATIO_SAFETYLIST_H
+#define INC_HORATIO_SAFETYLIST_H
 
 
-#ifndef DPCRTLMM_SOURCE /* Looks like a user inclusion! */
-#error The safety list is for internal use by DPCRTLMM only
-#endif /*!DPCRTLMM_SOURCE*/
+#ifndef HORATIO_SOURCE /* Looks like a user inclusion! */
+#error The safety list is for internal use by HORATIO only
+#endif /*!HORATIO_SOURCE*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
 
 unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
-  const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase
+  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 void dpcrtlmm_SafetyList_Init(void);
 unsigned int dpcrtlmm_SafetyList_CountUsed(void);
 unsigned int dpcrtlmm_SafetyList_AddBase(
-  const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase
+  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 unsigned int dpcrtlmm_SafetyList_RemoveBase(
-  const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase
+  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 
 #ifdef __cplusplus
@@ -78,6 +78,6 @@ ignore this library. */
 #define SafetyList_RemoveBase           dpcrtlmm_SafetyList_RemoveBase
 
 #define SafetyList_CountFree(SafetyList) \
-  ( (DPCRTLMM_SAFETYLIST_MAXSIZE) - SafetyList_CountList(safetyList) )
+  ( (HORATIO_SAFETYLIST_MAXSIZE) - SafetyList_CountList(safetyList) )
 
-#endif /*!INC_DPCRTLMM_SAFETYLIST_H*/
+#endif /*!INC_HORATIO_SAFETYLIST_H*/

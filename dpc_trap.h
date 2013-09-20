@@ -29,12 +29,12 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef INC_DPCRTLMM_TRAP_H
-#define INC_DPCRTLMM_TRAP_H
+#ifndef INC_HORATIO_TRAP_H
+#define INC_HORATIO_TRAP_H
 
-#ifndef INC_DPCRTLMM_INTDATA_H
+#ifndef INC_HORATIO_INTDATA_H
 #  error ("Internal library users only!")
-#endif /*INC_DPCRTLMM_INTDATA_H*/
+#endif /*INC_HORATIO_INTDATA_H*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,10 +47,10 @@ void dpcrtlmm_int_Trap(
 } /* extern "C" */
 #endif /*__cplusplus*/
 
-/* NOTE: Prototype for InstallTrapHandler() is in DPCRTLMM.H */
+/* NOTE: Prototype for InstallTrapHandler() is in HORATIO.H */
 
-#ifdef INC_DPCRTLMM_INTDATA_H
+#ifdef INC_HORATIO_INTDATA_H
 #  define Trap dpcrtlmm_int_Trap
-#endif /*INC_DPCRTLMM_INTDATA_H*/
+#endif /*INC_HORATIO_INTDATA_H*/
 
-#endif /*!INC_DPCRTLMM_TRAP_H*/
+#endif /*!INC_HORATIO_TRAP_H*/

@@ -30,35 +30,35 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INC_DPCRTLMM_BLOCLOCK_H
-#define INC_DPCRTLMM_BLOCLOCK_H
+#ifndef INC_HORATIO_BLOCLOCK_H
+#define INC_HORATIO_BLOCLOCK_H
 
 #ifdef __cplusplus
   extern "C" {
 #endif /*__cplusplus*/
 
-#ifndef DPCRTLMM_SOURCE
+#ifndef HORATIO_SOURCE
 #  error ("This header is not for you")
-#endif /*DPCRTLMM_SOURCE*/
+#endif /*HORATIO_SOURCE*/
 
 void dpcrtlmm_int_SetBlockLockingFlag(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
   const unsigned int NewStatus
 );
 
 unsigned int dpcrtlmm_int_IsBlockLocked(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr
 );
 
 void dpcrtlmm_int_ToggleBlockLockingStatus(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr
 );
 
 #ifdef __cplusplus
   }
 #endif /*__cplusplus*/
 
-#endif /*!INC_DPCRTLMM_BLOCLOCK_H*/
+#endif /*!INC_HORATIO_BLOCLOCK_H*/

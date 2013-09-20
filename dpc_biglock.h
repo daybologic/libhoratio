@@ -30,14 +30,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INC_DPCRTLMM_BIGLOCK_H
-#define INC_DPCRTLMM_BIGLOCK_H
+#ifndef INC_HORATIO_BIGLOCK_H
+#define INC_HORATIO_BIGLOCK_H
 
-#ifndef DPCRTLMM_SOURCE
+#ifndef HORATIO_SOURCE
 #  error ("biglock is for internal library use")
 #endif
 
-#ifdef DPCRTLMM_THREADS
+#ifdef HORATIO_THREADS
 
 #ifdef __cplusplus
   extern "C" {
@@ -51,14 +51,14 @@ void dpcrtlmm_int_BigLock(int LockState);
   }
 #endif
 
-#endif /*DPCRTLMM_THREADS*/
+#endif /*HORATIO_THREADS*/
 
-#ifdef DPCRTLMM_THREADS
+#ifdef HORATIO_THREADS
 #  define LOCK dpcrtlmm_int_BigLock(1);
 #  define UNLOCK dpcrtlmm_int_BigLock(0);
 #else
 #  define LOCK
 #  define UNLOCK
-#endif /*DPCRTLMM_THREADS*/
+#endif /*HORATIO_THREADS*/
 
-#endif /*!INC_DPCRTLMM_BIGLOCK_H*/
+#endif /*!INC_HORATIO_BIGLOCK_H*/

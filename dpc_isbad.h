@@ -30,22 +30,22 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INC_DPCRTLMM_ISBAD_H
-#define INC_DPCRTLMM_ISBAD_H
+#ifndef INC_HORATIO_ISBAD_H
+#define INC_HORATIO_ISBAD_H
 
 #ifdef __cplusplus
   extern "C" {
 #endif /*__cplusplus*/
 
-#ifndef DPCRTLMM_SOURCE
+#ifndef HORATIO_SOURCE
 #  error ("This header is not for you")
-#endif /*DPCRTLMM_SOURCE*/
+#endif /*HORATIO_SOURCE*/
 
-unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
-unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
+unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
+unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray);
 
 #ifdef __cplusplus
   }
 #endif /*__cplusplus*/
 
-#endif /*!INC_DPCRTLMM_ISBAD_H*/
+#endif /*!INC_HORATIO_ISBAD_H*/

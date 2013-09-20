@@ -29,25 +29,25 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef INC_DPCRTLMM_IBLKPTR
-#define INC_DPCRTLMM_IBLKPTR
+#ifndef INC_HORATIO_IBLKPTR
+#define INC_HORATIO_IBLKPTR
 
-#ifndef DPCRTLMM_SOURCE
-#  error ("iblkptr.h is for internal DPCRTLMM usage only")
-#endif /*DPCRTLMM_SOURCE*/
+#ifndef HORATIO_SOURCE
+#  error ("iblkptr.h is for internal HORATIO usage only")
+#endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
-unsigned int dpcrtlmm_int_IndexFromBlockPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void DPCRTLMM_FARDATA* BlockPtr);
+unsigned int dpcrtlmm_int_IndexFromBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
 
-#ifdef INC_DPCRTLMM_INTDATA_H /* Build from inside? */
+#ifdef INC_HORATIO_INTDATA_H /* Build from inside? */
 #  define _IndexFromBlockPtr dpcrtlmm_int_IndexFromBlockPtr /* Lazy shortcut */
 #else /* Build from outside? */
 #  error ("Clear off! This header is for internal library use")
-#endif /*INC_DPCRTLMM_INTDATA_H*/
+#endif /*INC_HORATIO_INTDATA_H*/
 
-#endif /*INC_DPCRTLMM_IBLKPTR*/
+#endif /*INC_HORATIO_IBLKPTR*/

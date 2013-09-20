@@ -30,19 +30,19 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INC_DPCRTLMM_ALLOC_H
-#define INC_DPCRTLMM_ALLOC_H
+#ifndef INC_HORATIO_ALLOC_H
+#define INC_HORATIO_ALLOC_H
 
-#ifndef DPCRTLMM_SOURCE
+#ifndef HORATIO_SOURCE
 #  error ("This header is for internal library use only, include horatio.h")
-#endif /*DPCRTLMM_SOURCE*/
+#endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
   extern "C" {
 #endif /*__cplusplus*/
 
-void DPCRTLMM_FARDATA *dpcrtlmm_int_AllocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+void HORATIO_FARDATA *dpcrtlmm_int_AllocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
@@ -52,4 +52,4 @@ void DPCRTLMM_FARDATA *dpcrtlmm_int_AllocEx(
   }
 #endif /*__cplusplus*/
 
-#endif /*!INC_DPCRTLMM_ALLOC_H*/
+#endif /*!INC_HORATIO_ALLOC_H*/

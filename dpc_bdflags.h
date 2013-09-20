@@ -30,11 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INC_DPCRTLMM_BDFLAGS_H
-#define INC_DPCRTLMM_BDFLAGS_H
+#ifndef INC_HORATIO_BDFLAGS_H
+#define INC_HORATIO_BDFLAGS_H
 
-#ifndef DPCRTLMM_SOURCE
-#  error ("bdflags.h is for internal DPCRTLMM use")
+#ifndef HORATIO_SOURCE
+#  error ("bdflags.h is for internal HORATIO use")
 #endif
 
 #ifdef __cplusplus
@@ -42,8 +42,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr,
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags
 );
 
@@ -51,4 +51,4 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
   }
 #endif
 
-#endif /*!INC_DPCRTLMM_BDFLAGS_H*/
+#endif /*!INC_HORATIO_BDFLAGS_H*/

@@ -36,27 +36,27 @@ POSSIBILITY OF SUCH DAMAGE.
   Created 23rd Feb 2000
 */
 
-#ifndef INC_DPCRTLMM_LOCKTRAP_H
-#define INC_DPCRTLMM_LOCKTRAP_H
+#ifndef INC_HORATIO_LOCKTRAP_H
+#define INC_HORATIO_LOCKTRAP_H
 
-#ifndef DPCRTLMM_SOURCE
-#  error ("locktrap.h is for internal DPCRTLMM use")
-#endif /*DPCRTLMM_SOURCE*/
+#ifndef HORATIO_SOURCE
+#  error ("locktrap.h is for internal HORATIO use")
+#endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 unsigned int dpcrtlmm_int_LockTrap(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 );
 #ifdef __cplusplus
 }
 #endif
 
-#ifdef INC_DPCRTLMM_INTDATA_H
+#ifdef INC_HORATIO_INTDATA_H
 #  define _LockTrap dpcrtlmm_int_LockTrap
-#endif /*INC_DPCRTLMM_INTDATA_H*/
+#endif /*INC_HORATIO_INTDATA_H*/
 
-#endif /*!INC_DPCRTLMM_LOCKTRAP_H*/
+#endif /*!INC_HORATIO_LOCKTRAP_H*/

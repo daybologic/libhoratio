@@ -34,18 +34,18 @@ POSSIBILITY OF SUCH DAMAGE.
   Header for the debug hook executive and support code
 */
 
-#ifndef INC_DPCRTLMM_DBGHOOKS_H
-#define INC_DPCRTLMM_DBGHOOKS_H
+#ifndef INC_HORATIO_DBGHOOKS_H
+#define INC_HORATIO_DBGHOOKS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
 
-#ifndef DPCRTLMM_SOURCE
+#ifndef HORATIO_SOURCE
 #  error ("Internal library users only!")  // <-- See Overlord DDRP
-#endif /*!DPCRTLMM_SOURCE*/
+#endif /*!HORATIO_SOURCE*/
 
-#ifdef DPCRTLMM_DEBUGHOOKS
+#ifdef HORATIO_DEBUGHOOKS
 
 void dpcrtlmm_int_InitDebugHookMatrix(void); /* Call to clear all pointers in the matrix */
 
@@ -53,7 +53,7 @@ void dpcrtlmm_int_InitDebugHookMatrix(void); /* Call to clear all pointers in th
 rules first. */
 void dpcrtlmm_int_CallDebugHook(
   const unsigned short HookType,
-  const PS_DPCRTLMM_DEBUGHOOKINFO PDebugHookInfo
+  const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
 );
 
 /*
@@ -66,15 +66,15 @@ void dpcrtlmm_int_CallDebugHook(
   look in the public header dpcrtlmm.h.
 */
 
-#endif /*DPCRTLMM_DEBUGHOOKS*/
+#endif /*HORATIO_DEBUGHOOKS*/
 
-#ifdef INC_DPCRTLMM_INTDATA_H
+#ifdef INC_HORATIO_INTDATA_H
 #  define _InitDebugHookMatrix dpcrtlmm_int_InitDebugHookMatrix
 #  define _CallHook dpcrtlmm_int_CallHook
-#endif /*INC_DPCRTLMM_INTDATA_H*/
+#endif /*INC_HORATIO_INTDATA_H*/
 
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif /*__cplusplus*/
 
-#endif /*!INC_DPCRTLMM_DBGHOOKS_H*/
+#endif /*!INC_HORATIO_DBGHOOKS_H*/

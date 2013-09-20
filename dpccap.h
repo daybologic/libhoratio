@@ -29,7 +29,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-// DPCRTLMM 1.2 compatible encapsulation header for C++
+// HORATIO 1.2 compatible encapsulation header for C++
 // include this and add dpccap.cpp to your project
 // You can have this particular module, it's free
 // I'm writing this in ANSI/ISO C++, that doesn't mean it'll work on all
@@ -39,8 +39,8 @@ POSSIBILITY OF SUCH DAMAGE.
 // know, look how far Mozilla and Netscape has been ported!
 // I know the keyword bool is new, so I'm not using it, I'll use int thanks
 
-#ifndef INC_DPCRTLMM_CAP_H
-#define INC_DPCRTLMM_CAP_H
+#ifndef INC_HORATIO_CAP_H
+#define INC_HORATIO_CAP_H
 
 // main object, don't create more than one, the object is externed
 
@@ -48,24 +48,24 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace Overlord
 {
 #endif /*!__NO_NAMESPACES__*/
-  class TDPCRTLMM_MemManager
+  class THORATIO_MemManager
   {
   private:
     int firstAccess;
   public:
-    TDPCRTLMM_MemManager();
+    THORATIO_MemManager();
 
-    ~TDPCRTLMM_MemManager();
+    ~THORATIO_MemManager();
 
     void Startup(); // Explicit startup (not necessary but you can call it)
 
-    int InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));
+    int InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO));
 
     unsigned GetDebugHookChainCount(const unsigned int HookType);
 
     unsigned GetDebugHookMatrixCount();
 
-    unsigned int UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO));
+    unsigned int UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO));
 
     void* Alloc(const size_t NewBlockSize);
 
@@ -73,8 +73,8 @@ namespace Overlord
 
     void Free(void* Ptr);
 
-    // Only of use within a hook, see my docs for this function in DPCRTLMM, it's just the same
-    int IsDefaultBlockArray(PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray);
+    // Only of use within a hook, see my docs for this function in HORATIO, it's just the same
+    int IsDefaultBlockArray(PS_HORATIO_BLOCKDESCARRAY PBlockArray);
 
     // I shouldn't have been using void* in this function really, correct that
     // for the C++ layer
@@ -110,26 +110,26 @@ namespace Overlord
     void DisableTraps();
     int AreTrapsEnabled();
 
-    void GetStats(PS_DPCRTLMM_STATS PReadStats);
+    void GetStats(PS_HORATIO_STATS PReadStats);
 
     unsigned long GetBlockCount();
 
-    PS_DPCRTLMM_VERSION Ver(PS_DPCRTLMM_VERSION PVerStruct);
+    PS_HORATIO_VERSION Ver(PS_HORATIO_VERSION PVerStruct);
 
     void Dump(FILE* Target);
   };
 
-  class TDPCRTLMM_BlockArray
+  class THORATIO_BlockArray
   {
   private:
-      PS_DPCRTLMM_BLOCKDESCARRAY _PblockArray;
+      PS_HORATIO_BLOCKDESCARRAY _PblockArray;
   public:
-    TDPCRTLMM_BlockArray(bool Init);
-    TDPCRTLMM_BlockArray();
+    THORATIO_BlockArray(bool Init);
+    THORATIO_BlockArray();
     int Init();
 
     // Destroys the block array, destructs the object
-    ~TDPCRTLMM_BlockArray();
+    ~THORATIO_BlockArray();
 
     void* Alloc(const size_t NewBlockSize); /* Allocates a block in this block array */
 
@@ -168,6 +168,6 @@ extern
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager MemManager; /* This is the object you should use */
+THORATIO_MemManager MemManager; /* This is the object you should use */
 
-#endif //!INC_DPCRTLMM_CAP_H
+#endif //!INC_HORATIO_CAP_H

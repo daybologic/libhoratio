@@ -30,23 +30,23 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INC_DPCRTLMM_BLKARRAY_H
-#define INC_DPCRTLMM_BLKARRAY_H
+#ifndef INC_HORATIO_BLKARRAY_H
+#define INC_HORATIO_BLKARRAY_H
 
-#ifndef DPCRTLMM_SOURCE
-# error ("Use DPCRTLMM.H not seperate, internal headers")
-#endif /*DPCRTLMM_SOURCE*/
+#ifndef HORATIO_SOURCE
+# error ("Use HORATIO.H not seperate, internal headers")
+#endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
   extern "C" {
 #endif
 
 void dpcrtlmm_int_DestroyBlockArray(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 
 #ifdef __cplusplus
   }
 #endif
 
-#endif /*!INC_DPCRTLMM_BLKARRAY_H*/
+#endif /*!INC_HORATIO_BLKARRAY_H*/

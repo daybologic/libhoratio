@@ -29,23 +29,23 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef INC_DPCRTLMM_VPTRAP_H
-#define INC_DPCRTLMM_VPTRAP_H
+#ifndef INC_HORATIO_VPTRAP_H
+#define INC_HORATIO_VPTRAP_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
 void dpcrtlmm_int_VerifyPtrs(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ); /* BlockPtr can be NULL */
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
 
-#ifdef INC_DPCRTLMM_INTDATA_H
+#ifdef INC_HORATIO_INTDATA_H
 # define _VerifyPtrs dpcrtlmm_int_VerifyPtrs
-#endif /*INC_DPCRTLMM_INTDATA_H*/
+#endif /*INC_HORATIO_INTDATA_H*/
 
-#endif /*!INC_DPCRTLMM_VPTRAP_H*/
+#endif /*!INC_HORATIO_VPTRAP_H*/
