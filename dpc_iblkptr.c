@@ -72,6 +72,6 @@ unsigned int dpcrtlmm_int_IndexFromBlockPtr(
     DPCRTLMM_TRAP_INDEX_GEN_FAILED,
     "IndexFromBlockPtr(): Block not found, index not generated"
   );
-  return ~0; /* Buggered */
+  return ~0;
 }
 
