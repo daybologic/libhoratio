@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
@@ -44,27 +44,27 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*!_GNU_SOURCE*/
 
 #include <stdio.h>
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h"
 #include "restricted_horatio.h"
 #include "dpc_biglock.h"
 
-#ifdef DPCRTLMM_THREADS
+#ifdef HORATIO_THREADS
 
-#ifdef DPCRTLMM_THREADS_PTHREAD
-#  ifndef DPCRTLMM_THREADS_PTHREAD_NP
-#    pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for DPCRTLMM access from user callbacks.  Callbacks have the power to deadlock a thread"
-#  endif /*!DPCRTLMM_THREADS_PTHREAD_NP*/
-#endif /*DPCRTLMM_THREADS_PTHREAD*/
+#ifdef HORATIO_THREADS_PTHREAD
+#  ifndef HORATIO_THREADS_PTHREAD_NP
+#    pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for HORATIO access from user callbacks.  Callbacks have the power to deadlock a thread"
+#  endif /*!HORATIO_THREADS_PTHREAD_NP*/
+#endif /*HORATIO_THREADS_PTHREAD*/
 
-#if defined(DPCRTLMM_THREADS_NT)
+#if defined(HORATIO_THREADS_NT)
 #  include <windows.h>
-#elif defined(DPCRTLMM_THREADS_PTH)
+#elif defined(HORATIO_THREADS_PTH)
 #  include <pth.h>
-#elif defined(DPCRTLMM_THREADS_PTHREAD)
+#elif defined(HORATIO_THREADS_PTHREAD)
 #  include <errno.h>
 #  include <pthread.h>
 #endif
@@ -74,15 +74,15 @@ POSSIBILITY OF SUCH DAMAGE.
   but the macro PTHREAD_MUTEX_RECURSIVE_NP is not really available at
   all.  If that is the case, revoke what configure set up for us
 */
-#ifdef DPCRTLMM_THREADS_PTHREAD
-#  ifdef DPCRTLMM_THREADS_PTHREAD_NP
+#ifdef HORATIO_THREADS_PTHREAD
+#  ifdef HORATIO_THREADS_PTHREAD_NP
 #    ifndef PTHREAD_MUTEX_RECURSIVE_NP
-#      undef DPCRTLMM_THREADS_PTHREAD_NP
+#      undef HORATIO_THREADS_PTHREAD_NP
 #    endif /*!PTHREAD_MUTEX_RECURSIVE_NP*/
-#  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
-#endif /*DPCRTLMM_THREADS_PTHREAD*/
+#  endif /*HORATIO_THREADS_PTHREAD_NP*/
+#endif /*HORATIO_THREADS_PTHREAD*/
 
-#ifdef DPCRTLMM_THREADS_NT
+#ifdef HORATIO_THREADS_NT
 
 #  define Mutant CRITICAL_SECTION
 #  define InitialiseMutant(x) InitializeCriticalSection((x))
@@ -90,7 +90,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  define UnlockMutant(x) LeaveCriticalSection((x))
 #  define DestroyMutant(x) DeleteCriticalSection((x))
 
-#elif defined(DPCRTLMM_THREADS_PTH)
+#elif defined(HORATIO_THREADS_PTH)
 
 #  define Mutant pth_mutex_t
 #  define InitialiseMutant(x) pth_mutex_init((x))
@@ -98,27 +98,27 @@ POSSIBILITY OF SUCH DAMAGE.
 #  define UnlockMutant(x) pth_mutex_release((x))
 #  define DestroyMutant(x) pth_mutex_init((x))
 
-#elif defined(DPCRTLMM_THREADS_PTHREAD)
+#elif defined(HORATIO_THREADS_PTHREAD)
 
 #  define Mutant pthread_mutex_t
-#  ifdef DPCRTLMM_THREADS_PTHREAD_NP /* Supporting non-portable extension? */
+#  ifdef HORATIO_THREADS_PTHREAD_NP /* Supporting non-portable extension? */
 #    define InitialiseMutant(x) InitNPMutant((x))
 #  else
 #    define InitialiseMutant(x) pthread_mutex_init((x), NULL)
-#  endif /*DPCRTLMM_MAXPORT*/
+#  endif /*HORATIO_MAXPORT*/
 #  define LockMutant(x) pthread_mutex_lock((x))
 #  define UnlockMutant(x) pthread_mutex_unlock((x))
 #  define DestroyMutant(x) pthread_mutex_destroy((x))
 
-#endif /*DPCRTLMM_THREADS_NT*/
+#endif /*HORATIO_THREADS_NT*/
 
 static Mutant bigLock;
 
-#ifdef DPCRTLMM_THREADS_PTHREAD
-#  ifdef DPCRTLMM_THREADS_PTHREAD_NP
+#ifdef HORATIO_THREADS_PTHREAD
+#  ifdef HORATIO_THREADS_PTHREAD_NP
     void InitNPMutant(pthread_mutex_t* PMutant);
-#  endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
-#endif /*DPCRTLMM_THREADS_PTHREAD*/
+#  endif /*HORATIO_THREADS_PTHREAD_NP*/
+#endif /*HORATIO_THREADS_PTHREAD*/
 
 void dpcrtlmm_int_BigLockInit() {
   InitialiseMutant(&bigLock);
@@ -135,8 +135,8 @@ void dpcrtlmm_int_BigLock(int LockState) {
     UnlockMutant(&bigLock);
 }
 
-#ifdef DPCRTLMM_THREADS_PTHREAD
-#ifdef DPCRTLMM_THREADS_PTHREAD_NP
+#ifdef HORATIO_THREADS_PTHREAD
+#ifdef HORATIO_THREADS_PTHREAD_NP
 void InitNPMutant(pthread_mutex_t* PMutant) {
   pthread_mutexattr_t attributes;
 
@@ -145,9 +145,9 @@ void InitNPMutant(pthread_mutex_t* PMutant) {
   pthread_mutex_init(PMutant, &attributes);
   pthread_mutexattr_destroy(&attributes);
 }
-#endif /*DPCRTLMM_THREADS_PTHREAD_NP*/
-#endif /*DPCRTLMM_THREADS_PTHREAD*/
+#endif /*HORATIO_THREADS_PTHREAD_NP*/
+#endif /*HORATIO_THREADS_PTHREAD*/
 
-#else /* !DPCRTLMM_THREADS -- Threads not required */
+#else /* !HORATIO_THREADS -- Threads not required */
   char dpcrtlmm_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */
-#endif /*DPCRTLMM_THREADS*/
+#endif /*HORATIO_THREADS*/

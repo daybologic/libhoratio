@@ -32,13 +32,13 @@ POSSIBILITY OF SUCH DAMAGE.
 
 /*
 #############################################################################
-# Memory usage logging support for DPCRTLMM                                 #
-# Only included if DPCRTLMM_LOG is defined in build.h                       #
+# Memory usage logging support for HORATIO                                 #
+# Only included if HORATIO_LOG is defined in build.h                       #
 # (Superseeded by --enable-log configuration option)                        #
 #############################################################################
 
 You might be wondering why I did not just get rid of the whole function if
-DPCRTLMM_LOG was not defined.  Trouble is, even though it's never called if
+HORATIO_LOG was not defined.  Trouble is, even though it's never called if
 the macro is not defined, in some compilers there must be at least one
 external definition so I chose to get rid of the contents and disable the
 warning about the unused parameter, if getting rid of the warning actually
@@ -47,7 +47,7 @@ causes a warning on your compiler, I aplogise!
   - Does this apply any longer?  : DDRP
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -56,9 +56,9 @@ causes a warning on your compiler, I aplogise!
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -85,14 +85,14 @@ void dpcrtlmm_int_Log(
   char formatMsg[MAX_TRAP_STRING_LENGTH + 1024 + 512];
   char number[64]; /* Paranoia length number to string conversion */
 
-  #ifdef DPCRTLMM_LOG
+  #ifdef HORATIO_LOG
   FILE* HLogFile; /* Handle for log file */
-  #endif /*DPCRTLMM_LOG*/
+  #endif /*HORATIO_LOG*/
 
   if (Message) {
     if (Message[0]) {
       formatMsg[0] = '\0'; /* so strncat() knows where to begin */
-      STRNCAT_FIXEDBUFF(formatMsg, "DPCRTLMM: \"");
+      STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
       if ( File ) { /* Convert line number to string */
         sprintf(
           number,
@@ -104,11 +104,11 @@ void dpcrtlmm_int_Log(
         );
       }
       switch ( Severity ) {
-        case DPCRTLMM_LOG_WARNING : {
+        case HORATIO_LOG_WARNING : {
           STRNCAT_FIXEDBUFF(formatMsg, "Warning! ");
           break;
         }
-        case DPCRTLMM_LOG_ERROR : {
+        case HORATIO_LOG_ERROR : {
           STRNCAT_FIXEDBUFF(formatMsg, "FATAL ERROR! ");
           break;
         }
@@ -124,16 +124,16 @@ void dpcrtlmm_int_Log(
 
       /* Determine what do do with the message based on it's severity */
       /* Everything goes in the log... */
-      #ifdef DPCRTLMM_LOG
-      HLogFile = fopen("DPCRTLMM.LOG", "at"); /* Append/overwrite text file */
+      #ifdef HORATIO_LOG
+      HLogFile = fopen("HORATIO.LOG", "at"); /* Append/overwrite text file */
       if (HLogFile) { /* Log opened? */
         fputs(formatMsg, HLogFile); /* Output log msg to log file */
         fclose(HLogFile); /* Close the log file */
       }
-      #endif /*DPCRTLMM_LOG*/
+      #endif /*HORATIO_LOG*/
 
-      if ( Severity > DPCRTLMM_LOG_MESSAGE ) /* Anything more severe than a warning */
-        fprintf(DPCRTLMM_DEV_ERROR, formatMsg);
+      if ( Severity > HORATIO_LOG_MESSAGE ) /* Anything more severe than a warning */
+        fprintf(HORATIO_DEV_ERROR, formatMsg);
     }
   }
   return;

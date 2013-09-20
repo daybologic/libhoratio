@@ -35,15 +35,15 @@ POSSIBILITY OF SUCH DAMAGE.
   Created 22nd Feb 2000
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
 #include <stddef.h>
 #include <stdio.h>
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* The main library header */
@@ -52,8 +52,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_bloclock.h"
 
 void dpcrtlmm_SetBlockLockingFlag(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
   const unsigned int NewStatus
 ) {
   LOCK
@@ -62,8 +62,8 @@ void dpcrtlmm_SetBlockLockingFlag(
 }
 
 unsigned int dpcrtlmm_IsBlockLocked(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr
 ) {
   unsigned int ret;
 
@@ -75,8 +75,8 @@ unsigned int dpcrtlmm_IsBlockLocked(
 }
 
 void dpcrtlmm_ToggleBlockLockingStatus(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr
 ) {
   LOCK
   dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
@@ -84,8 +84,8 @@ void dpcrtlmm_ToggleBlockLockingStatus(
 }
 
 void dpcrtlmm_int_SetBlockLockingFlag(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
   const unsigned int NewStatus
 ) {
   unsigned char flags;
@@ -103,8 +103,8 @@ void dpcrtlmm_int_SetBlockLockingFlag(
 }
 
 unsigned int dpcrtlmm_int_IsBlockLocked(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr
 ) {
   unsigned char flags;
 
@@ -116,8 +116,8 @@ unsigned int dpcrtlmm_int_IsBlockLocked(
 }
 
 void dpcrtlmm_int_ToggleBlockLockingStatus(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr
 ) {
   /* Get current status */
   unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);

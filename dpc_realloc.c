@@ -29,15 +29,15 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 /* Created: UNKNOWN
    Programmer: Overlord David Duncan Ross Palmer
-   Library: DPCRTLMM
+   Library: HORATIO
    Language: ANSI C (1990 implementation)
-   Purpose: DPCRTLMM's memory user-memory reallocation
+   Purpose: HORATIO's memory user-memory reallocation
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -46,15 +46,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_WANTFARDATA
+#ifdef HORATIO_WANTFARDATA
 # ifdef HAVE_ALLOC_H
 #  include <alloc.h>
 # endif /*HAVE_ALLOC_H*/
-#endif /*DPCRTLMM_WANTFARDATA*/
+#endif /*HORATIO_WANTFARDATA*/
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -66,18 +66,18 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_log.h"
 #include "dpc_biglock.h" /* Mutual exclusion */
 
-static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *OldBlockPtr,
+static void HORATIO_FARDATA *dpcrtlmm_int_Realloc(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *OldBlockPtr,
   const size_t NewSize
 );
 
-void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *OldBlockPtr,
+void HORATIO_FARDATA *dpcrtlmm_Realloc(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *OldBlockPtr,
   const size_t NewSize
 ) {
-  void DPCRTLMM_FARDATA *ret;
+  void HORATIO_FARDATA *ret;
 
   LOCK
   ret = dpcrtlmm_int_Realloc(PBlockArray, OldBlockPtr, NewSize);
@@ -86,20 +86,20 @@ void DPCRTLMM_FARDATA *dpcrtlmm_Realloc(
   return ret;
 }
 
-static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *OldBlockPtr,
+static void HORATIO_FARDATA *dpcrtlmm_int_Realloc(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *OldBlockPtr,
   const size_t NewSize
 ) {
   /* ptr is returned to the caller (modified later) */
-  void DPCRTLMM_FARDATA *ptr = OldBlockPtr;
+  void HORATIO_FARDATA *ptr = OldBlockPtr;
   const char funcName[] = "Realloc()"; /* Name of our function */
   unsigned int blockIndex; /* Index of block in the array */
-  char DPCRTLMM_FARDATA* sizePtr; /* Pointer used during resizing */
-  PS_DPCRTLMM_BLOCKDESCARRAY PRArr;
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo; /* Used for advanced debug hooks! */
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  char HORATIO_FARDATA* sizePtr; /* Pointer used during resizing */
+  PS_HORATIO_BLOCKDESCARRAY PRArr;
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo; /* Used for advanced debug hooks! */
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   PRArr = _ResolveArrayPtr(PBlockArray);
   _VerifyPtrs(funcName, PBlockArray, OldBlockPtr); /* Do trap if passed pointers are invalid */
@@ -124,16 +124,16 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   }
   /* The resize is valid */
 
-  sizePtr = DPCRTLMM_REALLOC( OldBlockPtr, NewSize ); /* Attempt to resize the block */
+  sizePtr = HORATIO_REALLOC( OldBlockPtr, NewSize ); /* Attempt to resize the block */
   if (!sizePtr) return NULL; /* If the block cannot be enlarged return NULL to the caller to indicate the failure */
 
-  #ifdef DPCRTLMM_DEBUGHOOKS
+  #ifdef HORATIO_DEBUGHOOKS
   /* Call debug hooks */
   debugHookInfo.PRelArr = PRArr;
   debugHookInfo.PRelDesc = OldBlockPtr; /* Do NOT dereference, base may have changed */
-  debugHookInfo.HookType = DPCRTLMM_HOOK_REALLOC;
+  debugHookInfo.HookType = HORATIO_HOOK_REALLOC;
   /* Set AllocReq to size difference */
-  debugHookInfo.AllocReq = DPCRTLMM_MAX(PRArr->Descriptors[blockIndex].Size, NewSize) - DPCRTLMM_MIN(PRArr->Descriptors[blockIndex].Size, NewSize);
+  debugHookInfo.AllocReq = HORATIO_MAX(PRArr->Descriptors[blockIndex].Size, NewSize) - HORATIO_MIN(PRArr->Descriptors[blockIndex].Size, NewSize);
   if ( NewSize < PRArr->Descriptors[blockIndex].Size ) { /* Negate number */
     debugHookInfo.Misc0 |= 1; /* Set bit 0 */
   } else { /* Positive number */
@@ -141,8 +141,8 @@ static void DPCRTLMM_FARDATA *dpcrtlmm_int_Realloc(
   }
   /* Misc1 points to the new block, the hook routine can dereference it if it wants to */
   debugHookInfo.Misc1 = (unsigned long)sizePtr; /* Hook routine should cast it back to void* */
-  dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REALLOC, &debugHookInfo);
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_REALLOC, &debugHookInfo);
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   ptr = sizePtr; /* Set new pointer as the return value */
   /* Update block descriptor */

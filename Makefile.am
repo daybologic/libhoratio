@@ -43,7 +43,7 @@ TESTS = example1 example2 example3 newbrand
 check_PROGRAMS = $(TESTS)
 examples_LDADD = -ldpcrtlmm
 
-if DPCRTLMM_THREADS_PTH
+if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
 endif
 

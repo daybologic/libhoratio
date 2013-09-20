@@ -38,7 +38,7 @@ caller should then make steps not to modify the block.  This TRUE return only
 ocours when trapping is off or handled by the user who chose to ignore the
 trap.  Otherwise the function does not return. */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -47,9 +47,9 @@ trap.  Otherwise the function does not return. */
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -61,8 +61,8 @@ trap.  Otherwise the function does not return. */
 
 unsigned int dpcrtlmm_int_LockTrap(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ) {
   /* Block locked? */
   if (dpcrtlmm_int_IsBlockLocked(PBlockArray, BlockPtr)) {
@@ -75,15 +75,15 @@ unsigned int dpcrtlmm_int_LockTrap(
       #endif /*HAVE_SNPRINTF*/
       "%s: (locking violation) Block %s%p in array %s%p, flag dump: %X",
       FuncName,
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
-      DPCRTLMM_FMTPTRPFX, BlockPtr,
+      HORATIO_FMTPTRPFX, (void*)PBlockArray,
+      HORATIO_FMTPTRPFX, BlockPtr,
       (unsigned short)dpcrtlmm_int_ModifyDescriptorFlags(
         PBlockArray,
         BlockPtr,
         NULL
       )
     );
-    Trap(DPCRTLMM_TRAP_LOCKINGVIOLATION, trapMsg); /* Execute the trap */
+    Trap(HORATIO_TRAP_LOCKINGVIOLATION, trapMsg); /* Execute the trap */
     return 1U; /* If the trap recovered let program go on and notify user that trap ocourred */
   }
   return 0U; /* Block not locked */

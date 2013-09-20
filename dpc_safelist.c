@@ -33,14 +33,14 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
 #############################################################################
 # Functions for handling the safety list                                    #
-# DPCRTLMM--The DayboLogic C-Runtime Memory Manager                         #
+# HORATIO--The DayboLogic C-Runtime Memory Manager                         #
 # No functions here are for calling by the user, they are only for internal #
 # library use.                                                              #
 #############################################################################
 Created May 3rd 2000
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -49,9 +49,9 @@ Created May 3rd 2000
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -59,11 +59,11 @@ Created May 3rd 2000
 #include "dpc_safelist.h"
 
 unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
-  const PS_DPCRTLMM_BLOCKDESCARRAY ArrayBase
+  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 ) {
   if (ArrayBase) {
     unsigned int sli; /* Used for processing of the list */
-    for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ )
+    for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ )
       if (_safetyList[sli] == ArrayBase) return 1U;
   }
   return 0U; /* Not present or bad params */
@@ -73,7 +73,7 @@ void dpcrtlmm_SafetyList_Init() {
   unsigned int i;
 
   /* All possible entries in list */
-  for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ )
+  for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ )
     _safetyList[i] = NULL; /* Zero pointer */
 
   return;
@@ -82,7 +82,7 @@ void dpcrtlmm_SafetyList_Init() {
 unsigned int dpcrtlmm_SafetyList_CountUsed() {
   unsigned int sli, slc = 0U;
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
+  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
     if (_safetyList[sli]) /* Valid pointer in list? */
       slc++; /* Increment count */
   }
@@ -91,7 +91,7 @@ unsigned int dpcrtlmm_SafetyList_CountUsed() {
 }
 
 unsigned int dpcrtlmm_SafetyList_AddBase(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PArrayBase
+  const PS_HORATIO_BLOCKDESCARRAY PArrayBase
 ) {
   unsigned int sli;
 
@@ -101,7 +101,7 @@ unsigned int dpcrtlmm_SafetyList_AddBase(
   */
   if (SafetyList_IsArrayPtrPresent(PArrayBase)) return 0U;
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
+  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
     if (!_safetyList[sli]) { /* First free entry? */
       _safetyList[sli] = PArrayBase; /* Store base in safety list */
       return 1U; /* Done, abort loop, report success */
@@ -118,7 +118,7 @@ unsigned int dpcrtlmm_SafetyList_AddBase(
 }
 
 unsigned int dpcrtlmm_SafetyList_RemoveBase(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PArrayBase
+  const PS_HORATIO_BLOCKDESCARRAY PArrayBase
 ) {
   unsigned int sli;
 
@@ -126,7 +126,7 @@ unsigned int dpcrtlmm_SafetyList_RemoveBase(
   if it is not found the function fails, it is is the entry is set to NULL,
   which is an effective removal. */
 
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) {
+  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
     if (_safetyList[sli] == PArrayBase) { /* Found the base in question? */
       _safetyList[sli] = NULL; /* Mark entry in list as unused */
       return 1U; /* Successfully removed */

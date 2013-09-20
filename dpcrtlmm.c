@@ -29,18 +29,18 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-/* Incase you're wondering why DPCRTLMM_SOURCE appears at the top of all my
-source, it's to do with build.h.  That header is for the compilation fo the
+/* Incase you're wondering why HORATIO_SOURCE appears at the top of all
+sources, it's to do with build.h.  That header is for the compilation of the
 library only, not to be included in user programs.  If users include build.h
 the definition won't exist and build.h will tell them off! */
 
 /*
-  Allocations on behalf of callers are done with DPCRTLMM_MALLOC,
+  Allocations on behalf of callers are done with HORATIO_MALLOC,
   internal allocations are done with malloc() and failure should be
   ignored by checking for NULL.
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -50,9 +50,9 @@ the definition won't exist and build.h will tell them off! */
 #include <string.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -74,29 +74,29 @@ to put it in a separate function so it could be called in
 two different locations, the safety list loop and then for the
 built-in array, returns number of bytes wasted, the called wil
 add this to the total leakage */
-static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr);
+static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr);
 unsigned char dpcrtlmm__EnableTraps = 1U;
 
-PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct) {
+PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct) {
   /* No need to lock the big global lock for this, only reading readonly data. */
   if (PVerStruct) {
     /* Load version information into the caller's structure */
-    PVerStruct->Major = DPCRTLMM_VERSION_MAJOR;
-    PVerStruct->Minor = DPCRTLMM_VERSION_MINOR;
-    PVerStruct->Patch = DPCRTLMM_VERSION_PATCH;
+    PVerStruct->Major = HORATIO_VERSION_MAJOR;
+    PVerStruct->Minor = HORATIO_VERSION_MINOR;
+    PVerStruct->Patch = HORATIO_VERSION_PATCH;
     PVerStruct->Flags = (unsigned char)0U;
     #ifdef DEBUG
-      PVerStruct->Flags |= DPCRTLMM_VERSION_DEBUG;
+      PVerStruct->Flags |= HORATIO_VERSION_DEBUG;
     #endif /*DEBUG*/
     #ifdef PRIVATE
-      PVerStruct->Flags |= DPCRTLMM_VERSION_PRIVATE;
+      PVerStruct->Flags |= HORATIO_VERSION_PRIVATE;
     #endif /*PRIVATE*/
     #ifdef SPECIAL
-      PVerStruct->Flags |= DPCRTLMM_VERSION_SPECIAL;
+      PVerStruct->Flags |= HORATIO_VERSION_SPECIAL;
     #endif /*SPECIAL*/
-    #ifdef DPCRTLMM_THREADS
-      PVerStruct->Flags |= DPCRTLMM_VERSION_MT;
-    #endif /*DPCRTLMM_THREADS*/
+    #ifdef HORATIO_THREADS
+      PVerStruct->Flags |= HORATIO_VERSION_MT;
+    #endif /*HORATIO_THREADS*/
   }
   return PVerStruct;
 }
@@ -107,19 +107,19 @@ void dpcrtlmm_Startup() {
     _libStarted = 1U; /* The library is started now */
     _UserTrapCallback = NULL; /* No user trap handler installed */
     SafetyList_Init(); /* Init the safety list */
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #ifdef HORATIO_DEBUGHOOKS
       dpcrtlmm_int_InitDebugHookMatrix(); /* Init the debug hook matrix */
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
-    #ifdef DPCRTLMM_THREADS
+    #endif /*HORATIO_DEBUGHOOKS*/
+    #ifdef HORATIO_THREADS
       dpcrtlmm_int_BigLockInit();
-    #endif /*DPCRTLMM_THREADS*/
+    #endif /*HORATIO_THREADS*/
   } else { /* This has been done before! */
-    #ifdef DPCRTLMM_DEBUGHOOKS
-    S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
-    memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_STARTUP, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
-    Trap(DPCRTLMM_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
+    #ifdef HORATIO_DEBUGHOOKS
+    S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+    memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_STARTUP, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
+    Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
   }
   MESSAGE(NULL, 0, "Library started");
   return;
@@ -128,32 +128,32 @@ void dpcrtlmm_Startup() {
 void dpcrtlmm_Shutdown() {
   /* Don't moan about my double use of the define, I like it this
   way, it feels cleaner, declarations separated! */
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+  #endif /*HORATIO_DEBUGHOOKS*/
+  #ifdef HORATIO_DEBUGHOOKS
+  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   if (_libStarted) {
     /* Cleanup of internal library data */
     _libStarted = 0U; /* The library has been shut down */
-    #ifdef DPCRTLMM_THREADS
+    #ifdef HORATIO_THREADS
       dpcrtlmm_int_BigLockUninit();
-    #endif /*DPCRTLMM_THREADS*/
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #endif /*HORATIO_THREADS*/
+    #ifdef HORATIO_DEBUGHOOKS
       debugHookInfo.Success = 1U; /* Normal call to shutdown even if leaks are caught */
-      dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+      dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_SHUTDOWN, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
     TrapUnFreedArrays(); /* Output log information if memory has not been released */
     MESSAGE(NULL, 0, "Library shutdown");
   } else { /* This has been done before! */
     /* Call hooks and fire trap */
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #ifdef HORATIO_DEBUGHOOKS
     debugHookInfo.Success = 0U; /* Failed */
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_SHUTDOWN, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
-    Trap(DPCRTLMM_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
+    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_SHUTDOWN, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
+    Trap(HORATIO_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
   }
   return;
 }
@@ -168,7 +168,7 @@ static void TrapUnFreedArrays() {
   long unsigned int numArraysUnfreed = 0U; /* Count of number of arrays the programmer failed to free (excludes built-in one which doesn't get destroyed) */
   unsigned long totalBytesLeaked = 0UL; /* The total bytes leaked for the whole program */
   unsigned int sli;
-  for ( sli = 0U; sli < DPCRTLMM_SAFETYLIST_MAXSIZE; sli++ ) { /* All entries in the safety list */
+  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) { /* All entries in the safety list */
     unsigned int oldTrapEnablement; /* Temporary used while traps are supressed */
     if (_safetyList[sli]) { /* Discovered non-freed array? */
       /* numArraysUnfreed is used for a log message */
@@ -180,7 +180,7 @@ static void TrapUnFreedArrays() {
         trapMsgRemaining,
         #endif /*HAVE_SNPRINTF*/
         "Shutdown(): The array %s%p was not freed, any blocks unfreed in the array will be listed",
-        DPCRTLMM_FMTPTRPFX, (void*)(_safetyList[sli])
+        HORATIO_FMTPTRPFX, (void*)(_safetyList[sli])
       );
       WARNING(trapMsg);
       if (_safetyList[sli]->Count) { /* Are there any unfreed blocks in the array? */
@@ -194,11 +194,11 @@ static void TrapUnFreedArrays() {
         dpcrtlmm__EnableTraps = 1U; /* Traps are re-enabled */
     }
   }
-  #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
+  #ifndef HORATIO_NONULL_BLOCKDESCARRAY
   if (_defaultArray.Count) { /* Any unfreed blocks in the default ("NULL") array? */
     totalBytesLeaked += TrapUnFreedBlocks(&_defaultArray);
   }
-  #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
+  #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
   if (numArraysUnfreed) {
     sprintf(
       trapMsg,
@@ -220,12 +220,12 @@ static void TrapUnFreedArrays() {
       "%lu bytes of memory leaked in total.\n",
       totalBytesLeaked
     );
-    Trap(DPCRTLMM_TRAP_UNFREED_DATA, trapMsg);
+    Trap(HORATIO_TRAP_UNFREED_DATA, trapMsg);
   }
   return;
 }
 
-static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
+static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr) {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)];
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   unsigned int unfreedBlockCount;
@@ -245,8 +245,8 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
           trapMsgRemaining,
           #endif /*HAVE_SNPRINTF*/
           "Block %s%p in descriptor array %s%p was not freed, size: %u bytes",
-          DPCRTLMM_FMTPTRPFX, PArr->Descriptors[0].PBase,
-          DPCRTLMM_FMTPTRPFX, (void*)PArr,
+          HORATIO_FMTPTRPFX, PArr->Descriptors[0].PBase,
+          HORATIO_FMTPTRPFX, (void*)PArr,
           (unsigned int)PArr->Descriptors[0].Size
         );
         MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
@@ -260,7 +260,7 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
         trapMsgRemaining,
         #endif /*HAVE_SNPRINTF*/
         "Array leakage summary: array %s%p contained %u unfreed blocks, a total of %lu bytes",
-        DPCRTLMM_FMTPTRPFX, (void*)PArr,
+        HORATIO_FMTPTRPFX, (void*)PArr,
         unfreedBlockCount,
         totalLeakage
       );

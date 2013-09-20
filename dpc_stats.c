@@ -35,12 +35,12 @@ POSSIBILITY OF SUCH DAMAGE.
   Programmer: David Duncan Ross Palmer
   Contact: http://www.daybologic.co.uk/mailddrp/
   Created: 27th July 2000
-  Library: DPCRTLMM 1.0
+  Library: HORATIO 1.0
   Language: ANSI C (1990)
   Revision #5
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -49,9 +49,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Public library header */
@@ -59,11 +59,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_biglock.h" /* Mutual exclusion */
 
 static void CountFlagsInUse(
-  PS_DPCRTLMM_STATS PFlagsStats
+  PS_HORATIO_STATS PFlagsStats
 );
 static void DumpOnArray(
   FILE *Target,
-  PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
+  PS_HORATIO_BLOCKDESCARRAY CurrentArray
 );
 static void CrackAndPrintFlags(
   FILE *Target,
@@ -81,7 +81,7 @@ unsigned long dpcrtlmm_GetBlockCount() {
 }
 
 void dpcrtlmm_GetStats(
-  PS_DPCRTLMM_STATS PReadStats
+  PS_HORATIO_STATS PReadStats
 ) {
   LOCK
   if (PReadStats) {
@@ -96,7 +96,7 @@ void dpcrtlmm_GetStats(
 }
 
 static void CountFlagsInUse(
-  PS_DPCRTLMM_STATS PFlagsStats
+  PS_HORATIO_STATS PFlagsStats
 ) {
   if (PFlagsStats) {
     unsigned int i;
@@ -106,7 +106,7 @@ static void CountFlagsInUse(
     PFlagsStats->Blocks.Unswappable = 0UL;
 
     /* Go through normal arrays */
-    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) {
+    for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ ) {
       if (_safetyList[i]) { /* Used entry? */
         unsigned int j;
         for ( j = 0U; j < _safetyList[i]->Count; j++ ) {
@@ -120,7 +120,7 @@ static void CountFlagsInUse(
       }
     }
     /* Extra support for the "NULL array" */
-    #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
+    #ifndef HORATIO_NONULL_BLOCKDESCARRAY
     for ( i = 0U; i < _defaultArray.Count; i++ ) {
       unsigned char flags = _defaultArray.Descriptors[i].Flags;
 
@@ -129,7 +129,7 @@ static void CountFlagsInUse(
       if ( (flags & 2) == 2) /* NoSwap bit set */
         PFlagsStats->Blocks.Unswappable++;
     }
-    #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
+    #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
   }
 }
 
@@ -140,11 +140,11 @@ void dpcrtlmm_Dump(
   if ( Target ) {
     unsigned int i;
 
-    for ( i = 0U; i < DPCRTLMM_SAFETYLIST_MAXSIZE; i++ ) {
+    for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ ) {
       if ( _safetyList[i] ) /* Used entry? */
         DumpOnArray(Target, _safetyList[i]);
     }
-    #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY
+    #ifndef HORATIO_NONULL_BLOCKDESCARRAY
     DumpOnArray(Target, &_defaultArray);
     #endif
   }
@@ -154,7 +154,7 @@ void dpcrtlmm_Dump(
 
 static void DumpOnArray(
   FILE *Target,
-  PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
+  PS_HORATIO_BLOCKDESCARRAY CurrentArray
 ) {
   unsigned int j; /* Just so I don't get confused with the other function */
 
@@ -171,8 +171,8 @@ static void DumpOnArray(
     fprintf(
       Target,
       "Address: %s%p, (Array: %s%p), owner: %s, line %u is %u bytes. ",
-      DPCRTLMM_FMTPTRPFX, CurrentArray->Descriptors[j].PBase,
-      DPCRTLMM_FMTPTRPFX, (void*)CurrentArray,
+      HORATIO_FMTPTRPFX, CurrentArray->Descriptors[j].PBase,
+      HORATIO_FMTPTRPFX, (void*)CurrentArray,
       filename,
       CurrentArray->Descriptors[j].SourceLine,
       (unsigned int)CurrentArray->Descriptors[j].Size

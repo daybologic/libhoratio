@@ -29,7 +29,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 /*
   Main allocation function and block array grower
@@ -43,15 +43,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_WANTFARDATA
+#ifdef HORATIO_WANTFARDATA
 # ifdef HAVE_ALLOC_H
 #  include <alloc.h>
 # endif /*HAVE_ALLOC_H*/
-#endif /*DPCRTLMM_WANTFARDATA*/
+#endif /*HORATIO_WANTFARDATA*/
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -79,7 +79,7 @@ static void OurLog(
 */
 
 static unsigned int GrowBlockArray(
-  PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
+  PS_HORATIO_BLOCKDESCARRAY PCurrentBlockArray,
   const unsigned int GrowByElems
 );
 
@@ -99,14 +99,14 @@ static unsigned int GrowBlockArray(
 #define OURLOG_POS(sev, msg) \
   OURLOG(__FILE__, __LINE__, (sev), (msg))
 
-void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+void HORATIO_FARDATA* dpcrtlmm_AllocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
 ) {
   /* Thread safe wrapper for AllocEx() */
-  void DPCRTLMM_FARDATA* ret;
+  void HORATIO_FARDATA* ret;
 
   LOCK
   ret = dpcrtlmm_int_AllocEx(PBlockArray, NewBlockSize, File, Line);
@@ -115,22 +115,22 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   return ret;
 }
 
-void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+void HORATIO_FARDATA* dpcrtlmm_int_AllocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
 ) {
   /* locals */
-  void DPCRTLMM_FARDATA* genBlockPtr; /* Generated block pointer */
+  void HORATIO_FARDATA* genBlockPtr; /* Generated block pointer */
   char logMsg[MAX_TRAP_STRING_LENGTH + 1];
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+  #endif /*HORATIO_DEBUGHOOKS*/
   #ifdef HAVE_SNPRINTF
   size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
   #endif /*HAVE_SNPRINTF*/
-  PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray); /* Resolving is done because of a possible NULL */
+  PS_HORATIO_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray); /* Resolving is done because of a possible NULL */
 
   _VerifyPtrs("Alloc()", PBlockArray, NULL); /* Haults program if array not valid, third arg is not applicable here */
 
@@ -141,14 +141,14 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
     #endif /*HAVE_SNPRINTF*/
     "Program Requested to allocate %u byte block for array %s%p",
     (unsigned int)NewBlockSize,
-    DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+    HORATIO_FMTPTRPFX, (void*)PBlockArray
   );
   #ifdef HAVE_SNPRINTF
   logMsgRemaining -= strlen(logMsg);
   #endif /*HAVE_SNPRINTF*/
-  OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
+  OURLOG(File, Line, HORATIO_LOG_MESSAGE, logMsg);
 
-  genBlockPtr = DPCRTLMM_MALLOC(NewBlockSize); /* Allocate block */
+  genBlockPtr = HORATIO_MALLOC(NewBlockSize); /* Allocate block */
   if (!genBlockPtr) { /* Out of memory? */
     /* Use buffer for log messages, it's the same size as for traps */
     sprintf(
@@ -158,19 +158,19 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
       #endif /*HAVE_SNPRINTF*/
       "Attempt to allocate block of %u bytes for array at base %s%p has failed",
       (unsigned int)NewBlockSize,
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
     #ifdef HAVE_SNPRINTF
     logMsgRemaining -= strlen(logMsg);
     #endif /*HAVE_SNPRINTF*/
-    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
+    OURLOG(File, Line, HORATIO_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
     return NULL; /* No pointer generated */
   }
 
   /* Now add the block to the array, first grow array */
   if (!GrowBlockArray(PRArr, 1)) {
     /* Attempt to enlarge the array failed? */
-    DPCRTLMM_FREE(genBlockPtr); /* Release the new block of memory */
+    HORATIO_FREE(genBlockPtr); /* Release the new block of memory */
 
     sprintf(
       logMsg,
@@ -178,13 +178,13 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
       logMsgRemaining,
       #endif /*HAVE_SNPRINTF*/
       "Attempt to enlarge array at base %s%p by one element failed",
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
     #ifdef HAVE_SNPRINTF
     logMsgRemaining -= strlen(logMsg);
     #endif /*HAVE_SNPRINTF*/
     /* This could be quite critical, if the memory manager is running our of space */
-    OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
+    OURLOG_POS(HORATIO_LOG_WARNING, logMsg);
     return NULL; /* Give up */
   }
 
@@ -210,24 +210,24 @@ void DPCRTLMM_FARDATA* dpcrtlmm_int_AllocEx(
     dpcrtlmm_int__allocPeak = dpcrtlmm_int__allocCharge;
 
   /* Call the debug hook executive */
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO)); /* Init structure */
+  #ifdef HORATIO_DEBUGHOOKS
+  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO)); /* Init structure */
   debugHookInfo.PRelArr = PRArr; /* Use resolved value, NULL means N/A, this is the only point at which the array pointer address is exposed to the caller directly (expect other debug hook calls of course) */
   debugHookInfo.PRelDesc = genBlockPtr;
-  debugHookInfo.HookType = DPCRTLMM_HOOK_ALLOC;
+  debugHookInfo.HookType = HORATIO_HOOK_ALLOC;
   debugHookInfo.AllocReq = (unsigned int)NewBlockSize;
   debugHookInfo.Success = 1U; /* TRUE */
-  dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_ALLOC, &debugHookInfo);
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_ALLOC, &debugHookInfo);
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   return genBlockPtr; /* Give pointer to the caller */
 }
 
 static unsigned int GrowBlockArray(
-  PS_DPCRTLMM_BLOCKDESCARRAY PCurrentBlockArray,
+  PS_HORATIO_BLOCKDESCARRAY PCurrentBlockArray,
   const unsigned int GrowByElems
 ) {
-  PS_DPCRTLMM_BLOCKDESCRIPTOR ptr; /* Pointer to block descriptors during enlargement */
+  PS_HORATIO_BLOCKDESCRIPTOR ptr; /* Pointer to block descriptors during enlargement */
   unsigned int oldCount; /* Count before enlargement */
   unsigned int initi; /* Initialization interator */
 
@@ -238,12 +238,12 @@ static unsigned int GrowBlockArray(
   #endif /*NDEBUG*/
 
   if (!GrowByElems) { /* Want to grow by nothing? */
-    OURLOG_POS(DPCRTLMM_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
+    OURLOG_POS(HORATIO_LOG_WARNING, "Attempt to GrowBlockArray() by no items, ignored");
     return 1U; /* Success, already this size, it's great when there's nothing to do isn't it, programmer's are lazy */
   }
 
   oldCount = PCurrentBlockArray->Count; /* Take count before we grow array */
-  ptr = DPCRTLMM_REALLOC( PCurrentBlockArray->Descriptors, (oldCount + GrowByElems) * sizeof(S_DPCRTLMM_BLOCKDESCRIPTOR) ); /* Grow array */
+  ptr = HORATIO_REALLOC( PCurrentBlockArray->Descriptors, (oldCount + GrowByElems) * sizeof(S_HORATIO_BLOCKDESCRIPTOR) ); /* Grow array */
   if (!ptr) /* Couldn't grow? */
     return 0U; /* Fail */
 

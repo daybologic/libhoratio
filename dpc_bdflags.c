@@ -34,16 +34,16 @@ POSSIBILITY OF SUCH DAMAGE.
   Raw block descriptor flag modifiers
   Now supports NULL arrays
 */
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
 #include <stddef.h>
 #include <string.h> /* memset() */
 #include <stdio.h>
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -61,8 +61,8 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 unsigned char dpcrtlmm_ModifyDescriptorFlags(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr,
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags
 ) {
   unsigned char ret;
@@ -79,30 +79,30 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
 }
 
 unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *Ptr,
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags
 ) {
   /* locals */
   const char funcName[] = "ModifyDescriptorFlags()"; /* Name of this function */
   unsigned int blockIndex; /* Index of block descriptor into the array */
   unsigned char oldFlags; /* Old flags, returned to caller */
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
   unsigned int indexOfBlock;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
-  PS_DPCRTLMM_BLOCKDESCARRAY PRArr; /* Holds resolved pointer array */
+  #endif /*HORATIO_DEBUGHOOKS*/
+  PS_HORATIO_BLOCKDESCARRAY PRArr; /* Holds resolved pointer array */
 
   /* Bah, this is a pain supporting this particular hook */
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
+  #ifdef HORATIO_DEBUGHOOKS
+  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
 
   debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
   indexOfBlock = dpcrtlmm_int_IndexFromBlockPtr(PBlockArray, Ptr);
   /* Looked up the right descriptor to suit hook requirements */
   debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[indexOfBlock];
-  debugHookInfo.HookType = DPCRTLMM_HOOK_MODIFYDESCFLAGS;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  debugHookInfo.HookType = HORATIO_HOOK_MODIFYDESCFLAGS;
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   _VerifyPtrs(funcName, PBlockArray, Ptr); /* Make sure invalid pointers don't get past here */
 
@@ -112,12 +112,12 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
   if (PNewFlags) /* Caller passed new flags */
     PRArr->Descriptors[blockIndex].Flags = *PNewFlags; /* Modify the flags */
 
-  #ifdef DPCRTLMM_DEBUGHOOKS
+  #ifdef HORATIO_DEBUGHOOKS
   debugHookInfo.Success = 1U;
   debugHookInfo.Misc0 = (unsigned long)oldFlags;
   debugHookInfo.Misc1 = (unsigned long)( (PNewFlags) ? (*PNewFlags) : (oldFlags) );
-  dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   return oldFlags; /* Give the old flags back to the caller */
 }

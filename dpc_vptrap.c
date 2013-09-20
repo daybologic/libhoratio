@@ -41,7 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
   Creation: 19th July 2000
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -52,9 +52,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -70,18 +70,18 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 static void TrapOnBadBlockArray(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 static void TrapOnBadBlockPtr(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 );
 
 void dpcrtlmm_int_VerifyPtrs(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ) {
   /* CAUTION: Do not pass a resolved array pointer to this function */
   /*
@@ -98,7 +98,7 @@ void dpcrtlmm_int_VerifyPtrs(
 
 static void TrapOnBadBlockArray(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* locals */
   const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
@@ -117,10 +117,10 @@ static void TrapOnBadBlockArray(
       #endif /*HAVE_SNPRINTF*/
       cTrapMsg0,
       (FuncName) ? (FuncName) : ("UNKNOWN"),
-      DPCRTLMM_FMTPTRPFX, PBlockArray
+      HORATIO_FMTPTRPFX, PBlockArray
     );
 
-    Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, dynMsg);
+    Trap(HORATIO_TRAP_BAD_BLOCK_ARRAY, dynMsg);
   } else { /* malloc() failed */
     if ( dpcrtlmm__EnableTraps ) abort();
   }
@@ -128,8 +128,8 @@ static void TrapOnBadBlockArray(
 
 static void TrapOnBadBlockPtr(
   const char *FuncName,
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ) {
   char trapMsg[MAX_TRAP_STRING_LENGTH +1]; /* For trap message */
   #ifdef HAVE_SNPRINTF
@@ -152,11 +152,11 @@ static void TrapOnBadBlockPtr(
       #endif /*HAVE_SNPRINTF*/
       "%s: The block pointer %s%p is not valid for array %s%p, cannot test block pointer validity.",
       PusedFuncName,
-      DPCRTLMM_FMTPTRPFX, BlockPtr,
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      HORATIO_FMTPTRPFX, BlockPtr,
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
 
-    Trap(DPCRTLMM_TRAP_BAD_BLOCK, trapMsg);
+    Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg);
   } /* Bad block array? */
 
   /* The array is a valid and acceptable pointer, pass on to IsBadBlockPtr()
@@ -186,10 +186,10 @@ static void TrapOnBadBlockPtr(
       #endif /*HAVE_SNPRINTF*/
       "%s: Bad block pointer: %s%p for array %s%p",
       PusedFuncName,
-      DPCRTLMM_FMTPTRPFX, BlockPtr,
-      DPCRTLMM_FMTPTRPFX, (void *)PBlockArray
+      HORATIO_FMTPTRPFX, BlockPtr,
+      HORATIO_FMTPTRPFX, (void *)PBlockArray
     );
-    Trap(DPCRTLMM_TRAP_BAD_BLOCK, trapMsg); /* Fire trap */
+    Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg); /* Fire trap */
     if ( pusedDynamic )
       free(PusedFuncName);
   }

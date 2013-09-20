@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
@@ -38,15 +38,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_WANTFARDATA
+#ifdef HORATIO_WANTFARDATA
 # ifdef HAVE_ALLOC_H
 #  include <alloc.c>
 # endif /*HAVE_ALLOC_H*/
-#endif /*DPCRTLMM_WANTFARDATA*/
+#endif /*HORATIO_WANTFARDATA*/
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -70,8 +70,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 /* Function under the locked version */
 static void dpcrtlmm_int_Free(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *Ptr
 );
 
 /*
@@ -81,7 +81,7 @@ static void dpcrtlmm_int_Free(
   started from
 */
 static void Moveup(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int StartPos
 );
 /*
@@ -89,7 +89,7 @@ static void Moveup(
   than the current size.
 */
 static void ShrinkBlockArray(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int Amount
 );
 static void OurLog(
@@ -100,8 +100,8 @@ static void OurLog(
 );
 
 void dpcrtlmm_Free(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *Ptr
 ) {
   /* Thread safe wrapper around Free() */
 
@@ -111,8 +111,8 @@ void dpcrtlmm_Free(
 }
 
 static void dpcrtlmm_int_Free(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *Ptr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *Ptr
 ) {
   /* locals */
   unsigned int i; /* For the finder loop */
@@ -121,10 +121,10 @@ static void dpcrtlmm_int_Free(
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   #endif /*HAVE_SNPRINTF*/
   const char funcName[] = "Free()"; /* Our function name */
-  PS_DPCRTLMM_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugTrapInfo;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  PS_HORATIO_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugTrapInfo;
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   PRArr = _ResolveArrayPtr(PBlockArray); /* Resolve incase block array is NULL */
   _VerifyPtrs(funcName, PBlockArray, NULL); /* Don't check if bad block in this trap, use own trap... */
@@ -135,13 +135,13 @@ static void dpcrtlmm_int_Free(
       trapMsgRemaining,
       #endif /*HAVE_SNPRINTF*/
       "Free(): Attempt to release memory we don\'t own or memory which has already been released, array: %s%p, block %s%p",
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
-      DPCRTLMM_FMTPTRPFX, Ptr
+      HORATIO_FMTPTRPFX, (void*)PBlockArray,
+      HORATIO_FMTPTRPFX, Ptr
     );
     #ifdef HAVE_SNPRINTF
     trapMsgRemaining -= strlen(trapMsg);
     #endif /*HAVE_SNPRINTF*/
-    Trap(DPCRTLMM_TRAP_UNOWNED_FREE, trapMsg);
+    Trap(HORATIO_TRAP_UNOWNED_FREE, trapMsg);
   }
 
   if (_LockTrap(funcName, PBlockArray, Ptr)) /* Do trap if block is locked */
@@ -150,23 +150,23 @@ static void dpcrtlmm_int_Free(
   /* Find the block's descriptor using the block base address, have a caution to use the resolved array pointer */
   for ( i = 0U; i < PRArr->Count; i++ ) {
     if ( PRArr->Descriptors[i].PBase == Ptr ) { /* This is the one */
-      #ifdef DPCRTLMM_LOG
+      #ifdef HORATIO_LOG
       sprintf(
         trapMsg,
         #ifdef HAVE_SNPRINTF
         trapMsgRemaining,
         #endif /*HAVE_SNPRINTF*/
         "Freeing block %s%p from array %s%p",
-        DPCRTLMM_FMTPTRPFX, PRArr->Descriptors[i].PBase,
-        DPCRTLMM_FMTPTRPFX, (void*)PRArr
+        HORATIO_FMTPTRPFX, PRArr->Descriptors[i].PBase,
+        HORATIO_FMTPTRPFX, (void*)PRArr
       );
       #ifdef HAVE_SNPRINTF
       trapMsgRemaining -= strlen(trapMsg);
       #endif /*HAVE_SNPRINTF*/
-      OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
-      #endif /*DPCRTLMM_LOG*/
+      OURLOG(PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, HORATIO_LOG_MESSAGE, trapMsg);
+      #endif /*HORATIO_LOG*/
 
-      DPCRTLMM_FREE( PRArr->Descriptors[i].PBase ); /* Free the block */
+      HORATIO_FREE( PRArr->Descriptors[i].PBase ); /* Free the block */
       if ( PRArr->Descriptors[i].SourceFile ) /* We know the file which allocated this */
         free(PRArr->Descriptors[i].SourceFile); /* Now we don't! */
 
@@ -179,16 +179,16 @@ static void dpcrtlmm_int_Free(
       ShrinkBlockArray(PRArr, 1); /* Shrink size of array of descriptors (deleting redundant end item (which has been shifted up))*/
 
       /* Call the debug hoop executive */
-      #ifdef DPCRTLMM_DEBUGHOOKS
-      memset(&debugTrapInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
+      #ifdef HORATIO_DEBUGHOOKS
+      memset(&debugTrapInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
       debugTrapInfo.PRelArr = PRArr;
       debugTrapInfo.PRelDesc = &PRArr->Descriptors[i];
-      debugTrapInfo.HookType = DPCRTLMM_HOOK_FREE;
+      debugTrapInfo.HookType = HORATIO_HOOK_FREE;
       /* AlloqReq is not applicable */
       debugTrapInfo.Success = 1U; /* Yup, success! */
       /* The rest are currently reserved. */
-      dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_FREE, &debugTrapInfo);
-      #endif /*DPCRTLMM_DEBUGHOOKS*/
+      dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_FREE, &debugTrapInfo);
+      #endif /*HORATIO_DEBUGHOOKS*/
 
       break; /* Don't look at anymore blocks */
     }
@@ -197,7 +197,7 @@ static void dpcrtlmm_int_Free(
 }
 
 static void Moveup(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int StartPos
 ) {
   /* locals */
@@ -205,7 +205,7 @@ static void Moveup(
 
   if ( PBlockArray->Count < 2) { /* Only one or no items, can't do a moveup */
     /* Do trap */
-    Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, "Free()/Moveup: Can\'t move up one item or no items.\n");
+    Trap(HORATIO_TRAP_BAD_RANGE_MOVEUP, "Free()/Moveup: Can\'t move up one item or no items.\n");
     return;
   }
   if ( StartPos >= PBlockArray->Count ) { /* StartPos out of range? */
@@ -222,19 +222,19 @@ static void Moveup(
       #endif /*HAVE_SNPRINTF*/
       "Free()/Moveup: StartPos is not valid. StartPos=%u, %s%p->Count=%u",
       StartPos,
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
+      HORATIO_FMTPTRPFX, (void*)PBlockArray,
       PBlockArray->Count
     );
     #ifdef HAVE_SNPRINTF
     trapMsgRemaining -= strlen(trapMsg);
     #endif /*HAVE_SNPRINTF*/
-    Trap(DPCRTLMM_TRAP_BAD_RANGE_MOVEUP, trapMsg);
+    Trap(HORATIO_TRAP_BAD_RANGE_MOVEUP, trapMsg);
     return;
   }
 
   /* Moving elements left to fill a gap */
   for ( i = StartPos+1; i < PBlockArray->Count; i++ ) {
-    S_DPCRTLMM_BLOCKDESCRIPTOR blockDesc;
+    S_HORATIO_BLOCKDESCRIPTOR blockDesc;
 
     blockDesc = PBlockArray->Descriptors[i];
     PBlockArray->Descriptors[i-1] = blockDesc;
@@ -243,7 +243,7 @@ static void Moveup(
 }
 
 static void ShrinkBlockArray(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int Amount
 ) {
   char logMsg[MAX_TRAP_STRING_LENGTH +1];
@@ -258,13 +258,13 @@ static void ShrinkBlockArray(
       #ifdef HAVE_SNPRINTF
       logMsgRemaining,
       #endif /*HAVE_SNPRINTF*/
-      "Attempt to ShrinkBlockArray(%s%p) by nothing, ignored (internal DPCRTLMM error)",
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      "Attempt to ShrinkBlockArray(%s%p) by nothing, ignored (internal HORATIO error)",
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
     #ifdef HAVE_SNPRINTF
     logMsgRemaining -= strlen(logMsg);
     #endif /*HAVE_SNPRINTF*/
-    OURLOG_POS(DPCRTLMM_LOG_WARNING, logMsg);
+    OURLOG_POS(HORATIO_LOG_WARNING, logMsg);
     return;
   }
   if (!PBlockArray->Count) {
@@ -274,12 +274,12 @@ static void ShrinkBlockArray(
       logMsgRemaining,
       #endif /*HAVE_SNPRINTF*/
       "ShrinkBlockArray(): %s%p->Count=0U, can\'t shrink the array any more!",
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
     #ifdef HAVE_SNPRINTF
     logMsgRemaining -= strlen(logMsg);
     #endif /*HAVE_SNPRINTF*/
-    Trap(DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT, logMsg);
+    Trap(HORATIO_TRAP_SHRINKARR_WHILE_NOWT, logMsg);
     return;
   }
   if (Amount > PBlockArray->Count) { /* Shrink further than size?! */
@@ -290,23 +290,23 @@ static void ShrinkBlockArray(
       #endif /*HAVE_SNPRINTF*/
       "ShrinkBlockArray(): Amount=%u, greater than original size in elements (%s%p->Count=%u)",
       Amount,
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray,
+      HORATIO_FMTPTRPFX, (void*)PBlockArray,
       PBlockArray->Count
     );
     #ifdef HAVE_SNPRINTF
     logMsgRemaining -= strlen(logMsg);
     #endif /*HAVE_SNPRINTF*/
-    Trap(DPCRTLMM_TRAP_SHRINKARR_TOOMUCH, logMsg);
+    Trap(HORATIO_TRAP_SHRINKARR_TOOMUCH, logMsg);
     return;
   }
 
   /* Reducing to zero? */
   if ( !(PBlockArray->Count - Amount) ) {
-    DPCRTLMM_FREE(PBlockArray->Descriptors); /* Release entire descriptor array */
+    HORATIO_FREE(PBlockArray->Descriptors); /* Release entire descriptor array */
     PBlockArray->Descriptors = NULL; /* Mark as no allocation in entire array */
   } else { /* Reducing somewhat but not completely */
     /* Shrink array */
-    PBlockArray->Descriptors = DPCRTLMM_REALLOC( PBlockArray->Descriptors, (PBlockArray->Count - Amount)*sizeof(S_DPCRTLMM_BLOCKDESCRIPTOR) );
+    PBlockArray->Descriptors = HORATIO_REALLOC( PBlockArray->Descriptors, (PBlockArray->Count - Amount)*sizeof(S_HORATIO_BLOCKDESCRIPTOR) );
   }
   PBlockArray->Count -= Amount; /* Adjust count for descriptor array */
   return;

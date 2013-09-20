@@ -33,13 +33,13 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
 #############################################################################
 # IsBad....() routines for testing validity of pointers, just a small part  #
-# of one of my favourite libraries DPCRTLMM, heh heh.                       #
+# of one of my favourite libraries HORATIO, heh heh.                       #
 #############################################################################
 
   NOTE: 28th July 2000
   Both function can now cope with resolved or unresolved array pointers
 */
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -48,9 +48,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -61,8 +61,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_isbad.h"
 
 unsigned int dpcrtlmm_IsBadBlockPtr(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ) {
   /* Thread safe wrapper for IsBadBlockPtr() */
   unsigned int ret;
@@ -75,7 +75,7 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 }
 
 unsigned int dpcrtlmm_IsBadArrayPtr(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* Thread safe wrapper for IsBadArrayPtr() */
   unsigned int ret;
@@ -88,12 +88,12 @@ unsigned int dpcrtlmm_IsBadArrayPtr(
 }
 
 unsigned int dpcrtlmm_int_IsBadBlockPtr(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ) {
   /* locals */
   unsigned int i; /* List/loop control */
-  PS_DPCRTLMM_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
+  PS_HORATIO_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
   /* Test for bad block array */
   if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* Block array bad? */
@@ -106,10 +106,10 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
       MAX_TRAP_STRING_LENGTH,
       #endif /*HAVE_SNPRINTF*/
       "The block array address %s%p is unknown, unable to search for blocks.",
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
 
-    Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapmsg);
+    Trap(HORATIO_TRAP_BAD_BLOCK_ARRAY, trapmsg);
   }
 
   for ( i = 0U; i < PRArr->Count; i++ ) { /* For all the block descriptors in the list */
@@ -122,15 +122,15 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
 }
 
 unsigned int dpcrtlmm_int_IsBadArrayPtr(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* I've rewritten this function so that is can support NULL arrays
   and it does not matter whether PBlockArray is resolved or not */
 
-  #ifndef DPCRTLMM_NONULL_BLOCKDESCARRAY /* Build supports NULL arrays? */
+  #ifndef HORATIO_NONULL_BLOCKDESCARRAY /* Build supports NULL arrays? */
   if ( !PBlockArray || PBlockArray == &_defaultArray ) /* NULL array (or resolved version) */
     return 0U; /* Not a bad array */
-  #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
+  #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 
   /* Check the normal safety list */
   return !SafetyList_IsArrayPtrPresent(PBlockArray);

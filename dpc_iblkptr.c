@@ -34,7 +34,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * Internal function for getting the index of a block  *
  * within an array, now supports NULL arrays           *
  *******************************************************/
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
@@ -42,9 +42,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -54,11 +54,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_iblkptr.h"
 
 unsigned int dpcrtlmm_int_IndexFromBlockPtr(
-  const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  const void DPCRTLMM_FARDATA *BlockPtr
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
 ) {
   unsigned int i;
-  PS_DPCRTLMM_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
+  PS_HORATIO_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
 
   _VerifyPtrs("IndexFromBlockPtr()", PBlockArray, NULL);
 
@@ -69,7 +69,7 @@ unsigned int dpcrtlmm_int_IndexFromBlockPtr(
   }
 
   Trap(
-    DPCRTLMM_TRAP_INDEX_GEN_FAILED,
+    HORATIO_TRAP_INDEX_GEN_FAILED,
     "IndexFromBlockPtr(): Block not found, index not generated"
   );
   return ~0; /* Buggered */

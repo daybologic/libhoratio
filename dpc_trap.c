@@ -31,11 +31,11 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  Library: DPCRTLMM
+  Library: HORATIO
   Created: Feb 2000
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -45,9 +45,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h> /* For fprintf() */
 #include <stdlib.h> /* For abort() */
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -101,12 +101,12 @@ void dpcrtlmm_int_Trap(
   const char *Message
 ) {
   char* trapsCopy;
-  const char preFix[] = "DPCRTLMM_UNHANDLED_TRAP: ";
+  const char preFix[] = "HORATIO_UNHANDLED_TRAP: ";
 
   ERROR(Message); /* Pass on to the logger automatically */
   if ( !dpcrtlmm__EnableTraps ) return; /* Don't execute traps if traps have been switched off */
 
-  /* The message is prefixed with "DPCRTLMM (Trap): " by copying it */
+  /* The message is prefixed with "HORATIO (Trap): " by copying it */
   trapsCopy = (char*)malloc( sizeof(preFix) + strlen(Message) ); /* No NULL terminator because sizeof() includes this */
   if (trapsCopy) {
     strcpy(trapsCopy, preFix);
@@ -133,52 +133,52 @@ static void dpcrtlmm_int_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
 ) {
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 
-  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
-  debugHookInfo.HookType = DPCRTLMM_HOOK_INSTTRAPCALLBACK;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+  debugHookInfo.HookType = HORATIO_HOOK_INSTTRAPCALLBACK;
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   if (NewTrapCallback) {
-    #ifdef DPCRTLMM_LOG
+    #ifdef HORATIO_LOG
     char logStr[MAX_TRAP_STRING_LENGTH+sizeof(char)];
-    #endif /*DPCRTLMM_LOG*/
+    #endif /*HORATIO_LOG*/
 
     /* Install the handler/hook */
     _UserTrapCallback = NewTrapCallback; /* Replace the PFunc */
     _userTrapCallbackIsHook = AsHook; /* Set hook mode (or not) */
 
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #ifdef HORATIO_DEBUGHOOKS
     /* Update debug hook info */
     debugHookInfo.Success = 1U;
     debugHookInfo.Misc0 = (unsigned long)NewTrapCallback;
     if (AsHook) debugHookInfo.Misc1 |= 1; /* Set bit 0 in accordance with the documentation */
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+    #endif /*HORATIO_DEBUGHOOKS*/
 
-    #ifdef DPCRTLMM_LOG
+    #ifdef HORATIO_LOG
     /* Log that we did that */
     sprintf(
       logStr,
       "InstallTrapCallback(): Installed the trap %s %s%lX",
       (AsHook) ? ("hook") : ("handler"),
-      DPCRTLMM_FMTPTRPFX, (unsigned long int)NewTrapCallback
+      HORATIO_FMTPTRPFX, (unsigned long int)NewTrapCallback
     );
     MESSAGE(NULL, 0, logStr);
-    #endif /*DPCRTLMM_LOG*/
+    #endif /*HORATIO_LOG*/
 
-    #ifdef DPCRTLMM_DEBUGHOOKS
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+    #ifdef HORATIO_DEBUGHOOKS
+    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
   } else { /* Pointer to trap handler not passed */
-    #ifdef DPCRTLMM_DEBUGHOOKS
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+    #ifdef HORATIO_DEBUGHOOKS
+    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
 
     if (_UserTrapCallback) /* Already have a handler and caller is trying to NULL it */
-      Trap(DPCRTLMM_TRAP_BAD_HANDLER_REMOVAL, "InstallTrapCallback(): Can\'t remove handler or hook in this way");
+      Trap(HORATIO_TRAP_BAD_HANDLER_REMOVAL, "InstallTrapCallback(): Can\'t remove handler or hook in this way");
     else /* Trying to set handler when no current handler installed */
-      Trap(DPCRTLMM_TRAP_NULL_HANDLER, "InstallTrapCallback(): NULL handler or hook is not acceptable.");
+      Trap(HORATIO_TRAP_NULL_HANDLER, "InstallTrapCallback(): NULL handler or hook is not acceptable.");
   }
   return;
 }
@@ -187,13 +187,13 @@ static void dpcrtlmm_int_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
 ) {
   char logStr[MAX_TRAP_STRING_LENGTH+1];
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 
-  memset(&debugHookInfo, 0, sizeof(S_DPCRTLMM_DEBUGHOOKINFO));
-  debugHookInfo.HookType = DPCRTLMM_HOOK_REMTRAPCALLBACK;
+  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+  debugHookInfo.HookType = HORATIO_HOOK_REMTRAPCALLBACK;
   debugHookInfo.Misc0 = (unsigned long)CurrentCallback;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   if (CurrentCallback == _UserTrapCallback) { /* Make sure user knows */
     _UserTrapCallback = NULL; /* Remove handler or hook */
@@ -209,14 +209,14 @@ static void dpcrtlmm_int_RemoveTrapCallback(
     );
     MESSAGE(NULL, 0, logStr);
 
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #ifdef HORATIO_DEBUGHOOKS
     debugHookInfo.Success = 1U;
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
   } else { /* The user does not know the address! */
-    #ifdef DPCRTLMM_DEBUGHOOKS
-    dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_REMTRAPCALLBACK, &debugHookInfo);
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+    #ifdef HORATIO_DEBUGHOOKS
+    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo);
+    #endif /*HORATIO_DEBUGHOOKS*/
 
     sprintf(
       logStr,
@@ -224,10 +224,10 @@ static void dpcrtlmm_int_RemoveTrapCallback(
       MAX_TRAP_STRING_LENGTH,
       #endif /*HAVE_SNPRINTF*/
       "RemoveTrapCallback(): The handler is NOT %s%lX !!!",
-      DPCRTLMM_FMTPTRPFX, (unsigned long int)CurrentCallback
+      HORATIO_FMTPTRPFX, (unsigned long int)CurrentCallback
     );
 
-    Trap(DPCRTLMM_TRAP_UNAUTH_REMOVE, logStr);
+    Trap(HORATIO_TRAP_UNAUTH_REMOVE, logStr);
   }
   return;
 }
@@ -269,7 +269,7 @@ static void DefHandler(
   /*
     Output trap's message on the standard error stream
   */
-  fprintf(DPCRTLMM_DEV_ERROR, TrapMsg);
+  fprintf(HORATIO_DEV_ERROR, TrapMsg);
   abort();
 }
 

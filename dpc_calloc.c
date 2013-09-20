@@ -30,16 +30,16 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -50,36 +50,36 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_biglock.h" /* For entire library mutual exclusion */
 #include "dpc_alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 
-#ifdef DPCRTLMM_LOG
+#ifdef HORATIO_LOG
 static void OurLog(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
   const char *Str
 );
-#endif /*DPCRTLMM_LOG*/
+#endif /*HORATIO_LOG*/
 
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
 #define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
   const char* File,
   const unsigned int Line
 );
 
-void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+void HORATIO_FARDATA* dpcrtlmm_CallocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
   const char* File,
   const unsigned int Line
 ) {
-  void DPCRTLMM_FARDATA* ret;
+  void HORATIO_FARDATA* ret;
 
   LOCK
   ret = dpcrtlmm_int_CallocEx(PBlockArray, N, NewBlockSize, File, Line);
@@ -88,22 +88,22 @@ void DPCRTLMM_FARDATA* dpcrtlmm_CallocEx(
   return ret;
 }
 
-static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
   const char* File,
   const unsigned int Line
 ) {
-  void DPCRTLMM_FARDATA* resultantPtr;
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  S_DPCRTLMM_DEBUGHOOKINFO debugHookInfo;
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
-  #ifdef DPCRTLMM_LOG
+  void HORATIO_FARDATA* resultantPtr;
+  #ifdef HORATIO_DEBUGHOOKS
+  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+  #endif /*HORATIO_DEBUGHOOKS*/
+  #ifdef HORATIO_LOG
   char logMsg[MAX_TRAP_STRING_LENGTH+1];
-  #endif /*DPCRTLMM_LOG*/
+  #endif /*HORATIO_LOG*/
 
-  #ifdef DPCRTLMM_LOG
+  #ifdef HORATIO_LOG
   sprintf(
     logMsg,
     "Calloc() called, %u blocks of %u bytes requested, "
@@ -111,47 +111,47 @@ static void DPCRTLMM_FARDATA* dpcrtlmm_int_CallocEx(
     N,
     (unsigned int)NewBlockSize
   );
-  OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, logMsg);
-  #endif /*DPCRTLMM_LOG*/
+  OURLOG(File, Line, HORATIO_LOG_MESSAGE, logMsg);
+  #endif /*HORATIO_LOG*/
 
-  #ifdef DPCRTLMM_DEBUGHOOKS
+  #ifdef HORATIO_DEBUGHOOKS
   debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
-  debugHookInfo.HookType = DPCRTLMM_HOOK_CALLOC;
+  debugHookInfo.HookType = HORATIO_HOOK_CALLOC;
   debugHookInfo.AllocReq = (N*NewBlockSize);
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  #endif /*HORATIO_DEBUGHOOKS*/
 
   resultantPtr = dpcrtlmm_int_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
   if (resultantPtr) {
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #ifdef HORATIO_DEBUGHOOKS
     /* Ahh damn it, I'll have to look up the descriptor for this block */
     unsigned int blkIndex = dpcrtlmm_int_IndexFromBlockPtr(PBlockArray, resultantPtr);
     debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[blkIndex];
     debugHookInfo.Success = 1U;
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
+    #endif /*HORATIO_DEBUGHOOKS*/
 
-    #ifdef DPCRTLMM_LOG
-    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation successful");
-    #endif /*DPCRTLMM_LOG*/
+    #ifdef HORATIO_LOG
+    OURLOG(File, Line, HORATIO_LOG_MESSAGE, "Allocation successful");
+    #endif /*HORATIO_LOG*/
 
     /* Bug fix: I didn't realize this but the specification for for calloc()
-       requires that the new memory is zeroed. Fix DPCRTLMM Version 1.1.2 or 1.1.3 */
+       requires that the new memory is zeroed. Fix HORATIO Version 1.1.2 or 1.1.3 */
     memset(resultantPtr, 0, N*NewBlockSize);
   } else {
-    #ifdef DPCRTLMM_DEBUGHOOKS
+    #ifdef HORATIO_DEBUGHOOKS
     /*blockDescArray.Success = 0U;   - optimized away */
-    #endif /*DPCRTLMM_DEBUGHOOKS*/
-    #ifdef DPCRTLMM_LOG
-    OURLOG(File, Line, DPCRTLMM_LOG_MESSAGE, "Allocation failed");
-    #endif /*DPCRTLMM_LOG*/
+    #endif /*HORATIO_DEBUGHOOKS*/
+    #ifdef HORATIO_LOG
+    OURLOG(File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
+    #endif /*HORATIO_LOG*/
   }
 
-  #ifdef DPCRTLMM_DEBUGHOOKS
-  dpcrtlmm_int_CallDebugHook(DPCRTLMM_HOOK_CALLOC, &debugHookInfo);
-  #endif /*DPCRTLMM_DEBUGHOOKS*/
+  #ifdef HORATIO_DEBUGHOOKS
+  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_CALLOC, &debugHookInfo);
+  #endif /*HORATIO_DEBUGHOOKS*/
   return resultantPtr;
 }
 
-#ifdef DPCRTLMM_LOG
+#ifdef HORATIO_LOG
 static void OurLog(
   const char* File,
   const unsigned int Line,
@@ -179,5 +179,5 @@ static void OurLog(
   }
   return;
 }
-#endif /*DPCRTLMM_LOG*/
+#endif /*HORATIO_LOG*/
 

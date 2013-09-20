@@ -861,8 +861,8 @@ FFLAGS
 ac_ct_F77
 LIBTOOL
 LIBOBJS
-DPCRTLMM_THREADS_PTH_TRUE
-DPCRTLMM_THREADS_PTH_FALSE
+HORATIO_THREADS_PTH_TRUE
+HORATIO_THREADS_PTH_FALSE
 LTLIBOBJS'
 ac_subst_files=''
       ac_precious_vars='build_alias
@@ -1472,7 +1472,7 @@ Optional Features:
   --enable-hdrstop        Enable pragma hdrstop
   --enable-stderr         Enable stderr output
   --enable-fardata        Enable far pointers for data (16-bit only)
-  --enable-log            Enable logging to DPCRTLMM.LOG
+  --enable-log            Enable logging to HORATIO.LOG
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -21017,7 +21017,7 @@ done
 if test "$pthread_mutexattr_setkind_np" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_THREADS_PTHREAD_NP
+#define HORATIO_THREADS_PTHREAD_NP
 _ACEOF
 
 fi
@@ -21090,7 +21090,7 @@ fi
 if test "$threads_enabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_THREADS
+#define HORATIO_THREADS
 _ACEOF
 
 fi
@@ -21110,7 +21110,7 @@ fi
 if test "$hdrstop_enabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_HDRSTOP
+#define HORATIO_HDRSTOP
 _ACEOF
 
 fi
@@ -21131,18 +21131,18 @@ fi
 
 
 if test "$pth_init" = "yes"; then
-  DPCRTLMM_THREADS_PTH_TRUE=
-  DPCRTLMM_THREADS_PTH_FALSE='#'
+  HORATIO_THREADS_PTH_TRUE=
+  HORATIO_THREADS_PTH_FALSE='#'
 else
-  DPCRTLMM_THREADS_PTH_TRUE='#'
-  DPCRTLMM_THREADS_PTH_FALSE=
+  HORATIO_THREADS_PTH_TRUE='#'
+  HORATIO_THREADS_PTH_FALSE=
 fi
 
 if test "$real_thread_lib" = "pth"; then
   if test "$threads_enabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_THREADS_PTH
+#define HORATIO_THREADS_PTH
 _ACEOF
 
   fi
@@ -21161,7 +21161,7 @@ if test "$real_thread_lib" = "pthread"; then
     fi
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_THREADS_PTHREAD
+#define HORATIO_THREADS_PTHREAD
 _ACEOF
 
   fi
@@ -21170,7 +21170,7 @@ if test "$real_thread_lib" = "nt"; then
   if test "$threads_enabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_THREADS_NT
+#define HORATIO_THREADS_NT
 _ACEOF
 
   fi
@@ -21206,7 +21206,7 @@ else
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define DPCRTLMM_DEV_ERROR $stderr_stream
+#define HORATIO_DEV_ERROR $stderr_stream
 _ACEOF
 
 { echo "$as_me:$LINENO: result: $stderr_enabled" >&5
@@ -21233,7 +21233,7 @@ fi
 
 
 cat >>confdefs.h <<_ACEOF
-#define DPCRTLMM_SAFETYLIST_MAXSIZE $safety_list_size
+#define HORATIO_SAFETYLIST_MAXSIZE $safety_list_size
 _ACEOF
 
 { echo "$as_me:$LINENO: result: $safety_list_size" >&5
@@ -21262,14 +21262,14 @@ hook_chains_enabled=no
 if test "$hook_chain_size" != "0"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_DEBUGHOOKS
+#define HORATIO_DEBUGHOOKS
 _ACEOF
 
   hook_chains_enabled=yes
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define DPCRTLMM_HOOKCHAIN_SIZE $hook_chain_size
+#define HORATIO_HOOKCHAIN_SIZE $hook_chain_size
 _ACEOF
 
 { echo "$as_me:$LINENO: result: $hook_chain_size" >&5
@@ -21291,7 +21291,7 @@ fi
 if test "$fardata_enabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_WANTFARDATA
+#define HORATIO_WANTFARDATA
 _ACEOF
 
 fi
@@ -21311,15 +21311,15 @@ fi
 if test "$null_array_disabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_NONULL_BLOCKDESCARRAY
+#define HORATIO_NONULL_BLOCKDESCARRAY
 _ACEOF
 
 fi
 { echo "$as_me:$LINENO: result: $null_array_disabled" >&5
 echo "${ECHO_T}$null_array_disabled" >&6; }
 
-{ echo "$as_me:$LINENO: checking whether to log to DPCRTLMM.LOG" >&5
-echo $ECHO_N "checking whether to log to DPCRTLMM.LOG... $ECHO_C" >&6; }
+{ echo "$as_me:$LINENO: checking whether to log to HORATIO.LOG" >&5
+echo $ECHO_N "checking whether to log to HORATIO.LOG... $ECHO_C" >&6; }
 # Check whether --enable-log was given.
 if test "${enable_log+set}" = set; then
   enableval=$enable_log; log_enabled=yes
@@ -21331,7 +21331,7 @@ fi
 if test "$log_enabled" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
-#define DPCRTLMM_LOG
+#define HORATIO_LOG
 _ACEOF
 
 fi
@@ -21445,10 +21445,10 @@ echo "$as_me: error: conditional \"AMDEP\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${DPCRTLMM_THREADS_PTH_TRUE}" && test -z "${DPCRTLMM_THREADS_PTH_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"DPCRTLMM_THREADS_PTH\" was never defined.
+if test -z "${HORATIO_THREADS_PTH_TRUE}" && test -z "${HORATIO_THREADS_PTH_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"HORATIO_THREADS_PTH\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"DPCRTLMM_THREADS_PTH\" was never defined.
+echo "$as_me: error: conditional \"HORATIO_THREADS_PTH\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -22075,8 +22075,8 @@ FFLAGS!$FFLAGS$ac_delim
 ac_ct_F77!$ac_ct_F77$ac_delim
 LIBTOOL!$LIBTOOL$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
-DPCRTLMM_THREADS_PTH_TRUE!$DPCRTLMM_THREADS_PTH_TRUE$ac_delim
-DPCRTLMM_THREADS_PTH_FALSE!$DPCRTLMM_THREADS_PTH_FALSE$ac_delim
+HORATIO_THREADS_PTH_TRUE!$HORATIO_THREADS_PTH_TRUE$ac_delim
+HORATIO_THREADS_PTH_FALSE!$HORATIO_THREADS_PTH_FALSE$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 

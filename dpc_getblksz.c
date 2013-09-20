@@ -33,16 +33,16 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
   Gets size of a block
 */
-#define DPCRTLMM_SOURCE
+#define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
 #include <stdio.h>
 #include <stddef.h>
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
 #include "restricted_horatio.h" /* Main library header */
@@ -54,13 +54,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_isbad.h" /* Internal interface to block testers */
 
 static size_t dpcrtlmm_int_GetBlockSize(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *BlockPtr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *BlockPtr
 );
 
 size_t dpcrtlmm_GetBlockSize(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *BlockPtr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *BlockPtr
 ) {
   size_t ret;
 
@@ -72,8 +72,8 @@ size_t dpcrtlmm_GetBlockSize(
 }
 
 static size_t dpcrtlmm_int_GetBlockSize(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
-  void DPCRTLMM_FARDATA *BlockPtr
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *BlockPtr
 ) {
   /* First test pointers */
   _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
@@ -87,10 +87,10 @@ static size_t dpcrtlmm_int_GetBlockSize(
       MAX_TRAP_STRING_LENGTH,
       #endif /*HAVE_SNPRINTF*/
       "Attempt to GetBlockSize() unknown block at base %s%p, in array base: %s%p",
-      DPCRTLMM_FMTPTRPFX, BlockPtr,
-      DPCRTLMM_FMTPTRPFX, (void*)PBlockArray
+      HORATIO_FMTPTRPFX, BlockPtr,
+      HORATIO_FMTPTRPFX, (void*)PBlockArray
     );
-    Trap(DPCRTLMM_TRAP_BAD_BLOCK, trapMsg);
+    Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg);
   }
   return _ResolveArrayPtr(PBlockArray)->Descriptors[ _IndexFromBlockPtr(PBlockArray, BlockPtr) ].Size;
 }
