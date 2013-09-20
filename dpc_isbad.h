@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_ISBAD_H
 #define INC_DPCRTLMM_ISBAD_H
-/*-------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
   extern "C" {
 #endif /*__cplusplus*/
@@ -47,5 +47,5 @@ unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_DPCRTLMM_BLOCKDESCARRAY PBlockA
 #ifdef __cplusplus
   }
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_ISBAD_H*/

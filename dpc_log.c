@@ -64,14 +64,14 @@ causes a warning on your compiler, I aplogise!
 #include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library header */
 #include "dpc_log.h"
-/*-------------------------------------------------------------------------*/
+
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
           strncat( \
             (buff), \
             (sourcestring), \
             (sizeof((buff))/sizeof((buff)[0])-1) \
             )
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_Log(
   const char *File,
   const unsigned int Line,
@@ -138,4 +138,4 @@ void dpcrtlmm_int_Log(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+

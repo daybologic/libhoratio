@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "horatio.h"
-/*-------------------------------------------------------------------------*/
+
 int main(void);
 static void PrintStats(const PS_DPCRTLMM_STATS PStats);
 static void InitArrays(void);
@@ -65,7 +65,7 @@ static void myTrapHandler(
 );
 static void *nullarrptrs[16];
 static void *arrptrs[8];
-/*-------------------------------------------------------------------------*/
+
 int main() {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
@@ -129,7 +129,7 @@ int main() {
   printf("Successful execution\n");
   return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static void PrintStats(const PS_DPCRTLMM_STATS PStats) {
   if (PStats) {
     printf(
@@ -152,7 +152,7 @@ static void PrintStats(const PS_DPCRTLMM_STATS PStats) {
     );
   }
 }
-/*-------------------------------------------------------------------------*/
+
 static void InitArrays() {
   size_t i;
   for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
@@ -160,7 +160,7 @@ static void InitArrays() {
   for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
     arrptrs[i] = NULL;
 }
-/*-------------------------------------------------------------------------*/
+
 static void PrintVersion() {
   S_DPCRTLMM_VERSION ver;
   printf("Gathering library version info...");
@@ -168,7 +168,7 @@ static void PrintVersion() {
   printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
   printf("\n");
 }
-/*-------------------------------------------------------------------------*/
+
 static void myTrapHandler(
   const unsigned int TrapID,
   const char *TrapMsg
@@ -191,4 +191,4 @@ static void myTrapHandler(
   */
   return;
 }
-/*-------------------------------------------------------------------------*/
+

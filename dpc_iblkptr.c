@@ -52,7 +52,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_trap.h" /* Trap support */
 #include "dpc_vptrap.h" /* For _VerifyPtrs() */
 #include "dpc_iblkptr.h"
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_int_IndexFromBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
@@ -74,4 +74,4 @@ unsigned int dpcrtlmm_int_IndexFromBlockPtr(
   );
   return ~0; /* Buggered */
 }
-/*-------------------------------------------------------------------------*/
+

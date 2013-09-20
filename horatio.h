@@ -30,9 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_HORATIO_H
-# define INC_HORATIO_H
-# define INC_DPCRTLMM_H /* Legacy sentry */
-/*-------------------------------------------------------------------------*/
+#define INC_HORATIO_H
+#define INC_DPCRTLMM_H /* Legacy sentry */
 /*
 Created 15th Feb 2000
 Author: David Duncan Ross Palmer (M6KVM), Daybo Logic.
@@ -750,5 +749,5 @@ them it won't be hard to write your own hack table. */
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_HORATIO_H*/

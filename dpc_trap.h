@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_DPCRTLMM_TRAP_H
 #define INC_DPCRTLMM_TRAP_H
-/*-------------------------------------------------------------------------*/
+
 #ifndef INC_DPCRTLMM_INTDATA_H
 #  error ("Internal library users only!")
 #endif /*INC_DPCRTLMM_INTDATA_H*/
@@ -52,5 +52,5 @@ void dpcrtlmm_int_Trap(
 #ifdef INC_DPCRTLMM_INTDATA_H
 #  define Trap dpcrtlmm_int_Trap
 #endif /*INC_DPCRTLMM_INTDATA_H*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_TRAP_H*/

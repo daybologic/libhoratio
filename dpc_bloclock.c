@@ -50,7 +50,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_biglock.h" /* Mutual exclusion */
 #include "dpc_bdflags.h" /* Need this to get around the lock */
 #include "dpc_bloclock.h"
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_SetBlockLockingFlag(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
@@ -60,7 +60,7 @@ void dpcrtlmm_SetBlockLockingFlag(
   dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
   UNLOCK
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_IsBlockLocked(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
@@ -73,7 +73,7 @@ unsigned int dpcrtlmm_IsBlockLocked(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_ToggleBlockLockingStatus(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
@@ -82,7 +82,7 @@ void dpcrtlmm_ToggleBlockLockingStatus(
   dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
   UNLOCK
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_SetBlockLockingFlag(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr,
@@ -101,7 +101,7 @@ void dpcrtlmm_int_SetBlockLockingFlag(
   dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
   return; /* That was simple enough, I can drink some water now */
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_int_IsBlockLocked(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
@@ -114,7 +114,7 @@ unsigned int dpcrtlmm_int_IsBlockLocked(
     return 1U; /* Yes, the block is locked */
   return 0U; /* No, the block is not locked */
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_ToggleBlockLockingStatus(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *Ptr
@@ -124,5 +124,5 @@ void dpcrtlmm_int_ToggleBlockLockingStatus(
   /* Set locking state as NOT current locking state */
   dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat);
 }
-/*-------------------------------------------------------------------------*/
+
 

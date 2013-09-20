@@ -69,7 +69,7 @@ static void CrackAndPrintFlags(
   FILE *Target,
   unsigned char Flags
 );
-/*-------------------------------------------------------------------------*/
+
 unsigned long dpcrtlmm_GetBlockCount() {
   unsigned long ret;
 
@@ -79,7 +79,7 @@ unsigned long dpcrtlmm_GetBlockCount() {
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_GetStats(
   PS_DPCRTLMM_STATS PReadStats
 ) {
@@ -94,7 +94,7 @@ void dpcrtlmm_GetStats(
   }
   UNLOCK
 }
-/*-------------------------------------------------------------------------*/
+
 static void CountFlagsInUse(
   PS_DPCRTLMM_STATS PFlagsStats
 ) {
@@ -132,7 +132,7 @@ static void CountFlagsInUse(
     #endif /*!DPCRTLMM_NONULL_BLOCKDESCARRAY*/
   }
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_Dump(
   FILE *Target
 ) {
@@ -151,7 +151,7 @@ void dpcrtlmm_Dump(
   UNLOCK
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static void DumpOnArray(
   FILE *Target,
   PS_DPCRTLMM_BLOCKDESCARRAY CurrentArray
@@ -181,7 +181,7 @@ static void DumpOnArray(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static void CrackAndPrintFlags(
   FILE *Target,
   unsigned char Flags
@@ -205,4 +205,4 @@ static void CrackAndPrintFlags(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+

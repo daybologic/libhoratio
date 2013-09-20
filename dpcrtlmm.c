@@ -63,7 +63,7 @@ the definition won't exist and build.h will tell them off! */
 #include "dpc_dbghooks.h" /* The debug hook support/executive */
 #include "dpc_biglock.h" /* To init / uninit the big lib lock */
 #include "dpc_blkarray.h" /* Internal interface to block arrays */
-/*-------------------------------------------------------------------------*/
+
 /*
 Minimal stuff here please, if possible promote granularity by using other C files
 */
@@ -76,7 +76,7 @@ built-in array, returns number of bytes wasted, the called wil
 add this to the total leakage */
 static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr);
 unsigned char dpcrtlmm__EnableTraps = 1U;
-/*-------------------------------------------------------------------------*/
+
 PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct) {
   /* No need to lock the big global lock for this, only reading readonly data. */
   if (PVerStruct) {
@@ -100,7 +100,7 @@ PS_DPCRTLMM_VERSION dpcrtlmm_Ver(PS_DPCRTLMM_VERSION PVerStruct) {
   }
   return PVerStruct;
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_Startup() {
   if (!_libStarted) {
     /* Initialization of internal library data */
@@ -124,7 +124,7 @@ void dpcrtlmm_Startup() {
   MESSAGE(NULL, 0, "Library started");
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_Shutdown() {
   /* Don't moan about my double use of the define, I like it this
   way, it feels cleaner, declarations separated! */
@@ -157,11 +157,11 @@ void dpcrtlmm_Shutdown() {
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_IsStarted() {
   return _libStarted;
 }
-/*-------------------------------------------------------------------------*/
+
 static void TrapUnFreedArrays() {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)]; /* Reserved for trap/log messages */
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
@@ -224,7 +224,7 @@ static void TrapUnFreedArrays() {
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)];
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
@@ -269,4 +269,4 @@ static unsigned long TrapUnFreedBlocks(const PS_DPCRTLMM_BLOCKDESCARRAY PArr) {
   } /*(PArr)*/
   return totalLeakage; /* Caller gets to know this so they can add it to a total */
 }
-/*-------------------------------------------------------------------------*/
+

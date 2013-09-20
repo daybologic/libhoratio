@@ -36,7 +36,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_DBGHOOKS_H
 #define INC_DPCRTLMM_DBGHOOKS_H
-/*-------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
@@ -76,5 +76,5 @@ void dpcrtlmm_int_CallDebugHook(
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_DBGHOOKS_H*/

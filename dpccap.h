@@ -41,7 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_CAP_H
 #define INC_DPCRTLMM_CAP_H
-//---------------------------------------------------------------------------
+
 // main object, don't create more than one, the object is externed
 
 #ifndef __NO_NAMESPACES__
@@ -169,5 +169,5 @@ extern
 Overlord::
 #endif
 TDPCRTLMM_MemManager MemManager; /* This is the object you should use */
-//---------------------------------------------------------------------------
+
 #endif //!INC_DPCRTLMM_CAP_H

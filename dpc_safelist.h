@@ -40,7 +40,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_SAFETYLIST_H
 #define INC_DPCRTLMM_SAFETYLIST_H
-/*-------------------------------------------------------------------------*/
+
 
 #ifndef DPCRTLMM_SOURCE /* Looks like a user inclusion! */
 #error The safety list is for internal use by DPCRTLMM only
@@ -79,5 +79,5 @@ ignore this library. */
 
 #define SafetyList_CountFree(SafetyList) \
   ( (DPCRTLMM_SAFETYLIST_MAXSIZE) - SafetyList_CountList(safetyList) )
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_SAFETYLIST_H*/

@@ -70,12 +70,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* For the debug hook executive */
 #include "dpc_biglock.h" /* For total library mutual exclusion */
 #include "dpc_blkarray.h"
-/*-------------------------------------------------------------------------*/
+
 static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray(void);
 static unsigned int dpcrtlmm_int_IsDefaultBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
 );
-/*-------------------------------------------------------------------------*/
+
 PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray() {
   /* Thread safe wrapper for CreateBlockArray() */
   PS_DPCRTLMM_BLOCKDESCARRAY ret;
@@ -86,7 +86,7 @@ PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray() {
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_DestroyBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
 ) {
@@ -96,7 +96,7 @@ void dpcrtlmm_DestroyBlockArray(
   dpcrtlmm_int_DestroyBlockArray(PBlockArray);
   UNLOCK
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_IsDefaultBlockArray(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
 ) {
@@ -110,7 +110,7 @@ unsigned int dpcrtlmm_IsDefaultBlockArray(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
   PS_DPCRTLMM_BLOCKDESCARRAY Parray; /* Pointer for caller */
   #ifdef DPCRTLMM_LOG
@@ -171,7 +171,7 @@ static PS_DPCRTLMM_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
   #endif /*DPCRTLMM_DEBUGHOOKS*/
   return Parray; /* Give new pointer to the caller */
 }
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   /* locals */
   unsigned int sli; /* Safety list loop processing */
@@ -265,7 +265,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   Trap(DPCRTLMM_TRAP_BAD_BLOCK_ARRAY, trapStr);
   return;
 }
-/*-------------------------------------------------------------------------*/
+
 static unsigned int dpcrtlmm_int_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray ) {
   #ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
   return 0; /* Default (NULL) array does not exist */
@@ -275,4 +275,4 @@ static unsigned int dpcrtlmm_int_IsDefaultBlockArray( PS_DPCRTLMM_BLOCKDESCARRAY
   return 0U; /* FALSE */
   #endif
 }
-/*-------------------------------------------------------------------------*/
+

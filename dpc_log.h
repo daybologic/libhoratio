@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_DPCRTLMM_LOG_H
 #define INC_DPCRTLMM_LOG_H
-/*-------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
@@ -75,5 +75,5 @@ void dpcrtlmm_int_Log(
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_LOG_H*/

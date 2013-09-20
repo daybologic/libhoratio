@@ -77,7 +77,7 @@ static void TrapOnBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
 );
-/*-------------------------------------------------------------------------*/
+
 void dpcrtlmm_int_VerifyPtrs(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
@@ -95,7 +95,7 @@ void dpcrtlmm_int_VerifyPtrs(
     TrapOnBadBlockPtr(FuncName, PBlockArray, BlockPtr);
   }
 }
-/*-------------------------------------------------------------------------*/
+
 static void TrapOnBadBlockArray(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
@@ -125,7 +125,7 @@ static void TrapOnBadBlockArray(
     if ( dpcrtlmm__EnableTraps ) abort();
   }
 }
-/*-------------------------------------------------------------------------*/
+
 static void TrapOnBadBlockPtr(
   const char *FuncName,
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
@@ -195,4 +195,4 @@ static void TrapOnBadBlockPtr(
   }
   return;
 }
-/*-------------------------------------------------------------------------*/
+

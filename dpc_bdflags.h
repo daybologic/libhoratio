@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_BDFLAGS_H
 #define INC_DPCRTLMM_BDFLAGS_H
-/*-------------------------------------------------------------------------*/
+
 #ifndef DPCRTLMM_SOURCE
 #  error ("bdflags.h is for internal DPCRTLMM use")
 #endif
@@ -50,5 +50,5 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
 #ifdef __cplusplus
   }
 #endif
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_BDFLAGS_H*/

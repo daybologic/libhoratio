@@ -59,7 +59,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_safelist.h" /* List of acceptable arrays */
 #include "dpc_biglock.h" /* Mutual exclusion */
 #include "dpc_isbad.h"
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_IsBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
@@ -73,7 +73,7 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_IsBadArrayPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
 ) {
@@ -86,7 +86,7 @@ unsigned int dpcrtlmm_IsBadArrayPtr(
 
   return ret;
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_int_IsBadBlockPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const void DPCRTLMM_FARDATA *BlockPtr
@@ -120,7 +120,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
   is bad or not in the specified array. */
   return 1U; /* Yes, block is bad */
 }
-/*-------------------------------------------------------------------------*/
+
 unsigned int dpcrtlmm_int_IsBadArrayPtr(
   const PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
 ) {
@@ -135,4 +135,4 @@ unsigned int dpcrtlmm_int_IsBadArrayPtr(
   /* Check the normal safety list */
   return !SafetyList_IsArrayPtrPresent(PBlockArray);
 }
-/*-------------------------------------------------------------------------*/
+

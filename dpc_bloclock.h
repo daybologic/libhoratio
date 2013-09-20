@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_BLOCLOCK_H
 #define INC_DPCRTLMM_BLOCLOCK_H
-/*-------------------------------------------------------------------------*/
+
 #ifdef __cplusplus
   extern "C" {
 #endif /*__cplusplus*/
@@ -60,5 +60,5 @@ void dpcrtlmm_int_ToggleBlockLockingStatus(
 #ifdef __cplusplus
   }
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_BLOCLOCK_H*/

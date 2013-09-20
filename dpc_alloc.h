@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef INC_DPCRTLMM_ALLOC_H
 #define INC_DPCRTLMM_ALLOC_H
-/*-------------------------------------------------------------------------*/
+
 #ifndef DPCRTLMM_SOURCE
 #  error ("This header is for internal library use only, include horatio.h")
 #endif /*DPCRTLMM_SOURCE*/
@@ -51,5 +51,5 @@ void DPCRTLMM_FARDATA *dpcrtlmm_int_AllocEx(
 #ifdef __cplusplus
   }
 #endif /*__cplusplus*/
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_ALLOC_H*/

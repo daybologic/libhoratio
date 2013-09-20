@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef INC_DPCRTLMM_INTDATA_H
 #define INC_DPCRTLMM_INTDATA_H
-/*-------------------------------------------------------------------------*/
+
 /* WARNING! This header is for internal library use only, it contains
 internal data for the library. */
 
@@ -73,5 +73,5 @@ extern unsigned long dpcrtlmm_int__allocPeak;
 #define _blockCountPeak dpcrtlmm_int__blockCountPeak
 #define _allocCharge dpcrtlmm_int__allocCharge
 #define _allocPeak dpcrtlmm_int__allocPeak
-/*-------------------------------------------------------------------------*/
+
 #endif /*!INC_DPCRTLMM_INTDATA_H*/
