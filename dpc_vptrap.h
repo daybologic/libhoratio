@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
-void dpcrtlmm_int_VerifyPtrs(
+void horatio_int_VerifyPtrs(
   const char *FuncName,
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
@@ -45,7 +45,7 @@ void dpcrtlmm_int_VerifyPtrs(
 #endif /*__cplusplus*/
 
 #ifdef INC_HORATIO_INTDATA_H
-# define _VerifyPtrs dpcrtlmm_int_VerifyPtrs
+# define _VerifyPtrs horatio_int_VerifyPtrs
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #endif /*!INC_HORATIO_VPTRAP_H*/

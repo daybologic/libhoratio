@@ -39,7 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
-void dpcrtlmm_int_Trap(
+void horatio_int_Trap(
   const unsigned int Id,
   const char *Message
 ); /* Fire the specified trap */
@@ -50,7 +50,7 @@ void dpcrtlmm_int_Trap(
 /* NOTE: Prototype for InstallTrapHandler() is in HORATIO.H */
 
 #ifdef INC_HORATIO_INTDATA_H
-#  define Trap dpcrtlmm_int_Trap
+#  define Trap horatio_int_Trap
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #endif /*!INC_HORATIO_TRAP_H*/

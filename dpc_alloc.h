@@ -41,7 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
   extern "C" {
 #endif /*__cplusplus*/
 
-void HORATIO_FARDATA *dpcrtlmm_int_AllocEx(
+void HORATIO_FARDATA *horatio_int_AllocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,

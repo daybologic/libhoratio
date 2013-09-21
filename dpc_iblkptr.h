@@ -39,13 +39,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
-unsigned int dpcrtlmm_int_IndexFromBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
+unsigned int horatio_int_IndexFromBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
 
 #ifdef INC_HORATIO_INTDATA_H /* Build from inside? */
-#  define _IndexFromBlockPtr dpcrtlmm_int_IndexFromBlockPtr /* Lazy shortcut */
+#  define _IndexFromBlockPtr horatio_int_IndexFromBlockPtr /* Lazy shortcut */
 #else /* Build from outside? */
 #  error ("Clear off! This header is for internal library use")
 #endif /*INC_HORATIO_INTDATA_H*/

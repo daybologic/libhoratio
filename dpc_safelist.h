@@ -50,15 +50,15 @@ POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /*__cplusplus*/
 
-unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
+unsigned int horatio_SafetyList_IsArrayPtrPresent(
   const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
-void dpcrtlmm_SafetyList_Init(void);
-unsigned int dpcrtlmm_SafetyList_CountUsed(void);
-unsigned int dpcrtlmm_SafetyList_AddBase(
+void horatio_SafetyList_Init(void);
+unsigned int horatio_SafetyList_CountUsed(void);
+unsigned int horatio_SafetyList_AddBase(
   const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
-unsigned int dpcrtlmm_SafetyList_RemoveBase(
+unsigned int horatio_SafetyList_RemoveBase(
   const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 
@@ -71,11 +71,11 @@ any given host program, slightly shorter names are available internally, and
 these functions are ONLY called internally anyway, the over qualification was
 to make the map file look cleaner so programmers working on something can
 ignore this library. */
-#define SafetyList_IsArrayPtrPresent    dpcrtlmm_SafetyList_IsArrayPtrPresent
-#define SafetyList_Init                 dpcrtlmm_SafetyList_Init
-#define SafetyList_CountUsed            dpcrtlmm_SafetyList_CountUsed
-#define SafetyList_AddBase              dpcrtlmm_SafetyList_AddBase
-#define SafetyList_RemoveBase           dpcrtlmm_SafetyList_RemoveBase
+#define SafetyList_IsArrayPtrPresent    horatio_SafetyList_IsArrayPtrPresent
+#define SafetyList_Init                 horatio_SafetyList_Init
+#define SafetyList_CountUsed            horatio_SafetyList_CountUsed
+#define SafetyList_AddBase              horatio_SafetyList_AddBase
+#define SafetyList_RemoveBase           horatio_SafetyList_RemoveBase
 
 #define SafetyList_CountFree(SafetyList) \
   ( (HORATIO_SAFETYLIST_MAXSIZE) - SafetyList_CountList(safetyList) )

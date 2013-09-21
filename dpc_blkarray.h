@@ -34,14 +34,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_BLKARRAY_H
 
 #ifndef HORATIO_SOURCE
-# error ("Use HORATIO.H not seperate, internal headers")
+# error ("Use horatio.h not seperate, internal headers")
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
   extern "C" {
 #endif
 
-void dpcrtlmm_int_DestroyBlockArray(
+void horatio_int_DestroyBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 

@@ -41,8 +41,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #  error ("This header is not for you")
 #endif /*HORATIO_SOURCE*/
 
-unsigned int dpcrtlmm_int_IsBadBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
-unsigned int dpcrtlmm_int_IsBadArrayPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray);
+unsigned int horatio_int_IsBadBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
+unsigned int horatio_int_IsBadArrayPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray);
 
 #ifdef __cplusplus
   }

@@ -41,7 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
   extern "C" {
 #endif
 
-unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
+unsigned char horatio_int_ModifyDescriptorFlags(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags

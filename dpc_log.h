@@ -55,7 +55,7 @@ messages, warnings and errors */
 /*
   Write the message to the log (or do nothing if the log macro is undefined
 */
-void dpcrtlmm_int_Log(
+void horatio_int_Log(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
@@ -64,13 +64,13 @@ void dpcrtlmm_int_Log(
 
 /* To make my life easier... but MESSAGE is only defined for logging builds */
 #ifdef HORATIO_LOG
-#  define MESSAGE(sfn, sfl, msg) dpcrtlmm_int_Log((sfn), (sfl), (const unsigned short)HORATIO_LOG_MESSAGE, (msg))
+#  define MESSAGE(sfn, sfl, msg) horatio_int_Log((sfn), (sfl), (const unsigned short)HORATIO_LOG_MESSAGE, (msg))
 #else /* Non logging build */
 #  define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
 #endif /*HORATIO_LOG*/
 
-#define WARNING(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)HORATIO_LOG_WARNING, (msg))
-#define ERROR(msg) dpcrtlmm_int_Log((__FILE__), (__LINE__), (const unsigned short)HORATIO_LOG_ERROR, (msg))
+#define WARNING(msg) horatio_int_Log((__FILE__), (__LINE__), (const unsigned short)HORATIO_LOG_WARNING, (msg))
+#define ERROR(msg) horatio_int_Log((__FILE__), (__LINE__), (const unsigned short)HORATIO_LOG_ERROR, (msg))
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -42,35 +42,35 @@ extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-#  error ("Internal library users only!")  // <-- See Overlord DDRP
+#  error ("Internal library users only!")
 #endif /*!HORATIO_SOURCE*/
 
 #ifdef HORATIO_DEBUGHOOKS
 
-void dpcrtlmm_int_InitDebugHookMatrix(void); /* Call to clear all pointers in the matrix */
+void horatio_int_InitDebugHookMatrix(void); /* Call to clear all pointers in the matrix */
 
 /* Debug hook executive, caller must prepare information according to the
 rules first. */
-void dpcrtlmm_int_CallDebugHook(
+void horatio_int_CallDebugHook(
   const unsigned short HookType,
   const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
 );
 
 /*
   For user mode functions declrs:
-  dpcrtlmm_InstallDebugHook(),
-  dpcrtlmm_GetDebugHookChainCount(),
-  dpcrtlmm_GetDebugHookMatrixCount() &
-  dpcrtlmm_UninstallDebugHook()
-                                   
+  horatio_InstallDebugHook(),
+  horatio_GetDebugHookChainCount(),
+  horatio_GetDebugHookMatrixCount() &
+  horatio_UninstallDebugHook()
+
   look in the public header dpcrtlmm.h.
 */
 
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef INC_HORATIO_INTDATA_H
-#  define _InitDebugHookMatrix dpcrtlmm_int_InitDebugHookMatrix
-#  define _CallHook dpcrtlmm_int_CallHook
+#  define _InitDebugHookMatrix horatio_int_InitDebugHookMatrix
+#  define _CallHook horatio_int_CallHook
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #ifdef __cplusplus

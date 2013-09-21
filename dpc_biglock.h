@@ -43,9 +43,9 @@ POSSIBILITY OF SUCH DAMAGE.
   extern "C" {
 #endif
 
-void dpcrtlmm_int_BigLockInit(void);
-void dpcrtlmm_int_BigLockUninit(void);
-void dpcrtlmm_int_BigLock(int LockState);
+void horatio_int_BigLockInit(void);
+void horatio_int_BigLockUninit(void);
+void horatio_int_BigLock(int LockState);
 
 #ifdef __cplusplus
   }
@@ -54,8 +54,8 @@ void dpcrtlmm_int_BigLock(int LockState);
 #endif /*HORATIO_THREADS*/
 
 #ifdef HORATIO_THREADS
-#  define LOCK dpcrtlmm_int_BigLock(1);
-#  define UNLOCK dpcrtlmm_int_BigLock(0);
+#  define LOCK horatio_int_BigLock(1);
+#  define UNLOCK horatio_int_BigLock(0);
 #else
 #  define LOCK
 #  define UNLOCK

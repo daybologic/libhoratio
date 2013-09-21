@@ -41,18 +41,18 @@ POSSIBILITY OF SUCH DAMAGE.
 #  error ("This header is not for you")
 #endif /*HORATIO_SOURCE*/
 
-void dpcrtlmm_int_SetBlockLockingFlag(
+void horatio_int_SetBlockLockingFlag(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned int NewStatus
 );
 
-unsigned int dpcrtlmm_int_IsBlockLocked(
+unsigned int horatio_int_IsBlockLocked(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr
 );
 
-void dpcrtlmm_int_ToggleBlockLockingStatus(
+void horatio_int_ToggleBlockLockingStatus(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr
 );

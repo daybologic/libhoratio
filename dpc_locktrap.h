@@ -46,7 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef __cplusplus
 extern "C" {
 #endif
-unsigned int dpcrtlmm_int_LockTrap(
+unsigned int horatio_int_LockTrap(
   const char *FuncName,
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
@@ -56,7 +56,7 @@ unsigned int dpcrtlmm_int_LockTrap(
 #endif
 
 #ifdef INC_HORATIO_INTDATA_H
-#  define _LockTrap dpcrtlmm_int_LockTrap
+#  define _LockTrap horatio_int_LockTrap
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #endif /*!INC_HORATIO_LOCKTRAP_H*/
