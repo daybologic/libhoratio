@@ -636,7 +636,7 @@ to ignore certain traps. */
 /* New in 1.1.4, define USING_DPCRTLMM before including this header if
 you wish to make normal C runtime using code switch to libhoratio code
 without changing all the calls.  In some custom distributions this was
-done with usehoratio.h or similar.  Nb. USING_DPCRTLMM is the legacy
+done with usedpcrtlmm.h or similar.  Nb. USING_DPCRTLMM is the legacy
 name for USING_HORATIO */
 
 #ifdef USING_DPCRTLMM
