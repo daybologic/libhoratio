@@ -38,40 +38,40 @@ internal data for the library. */
 #include "dpc_build.h" /* Build parameters */
 
 /* Internal library data */
-extern PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */
+extern PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY /* New NULL block array support enabled? */
-  extern S_HORATIO_BLOCKDESCARRAY dpcrtlmm_int__defaultArray; /* Always here, never created, never destroyed accessable by specifying NULL for an array pointer */
+  extern S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray; /* Always here, never created, never destroyed accessable by specifying NULL for an array pointer */
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
-extern unsigned int dpcrtlmm_int__libStarted; /* Set TRUE when library is started */
-extern void (*dpcrtlmm_int__UserTrapCallback)(const unsigned int Id, const char* Message); /* The user trap handle must not be called by us unless is is a valid pointer */
-extern unsigned int dpcrtlmm_int__userTrapCallbackIsHook; /* Indication as to the manner in which the user trap callback expects to be treated, as a hook or as a handler */
+extern unsigned int horatio_int__libStarted; /* Set TRUE when library is started */
+extern void (*horatio_int__UserTrapCallback)(const unsigned int Id, const char* Message); /* The user trap handle must not be called by us unless is is a valid pointer */
+extern unsigned int horatio_int__userTrapCallbackIsHook; /* Indication as to the manner in which the user trap callback expects to be treated, as a hook or as a handler */
 #ifdef HORATIO_DEBUGHOOKS
-extern unsigned int (*dpcrtlmm_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length) */
+extern unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length) */
 #endif /*HORATIO_DEBUGHOOKS*/
 #ifdef HORATIO_NONULL_BLOCKDESCARRAY
-# define dpcrtlmm_int__ResolveArrayPtr(p) (p)  /* Resolving not neccersary, it's for the NULL array */
+# define horatio_int__ResolveArrayPtr(p) (p)  /* Resolving not neccersary, it's for the NULL array */
 #else
-# define dpcrtlmm_int__ResolveArrayPtr(p) ((p) ? (p) : (&dpcrtlmm_int__defaultArray))
+# define horatio_int__ResolveArrayPtr(p) ((p) ? (p) : (&horatio_int__defaultArray))
 #endif /*HORATIO_NONULL_BLOCKDESCARRAY*/
 /* Statistics */
-extern unsigned long dpcrtlmm_int__blockCount;
-extern unsigned long dpcrtlmm_int__blockCountPeak;
-extern unsigned long dpcrtlmm_int__allocCharge;
-extern unsigned long dpcrtlmm_int__allocPeak;
+extern unsigned long horatio_int__blockCount;
+extern unsigned long horatio_int__blockCountPeak;
+extern unsigned long horatio_int__allocCharge;
+extern unsigned long horatio_int__allocPeak;
 
 /* Magic lazy references for library's own use */
-#define _safetyList dpcrtlmm_int__safetyList
+#define _safetyList horatio_int__safetyList
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY
-#  define _defaultArray dpcrtlmm_int__defaultArray
+#  define _defaultArray horatio_int__defaultArray
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
-#define _libStarted dpcrtlmm_int__libStarted
-#define _UserTrapCallback dpcrtlmm_int__UserTrapCallback
-#define _userTrapCallbackIsHook dpcrtlmm_int__userTrapCallbackIsHook
-#define _debugHookMatrix dpcrtlmm_int__debugHookMatrix
-#define _ResolveArrayPtr dpcrtlmm_int__ResolveArrayPtr
-#define _blockCount dpcrtlmm_int__blockCount
-#define _blockCountPeak dpcrtlmm_int__blockCountPeak
-#define _allocCharge dpcrtlmm_int__allocCharge
-#define _allocPeak dpcrtlmm_int__allocPeak
+#define _libStarted horatio_int__libStarted
+#define _UserTrapCallback horatio_int__UserTrapCallback
+#define _userTrapCallbackIsHook horatio_int__userTrapCallbackIsHook
+#define _debugHookMatrix horatio_int__debugHookMatrix
+#define _ResolveArrayPtr horatio_int__ResolveArrayPtr
+#define _blockCount horatio_int__blockCount
+#define _blockCountPeak horatio_int__blockCountPeak
+#define _allocCharge horatio_int__allocCharge
+#define _allocPeak horatio_int__allocPeak
 
 #endif /*!INC_HORATIO_INTDATA_H*/
