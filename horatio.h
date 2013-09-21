@@ -574,7 +574,7 @@ unsigned char horatio_AreTrapsEnabled(void);
 void horatio_DisableTraps(void);
 void horatio_EnableTraps(void);
 
-extern unsigned char dpcrtlmm__EnableTraps; /* Obsolete */
+extern unsigned char horatio__EnableTraps; /* Obsolete */
 
 /* Statistics functions */
 unsigned long horatio_GetBlockCount(void); /* Returns number of allocated blocks */
@@ -636,7 +636,7 @@ to ignore certain traps. */
 /* New in 1.1.4, define USING_DPCRTLMM before including this header if
 you wish to make normal C runtime using code switch to libhoratio code
 without changing all the calls.  In some custom distributions this was
-done with usedpcrtlmm.h or similar.  Nb. USING_DPCRTLMM is the legacy
+done with usehoratio.h or similar.  Nb. USING_DPCRTLMM is the legacy
 name for USING_HORATIO */
 
 #ifdef USING_DPCRTLMM

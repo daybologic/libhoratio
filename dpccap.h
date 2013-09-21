@@ -134,7 +134,7 @@ namespace Overlord {
 
     void Free(void* Ptr);
 
-    // dpcrtlmm should be using a constant pointer for this!
+    // horatio should be using a constant pointer for this!
     size_t GetBlockSize(const void* BlockPtr) const;
 
     int IsBadBlockPtr(const void* BlockPtr) const;

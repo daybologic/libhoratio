@@ -63,7 +63,7 @@ void horatio_int_CallDebugHook(
   horatio_GetDebugHookMatrixCount() &
   horatio_UninstallDebugHook()
 
-  look in the public header dpcrtlmm.h.
+  look in the public header horatio.h.
 */
 
 #endif /*HORATIO_DEBUGHOOKS*/
