@@ -120,15 +120,15 @@ static Mutant bigLock;
 #  endif /*HORATIO_THREADS_PTHREAD_NP*/
 #endif /*HORATIO_THREADS_PTHREAD*/
 
-void dpcrtlmm_int_BigLockInit() {
+void horatio_int_BigLockInit() {
   InitialiseMutant(&bigLock);
 }
 
-void dpcrtlmm_int_BigLockUninit() {
+void horatio_int_BigLockUninit() {
   DestroyMutant(&bigLock);
 }
 
-void dpcrtlmm_int_BigLock(int LockState) {
+void horatio_int_BigLock(int LockState) {
   if ( LockState )
     LockMutant(&bigLock);
   else
@@ -149,5 +149,5 @@ void InitNPMutant(pthread_mutex_t* PMutant) {
 #endif /*HORATIO_THREADS_PTHREAD*/
 
 #else /* !HORATIO_THREADS -- Threads not required */
-  char dpcrtlmm_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */
+  char horatio_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */
 #endif /*HORATIO_THREADS*/

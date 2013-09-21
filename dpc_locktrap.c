@@ -59,13 +59,13 @@ trap.  Otherwise the function does not return. */
 #include "dpc_bdflags.h" /* For internal interface */
 #include "dpc_locktrap.h"
 
-unsigned int dpcrtlmm_int_LockTrap(
+unsigned int horatio_int_LockTrap(
   const char *FuncName,
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
 ) {
   /* Block locked? */
-  if (dpcrtlmm_int_IsBlockLocked(PBlockArray, BlockPtr)) {
+  if (horatio_int_IsBlockLocked(PBlockArray, BlockPtr)) {
     char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For this trap message */
 
     sprintf(
@@ -77,7 +77,7 @@ unsigned int dpcrtlmm_int_LockTrap(
       FuncName,
       HORATIO_FMTPTRPFX, (void*)PBlockArray,
       HORATIO_FMTPTRPFX, BlockPtr,
-      (unsigned short)dpcrtlmm_int_ModifyDescriptorFlags(
+      (unsigned short)horatio_int_ModifyDescriptorFlags(
         PBlockArray,
         BlockPtr,
         NULL

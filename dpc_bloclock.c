@@ -51,39 +51,39 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_bdflags.h" /* Need this to get around the lock */
 #include "dpc_bloclock.h"
 
-void dpcrtlmm_SetBlockLockingFlag(
+void horatio_SetBlockLockingFlag(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned int NewStatus
 ) {
   LOCK
-  dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
+  horatio_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
   UNLOCK
 }
 
-unsigned int dpcrtlmm_IsBlockLocked(
+unsigned int horatio_IsBlockLocked(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr
 ) {
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);
+  ret = horatio_int_IsBlockLocked(PBlockArray, Ptr);
   UNLOCK
 
   return ret;
 }
 
-void dpcrtlmm_ToggleBlockLockingStatus(
+void horatio_ToggleBlockLockingStatus(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr
 ) {
   LOCK
-  dpcrtlmm_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
+  horatio_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
   UNLOCK
 }
 
-void dpcrtlmm_int_SetBlockLockingFlag(
+void horatio_int_SetBlockLockingFlag(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned int NewStatus
@@ -91,38 +91,38 @@ void dpcrtlmm_int_SetBlockLockingFlag(
   unsigned char flags;
 
   /* Get current flags */
-  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
+  flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
   if (NewStatus) /* Locking? */
     flags |= 1; /* Set lock bit */
   else /* Unlocking? */
     flags |= ~1; /* Clear lock bit */
 
   /* Set the new flags */
-  dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
+  horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
   return; /* That was simple enough, I can drink some water now */
 }
 
-unsigned int dpcrtlmm_int_IsBlockLocked(
+unsigned int horatio_int_IsBlockLocked(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr
 ) {
   unsigned char flags;
 
   /* Get the flags for the descriptor */
-  flags = dpcrtlmm_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
+  flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
   if ( ((flags & 1) == 1) ) /* The lock bit is set? */
     return 1U; /* Yes, the block is locked */
   return 0U; /* No, the block is not locked */
 }
 
-void dpcrtlmm_int_ToggleBlockLockingStatus(
+void horatio_int_ToggleBlockLockingStatus(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr
 ) {
   /* Get current status */
-  unsigned int oldLockStat = dpcrtlmm_int_IsBlockLocked(PBlockArray, Ptr);
+  unsigned int oldLockStat = horatio_int_IsBlockLocked(PBlockArray, Ptr);
   /* Set locking state as NOT current locking state */
-  dpcrtlmm_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat);
+  horatio_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat);
 }
 
 

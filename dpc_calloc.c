@@ -45,7 +45,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "restricted_horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_log.h" /* Main logging support */
-#include "dpc_iblkptr.h" /* dpcrtlmm_int_IndexFromBlockPtr() */
+#include "dpc_iblkptr.h" /* horatio_int_IndexFromBlockPtr() */
 #include "dpc_dbghooks.h" /* Debug hook executive */
 #include "dpc_biglock.h" /* For entire library mutual exclusion */
 #include "dpc_alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
@@ -64,7 +64,7 @@ static void OurLog(
 #endif /*OURLOG*/
 
 #define OURLOG(f, l, sev, msg) OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
+static void HORATIO_FARDATA* horatio_int_CallocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
@@ -72,7 +72,7 @@ static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
   const unsigned int Line
 );
 
-void HORATIO_FARDATA* dpcrtlmm_CallocEx(
+void HORATIO_FARDATA* horatio_CallocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
@@ -82,13 +82,13 @@ void HORATIO_FARDATA* dpcrtlmm_CallocEx(
   void HORATIO_FARDATA* ret;
 
   LOCK
-  ret = dpcrtlmm_int_CallocEx(PBlockArray, N, NewBlockSize, File, Line);
+  ret = horatio_int_CallocEx(PBlockArray, N, NewBlockSize, File, Line);
   UNLOCK
 
   return ret;
 }
 
-static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
+static void HORATIO_FARDATA* horatio_int_CallocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
@@ -120,11 +120,11 @@ static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
   debugHookInfo.AllocReq = (N*NewBlockSize);
   #endif /*HORATIO_DEBUGHOOKS*/
 
-  resultantPtr = dpcrtlmm_int_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
+  resultantPtr = horatio_int_AllocEx( PBlockArray, (N*NewBlockSize), File, Line); /* Call Alloc() */
   if (resultantPtr) {
     #ifdef HORATIO_DEBUGHOOKS
     /* Ahh damn it, I'll have to look up the descriptor for this block */
-    unsigned int blkIndex = dpcrtlmm_int_IndexFromBlockPtr(PBlockArray, resultantPtr);
+    unsigned int blkIndex = horatio_int_IndexFromBlockPtr(PBlockArray, resultantPtr);
     debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[blkIndex];
     debugHookInfo.Success = 1U;
     #endif /*HORATIO_DEBUGHOOKS*/
@@ -146,7 +146,7 @@ static void HORATIO_FARDATA* dpcrtlmm_int_CallocEx(
   }
 
   #ifdef HORATIO_DEBUGHOOKS
-  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_CALLOC, &debugHookInfo);
+  horatio_int_CallDebugHook(HORATIO_HOOK_CALLOC, &debugHookInfo);
   #endif /*HORATIO_DEBUGHOOKS*/
   return resultantPtr;
 }
@@ -172,7 +172,7 @@ static void OurLog(
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
+      horatio_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

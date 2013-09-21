@@ -72,7 +72,7 @@ causes a warning on your compiler, I aplogise!
             (sizeof((buff))/sizeof((buff)[0])-1) \
             )
 
-void dpcrtlmm_int_Log(
+void horatio_int_Log(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,

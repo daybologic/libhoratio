@@ -58,7 +58,7 @@ Created May 3rd 2000
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_safelist.h"
 
-unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
+unsigned int horatio_SafetyList_IsArrayPtrPresent(
   const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 ) {
   if (ArrayBase) {
@@ -69,7 +69,7 @@ unsigned int dpcrtlmm_SafetyList_IsArrayPtrPresent(
   return 0U; /* Not present or bad params */
 }
 
-void dpcrtlmm_SafetyList_Init() {
+void horatio_SafetyList_Init() {
   unsigned int i;
 
   /* All possible entries in list */
@@ -79,7 +79,7 @@ void dpcrtlmm_SafetyList_Init() {
   return;
 }
 
-unsigned int dpcrtlmm_SafetyList_CountUsed() {
+unsigned int horatio_SafetyList_CountUsed() {
   unsigned int sli, slc = 0U;
 
   for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
@@ -90,7 +90,7 @@ unsigned int dpcrtlmm_SafetyList_CountUsed() {
   return slc; /* Give count to caller */
 }
 
-unsigned int dpcrtlmm_SafetyList_AddBase(
+unsigned int horatio_SafetyList_AddBase(
   const PS_HORATIO_BLOCKDESCARRAY PArrayBase
 ) {
   unsigned int sli;
@@ -117,7 +117,7 @@ unsigned int dpcrtlmm_SafetyList_AddBase(
   side effect is to make if more difficult to localize a leak, however. */
 }
 
-unsigned int dpcrtlmm_SafetyList_RemoveBase(
+unsigned int horatio_SafetyList_RemoveBase(
   const PS_HORATIO_BLOCKDESCARRAY PArrayBase
 ) {
   unsigned int sli;

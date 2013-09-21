@@ -60,7 +60,7 @@ POSSIBILITY OF SUCH DAMAGE.
   I can be bothered
 */
 
-unsigned char dpcrtlmm_ModifyDescriptorFlags(
+unsigned char horatio_ModifyDescriptorFlags(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags
@@ -68,7 +68,7 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
   unsigned char ret;
 
   LOCK
-  ret = dpcrtlmm_int_ModifyDescriptorFlags(
+  ret = horatio_int_ModifyDescriptorFlags(
     PBlockArray,
     Ptr,
     PNewFlags
@@ -78,7 +78,7 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
   return ret;
 }
 
-unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
+unsigned char horatio_int_ModifyDescriptorFlags(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags
@@ -98,7 +98,7 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
   memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
 
   debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
-  indexOfBlock = dpcrtlmm_int_IndexFromBlockPtr(PBlockArray, Ptr);
+  indexOfBlock = horatio_int_IndexFromBlockPtr(PBlockArray, Ptr);
   /* Looked up the right descriptor to suit hook requirements */
   debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[indexOfBlock];
   debugHookInfo.HookType = HORATIO_HOOK_MODIFYDESCFLAGS;
@@ -116,7 +116,7 @@ unsigned char dpcrtlmm_int_ModifyDescriptorFlags(
   debugHookInfo.Success = 1U;
   debugHookInfo.Misc0 = (unsigned long)oldFlags;
   debugHookInfo.Misc1 = (unsigned long)( (PNewFlags) ? (*PNewFlags) : (oldFlags) );
-  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
+  horatio_int_CallDebugHook(HORATIO_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
   #endif /*HORATIO_DEBUGHOOKS*/
 
   return oldFlags; /* Give the old flags back to the caller */

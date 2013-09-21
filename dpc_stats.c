@@ -70,7 +70,7 @@ static void CrackAndPrintFlags(
   unsigned char Flags
 );
 
-unsigned long dpcrtlmm_GetBlockCount() {
+unsigned long horatio_GetBlockCount() {
   unsigned long ret;
 
   LOCK
@@ -80,7 +80,7 @@ unsigned long dpcrtlmm_GetBlockCount() {
   return ret;
 }
 
-void dpcrtlmm_GetStats(
+void horatio_GetStats(
   PS_HORATIO_STATS PReadStats
 ) {
   LOCK
@@ -133,7 +133,7 @@ static void CountFlagsInUse(
   }
 }
 
-void dpcrtlmm_Dump(
+void horatio_Dump(
   FILE *Target
 ) {
   LOCK

@@ -53,32 +53,32 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_biglock.h" /* Library mutual exclusion */
 #include "dpc_isbad.h" /* Internal interface to block testers */
 
-static size_t dpcrtlmm_int_GetBlockSize(
+static size_t horatio_int_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *BlockPtr
 );
 
-size_t dpcrtlmm_GetBlockSize(
+size_t horatio_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *BlockPtr
 ) {
   size_t ret;
 
   LOCK
-  ret = dpcrtlmm_int_GetBlockSize(PBlockArray, BlockPtr);
+  ret = horatio_int_GetBlockSize(PBlockArray, BlockPtr);
   UNLOCK
 
   return ret;
 }
 
-static size_t dpcrtlmm_int_GetBlockSize(
+static size_t horatio_int_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *BlockPtr
 ) {
   /* First test pointers */
   _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
 
-  if (dpcrtlmm_int_IsBadBlockPtr(PBlockArray, BlockPtr)) { /* Block pointer is invalid? */
+  if (horatio_int_IsBadBlockPtr(PBlockArray, BlockPtr)) { /* Block pointer is invalid? */
     char trapMsg[MAX_TRAP_STRING_LENGTH+1];
 
     sprintf(

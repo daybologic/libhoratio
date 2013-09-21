@@ -60,7 +60,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_biglock.h" /* Mutual exclusion */
 #include "dpc_isbad.h"
 
-unsigned int dpcrtlmm_IsBadBlockPtr(
+unsigned int horatio_IsBadBlockPtr(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
 ) {
@@ -68,26 +68,26 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_IsBadBlockPtr(PBlockArray, BlockPtr);
+  ret = horatio_int_IsBadBlockPtr(PBlockArray, BlockPtr);
   UNLOCK
 
   return ret;
 }
 
-unsigned int dpcrtlmm_IsBadArrayPtr(
+unsigned int horatio_IsBadArrayPtr(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* Thread safe wrapper for IsBadArrayPtr() */
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_IsBadArrayPtr(PBlockArray);
+  ret = horatio_int_IsBadArrayPtr(PBlockArray);
   UNLOCK
 
   return ret;
 }
 
-unsigned int dpcrtlmm_int_IsBadBlockPtr(
+unsigned int horatio_int_IsBadBlockPtr(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
 ) {
@@ -96,7 +96,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
   PS_HORATIO_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
   /* Test for bad block array */
-  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* Block array bad? */
+  if ( horatio_int_IsBadArrayPtr(PBlockArray) ) { /* Block array bad? */
     /* Fire a trap */
     char trapmsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
 
@@ -121,7 +121,7 @@ unsigned int dpcrtlmm_int_IsBadBlockPtr(
   return 1U; /* Yes, block is bad */
 }
 
-unsigned int dpcrtlmm_int_IsBadArrayPtr(
+unsigned int horatio_int_IsBadArrayPtr(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* I've rewritten this function so that is can support NULL arrays

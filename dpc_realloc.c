@@ -66,13 +66,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_log.h"
 #include "dpc_biglock.h" /* Mutual exclusion */
 
-static void HORATIO_FARDATA *dpcrtlmm_int_Realloc(
+static void HORATIO_FARDATA *horatio_int_Realloc(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *OldBlockPtr,
   const size_t NewSize
 );
 
-void HORATIO_FARDATA *dpcrtlmm_Realloc(
+void HORATIO_FARDATA *horatio_Realloc(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *OldBlockPtr,
   const size_t NewSize
@@ -80,13 +80,13 @@ void HORATIO_FARDATA *dpcrtlmm_Realloc(
   void HORATIO_FARDATA *ret;
 
   LOCK
-  ret = dpcrtlmm_int_Realloc(PBlockArray, OldBlockPtr, NewSize);
+  ret = horatio_int_Realloc(PBlockArray, OldBlockPtr, NewSize);
   UNLOCK
 
   return ret;
 }
 
-static void HORATIO_FARDATA *dpcrtlmm_int_Realloc(
+static void HORATIO_FARDATA *horatio_int_Realloc(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *OldBlockPtr,
   const size_t NewSize
@@ -108,16 +108,16 @@ static void HORATIO_FARDATA *dpcrtlmm_int_Realloc(
 
   if (!NewSize) { /* No new size, hmm, must be wanting free() really */
     WARNING("Dynamic possibly non-portable use of realloc() as a free-er");
-    dpcrtlmm_Free(PBlockArray, OldBlockPtr); /* Give the caller what they want */
+    horatio_Free(PBlockArray, OldBlockPtr); /* Give the caller what they want */
     return NULL;
   }
 
   if ( !OldBlockPtr ) { /* This is a non-portable attempt to use realloc as an initial allocator */
     WARNING("Dynamic possibly non-portable use of realloc() as an initial allocator");
-    return dpcrtlmm_Alloc(PBlockArray, NewSize);
+    return horatio_Alloc(PBlockArray, NewSize);
   }
 
-  blockIndex = dpcrtlmm_int_IndexFromBlockPtr(PRArr, OldBlockPtr);
+  blockIndex = horatio_int_IndexFromBlockPtr(PRArr, OldBlockPtr);
   if ( PRArr->Descriptors[blockIndex].Size == NewSize ) { /* Same size ?! */
     /* The block is already the requested size! */
     return ptr; /* Give present pointer back to caller wihout touching it */
@@ -141,7 +141,7 @@ static void HORATIO_FARDATA *dpcrtlmm_int_Realloc(
   }
   /* Misc1 points to the new block, the hook routine can dereference it if it wants to */
   debugHookInfo.Misc1 = (unsigned long)sizePtr; /* Hook routine should cast it back to void* */
-  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_REALLOC, &debugHookInfo);
+  horatio_int_CallDebugHook(HORATIO_HOOK_REALLOC, &debugHookInfo);
   #endif /*HORATIO_DEBUGHOOKS*/
 
   ptr = sizePtr; /* Set new pointer as the return value */

@@ -69,7 +69,7 @@ POSSIBILITY OF SUCH DAMAGE.
   OURLOG(__FILE__, __LINE__, (sev), (msg))
 
 /* Function under the locked version */
-static void dpcrtlmm_int_Free(
+static void horatio_int_Free(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *Ptr
 );
@@ -99,18 +99,18 @@ static void OurLog(
   const char *Msg
 );
 
-void dpcrtlmm_Free(
+void horatio_Free(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *Ptr
 ) {
   /* Thread safe wrapper around Free() */
 
   LOCK
-  dpcrtlmm_int_Free(PBlockArray, Ptr);
+  horatio_int_Free(PBlockArray, Ptr);
   UNLOCK
 }
 
-static void dpcrtlmm_int_Free(
+static void horatio_int_Free(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *Ptr
 ) {
@@ -128,7 +128,7 @@ static void dpcrtlmm_int_Free(
 
   PRArr = _ResolveArrayPtr(PBlockArray); /* Resolve incase block array is NULL */
   _VerifyPtrs(funcName, PBlockArray, NULL); /* Don't check if bad block in this trap, use own trap... */
-  if ( dpcrtlmm_int_IsBadBlockPtr(PBlockArray, Ptr) ) { /* Block pointer not valid? */
+  if ( horatio_int_IsBadBlockPtr(PBlockArray, Ptr) ) { /* Block pointer not valid? */
     sprintf(
       trapMsg,
       #ifdef HAVE_SNPRINTF
@@ -171,8 +171,8 @@ static void dpcrtlmm_int_Free(
         free(PRArr->Descriptors[i].SourceFile); /* Now we don't! */
 
       /* Update library stats */
-      dpcrtlmm_int__blockCount--;
-      dpcrtlmm_int__allocCharge -= PRArr->Descriptors[i].Size;
+      horatio_int__blockCount--;
+      horatio_int__allocCharge -= PRArr->Descriptors[i].Size;
 
       if (PRArr->Count >= 2) /* These are other items in the array? */
         Moveup(PRArr, i); /* Moveup following blocks descriptors in array to remove blank space */
@@ -187,7 +187,7 @@ static void dpcrtlmm_int_Free(
       /* AlloqReq is not applicable */
       debugTrapInfo.Success = 1U; /* Yup, success! */
       /* The rest are currently reserved. */
-      dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_FREE, &debugTrapInfo);
+      horatio_int_CallDebugHook(HORATIO_HOOK_FREE, &debugTrapInfo);
       #endif /*HORATIO_DEBUGHOOKS*/
 
       break; /* Don't look at anymore blocks */
@@ -332,7 +332,7 @@ static void OurLog(
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
+      horatio_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

@@ -78,7 +78,7 @@ static void TrapOnBadBlockPtr(
   const void HORATIO_FARDATA *BlockPtr
 );
 
-void dpcrtlmm_int_VerifyPtrs(
+void horatio_int_VerifyPtrs(
   const char *FuncName,
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
@@ -104,7 +104,7 @@ static void TrapOnBadBlockArray(
   const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
   size_t dynMsgSize = ((FuncName) ? (strlen(FuncName)) : (0)) + strlen(cTrapMsg0) + 32; /* Enough space for address and NULL (and more) */ 
-  if ( !dpcrtlmm_int_IsBadArrayPtr(PBlockArray) )
+  if ( !horatio_int_IsBadArrayPtr(PBlockArray) )
     return;
 
   /* The array base is bad */
@@ -122,7 +122,7 @@ static void TrapOnBadBlockArray(
 
     Trap(HORATIO_TRAP_BAD_BLOCK_ARRAY, dynMsg);
   } else { /* malloc() failed */
-    if ( dpcrtlmm__EnableTraps ) abort();
+    if ( horatio__EnableTraps ) abort();
   }
 }
 
@@ -136,7 +136,7 @@ static void TrapOnBadBlockPtr(
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
   #endif /*HAVE_SNPRINTF*/
 
-  if ( dpcrtlmm_int_IsBadArrayPtr(PBlockArray) ) { /* The pointer to the array is invalid */
+  if ( horatio_int_IsBadArrayPtr(PBlockArray) ) { /* The pointer to the array is invalid */
     char blankStr[] = "";
     const char *PusedFuncName; /* Points to function name to use (not dynamic) */
 
@@ -161,7 +161,7 @@ static void TrapOnBadBlockPtr(
 
   /* The array is a valid and acceptable pointer, pass on to IsBadBlockPtr()
   and if it's bad fire a trap. */
-  if ( dpcrtlmm_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) { /* Is bad block pointer? */
+  if ( horatio_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) { /* Is bad block pointer? */
     char *PusedFuncName;
     int pusedDynamic;
     char blankStr[] = "";

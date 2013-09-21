@@ -71,33 +71,33 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_biglock.h" /* For total library mutual exclusion */
 #include "dpc_blkarray.h"
 
-static PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray(void);
-static unsigned int dpcrtlmm_int_IsDefaultBlockArray(
+static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray(void);
+static unsigned int horatio_int_IsDefaultBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 
-PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray() {
+PS_HORATIO_BLOCKDESCARRAY horatio_CreateBlockArray() {
   /* Thread safe wrapper for CreateBlockArray() */
   PS_HORATIO_BLOCKDESCARRAY ret;
 
   LOCK
-  ret = dpcrtlmm_int_CreateBlockArray();
+  ret = horatio_int_CreateBlockArray();
   UNLOCK
 
   return ret;
 }
 
-void dpcrtlmm_DestroyBlockArray(
+void horatio_DestroyBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* Thread safe wrapper for DestroyBlockArray() */
 
   LOCK
-  dpcrtlmm_int_DestroyBlockArray(PBlockArray);
+  horatio_int_DestroyBlockArray(PBlockArray);
   UNLOCK
 }
 
-unsigned int dpcrtlmm_IsDefaultBlockArray(
+unsigned int horatio_IsDefaultBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* Thread safe wrapper for IsDefaultBlockArray() */
@@ -105,13 +105,13 @@ unsigned int dpcrtlmm_IsDefaultBlockArray(
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_IsDefaultBlockArray(PBlockArray);
+  ret = horatio_int_IsDefaultBlockArray(PBlockArray);
   UNLOCK
 
   return ret;
 }
 
-static PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
+static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
   PS_HORATIO_BLOCKDESCARRAY Parray; /* Pointer for caller */
   #ifdef HORATIO_LOG
   char logMsg[MAX_TRAP_STRING_LENGTH+1];
@@ -140,7 +140,7 @@ static PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
     /* PRelDesc is nothing, there is no related descriptor */
     debugHookInfo.Success = 0U; /* Ahh, no failure! */
     /* The rest are reserved or not used */
-    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_CREATEBLOCKARRAY, &debugHookInfo);   /* Call the debug hook executive */
+    horatio_int_CallDebugHook(HORATIO_HOOK_CREATEBLOCKARRAY, &debugHookInfo);   /* Call the debug hook executive */
     #endif /*HORATIO_DEBUGHOOKS*/
     return Parray; /* Give the NULL pointer back to the caller */
   }
@@ -167,12 +167,12 @@ static PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_int_CreateBlockArray() {
   /* Set up more hook information to indicate success */
   debugHookInfo.PRelArr = Parray; /* The relavant array in this case is the one allocated */
   debugHookInfo.Success = 1U; /* Yay, success! */
-  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_CREATEBLOCKARRAY, &debugHookInfo);   /* Call the debug hook executive */
+  horatio_int_CallDebugHook(HORATIO_HOOK_CREATEBLOCKARRAY, &debugHookInfo);   /* Call the debug hook executive */
   #endif /*HORATIO_DEBUGHOOKS*/
   return Parray; /* Give new pointer to the caller */
 }
 
-void dpcrtlmm_int_DestroyBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
+void horatio_int_DestroyBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
   /* locals */
   unsigned int sli; /* Safety list loop processing */
   char trapStr[MAX_TRAP_STRING_LENGTH+1]; /* Sometimes used for creating trap strings */
@@ -241,7 +241,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
         #ifdef HORATIO_DEBUGHOOKS
         /* Success, call hooks */
         debugHookInfo.Success = 1U; /* Wicked! */
-        dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_DESTROYBLOCKARRAY, &debugHookInfo);
+        horatio_int_CallDebugHook(HORATIO_HOOK_DESTROYBLOCKARRAY, &debugHookInfo);
         #endif /*HORATIO_DEBUGHOOKS*/
         return; /* Exit to caller */
       }
@@ -251,7 +251,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
   #ifdef HORATIO_DEBUGHOOKS
   /* Call hooks */
   debugHookInfo.Success = 0U; /* Failed */
-  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_DESTROYBLOCKARRAY, &debugHookInfo);
+  horatio_int_CallDebugHook(HORATIO_HOOK_DESTROYBLOCKARRAY, &debugHookInfo);
   #endif /*HORATIO_DEBUGHOOKS*/
   /* Fire trap */
   sprintf(
@@ -266,7 +266,7 @@ void dpcrtlmm_int_DestroyBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
   return;
 }
 
-static unsigned int dpcrtlmm_int_IsDefaultBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
+static unsigned int horatio_int_IsDefaultBlockArray( PS_HORATIO_BLOCKDESCARRAY PBlockArray ) {
   #ifdef HORATIO_NONULL_BLOCKDESCARRAY
   return 0; /* Default (NULL) array does not exist */
   #else

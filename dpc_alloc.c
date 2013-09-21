@@ -99,7 +99,7 @@ static unsigned int GrowBlockArray(
 #define OURLOG_POS(sev, msg) \
   OURLOG(__FILE__, __LINE__, (sev), (msg))
 
-void HORATIO_FARDATA* dpcrtlmm_AllocEx(
+void HORATIO_FARDATA* horatio_AllocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,
@@ -109,13 +109,13 @@ void HORATIO_FARDATA* dpcrtlmm_AllocEx(
   void HORATIO_FARDATA* ret;
 
   LOCK
-  ret = dpcrtlmm_int_AllocEx(PBlockArray, NewBlockSize, File, Line);
+  ret = horatio_int_AllocEx(PBlockArray, NewBlockSize, File, Line);
   UNLOCK
 
   return ret;
 }
 
-void HORATIO_FARDATA* dpcrtlmm_int_AllocEx(
+void HORATIO_FARDATA* horatio_int_AllocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,
@@ -201,13 +201,13 @@ void HORATIO_FARDATA* dpcrtlmm_int_AllocEx(
   }
 
   /* Update library statistics */
-  dpcrtlmm_int__blockCount++;
-  dpcrtlmm_int__allocCharge += NewBlockSize;
+  horatio_int__blockCount++;
+  horatio_int__allocCharge += NewBlockSize;
   /* Update peaks */
-  if ( dpcrtlmm_int__blockCount > dpcrtlmm_int__blockCountPeak )
-    dpcrtlmm_int__blockCountPeak = dpcrtlmm_int__blockCount;
-  if ( dpcrtlmm_int__allocCharge > dpcrtlmm_int__allocPeak )
-    dpcrtlmm_int__allocPeak = dpcrtlmm_int__allocCharge;
+  if ( horatio_int__blockCount > horatio_int__blockCountPeak )
+    horatio_int__blockCountPeak = horatio_int__blockCount;
+  if ( horatio_int__allocCharge > horatio_int__allocPeak )
+    horatio_int__allocPeak = horatio_int__allocCharge;
 
   /* Call the debug hook executive */
   #ifdef HORATIO_DEBUGHOOKS
@@ -217,7 +217,7 @@ void HORATIO_FARDATA* dpcrtlmm_int_AllocEx(
   debugHookInfo.HookType = HORATIO_HOOK_ALLOC;
   debugHookInfo.AllocReq = (unsigned int)NewBlockSize;
   debugHookInfo.Success = 1U; /* TRUE */
-  dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_ALLOC, &debugHookInfo);
+  horatio_int_CallDebugHook(HORATIO_HOOK_ALLOC, &debugHookInfo);
   #endif /*HORATIO_DEBUGHOOKS*/
 
   return genBlockPtr; /* Give pointer to the caller */
@@ -281,7 +281,7 @@ static void OurLog(
       strcpy(PcopyStr, FuncName); /* Prepend prefix */
       strcat(PcopyStr, Str); /* Add log string after the prefix */
 
-      dpcrtlmm_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
+      horatio_int_Log(File, Line, Severity, PcopyStr); /* Pass on to the normal logger */
 
       free(PcopyStr); /* Copy can now be released */
     }

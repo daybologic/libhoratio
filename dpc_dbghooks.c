@@ -63,20 +63,20 @@ static unsigned int BadHookType(
   const unsigned int HookType
 );
 
-static unsigned int dpcrtlmm_int_InstallDebugHook(
+static unsigned int horatio_int_InstallDebugHook(
   const unsigned short HookType,
   unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 );
 
-static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
+static unsigned int horatio_int_GetDebugHookChainCount(
   const unsigned int HookType
 );
 
-static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(
+static unsigned int horatio_int_GetDebugHookMatrixCount(
   void
 );
 
-static unsigned int dpcrtlmm_int_UninstallDebugHook(
+static unsigned int horatio_int_UninstallDebugHook(
   const unsigned short HookType,
   unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 );
@@ -84,14 +84,14 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-unsigned int dpcrtlmm_InstallDebugHook(
+unsigned int horatio_InstallDebugHook(
   const unsigned short HookType,
   unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_InstallDebugHook(HookType, NewHookProc);
+  ret = horatio_int_InstallDebugHook(HookType, NewHookProc);
   UNLOCK
 
   return ret;
@@ -99,13 +99,13 @@ unsigned int dpcrtlmm_InstallDebugHook(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-unsigned int dpcrtlmm_GetDebugHookChainCount(
+unsigned int horatio_GetDebugHookChainCount(
   const unsigned int HookType
 ) {
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_GetDebugHookChainCount(HookType);
+  ret = horatio_int_GetDebugHookChainCount(HookType);
   UNLOCK
 
   return ret;
@@ -113,11 +113,11 @@ unsigned int dpcrtlmm_GetDebugHookChainCount(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
+unsigned int horatio_GetDebugHookMatrixCount() {
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_GetDebugHookMatrixCount();
+  ret = horatio_int_GetDebugHookMatrixCount();
   UNLOCK
 
   return ret;
@@ -125,14 +125,14 @@ unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-unsigned int dpcrtlmm_UninstallDebugHook(
+unsigned int horatio_UninstallDebugHook(
   const unsigned short HookType,
   unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
   unsigned int ret;
 
   LOCK
-  ret = dpcrtlmm_int_UninstallDebugHook(HookType, HookProc2Remove);
+  ret = horatio_int_UninstallDebugHook(HookType, HookProc2Remove);
   UNLOCK
 
   return ret;
@@ -140,7 +140,7 @@ unsigned int dpcrtlmm_UninstallDebugHook(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-void dpcrtlmm_int_InitDebugHookMatrix() {
+void horatio_int_InitDebugHookMatrix() {
   /* Initialize or clear the debug hook matrix */
   unsigned int chainI; /* Used during initialization of chains loop */
 
@@ -150,7 +150,7 @@ void dpcrtlmm_int_InitDebugHookMatrix() {
     for ( hookTypeI = 0U; hookTypeI < HORATIO_DEBUGHOOK_LASTHOOK+1; hookTypeI++ ) {
       unsigned int (*NULLHookPtr)(PS_HORATIO_DEBUGHOOKINFO) = NULL; /* Make NULL pointer */
 
-      dpcrtlmm_int__debugHookMatrix[(size_t)chainI][(size_t)hookTypeI] = NULLHookPtr; /* Init element */
+      horatio_int__debugHookMatrix[(size_t)chainI][(size_t)hookTypeI] = NULLHookPtr; /* Init element */
     }
   }
   return;
@@ -158,7 +158,7 @@ void dpcrtlmm_int_InitDebugHookMatrix() {
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-void dpcrtlmm_int_CallDebugHook(
+void horatio_int_CallDebugHook(
   const unsigned short HookType,
   const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
 ) {
@@ -193,7 +193,7 @@ void dpcrtlmm_int_CallDebugHook(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-static unsigned int dpcrtlmm_int_InstallDebugHook(
+static unsigned int horatio_int_InstallDebugHook(
   const unsigned short HookType,
   unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
@@ -215,9 +215,9 @@ static unsigned int dpcrtlmm_int_InstallDebugHook(
     unsigned short nextHook;
 
     for ( nextHook = (unsigned short)0x0000U; nextHook < HORATIO_DEBUGHOOK_LASTHOOK; nextHook++ ) { /* Go through all valid hook types */
-      if ( !dpcrtlmm_InstallDebugHook(nextHook, NewHookProc) ) { /* Call ourselves back to sort it out */
+      if ( !horatio_InstallDebugHook(nextHook, NewHookProc) ) { /* Call ourselves back to sort it out */
         /* Failed to install a hook? */
-        dpcrtlmm_UninstallDebugHook(HORATIO_HOOK_ALL, NewHookProc); /* Remove all of the hooks which are for this address */
+        horatio_UninstallDebugHook(HORATIO_HOOK_ALL, NewHookProc); /* Remove all of the hooks which are for this address */
         return 0U; /* Report failure for the whole lot, FALSE return */
       }
       set = 1U; /* Report success, in a while */
@@ -229,7 +229,7 @@ static unsigned int dpcrtlmm_int_InstallDebugHook(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
-static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
+static unsigned int horatio_int_GetDebugHookChainCount(
   const unsigned int HookType
 ) {
   unsigned int i;
@@ -245,18 +245,18 @@ static unsigned int dpcrtlmm_int_GetDebugHookChainCount(
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
-static unsigned int dpcrtlmm_int_GetDebugHookMatrixCount(void) {
+static unsigned int horatio_int_GetDebugHookMatrixCount(void) {
   unsigned int i;
   unsigned total = 0U;
 
   for ( i = 0U; i <= HORATIO_DEBUGHOOK_LASTHOOK; i++ ) /* All types of hooks */
-    total += dpcrtlmm_int_GetDebugHookChainCount(i); /* Add chain contents to total for all chains */
+    total += horatio_int_GetDebugHookChainCount(i); /* Add chain contents to total for all chains */
 
   return total; /* Give total to caller */
 }
 
 #ifdef HORATIO_DEBUGHOOKS
-static unsigned int dpcrtlmm_int_UninstallDebugHook(
+static unsigned int horatio_int_UninstallDebugHook(
   const unsigned short HookType,
   unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
@@ -281,7 +281,7 @@ static unsigned int dpcrtlmm_int_UninstallDebugHook(
     retStatus = 1U; /* We always say success */
 
     for (si = (unsigned short)(0x0000U); si <= HORATIO_DEBUGHOOK_LASTHOOK; si++) /* All possible debug hook types */
-      dpcrtlmm_UninstallDebugHook(si, HookProc2Remove); /* Uninstall this hook from this type */
+      horatio_UninstallDebugHook(si, HookProc2Remove); /* Uninstall this hook from this type */
   }
 
   return retStatus; /* Give status to caller */

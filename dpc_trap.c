@@ -57,46 +57,46 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpc_dbghooks.h" /* The debug hook executive */
 #include "dpc_biglock.h" /* Mutual exclusion */
 
-static void dpcrtlmm_int_InstallTrapCallback(
+static void horatio_int_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
 );
-static void dpcrtlmm_int_RemoveTrapCallback(
+static void horatio_int_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
 );
-static signed char dpcrtlmm_int_GetTrapCallbackInfo(void);
+static signed char horatio_int_GetTrapCallbackInfo(void);
 static void DefHandler(
   const char *TrapMsg
 );
 
-void dpcrtlmm_InstallTrapCallback(
+void horatio_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
 ) {
   LOCK
-  dpcrtlmm_int_InstallTrapCallback(NewTrapCallback, AsHook);
+  horatio_int_InstallTrapCallback(NewTrapCallback, AsHook);
   UNLOCK
 }
 
-void dpcrtlmm_RemoveTrapCallback(
+void horatio_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
 ) {
   LOCK
-  dpcrtlmm_int_RemoveTrapCallback(CurrentCallback);
+  horatio_int_RemoveTrapCallback(CurrentCallback);
   UNLOCK
 }
 
-signed char dpcrtlmm_GetTrapCallbackInfo() {
+signed char horatio_GetTrapCallbackInfo() {
   signed char ret;
 
   LOCK
-  ret = dpcrtlmm_int_GetTrapCallbackInfo();
+  ret = horatio_int_GetTrapCallbackInfo();
   UNLOCK
 
   return ret;
 }
 
-void dpcrtlmm_int_Trap(
+void horatio_int_Trap(
   const unsigned int Id,
   const char *Message
 ) {
@@ -104,7 +104,7 @@ void dpcrtlmm_int_Trap(
   const char preFix[] = "HORATIO_UNHANDLED_TRAP: ";
 
   ERROR(Message); /* Pass on to the logger automatically */
-  if ( !dpcrtlmm__EnableTraps ) return; /* Don't execute traps if traps have been switched off */
+  if ( !horatio__EnableTraps ) return; /* Don't execute traps if traps have been switched off */
 
   /* The message is prefixed with "HORATIO (Trap): " by copying it */
   trapsCopy = (char*)malloc( sizeof(preFix) + strlen(Message) ); /* No NULL terminator because sizeof() includes this */
@@ -129,7 +129,7 @@ trapRecover:
   return;
 }
 
-static void dpcrtlmm_int_InstallTrapCallback(
+static void horatio_int_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),
   const unsigned int AsHook
 ) {
@@ -168,11 +168,11 @@ static void dpcrtlmm_int_InstallTrapCallback(
     #endif /*HORATIO_LOG*/
 
     #ifdef HORATIO_DEBUGHOOKS
-    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
+    horatio_int_CallDebugHook(HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*HORATIO_DEBUGHOOKS*/
   } else { /* Pointer to trap handler not passed */
     #ifdef HORATIO_DEBUGHOOKS
-    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
+    horatio_int_CallDebugHook(HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo);
     #endif /*HORATIO_DEBUGHOOKS*/
 
     if (_UserTrapCallback) /* Already have a handler and caller is trying to NULL it */
@@ -183,7 +183,7 @@ static void dpcrtlmm_int_InstallTrapCallback(
   return;
 }
 
-static void dpcrtlmm_int_RemoveTrapCallback(
+static void horatio_int_RemoveTrapCallback(
   void(*CurrentCallback)(const unsigned int, const char*)
 ) {
   char logStr[MAX_TRAP_STRING_LENGTH+1];
@@ -211,11 +211,11 @@ static void dpcrtlmm_int_RemoveTrapCallback(
 
     #ifdef HORATIO_DEBUGHOOKS
     debugHookInfo.Success = 1U;
-    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo);
+    horatio_int_CallDebugHook(HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*HORATIO_DEBUGHOOKS*/
   } else { /* The user does not know the address! */
     #ifdef HORATIO_DEBUGHOOKS
-    dpcrtlmm_int_CallDebugHook(HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo);
+    horatio_int_CallDebugHook(HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo);
     #endif /*HORATIO_DEBUGHOOKS*/
 
     sprintf(
@@ -232,7 +232,7 @@ static void dpcrtlmm_int_RemoveTrapCallback(
   return;
 }
 
-static signed char dpcrtlmm_int_GetTrapCallbackInfo() {
+static signed char horatio_int_GetTrapCallbackInfo() {
   if (!_UserTrapCallback) /* No user handler installed */
     return (signed char)-1;
   if (!_userTrapCallbackIsHook) /* Installed but not hook */
@@ -241,23 +241,23 @@ static signed char dpcrtlmm_int_GetTrapCallbackInfo() {
   return (signed char)1; /* Hook installed */
 }
 
-void dpcrtlmm_EnableTraps() {
+void horatio_EnableTraps() {
   LOCK
-  dpcrtlmm__EnableTraps = '\x1';
+  horatio__EnableTraps = '\x1';
   UNLOCK
 }
 
-void dpcrtlmm_DisableTraps() {
+void horatio_DisableTraps() {
   LOCK
-  dpcrtlmm__EnableTraps = '\x0';
+  horatio__EnableTraps = '\x0';
   UNLOCK
 }
 
-unsigned char dpcrtlmm_AreTrapsEnabled() {
+unsigned char horatio_AreTrapsEnabled() {
   unsigned char ret;
 
   LOCK
-  ret = dpcrtlmm__EnableTraps;
+  ret = horatio__EnableTraps;
   UNLOCK
 
   return ret;
