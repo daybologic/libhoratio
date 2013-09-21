@@ -45,11 +45,9 @@ POSSIBILITY OF SUCH DAMAGE.
 // main object, don't create more than one, the object is externed
 
 #ifndef __NO_NAMESPACES__
-namespace Overlord
-{
+namespace Overlord {
 #endif /*!__NO_NAMESPACES__*/
-  class THORATIO_MemManager
-  {
+  class THORATIO_MemManager {
   private:
     int firstAccess;
   public:
@@ -119,8 +117,7 @@ namespace Overlord
     void Dump(FILE* Target);
   };
 
-  class THORATIO_BlockArray
-  {
+  class THORATIO_BlockArray {
   private:
       PS_HORATIO_BLOCKDESCARRAY _PblockArray;
   public:
@@ -160,6 +157,7 @@ namespace Overlord
 
     void ToggleBlockLockingStatus(const void* Ptr);
   };
+
 #ifndef __NO_NAMESPACES__
 } /*namespace Overlord*/
 #endif
@@ -169,5 +167,9 @@ extern
 Overlord::
 #endif
 THORATIO_MemManager MemManager; /* This is the object you should use */
+
+/* Legacy support */
+#define TDPCRTLMM_MemManager THORATIO_MemManager
+#define TDPCRTLMM_BlockArray THORATIO_BlockArray
 
 #endif //!INC_HORATIO_CAP_H

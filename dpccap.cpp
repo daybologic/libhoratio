@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-// DPCRTLMM 1.2 compatible encapsulation object for C++
+// HORATIO 1.2 compatible encapsulation object for C++
 // Add this file to your C++ project
 // You can have this particular module it's free
 // I'm not going to use new style C++ casts, I want this module to port
@@ -45,9 +45,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HAVE_CONFIG_H*/
 #include <stddef.h> /* For NULL */
 #include <stdio.h>
-#ifdef DPCRTLMM_HDRSTOP // Same as in library source
+#ifdef HORATIO_HDRSTOP // Same as in library source
 #  pragma hdrstop
-#endif //DPCRTLMM_HDRSTOP
+#endif //HORATIO_HDRSTOP
 
 #include "restricted_horatio.h" // Library header
 #include "dpccap.h" // Class definitions
@@ -55,24 +55,24 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager MemManager;
+THORATIO_MemManager MemManager;
 
-// Overlord::TDPCRTLMM_MemManager
+// Overlord::THORATIO_MemManager
 
-// Constructor, starts DPCRTLMM
+// Constructor, starts HORATIO
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::TDPCRTLMM_MemManager()
+THORATIO_MemManager::THORATIO_MemManager()
   : firstAccess(1)
 {
 }
 
-// Destructor, shuts down DPCRTLMM
+// Destructor, shuts down HORATIO
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::~TDPCRTLMM_MemManager() {
+THORATIO_MemManager::~THORATIO_MemManager() {
   if ( this->firstAccess == 0 ) { /* Has been accessed/started? */
     dpcrtlmm_Shutdown();
     this->firstAccess = 1;
@@ -84,7 +84,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Startup() {
+THORATIO_MemManager::Startup() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
@@ -95,9 +95,9 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::InstallDebugHook(
+THORATIO_MemManager::InstallDebugHook(
   const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO)
+  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
@@ -110,7 +110,7 @@ unsigned
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::GetDebugHookChainCount(
+THORATIO_MemManager::GetDebugHookChainCount(
   const unsigned int HookType
 ) {
   if ( this->firstAccess ) {
@@ -124,7 +124,7 @@ unsigned
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif /*__NO_NAMESPACES__*/
-TDPCRTLMM_MemManager::GetDebugHookMatrixCount() {
+THORATIO_MemManager::GetDebugHookMatrixCount() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
@@ -136,9 +136,9 @@ unsigned int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::UninstallDebugHook(
+THORATIO_MemManager::UninstallDebugHook(
   const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO)
+  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
@@ -151,7 +151,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Alloc(
+THORATIO_MemManager::Alloc(
   const size_t NewBlockSize
 ) {
   if ( this->firstAccess ) {
@@ -165,7 +165,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Alloc(
+THORATIO_MemManager::Alloc(
   const size_t NewBlockSize,
   const char* File,
   const unsigned int Line
@@ -179,12 +179,12 @@ TDPCRTLMM_MemManager::Alloc(
 
 // Don't bother shielding the library from NULLs, the library
 // is perfectly capable of finding and reporting all the programmer's
-// mistakes without this little fancy layer playing at being DPCRTLMM
+// mistakes without this little fancy layer playing at being HORATIO
 void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Free(
+THORATIO_MemManager::Free(
   void* Ptr
 ) {
   if ( this->firstAccess ) {
@@ -198,8 +198,8 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::IsDefaultBlockArray(
-  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray
+THORATIO_MemManager::IsDefaultBlockArray(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
@@ -212,7 +212,7 @@ size_t
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::GetBlockSize(
+THORATIO_MemManager::GetBlockSize(
   const void* BlockPtr
 ) {
   if ( this->firstAccess ) {
@@ -226,7 +226,7 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::IsBadBlockPtr(
+THORATIO_MemManager::IsBadBlockPtr(
   const void* BlockPtr
 ) {
   if ( this->firstAccess ) {
@@ -240,7 +240,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Realloc(
+THORATIO_MemManager::Realloc(
   void* OldBlockPtr,
   const size_t NewSize
 ) {
@@ -255,7 +255,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Calloc(
+THORATIO_MemManager::Calloc(
   const unsigned int N,
   const size_t NewBlockSize
 ) {
@@ -270,7 +270,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Calloc(
+THORATIO_MemManager::Calloc(
   const unsigned int N,
   const size_t NewBlockSize,
   const char* File,
@@ -287,7 +287,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::InstallTrapCallback(
+THORATIO_MemManager::InstallTrapCallback(
   void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage),
   const unsigned int AsHook
 ) {
@@ -302,7 +302,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::RemoveTrapCallback(
+THORATIO_MemManager::RemoveTrapCallback(
   void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc)
 ) {
   if ( this->firstAccess ) {
@@ -316,7 +316,7 @@ signed char
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::GetTrapCallbackInfo() {
+THORATIO_MemManager::GetTrapCallbackInfo() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
@@ -328,7 +328,7 @@ unsigned char
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::ModifyDescriptorFlags(
+THORATIO_MemManager::ModifyDescriptorFlags(
   const void* Ptr,
   const unsigned char* PNewFlags
 ) {
@@ -343,7 +343,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::SetBlockLockingFlag(
+THORATIO_MemManager::SetBlockLockingFlag(
   const void* Ptr,
   const int NewStatus
 ) {
@@ -358,7 +358,7 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::IsBlockLocked(
+THORATIO_MemManager::IsBlockLocked(
   const void* Ptr
 ) {
   if ( this->firstAccess ) {
@@ -372,7 +372,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::LockBlock(
+THORATIO_MemManager::LockBlock(
   const void* pBlock
 ) {
   if ( this->firstAccess ) {
@@ -386,7 +386,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::UnlockBlock(
+THORATIO_MemManager::UnlockBlock(
   const void* pBlock
 ) {
   if ( this->firstAccess ) {
@@ -400,7 +400,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::ToggleBlockLockingStatus(
+THORATIO_MemManager::ToggleBlockLockingStatus(
   const void* Ptr
 ) {
   if ( this->firstAccess ) {
@@ -414,12 +414,12 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::EnableTraps() {
+THORATIO_MemManager::EnableTraps() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
   }
-  // Change DPCRTLMM externed variable, quicker than a library call
+  // Change HORATIO externed variable, quicker than a library call
   dpcrtlmm__EnableTraps = 1U;
 }
 
@@ -427,7 +427,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::DisableTraps() {
+THORATIO_MemManager::DisableTraps() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
@@ -439,7 +439,7 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::AreTrapsEnabled() {
+THORATIO_MemManager::AreTrapsEnabled() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
@@ -451,8 +451,8 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::GetStats(
-  PS_DPCRTLMM_STATS PReadStats
+THORATIO_MemManager::GetStats(
+  PS_HORATIO_STATS PReadStats
 ) {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
@@ -465,7 +465,7 @@ unsigned long
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::GetBlockCount() {
+THORATIO_MemManager::GetBlockCount() {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
@@ -473,12 +473,12 @@ TDPCRTLMM_MemManager::GetBlockCount() {
   return dpcrtlmm_GetBlockCount();
 }
 
-PS_DPCRTLMM_VERSION
+PS_HORATIO_VERSION
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Ver(
-  PS_DPCRTLMM_VERSION PVerStruct
+THORATIO_MemManager::Ver(
+  PS_HORATIO_VERSION PVerStruct
 ) {
   if ( this->firstAccess ) {
     dpcrtlmm_Startup();
@@ -491,7 +491,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_MemManager::Dump(
+THORATIO_MemManager::Dump(
   FILE* Target
 ) {
   if ( this->firstAccess ) {
@@ -503,12 +503,12 @@ TDPCRTLMM_MemManager::Dump(
 
 
 
-// Overlord::TDPCRTLMM_BlockArray
+// Overlord::THORATIO_BlockArray
 
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::TDPCRTLMM_BlockArray(
+THORATIO_BlockArray::THORATIO_BlockArray(
   bool Init
 )
   :
@@ -521,7 +521,7 @@ TDPCRTLMM_BlockArray::TDPCRTLMM_BlockArray(
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::TDPCRTLMM_BlockArray()
+THORATIO_BlockArray::THORATIO_BlockArray()
   :
   _PblockArray(NULL)
 {
@@ -532,7 +532,7 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Init() {
+THORATIO_BlockArray::Init() {
   int ret = 0;
 
   if ( !_PblockArray ) {
@@ -545,7 +545,7 @@ TDPCRTLMM_BlockArray::Init() {
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::~TDPCRTLMM_BlockArray() {
+THORATIO_BlockArray::~THORATIO_BlockArray() {
   dpcrtlmm_DestroyBlockArray(_PblockArray);
 }
 
@@ -553,7 +553,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Alloc(
+THORATIO_BlockArray::Alloc(
   const size_t NewBlockSize
 ) {
   return dpcrtlmm_Alloc(_PblockArray, NewBlockSize);
@@ -563,7 +563,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Alloc(
+THORATIO_BlockArray::Alloc(
   const size_t NewBlockSize,
   const char* File,
   const unsigned int Line
@@ -575,7 +575,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Free(
+THORATIO_BlockArray::Free(
   void* Ptr
 ) {
   dpcrtlmm_Free(_PblockArray, Ptr);
@@ -585,7 +585,7 @@ size_t
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::GetBlockSize(
+THORATIO_BlockArray::GetBlockSize(
   const void* BlockPtr
 ) const {
   return dpcrtlmm_GetBlockSize(_PblockArray, (void*)BlockPtr);
@@ -595,7 +595,7 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::IsBadBlockPtr(
+THORATIO_BlockArray::IsBadBlockPtr(
   const void* BlockPtr
 ) const {
   return dpcrtlmm_IsBadBlockPtr(_PblockArray, BlockPtr);
@@ -605,7 +605,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Realloc(
+THORATIO_BlockArray::Realloc(
   void* OldBlockPtr,
   const size_t NewSize
 ) {
@@ -616,7 +616,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Calloc(
+THORATIO_BlockArray::Calloc(
   const unsigned int N,
   const size_t NewBlockSize
 ) {
@@ -627,7 +627,7 @@ void*
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::Calloc(
+THORATIO_BlockArray::Calloc(
   const unsigned int N,
   const size_t NewBlockSize,
   const char* File,
@@ -640,7 +640,7 @@ unsigned char
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::ModifyDescriptorFlags(
+THORATIO_BlockArray::ModifyDescriptorFlags(
   const void* Ptr,
   const unsigned char* PNewFlags
 ) {
@@ -651,7 +651,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::SetBlockLockingFlag(
+THORATIO_BlockArray::SetBlockLockingFlag(
   const void* Ptr,
   int NewStatus
 ) {
@@ -662,7 +662,7 @@ int
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::IsBlockLocked(
+THORATIO_BlockArray::IsBlockLocked(
   const void* Ptr
 ) const {
   return dpcrtlmm_IsBlockLocked(_PblockArray, Ptr);
@@ -672,7 +672,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::LockBlock(
+THORATIO_BlockArray::LockBlock(
   const void* pBlock
 ) {
   dpcrtlmm_LockBlock(_PblockArray, pBlock);
@@ -682,7 +682,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::UnlockBlock(
+THORATIO_BlockArray::UnlockBlock(
   const void* pBlock
 ) {
   dpcrtlmm_SetBlockLockingFlag(_PblockArray, pBlock, (0U));
@@ -692,7 +692,7 @@ void
 #ifndef __NO_NAMESPACES__
 Overlord::
 #endif
-TDPCRTLMM_BlockArray::ToggleBlockLockingStatus(
+THORATIO_BlockArray::ToggleBlockLockingStatus(
   const void* Ptr
 ) {
   dpcrtlmm_ToggleBlockLockingStatus(_PblockArray, Ptr);
