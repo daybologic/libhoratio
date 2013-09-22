@@ -74,7 +74,7 @@ Overlord::
 #endif
 THORATIO_MemManager::~THORATIO_MemManager() {
   if ( this->firstAccess == 0 ) { /* Has been accessed/started? */
-    dpcrtlmm_Shutdown();
+    horatio_Shutdown();
     this->firstAccess = 1;
   }
 }
@@ -86,7 +86,7 @@ Overlord::
 #endif
 THORATIO_MemManager::Startup() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
 }
@@ -100,10 +100,10 @@ THORATIO_MemManager::InstallDebugHook(
   unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_InstallDebugHook(HookType, NewHookProc);
+  return horatio_InstallDebugHook(HookType, NewHookProc);
 }
 
 unsigned
@@ -114,10 +114,10 @@ THORATIO_MemManager::GetDebugHookChainCount(
   const unsigned int HookType
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_GetDebugHookChainCount(HookType);
+  return horatio_GetDebugHookChainCount(HookType);
 }
 
 unsigned
@@ -126,10 +126,10 @@ Overlord::
 #endif /*__NO_NAMESPACES__*/
 THORATIO_MemManager::GetDebugHookMatrixCount() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_GetDebugHookMatrixCount();
+  return horatio_GetDebugHookMatrixCount();
 }
 
 unsigned int
@@ -141,10 +141,10 @@ THORATIO_MemManager::UninstallDebugHook(
   unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_UninstallDebugHook(HookType, HookProc2Remove);
+  return horatio_UninstallDebugHook(HookType, HookProc2Remove);
 }
 
 void*
@@ -155,10 +155,10 @@ THORATIO_MemManager::Alloc(
   const size_t NewBlockSize
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_Alloc(NULL, NewBlockSize);
+  return horatio_Alloc(NULL, NewBlockSize);
 }
 
 void*
@@ -171,10 +171,10 @@ THORATIO_MemManager::Alloc(
   const unsigned int Line
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_AllocEx(NULL, NewBlockSize, File, Line);
+  return horatio_AllocEx(NULL, NewBlockSize, File, Line);
 }
 
 // Don't bother shielding the library from NULLs, the library
@@ -188,10 +188,10 @@ THORATIO_MemManager::Free(
   void* Ptr
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_Free(NULL, Ptr);
+  horatio_Free(NULL, Ptr);
 }
 
 int
@@ -202,10 +202,10 @@ THORATIO_MemManager::IsDefaultBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_IsDefaultBlockArray(PBlockArray);
+  return horatio_IsDefaultBlockArray(PBlockArray);
 }
 
 size_t
@@ -216,10 +216,10 @@ THORATIO_MemManager::GetBlockSize(
   const void* BlockPtr
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_GetBlockSize(NULL, (void*)BlockPtr);
+  return horatio_GetBlockSize(NULL, (void*)BlockPtr);
 }
 
 int
@@ -230,10 +230,10 @@ THORATIO_MemManager::IsBadBlockPtr(
   const void* BlockPtr
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_IsBadBlockPtr(NULL, BlockPtr);
+  return horatio_IsBadBlockPtr(NULL, BlockPtr);
 }
 
 void*
@@ -245,10 +245,10 @@ THORATIO_MemManager::Realloc(
   const size_t NewSize
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_Realloc(NULL, OldBlockPtr, NewSize);
+  return horatio_Realloc(NULL, OldBlockPtr, NewSize);
 }
 
 void*
@@ -260,10 +260,10 @@ THORATIO_MemManager::Calloc(
   const size_t NewBlockSize
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_Calloc(NULL, N, NewBlockSize);
+  return horatio_Calloc(NULL, N, NewBlockSize);
 }
 
 void*
@@ -277,10 +277,10 @@ THORATIO_MemManager::Calloc(
   const unsigned int Line
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_CallocEx(NULL, N, NewBlockSize, File, Line);
+  return horatio_CallocEx(NULL, N, NewBlockSize, File, Line);
 }
 
 void
@@ -292,10 +292,10 @@ THORATIO_MemManager::InstallTrapCallback(
   const unsigned int AsHook
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_InstallTrapCallback(UserCallbackProc, AsHook);
+  horatio_InstallTrapCallback(UserCallbackProc, AsHook);
 }
 
 void
@@ -306,10 +306,10 @@ THORATIO_MemManager::RemoveTrapCallback(
   void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc)
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_RemoveTrapCallback(CurrentCallbackProc);
+  horatio_RemoveTrapCallback(CurrentCallbackProc);
 }
 
 signed char
@@ -318,10 +318,10 @@ Overlord::
 #endif
 THORATIO_MemManager::GetTrapCallbackInfo() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_GetTrapCallbackInfo();
+  return horatio_GetTrapCallbackInfo();
 }
 
 unsigned char
@@ -333,10 +333,10 @@ THORATIO_MemManager::ModifyDescriptorFlags(
   const unsigned char* PNewFlags
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_ModifyDescriptorFlags(NULL, Ptr, PNewFlags);
+  return horatio_ModifyDescriptorFlags(NULL, Ptr, PNewFlags);
 }
 
 void
@@ -348,10 +348,10 @@ THORATIO_MemManager::SetBlockLockingFlag(
   const int NewStatus
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_SetBlockLockingFlag(NULL, Ptr, (const unsigned int)NewStatus);
+  horatio_SetBlockLockingFlag(NULL, Ptr, (const unsigned int)NewStatus);
 }
 
 int
@@ -362,10 +362,10 @@ THORATIO_MemManager::IsBlockLocked(
   const void* Ptr
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_IsBlockLocked(NULL, Ptr);
+  return horatio_IsBlockLocked(NULL, Ptr);
 }
 
 void
@@ -376,10 +376,10 @@ THORATIO_MemManager::LockBlock(
   const void* pBlock
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_SetBlockLockingFlag(NULL, pBlock, (1U));
+  horatio_SetBlockLockingFlag(NULL, pBlock, (1U));
 }
 
 void
@@ -390,10 +390,10 @@ THORATIO_MemManager::UnlockBlock(
   const void* pBlock
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_SetBlockLockingFlag(NULL, pBlock, (0U));
+  horatio_SetBlockLockingFlag(NULL, pBlock, (0U));
 }
 
 void
@@ -404,10 +404,10 @@ THORATIO_MemManager::ToggleBlockLockingStatus(
   const void* Ptr
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_ToggleBlockLockingStatus(NULL, Ptr);
+  horatio_ToggleBlockLockingStatus(NULL, Ptr);
 }
 
 void
@@ -416,7 +416,7 @@ Overlord::
 #endif
 THORATIO_MemManager::EnableTraps() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
   // Change HORATIO externed variable, quicker than a library call
@@ -429,7 +429,7 @@ Overlord::
 #endif
 THORATIO_MemManager::DisableTraps() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
   horatio__EnableTraps = 0U;
@@ -441,7 +441,7 @@ Overlord::
 #endif
 THORATIO_MemManager::AreTrapsEnabled() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
   return horatio__EnableTraps;
@@ -455,10 +455,10 @@ THORATIO_MemManager::GetStats(
   PS_HORATIO_STATS PReadStats
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_GetStats(PReadStats);
+  horatio_GetStats(PReadStats);
 }
 
 unsigned long
@@ -467,10 +467,10 @@ Overlord::
 #endif
 THORATIO_MemManager::GetBlockCount() {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_GetBlockCount();
+  return horatio_GetBlockCount();
 }
 
 PS_HORATIO_VERSION
@@ -481,10 +481,10 @@ THORATIO_MemManager::Ver(
   PS_HORATIO_VERSION PVerStruct
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm_Ver(PVerStruct);
+  return horatio_Ver(PVerStruct);
 } 
 
 void
@@ -495,10 +495,10 @@ THORATIO_MemManager::Dump(
   FILE* Target
 ) {
   if ( this->firstAccess ) {
-    dpcrtlmm_Startup();
+    horatio_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm_Dump(Target);
+  horatio_Dump(Target);
 }
 
 
@@ -536,7 +536,7 @@ THORATIO_BlockArray::Init() {
   int ret = 0;
 
   if ( !_PblockArray ) {
-    _PblockArray = dpcrtlmm_CreateBlockArray();
+    _PblockArray = horatio_CreateBlockArray();
     if ( _PblockArray ) ret = 1;
   }
   return ret;
@@ -546,7 +546,7 @@ THORATIO_BlockArray::Init() {
 Overlord::
 #endif
 THORATIO_BlockArray::~THORATIO_BlockArray() {
-  dpcrtlmm_DestroyBlockArray(_PblockArray);
+  horatio_DestroyBlockArray(_PblockArray);
 }
 
 void*
@@ -556,7 +556,7 @@ Overlord::
 THORATIO_BlockArray::Alloc(
   const size_t NewBlockSize
 ) {
-  return dpcrtlmm_Alloc(_PblockArray, NewBlockSize);
+  return horatio_Alloc(_PblockArray, NewBlockSize);
 }
 
 void*
@@ -568,7 +568,7 @@ THORATIO_BlockArray::Alloc(
   const char* File,
   const unsigned int Line
 ) {
-  return dpcrtlmm_AllocEx(_PblockArray, NewBlockSize, File, Line);
+  return horatio_AllocEx(_PblockArray, NewBlockSize, File, Line);
 }
 
 void
@@ -578,7 +578,7 @@ Overlord::
 THORATIO_BlockArray::Free(
   void* Ptr
 ) {
-  dpcrtlmm_Free(_PblockArray, Ptr);
+  horatio_Free(_PblockArray, Ptr);
 }
 
 size_t
@@ -588,7 +588,7 @@ Overlord::
 THORATIO_BlockArray::GetBlockSize(
   const void* BlockPtr
 ) const {
-  return dpcrtlmm_GetBlockSize(_PblockArray, (void*)BlockPtr);
+  return horatio_GetBlockSize(_PblockArray, (void*)BlockPtr);
 }
 
 int
@@ -598,7 +598,7 @@ Overlord::
 THORATIO_BlockArray::IsBadBlockPtr(
   const void* BlockPtr
 ) const {
-  return dpcrtlmm_IsBadBlockPtr(_PblockArray, BlockPtr);
+  return horatio_IsBadBlockPtr(_PblockArray, BlockPtr);
 }
 
 void*
@@ -609,7 +609,7 @@ THORATIO_BlockArray::Realloc(
   void* OldBlockPtr,
   const size_t NewSize
 ) {
-  return dpcrtlmm_Realloc(_PblockArray, OldBlockPtr, NewSize);
+  return horatio_Realloc(_PblockArray, OldBlockPtr, NewSize);
 }
 
 void*
@@ -620,7 +620,7 @@ THORATIO_BlockArray::Calloc(
   const unsigned int N,
   const size_t NewBlockSize
 ) {
-  return dpcrtlmm_Calloc(_PblockArray, N, NewBlockSize);
+  return horatio_Calloc(_PblockArray, N, NewBlockSize);
 }
 
 void*
@@ -633,7 +633,7 @@ THORATIO_BlockArray::Calloc(
   const char* File,
   const unsigned int Line
 ) {
-  return dpcrtlmm_CallocEx(_PblockArray, N, NewBlockSize, File, Line);
+  return horatio_CallocEx(_PblockArray, N, NewBlockSize, File, Line);
 }
 
 unsigned char
@@ -644,7 +644,7 @@ THORATIO_BlockArray::ModifyDescriptorFlags(
   const void* Ptr,
   const unsigned char* PNewFlags
 ) {
-  return dpcrtlmm_ModifyDescriptorFlags(_PblockArray, Ptr, PNewFlags);
+  return horatio_ModifyDescriptorFlags(_PblockArray, Ptr, PNewFlags);
 }
 
 void
@@ -655,7 +655,7 @@ THORATIO_BlockArray::SetBlockLockingFlag(
   const void* Ptr,
   int NewStatus
 ) {
-  dpcrtlmm_SetBlockLockingFlag(_PblockArray, Ptr, (const unsigned int)NewStatus);
+  horatio_SetBlockLockingFlag(_PblockArray, Ptr, (const unsigned int)NewStatus);
 }
 
 int
@@ -665,7 +665,7 @@ Overlord::
 THORATIO_BlockArray::IsBlockLocked(
   const void* Ptr
 ) const {
-  return dpcrtlmm_IsBlockLocked(_PblockArray, Ptr);
+  return horatio_IsBlockLocked(_PblockArray, Ptr);
 }
 
 void
@@ -675,7 +675,7 @@ Overlord::
 THORATIO_BlockArray::LockBlock(
   const void* pBlock
 ) {
-  dpcrtlmm_LockBlock(_PblockArray, pBlock);
+  horatio_LockBlock(_PblockArray, pBlock);
 }
 
 void
@@ -685,7 +685,7 @@ Overlord::
 THORATIO_BlockArray::UnlockBlock(
   const void* pBlock
 ) {
-  dpcrtlmm_SetBlockLockingFlag(_PblockArray, pBlock, (0U));
+  horatio_SetBlockLockingFlag(_PblockArray, pBlock, (0U));
 }
 
 void
@@ -695,6 +695,6 @@ Overlord::
 THORATIO_BlockArray::ToggleBlockLockingStatus(
   const void* Ptr
 ) {
-  dpcrtlmm_ToggleBlockLockingStatus(_PblockArray, Ptr);
+  horatio_ToggleBlockLockingStatus(_PblockArray, Ptr);
 }
 
