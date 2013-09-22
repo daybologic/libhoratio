@@ -374,6 +374,8 @@ void HORATIO_FARDATA* horatio_AllocEx(
 );
 #define dpcrtlmm_AllocEx \
         horatio_AllocEx
+#define dpcrtlmm_Alloc \
+        horatio_Alloc
 
 /* Alloc() "backwards compatibillity", it's actually a lot easier to use
 this version, so I recommend it.  This adds transparent file/line support for
@@ -525,6 +527,8 @@ void HORATIO_FARDATA *horatio_CallocEx(
 #define horatio_Calloc(blkarray, n, blksize) \
         horatio_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
 
+#define dpcrtlmm_CallocEx \
+        horatio_CallocEx
 #define dpcrtlmm_Calloc \
         horatio_Calloc
 
@@ -614,9 +618,17 @@ unsigned int horatio_IsBlockLocked(
 #define dpcrtlmm_IsBlockLocked \
         horatio_IsBlockLocked
 
-/* These next two are simple shortcuts and are therefore implemented as macros */
+/*
+  These next two are simple shortcuts and are therefore
+  implemented as macros
+*/
 #define horatio_LockBlock(pArr, pBlock) horatio_SetBlockLockingFlag(pArr, pBlock, (1U));
 #define horatio_UnlockBlock(pArr, pBlock) horatio_SetBlockLockingFlag(pArr, pBlock, (0U));
+#define dpcrtlmm_LockBlock \
+        horatio_LockBlock
+#define dpcrtlmm_UnlockBlock \
+        horatio_UnlockBlock
+
 void horatio_ToggleBlockLockingStatus(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA* Ptr

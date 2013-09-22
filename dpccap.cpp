@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif //HORATIO_HDRSTOP
 
-#include "restricted_horatio.h" // Library header
+#include "horatio.h" // Library header
 #include "dpccap.h" // Class definitions
 
 #ifndef __NO_NAMESPACES__
@@ -420,7 +420,7 @@ THORATIO_MemManager::EnableTraps() {
     this->firstAccess = 0;
   }
   // Change HORATIO externed variable, quicker than a library call
-  dpcrtlmm__EnableTraps = 1U;
+  horatio__EnableTraps = 1U;
 }
 
 void
@@ -432,7 +432,7 @@ THORATIO_MemManager::DisableTraps() {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
   }
-  dpcrtlmm__EnableTraps = 0U;
+  horatio__EnableTraps = 0U;
 }
 
 int
@@ -444,7 +444,7 @@ THORATIO_MemManager::AreTrapsEnabled() {
     dpcrtlmm_Startup();
     this->firstAccess = 0;
   }
-  return dpcrtlmm__EnableTraps;
+  return horatio__EnableTraps;
 }
 
 void
