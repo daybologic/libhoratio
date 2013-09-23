@@ -77,14 +77,11 @@ extern "C" {
 /*
   Users who don't have dpc_build.h won't have HORATIO_FARDATA defined,
   so just remove it to stop any problems happening.
-
-  FIXME: The above comment does not appear to make sense, given the
-  following code.  Further investigation is necessary.
 */
 #ifndef HORATIO_FARDATA
 #  define HORATIO_FARDATA
-#  define DPCRTLMM_FARDATA /* Legacy */
 #endif /*!HORATIO_FARDATA*/
+#define DPCRTLMM_FARDATA HORATIO_FARDATA /* Legacy */
 
 /* File / Line: This might be paranoia but I don't know if __FILE__ and
 __LINE__ are defined on every compiler.  I'm not taking the risk */
