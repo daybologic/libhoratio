@@ -53,7 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "restricted_horatio.h"
+#include "horatio.h"
 /*-------------------------------------------------------------------------*/
 int main(void);
 static void PrintStats(const PS_HORATIO_STATS PStats);

@@ -51,7 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "restricted_horatio.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h"
 
 PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */

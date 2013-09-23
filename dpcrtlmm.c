@@ -55,7 +55,7 @@ the definition won't exist and build.h will tell them off! */
 #endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "restricted_horatio.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal data */
 #include "dpc_trap.h" /* Trap() - Trap support */
 #include "dpc_log.h" /* LOG macro - Logging support */

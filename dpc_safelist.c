@@ -54,7 +54,7 @@ Created May 3rd 2000
 #endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "restricted_horatio.h" /* Main library header */
+#include "horatio.h" /* Main library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_safelist.h"
 

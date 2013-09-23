@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h" /* General build parameters */
-#include "restricted_horatio.h" /* Public library header */
+#include "horatio.h" /* Public library header */
 #include "dpc_intdata.h" /* Internal library data */
 #include "dpc_biglock.h" /* Mutual exclusion */
 

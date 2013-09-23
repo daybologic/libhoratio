@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HORATIO_HDRSTOP*/
 
 #include "dpc_build.h"
-#include "restricted_horatio.h"
+#include "horatio.h"
 #include "dpc_biglock.h"
 
 #ifdef HORATIO_THREADS
