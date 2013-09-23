@@ -8,11 +8,11 @@
  content="Mozilla/4.7 [en] (X11; I; Linux 2.2.17-0.6.1 ppc) [Netscape]">
   <meta name="Classification" content="programming,libraries">
   <meta name="Description"
- content="Technical documentation for HORATIO library">
-  <meta name="KeyWords" content="HORATIO,Memory manager,Daybo Logic">
-  <title>Daybo Logic HORATIO documentation</title>
+ content="Technical documentation for libhoratio">
+  <meta name="KeyWords" content="horatio,dpcrtlmm,Memory manager,Daybo Logic">
+  <title>Horatio's Memory Manager documentation</title>
   <meta content="David Duncan Ross Palmer" name="author">
-  <meta content="Manual for HORATIO" name="description">
+  <meta content="Manual for libhoratio" name="description">
 </head>
 <body style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);"
  alink="#c0ffc0" link="#ffff00" vlink="#c0c0c0">
@@ -62,13 +62,13 @@ use</a>
 <hr width="100%"><br>
 <a name="About"></a><b><u>1.&nbsp; About the library</u></b>
 <br>
-This could be used as an alternative to
+Horatio is designed to be used as an alternative to
 <br>
-memory tracking tools such as CodeGuard of MemorySleuth,
+memory tracking tools such as CodeGuard or MemorySleuth,
 <br>
-it's not as thorough as them however, it can't detect memory over
+it's not as thorough as them yet, however, as it cannot detect memory over-
 <br>
-runs on pointer accesses or anything like that.&nbsp; It can be used
+runs on pointer accesses.&nbsp; It can be used
 <br>
 to detect failures to release memory (as long as it's allocated
 <br>
@@ -78,13 +78,13 @@ It has an automatic garbage collection feature to free up all
 <br>
 unfreed memory too.&nbsp; It should be used by the entire program to
 <br>
-be most effective, it can provide statistics on memory left and
+be most effective, it can provide statistics on memory usage and
 <br>
-such like too.&nbsp; The best thing about the MM is that it provides
+record this to a database back-end.&nbsp; The best thing about Horatio is that
 <br>
-a central place for dynamic memory allocation in a program, so
+it provides a central place for dynamic memory allocation in a program, so
 <br>
-we can trace all activity, an optional log mode is available too.<br>
+we can trace all activity.<br>
 Swapping is not implemented but may be in a future version.<br>
 If the program is going to be released even though
 <br>
@@ -133,13 +133,13 @@ Frequently Asked Questions and common
 compile problems</span>
 <p>Q - I am using ./configure --enable-threads --with-gnu-pth to link
 with the GNU Portable Threads library.&nbsp; As soon as my program
-initialises the HORATIO library, the program crashes with a
+initialises libhoratio, the program crashes with a
 segmentation fault.&nbsp; Is this a bug?<br>
 A - No, GNU Portable Threads needs explicit initialisation before
-use.&nbsp; HORATIO uses GNU Portable threads for an internal lock and
-initialises this lock when HORATIO is initialised.&nbsp; It is your
+use.&nbsp; libhoratio uses GNU Portable threads for an internal lock and
+initialises this lock when libhoratio is initialised.&nbsp; It is your
 program's responsibility to initialise GNU Portable Threads before
-HORATIO is initialised.&nbsp; You will need to call pth_init( ) at
+libhoratio is initialised.&nbsp; You will need to call pth_init( ) at
 some point before <a href="#Startup">horatio_Startup</a>( ) is called.<br>
 </p>
 <p>Q - Error horatio.h (line number): Declaration missing ;
@@ -153,13 +153,13 @@ firstly check the language is set to non-ANSI compliance, if your
 compiler
 only supports ANSI you cannot support explicit far pointers so give
 up!&nbsp;
-The other problem is on line 112 (ish) of BUILD.H #define
+The other problem is on line 112 (ish) of dpc_build.h #define
 HORATIO_FARDATA
 _ _ far, change the _ _ far bit to just far and try again.&nbsp; Look
 for
-what the 'far' keyword equivilant is in your language.&nbsp; If you
+what the 'far' keyword equivilant is in your compiler.&nbsp; If you
 still
-have problems contact me.
+have problems contact the author.
 </p>
 <p>Q - No prototype for function 'farmalloc' or 'farcalloc' or
 'farfree'
@@ -169,7 +169,7 @@ A - The following answer applies to 16-bit segmented programming
 only.&nbsp; The explicit fars are non-ANSI, unfortunately the functions
 differ
 from one compiler to the next when one strays from ANSI.&nbsp; In
-BUILD.H
+dpc_build.h
 there are a list of functions here, change them to point to your
 compiler's
 equivilant functions if you can discover what they are.&nbsp; If you
@@ -181,16 +181,16 @@ else
 fails just compile for the compact/large or huge model.
 </p>
 <p>Q - I want to compile for 16-bit x86 processors in small memory
-models.&nbsp; However, the pointers returned from HORATIO use my
+models.&nbsp; However, the pointers returned from libhoratio use my
 segment address and not real segment address,&nbsp; When I try to
-success these pointers, the program crashes, or unexpected results
+access these pointers, the program crashes, or unexpected results
 happen.<br>
 A - The library only functions correctly with far data, run ./configure
 with --enable-fardata to enable explicit support.&nbsp; Unfortunately,
 this is not within the scope of ANSI C and you may find difficulty
 compiling.&nbsp; If your compiler cannot support explicit far pointers,
 you may be forced to compile for another memory model or not use
-HORATIO at all.<br>
+libhoratio at all.<br>
 </p>
 <p>Q - My program is crashing unexpectedly when I try to free blocks of
 memory (or earlier while using the memory manager)
@@ -204,7 +204,7 @@ in a memory model which has far data.&nbsp; There is another way in
 this
 version of the library, Configure with --enable-fardata.&nbsp; If this
 does not solve
-the problem please send me all details possible.
+the problem please send the authors all details possible.
 <br>
 </p>
 <hr width="100%"><br>
@@ -219,13 +219,13 @@ work.</span><br style="color: rgb(204, 0, 0);">
 <br style="color: rgb(204, 0, 0);">
 <span style="color: rgb(204, 0, 0);">Unpack the souce tarball with the
 following command:</span><br style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">tar -zxvf horatio-1.2.0.tar.gz or</span><br
+<span style="color: rgb(204, 0, 0);">tar -zxvf libhoratio-X.Y.Z.tar.gz or</span><br
  style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">tar -jxvf horatio-1.2.0.tar.bz2
+<span style="color: rgb(204, 0, 0);">tar -jxvf libhoratio-X.Y.Z.tar.bz2
 if you are using the bzip2ed version.</span><br
  style="color: rgb(204, 0, 0);">
 <br style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">cd horatio-1.2.0/</span><br
+<span style="color: rgb(204, 0, 0);">cd libhoratio-X.Y.Z/</span><br
  style="color: rgb(204, 0, 0);">
 <span style="color: rgb(204, 0, 0);">./configure --help</span><br
  style="color: rgb(204, 0, 0);">
@@ -248,7 +248,7 @@ want to build and run some
 example/test programs.</span><br style="color: rgb(204, 0, 0);">
 <span style="color: rgb(204, 0, 0);">Finally, as root, type make
 install.</span><br style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">The HORATIO library is now
+<span style="color: rgb(204, 0, 0);">The libhoratio library is now
 installed and ready for use by your system.</span><br>
 <br>
 Compiling under Win32 (Borland C):<br>
@@ -289,7 +289,7 @@ far or near pointers any more.<br>
 <br>
 Since version 1.2.0, the old config program has been removed.&nbsp; It
 has been replaced with a GNU autoconf generated configure script.&nbsp;
-This is good news for the portability and maintenance of DPCRTMM on
+This is good news for the portability and maintenance of libhoratio on
 UNIX platforms but it does means that pure DOS and Win32 users must
 either run the script via Cygwin (Win32) only, or edit config.h
 manually and then build their own makefile for their compiler.&nbsp;
@@ -310,26 +310,26 @@ rather than the pthread (POSIX threads) API.<br>
 <p>--enable-debug
 <br>
 This option defines DEBUG, it means extra debugging code is added to
-HORATIO for when I am debugging it, it does not add any extra
+libhoratio for when I am debugging it, it does not add any extra
 information
 for debugging your programs, only to my code.&nbsp; This could cause
 the
 library to abort on assert( ) traps and such.&nbsp; If you want to help
-submit problems with HORATIO, make sure it's built with
+submit problems with libhoratio, make sure it's built with
 --enable-debug.&nbsp;
-This will also add symbolic debug information to HORATIO where
+This will also add symbolic debug information to libhoratio where
 possible.<br>
 </p>
 <p>--enable-threads
 <br>
 Enables multithread safety.&nbsp; Note: This does not inply support,
-HORATIO can't handle threads portably for logging purposes etc.&nbsp;
-This option makes sure that HORATIO is mutually exclusive, that is, if
+libhoratio can't handle threads portably for logging purposes etc.&nbsp;
+This option makes sure that libhoratio is mutually exclusive, that is, if
 two threads attempt to call the library at the same time, one will
 succeed
 and one will have to wait until the first finishes.&nbsp; This stops
 internal
-corruption of HORATIO's data structures but adds overhead, don't use
+corruption of libhoratio's data structures but adds overhead, don't use
 it
 if you don't use pre-emptive threads.&nbsp; This is supported only on
 the
@@ -342,7 +342,7 @@ uses the GNU Portable Threads rather than POSIX threads.&nbsp; You will
 get a warning if you specifiy --enable-win32 and --with-gnu-pth because
 at time of writing, The GNU Portable Threads are only supported on
 UNIX-like platforms.&nbsp; Your program is resonsible for initialising
-the GNU Portable Threads library before HORATIO is started.<br>
+the GNU Portable Threads library before libhoratio is started.<br>
 </p>
 <p>--enable-stderr
 <br>
@@ -351,7 +351,7 @@ redirected separately from the normal standard output stream.<br>
 </p>
 <p>--with-hook-chain-size:nnnn
 <br>
-The default hook chain size is 32.&nbsp; In HORATIO before it was
+The default hook chain size is 32.&nbsp; In libhoratio before it was
 Open Sourced advanced debug hooks were only allowed in paid-for
 versions.&nbsp;
 to get rid of them set this to zero.&nbsp; Otherwise a debug matrix is
@@ -383,9 +383,9 @@ space or provide more space.
 <br>
 For tiny, small and compact memory models in 16-bit segmented systems
 ONLY.&nbsp; This makes sure pointers are not truncated between callers
-in modules using near pointers and the HORATIO library in other
+in modules using near pointers and the libhoratio library in other
 modules
-using near pointers.&nbsp; This ensures the HORATIO library explictly
+using near pointers.&nbsp; This ensures the libhoratio library explictly
 uses far pointers and the host program's code knows it.&nbsp; Far
 pointers are non-ANSI, therefore, if this doesn't work,
 editing build.h might be necessary, see the <a href="#FAQ">FAQ</a>.&nbsp;
@@ -484,7 +484,7 @@ arrays
 used throughout the program.&nbsp; The interface to this list is kept
 internal
 to the library, if you want to access it you could always add it to
-HORATIO.H,
+horatio.h,
 although there should be no reason to do this.&nbsp; The safety list's
 size can be adjusted at configuration time via the
 --with-safety-list-size option.<br>
@@ -507,7 +507,7 @@ If you already have a program to convert to use the library I suggest
 this.&nbsp; Download at least version 1.1.4 and define USING_HORATIO
 before
 including horatio.h in each module.&nbsp; This makes malloc( ),
-calloc( ), realloc( ) and free( ), call HORATIO instead.&nbsp; Also,
+calloc( ), realloc( ) and free( ), call libhoratio instead.&nbsp; Also,
 since the library should
 be started and shutdown correctly, I recommend code similar to example3
 as a typical transparent usage program.
@@ -609,7 +609,7 @@ users sees.
 No documentation is supplied or can be found that I have written for
 the hidden functions which I believe it is not worth library users
 trying
-to access.&nbsp; The file HORATIO.H contains most structures that will
+to access.&nbsp; The file horatio.h contains most structures that will
 be of any interest too.&nbsp; If you have the library source you can
 read
 all the other headers to discover the hidden interface if you are that
@@ -764,7 +764,7 @@ because of the block descriptor array.&nbsp; Block descriptor arrays
 are
 for organisation purposes, use <a href="#CreateBlockArray">horatio_CreateBlockArray(
 )</a> to get one before allocating any blocks of memory or specify NULL
-to use the array provided by HORATIO (the NULL array is not available
+to use the array provided by libhoratio (the NULL array is not available
 if the library is configured --with-no-null-array).&nbsp; The size in
 bytes of
 the desired block should be specified.&nbsp; NULL is returned if the
@@ -895,11 +895,11 @@ it.
 <br>
 Version: 1.1.6
 <br>
-This function returns nonzero if HORATIO has been started.&nbsp; It
-is intended to be used by libraries which rely on HORATIO for
+This function returns nonzero if libhoratio has been started.&nbsp; It
+is intended to be used by libraries which rely on libhoratio for
 debugging
 memory but need to know whether the program which uses it already uses
-HORATIO in oder to know when to start or stop the library or to leave
+libhoratio in oder to know when to start or stop the library or to leave
 well alone.
 <br>
 <a name="GetBlockSize"></a><br>
@@ -1144,7 +1144,7 @@ Although there are a few leaks that can't be tracked down it's stable
 and
 users would have nothing to complain about.&nbsp; They won't be too
 happy
-if HORATIO keeps outputting all the mistakes at the end.&nbsp;
+if libhoratio keeps outputting all the mistakes at the end.&nbsp;
 Removing
 the library may not be feasible if the program is designed intimately
 around
@@ -1201,7 +1201,7 @@ I return them the same structure, passing NULL does nothing.
 <font color="#3333ff">void horatio_Dump(FILE* Target);</font>
 <br>
 Dumps a listing of all allocated blocks of memory which are currently
-managed by HORATIO. Target may be any stream which allows writing, for
+managed by libhoratio. Target may be any stream which allows writing, for
 example stdout, stderr or a writable file. The output may be used for
 knowing
 what state memory is in at any time without having to wait until a trap
