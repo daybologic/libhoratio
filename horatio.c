@@ -54,15 +54,15 @@ the definition won't exist and build.h will tell them off! */
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal data */
-#include "dpc_trap.h" /* Trap() - Trap support */
-#include "dpc_log.h" /* LOG macro - Logging support */
-#include "dpc_safelist.h" /* Safety list support functions */
-#include "dpc_dbghooks.h" /* The debug hook support/executive */
-#include "dpc_biglock.h" /* To init / uninit the big lib lock */
-#include "dpc_blkarray.h" /* Internal interface to block arrays */
+#include "hintdata.h" /* Internal data */
+#include "htrap.h" /* Trap() - Trap support */
+#include "hlog.h" /* LOG macro - Logging support */
+#include "hsafelst.h" /* Safety list support functions */
+#include "hdbghook.h" /* The debug hook support/executive */
+#include "hbiglock.h" /* To init / uninit the big lib lock */
+#include "hblocarr.h" /* Internal interface to block arrays */
 
 /*
 Minimal stuff here please, if possible promote granularity by using other C files

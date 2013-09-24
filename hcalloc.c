@@ -41,14 +41,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library data */
-#include "dpc_log.h" /* Main logging support */
-#include "dpc_iblkptr.h" /* horatio_int_IndexFromBlockPtr() */
-#include "dpc_dbghooks.h" /* Debug hook executive */
-#include "dpc_biglock.h" /* For entire library mutual exclusion */
-#include "dpc_alloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
+#include "hintdata.h" /* Internal library data */
+#include "hlog.h" /* Main logging support */
+#include "hiblkptr.h" /* horatio_int_IndexFromBlockPtr() */
+#include "hdbghook.h" /* Debug hook executive */
+#include "hbiglock.h" /* For entire library mutual exclusion */
+#include "halloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 
 #ifdef HORATIO_LOG
 static void OurLog(

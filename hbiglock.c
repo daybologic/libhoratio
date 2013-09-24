@@ -48,9 +48,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h"
+#include "hbuild.h"
 #include "horatio.h"
-#include "dpc_biglock.h"
+#include "hbiglock.h"
 
 #ifdef HORATIO_THREADS
 

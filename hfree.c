@@ -48,16 +48,16 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal data */
-#include "dpc_vptrap.h" /* _VerifyPtrs() */
-#include "dpc_locktrap.h" /* _LockTrap() */
-#include "dpc_log.h" /* LOG macro */
-#include "dpc_trap.h" /* Trap() */
-#include "dpc_dbghooks.h" /* Debug hook executive */
-#include "dpc_biglock.h" /* For mutual exclusion */
-#include "dpc_isbad.h" /* Internal interface to block testers */
+#include "hintdata.h" /* Internal data */
+#include "hvptrap.h" /* _VerifyPtrs() */
+#include "hlcktrap.h" /* _LockTrap() */
+#include "hlog.h" /* LOG macro */
+#include "htrap.h" /* Trap() */
+#include "hdbghook.h" /* Debug hook executive */
+#include "hbiglock.h" /* For mutual exclusion */
+#include "hisbad.h" /* Internal interface to block testers */
 
 #ifdef OURLOG /* Somebody else using OURLOG? */
 #  undef OURLOG /* Don't want their version */

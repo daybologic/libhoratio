@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* WARNING! This header is for internal library use only, it contains
 internal data for the library. */
 
-#include "dpc_build.h" /* Build parameters */
+#include "hbuild.h" /* Build parameters */
 
 /* Internal library data */
 extern PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */

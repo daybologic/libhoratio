@@ -45,11 +45,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* The main library header */
-#include "dpc_biglock.h" /* Mutual exclusion */
-#include "dpc_bdflags.h" /* Need this to get around the lock */
-#include "dpc_bloclock.h"
+#include "hbiglock.h" /* Mutual exclusion */
+#include "hbdflags.h" /* Need this to get around the lock */
+#include "hbloclck.h"
 
 void horatio_SetBlockLockingFlag(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,

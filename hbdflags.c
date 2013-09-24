@@ -45,14 +45,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library data */
-#include "dpc_vptrap.h" /* _VerifyPtrs() (replaces BBA/BBP traps) */
-#include "dpc_iblkptr.h" /* For getting array descriptor index for a particular block */
-#include "dpc_dbghooks.h" /* The debug hook executive */
-#include "dpc_biglock.h" /* Library's mutual exclusion */
-#include "dpc_bdflags.h"
+#include "hintdata.h" /* Internal library data */
+#include "hvptrap.h" /* _VerifyPtrs() (replaces BBA/BBP traps) */
+#include "hiblkptr.h" /* For getting array descriptor index for a particular block */
+#include "hdbghook.h" /* The debug hook executive */
+#include "hbiglock.h" /* Library's mutual exclusion */
+#include "hbdflags.h"
 
 /*
   NOTE: Adding of the hook caller in here has caused two variables
