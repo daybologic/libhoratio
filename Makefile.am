@@ -41,7 +41,7 @@ AM_CFLAGS=
 
 TESTS = example1 example2 example3 newbrand
 check_PROGRAMS = $(TESTS)
-examples_LDADD = -ldpcrtlmm
+examples_LDADD = -lhoratio
 
 if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
@@ -66,27 +66,27 @@ example3_LDADD = $(examples_LDADD)
 INCLUDES = \
   -I.
 
-lib_LTLIBRARIES = libdpcrtlmm.la
-libdpcrtlmm_la_SOURCES  = dpcrtlmm.c
-libdpcrtlmm_la_SOURCES += dpc_alloc.c
-libdpcrtlmm_la_SOURCES += dpc_bdflags.c
-libdpcrtlmm_la_SOURCES += dpc_biglock.c
-libdpcrtlmm_la_SOURCES += dpc_blkarray.c
-libdpcrtlmm_la_SOURCES += dpc_bloclock.c
-libdpcrtlmm_la_SOURCES += dpc_calloc.c
-libdpcrtlmm_la_SOURCES += dpc_dbghooks.c
-libdpcrtlmm_la_SOURCES += dpc_free.c
-libdpcrtlmm_la_SOURCES += dpc_getblksz.c
-libdpcrtlmm_la_SOURCES += dpc_iblkptr.c
-libdpcrtlmm_la_SOURCES += dpc_intdata.c
-libdpcrtlmm_la_SOURCES += dpc_isbad.c
-libdpcrtlmm_la_SOURCES += dpc_locktrap.c
-libdpcrtlmm_la_SOURCES += dpc_log.c
-libdpcrtlmm_la_SOURCES += dpc_realloc.c
-libdpcrtlmm_la_SOURCES += dpc_safelist.c
-libdpcrtlmm_la_SOURCES += dpc_stats.c
-libdpcrtlmm_la_SOURCES += dpc_trap.c
-libdpcrtlmm_la_SOURCES += dpc_vptrap.c
+lib_LTLIBRARIES = horatio.la
+libdpcrtlmm_la_SOURCES  = horatio.c
+libdpcrtlmm_la_SOURCES += halloc.c
+libdpcrtlmm_la_SOURCES += hbdflags.c
+libdpcrtlmm_la_SOURCES += hbiglock.c
+libdpcrtlmm_la_SOURCES += hblocarr.c
+libdpcrtlmm_la_SOURCES += hbloclck.c
+libdpcrtlmm_la_SOURCES += hcalloc.c
+libdpcrtlmm_la_SOURCES += hdbghook.c
+libdpcrtlmm_la_SOURCES += hfree.c
+libdpcrtlmm_la_SOURCES += hblocsz.c
+libdpcrtlmm_la_SOURCES += hiblkptr.c
+libdpcrtlmm_la_SOURCES += hintdata.c
+libdpcrtlmm_la_SOURCES += hisbad.c
+libdpcrtlmm_la_SOURCES += hlcktrap.c
+libdpcrtlmm_la_SOURCES += hlog.c
+libdpcrtlmm_la_SOURCES += hrealloc.c
+libdpcrtlmm_la_SOURCES += hsafelst.c
+libdpcrtlmm_la_SOURCES += hstats.c
+libdpcrtlmm_la_SOURCES += htrap.c
+libdpcrtlmm_la_SOURCES += hvptrap.c
 
 nobase_include_HEADERS =  horatio.h
 nobase_include_HEADERS += dpcrtlmm.h
