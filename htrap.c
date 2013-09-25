@@ -49,13 +49,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library data */
-#include "dpc_log.h" /* Internal logging support */
-#include "dpc_trap.h"
-#include "dpc_dbghooks.h" /* The debug hook executive */
-#include "dpc_biglock.h" /* Mutual exclusion */
+#include "hintdata.h" /* Internal library data */
+#include "hlog.h" /* Internal logging support */
+#include "htrap.h"
+#include "hdbghook.h" /* The debug hook executive */
+#include "hbiglock.h" /* Mutual exclusion */
 
 static void horatio_int_InstallTrapCallback(
   void(*NewTrapCallback)(const unsigned int, const char*),

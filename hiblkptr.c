@@ -46,12 +46,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal data */
-#include "dpc_trap.h" /* Trap support */
-#include "dpc_vptrap.h" /* For _VerifyPtrs() */
-#include "dpc_iblkptr.h"
+#include "hintdata.h" /* Internal data */
+#include "htrap.h" /* Trap support */
+#include "hvptrap.h" /* For _VerifyPtrs() */
+#include "hiblkptr.h"
 
 unsigned int horatio_int_IndexFromBlockPtr(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,

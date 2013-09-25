@@ -60,10 +60,10 @@ causes a warning on your compiler, I aplogise!
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library header */
-#include "dpc_log.h"
+#include "hintdata.h" /* Internal library header */
+#include "hlog.h"
 
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
           strncat( \

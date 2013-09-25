@@ -53,10 +53,10 @@ Created May 3rd 2000
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library data */
-#include "dpc_safelist.h"
+#include "hintdata.h" /* Internal library data */
+#include "hsafelst.h"
 
 unsigned int horatio_SafetyList_IsArrayPtrPresent(
   const PS_HORATIO_BLOCKDESCARRAY ArrayBase

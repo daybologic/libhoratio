@@ -51,13 +51,13 @@ trap.  Otherwise the function does not return. */
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library header */
-#include "dpc_trap.h" /* Trap() */
-#include "dpc_bloclock.h" /* For internal interfaces */
-#include "dpc_bdflags.h" /* For internal interface */
-#include "dpc_locktrap.h"
+#include "hintdata.h" /* Internal library header */
+#include "htrap.h" /* Trap() */
+#include "hbloclck.h" /* For internal interfaces */
+#include "hbdflags.h" /* For internal interface */
+#include "hlcktrap.h"
 
 unsigned int horatio_int_LockTrap(
   const char *FuncName,

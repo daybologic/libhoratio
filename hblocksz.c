@@ -44,14 +44,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library data */
-#include "dpc_trap.h" /* Trap() - Trap support */
-#include "dpc_vptrap.h" /* _VerifyPtrs() */
-#include "dpc_iblkptr.h" /* IndexFromBlockPtr() */
-#include "dpc_biglock.h" /* Library mutual exclusion */
-#include "dpc_isbad.h" /* Internal interface to block testers */
+#include "hintdata.h" /* Internal library data */
+#include "htrap.h" /* Trap() - Trap support */
+#include "hvptrap.h" /* _VerifyPtrs() */
+#include "hiblkptr.h" /* IndexFromBlockPtr() */
+#include "hbiglock.h" /* Library mutual exclusion */
+#include "hisbad.h" /* Internal interface to block testers */
 
 static size_t horatio_int_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,

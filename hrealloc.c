@@ -56,15 +56,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#include "dpc_build.h" /* General build parameters */
+#include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
-#include "dpc_intdata.h" /* Internal library data */
-#include "dpc_vptrap.h" /* _VerifyPtrs() */
-#include "dpc_locktrap.h" /* _LockTrap() */
-#include "dpc_iblkptr.h"
-#include "dpc_dbghooks.h" /* Debug hooking routines, we use the executive */
-#include "dpc_log.h"
-#include "dpc_biglock.h" /* Mutual exclusion */
+#include "hintdata.h" /* Internal library data */
+#include "hvptrap.h" /* _VerifyPtrs() */
+#include "hlcktrap.h" /* _LockTrap() */
+#include "hiblkptr.h"
+#include "hdbghook.h" /* Debug hooking routines, we use the executive */
+#include "hlog.h"
+#include "hbiglock.h" /* Mutual exclusion */
 
 static void HORATIO_FARDATA *horatio_int_Realloc(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
