@@ -107,14 +107,13 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libdpcrtlmm_la_LIBADD =
-am_libdpcrtlmm_la_OBJECTS = dpcrtlmm.lo dpc_alloc.lo dpc_bdflags.lo \
-	dpc_biglock.lo dpc_blkarray.lo dpc_bloclock.lo dpc_calloc.lo \
-	dpc_dbghooks.lo dpc_free.lo dpc_getblksz.lo dpc_iblkptr.lo \
-	dpc_intdata.lo dpc_isbad.lo dpc_locktrap.lo dpc_log.lo \
-	dpc_realloc.lo dpc_safelist.lo dpc_stats.lo dpc_trap.lo \
-	dpc_vptrap.lo
-libdpcrtlmm_la_OBJECTS = $(am_libdpcrtlmm_la_OBJECTS)
+libhoratio_la_LIBADD =
+am_libhoratio_la_OBJECTS = horatio.lo halloc.lo hbdflags.lo \
+	hbiglock.lo hblocarr.lo hbloclck.lo hcalloc.lo hdbghook.lo \
+	hfree.lo hblocksz.lo hiblkptr.lo hintdata.lo hisbad.lo \
+	hlcktrap.lo hlog.lo hrealloc.lo hsafelst.lo hstats.lo htrap.lo \
+	hvptrap.lo
+libhoratio_la_OBJECTS = $(am_libhoratio_la_OBJECTS)
 am__EXEEXT_1 = example1$(EXEEXT) example2$(EXEEXT) example3$(EXEEXT) \
 	newbrand$(EXEEXT)
 am_example1_OBJECTS = example1.$(OBJEXT)
@@ -152,9 +151,9 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libdpcrtlmm_la_SOURCES) $(example1_SOURCES) \
+SOURCES = $(libhoratio_la_SOURCES) $(example1_SOURCES) \
 	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES)
-DIST_SOURCES = $(libdpcrtlmm_la_SOURCES) $(example1_SOURCES) \
+DIST_SOURCES = $(libhoratio_la_SOURCES) $(example1_SOURCES) \
 	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
@@ -298,7 +297,7 @@ AUTOMAKE_OPTIONS =
 
 # Add any explicit flags here, or on the configure command line.
 AM_CFLAGS = 
-examples_LDADD = -ldpcrtlmm
+examples_LDADD = -lhoratio
 @HORATIO_THREADS_PTH_TRUE@AM_LDFLAGS = -lpth
 example1_SOURCES = example1.c
 example1_INCLUDES = horatio.h
@@ -315,13 +314,11 @@ example3_LDADD = $(examples_LDADD)
 INCLUDES = \
   -I.
 
-lib_LTLIBRARIES = libdpcrtlmm.la
-libdpcrtlmm_la_SOURCES = dpcrtlmm.c dpc_alloc.c dpc_bdflags.c \
-	dpc_biglock.c dpc_blkarray.c dpc_bloclock.c dpc_calloc.c \
-	dpc_dbghooks.c dpc_free.c dpc_getblksz.c dpc_iblkptr.c \
-	dpc_intdata.c dpc_isbad.c dpc_locktrap.c dpc_log.c \
-	dpc_realloc.c dpc_safelist.c dpc_stats.c dpc_trap.c \
-	dpc_vptrap.c
+lib_LTLIBRARIES = libhoratio.la
+libhoratio_la_SOURCES = horatio.c halloc.c hbdflags.c hbiglock.c \
+	hblocarr.c hbloclck.c hcalloc.c hdbghook.c hfree.c hblocksz.c \
+	hiblkptr.c hintdata.c hisbad.c hlcktrap.c hlog.c hrealloc.c \
+	hsafelst.c hstats.c htrap.c hvptrap.c
 nobase_include_HEADERS = horatio.h dpcrtlmm.h
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -410,8 +407,8 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libdpcrtlmm.la: $(libdpcrtlmm_la_OBJECTS) $(libdpcrtlmm_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libdpcrtlmm_la_OBJECTS) $(libdpcrtlmm_la_LIBADD) $(LIBS)
+libhoratio.la: $(libhoratio_la_OBJECTS) $(libhoratio_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libhoratio_la_OBJECTS) $(libhoratio_la_LIBADD) $(LIBS)
 
 clean-checkPROGRAMS:
 	@list='$(check_PROGRAMS)'; test -n "$$list" || exit 0; \
@@ -440,30 +437,30 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_alloc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_bdflags.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_biglock.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_blkarray.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_bloclock.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_calloc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_dbghooks.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_free.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_getblksz.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_iblkptr.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_intdata.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_isbad.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_locktrap.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_log.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_realloc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_safelist.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_stats.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_trap.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpc_vptrap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpccap.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpcrtlmm.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/halloc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hbdflags.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hbiglock.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hblocarr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hblocksz.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hbloclck.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hcalloc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hdbghook.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hfree.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hiblkptr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hintdata.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hisbad.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hlcktrap.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hlog.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/horatio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hrealloc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hsafelst.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hstats.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/htrap.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hvptrap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newbrand.Po@am__quote@
 
 .c.o:
