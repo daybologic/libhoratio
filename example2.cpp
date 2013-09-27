@@ -1,6 +1,6 @@
 /*
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
+Horatio's Memory Manager
+Copyright (c) 2000-2013, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #define USING_DPCRTLMM /* Needed for calloc() re-definition */
-#include "dpcrtlmm.h"
+#include "horatio.h"
 #include "dpccap.h"
 
 static void PrintStats(const PS_DPCRTLMM_STATS PStats);
@@ -67,7 +67,7 @@ static void* arrptrs[16];
 #ifndef __NO_NAMESPACES__
   using namespace Overlord;
 #endif /*!__NO_NAMESPACES__*/
-/*-------------------------------------------------------------------------*/
+
 int main() {
   unsigned int i;
   S_DPCRTLMM_STATS stats;
@@ -130,7 +130,7 @@ int main() {
   printf("Successful execution\n");
   return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static void PrintStats(
   const PS_DPCRTLMM_STATS PStats
 ) {
@@ -141,7 +141,7 @@ static void PrintStats(
     printf("Charge: %lu, peak: %lu\n", PStats->Charge.Allocated, PStats->Charge.Peak);
   }
 }
-/*-------------------------------------------------------------------------*/
+
 static void InitArrays() {
   size_t i;
 
@@ -151,7 +151,7 @@ static void InitArrays() {
   for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
     arrptrs[i] = NULL;
 }
-/*-------------------------------------------------------------------------*/
+
 static void PrintVersion()
 {
   S_DPCRTLMM_VERSION ver;
@@ -161,7 +161,7 @@ static void PrintVersion()
   printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
   printf("\n");
 }
-/*-------------------------------------------------------------------------*/
+
 static void myTrapHandler(
   const unsigned int TrapID,
   const char* TrapMsg
@@ -180,4 +180,4 @@ static void myTrapHandler(
   hey it's only a test */
   return;
 }
-/*-------------------------------------------------------------------------*/
+
