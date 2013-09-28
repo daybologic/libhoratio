@@ -59,3 +59,99 @@ unsigned int dpcrtlmm_InstallDebugHook(
 		NewHookProc
 	);
 }
+
+unsigned int horatio_GetDebugHookChainCount(
+  const unsigned int HookType
+);
+
+unsigned int horatio_GetDebugHookMatrixCount(
+  void
+);
+unsigned int horatio_UninstallDebugHook(
+  const unsigned short HookType,
+  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+);
+void HORATIO_FARDATA* horatio_AllocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const size_t NewBlockSize,
+  const char *File,
+  const unsigned int Line
+);
+void horatio_Free(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *Ptr
+);
+PS_HORATIO_BLOCKDESCARRAY horatio_CreateBlockArray(
+  void
+);
+void horatio_DestroyBlockArray(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+);
+unsigned int horatio_IsDefaultBlockArray(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+);
+void horatio_Startup(void);
+void horatio_Shutdown(void);
+unsigned int horatio_IsStarted(void);
+size_t horatio_GetBlockSize(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *BlockPtr
+);
+unsigned int horatio_IsBadBlockPtr(
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
+);
+unsigned int horatio_IsBadArrayPtr(
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
+);
+void HORATIO_FARDATA *horatio_Realloc(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  void HORATIO_FARDATA *OldBlockPtr, const size_t NewSize
+);
+void HORATIO_FARDATA *horatio_CallocEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const unsigned int N,
+  const size_t NewBlockSize,
+  const char *File,
+  const unsigned int Line
+);
+void horatio_InstallTrapCallback(
+  void(*UserCallbackProc)(
+    const unsigned int TrapID,
+    const char *TrapMessage
+  ),
+  const unsigned int AsHook
+);
+void horatio_RemoveTrapCallback(
+  void(*CurrentCallbackProc)(
+    const unsigned int TrapID,
+    const char *TrapDesc
+  )
+);
+signed char horatio_GetTrapCallbackInfo(void);
+unsigned char horatio_ModifyDescriptorFlags(
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
+  const unsigned char *PNewFlags
+);
+void horatio_SetBlockLockingFlag(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA* Ptr,
+  const unsigned int NewStatus
+);
+unsigned int horatio_IsBlockLocked(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA* Ptr
+);
+void horatio_ToggleBlockLockingStatus(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA* Ptr
+); /* If locked, unlocks, if unlocked, locks */
+unsigned char horatio_AreTrapsEnabled(void);
+void horatio_DisableTraps(void);
+void horatio_EnableTraps(void);
+extern unsigned char horatio__EnableTraps; /* Obsolete */
+unsigned long horatio_GetBlockCount(void); /* Returns number of allocated blocks */
+void horatio_GetStats(PS_HORATIO_STATS PReadStats);
+void horatio_Dump(FILE* Target); /* Dumps a table of all active allocations with lots of detail */
+PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
