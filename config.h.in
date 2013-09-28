@@ -6,6 +6,9 @@
 /* Enable debug messages */
 #undef DEBUG
 
+/* Support legacy DPCRTLMM symbols */
+#undef DPCRTLMM_LEGACY
+
 /* Define to 1 if you have the <alloc.h> header file. */
 #undef HAVE_ALLOC_H
 
