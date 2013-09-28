@@ -171,18 +171,18 @@ if test "$hdrstop_enabled" = "yes"; then
 fi
 AC_MSG_RESULT($hdrstop_enabled)
 
-dnl --with-dpcrtlmm
-AC_MSG_CHECKING([whether to support dpcrtlmm names (legacy)])
+dnl --enable-dpcrtlmm
+AC_MSG_CHECKING([whether to enable support for dpcrtlmm names (legacy)])
 AC_ARG_ENABLE(
   [dpcrtlmm],
-  [  --with-dpcrtlmm       Enable legacy DPCRTLMM support (default on)],
-  [dpcrtlmm_legacy_enabled=yes],
-  [dpcrtlmm_legacy_enabled=no]
+  [  --enable-dpcrtlmm      Enable legacy DPCRTLMM support],
+  [dpcrtlmm_legacy=yes],
+  [dpcrtlmm_legacy=no]
 )
-if test "$dpcrtlmm_legacy_enabled" = "yes"; then
-  AC_DEFINE([DPCRTLMM_LEGACY], [], [Support legacy DPCRTLMM name])
+if test "$dpcrtlmm_legacy" = "yes"; then
+  AC_DEFINE([DPCRTLMM_LEGACY], [], [Support legacy DPCRTLMM symbols])
 fi
-AC_MSG_RESULT($dpcrtlmm_legacy_enabled)
+AC_MSG_RESULT($dpcrtlmm_legacy)
 
 dnl --with-gnu-pth
 AC_MSG_CHECKING([which back-end threadlib to link against])
