@@ -62,96 +62,252 @@ unsigned int dpcrtlmm_InstallDebugHook(
 
 unsigned int dpcrtlmm_GetDebugHookChainCount(
   const unsigned int HookType
-);
+) {
+	return horatio_GetDebugHookChainCount(
+		HookType
+	);
+}
 
-unsigned int dpcrtlmm_GetDebugHookMatrixCount(
-  void
-);
+unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
+	return horatio_GetDebugHookMatrixCount();
+}
+
 unsigned int dpcrtlmm_UninstallDebugHook(
   const unsigned short HookType,
   unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
-);
+) {
+	return horatio_UninstallDebugHook(
+		HookType,
+		HookProc2Remove
+	);
+}
+
 void HORATIO_FARDATA* dpcrtlmm_AllocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
-);
+) {
+	horatio_AllocEx(
+		PBlockArray,
+		NewBlockSize,
+		File,
+		Line
+	);
+	return;
+}
+
 void dpcrtlmm_Free(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *Ptr
-);
-PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray(
-  void
-);
+) {
+	horatio_Free(
+		PBlockArray,
+		Ptr
+	);
+	return;
+}
+
+PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray() {
+	return horatio_CreateBlockArray();
+}
+
 void dpcrtlmm_DestroyBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
-);
+) {
+	horatio_DestroyBlockArray(
+		PBlockArray
+	);
+	return;
+}
+
 unsigned int dpcrtlmm_IsDefaultBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
-);
-void dpcrtlmm_Startup(void);
-void dpcrtlmm_Shutdown(void);
-unsigned int dpcrtlmm_IsStarted(void);
+) {
+	return horatio_IsDefaultBlockArray(
+		PBlockArray
+	);
+}
+
+void dpcrtlmm_Startup() {
+	horatio_Startup();
+	return;
+}
+
+void dpcrtlmm_Shutdown() {
+	horatio_Shutdown();
+	return;
+}
+
+unsigned int dpcrtlmm_IsStarted() {
+	return horatio_IsStarted();
+}
+
 size_t dpcrtlmm_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *BlockPtr
-);
+) {
+	return horatio_GetBlockSize(
+		PBlockArray,
+		BlockPtr
+	);
+}
+
 unsigned int dpcrtlmm_IsBadBlockPtr(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *BlockPtr
-);
+) {
+	return horatio_IsBadBlockPtr(
+		PBlockArray,
+		BlockPtr
+	);
+}
+
 unsigned int dpcrtlmm_IsBadArrayPtr(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	return horatio_IsBadArrayPtr(
+		PBlockArray
+	);
 );
+
 void HORATIO_FARDATA *dpcrtlmm_Realloc(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   void HORATIO_FARDATA *OldBlockPtr, const size_t NewSize
-);
+) {
+	horatio_Realloc(
+		PBlockArray,
+		OldBlockPtr,
+		NewSize
+	);
+	return;
+}
+
 void HORATIO_FARDATA *dpcrtlmm_CallocEx(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const unsigned int N,
   const size_t NewBlockSize,
   const char *File,
   const unsigned int Line
-);
+) {
+	horatio_CallocEx(
+		PBlockArray,
+		N,
+		NewBlockSize,
+		File,
+		Line
+	);
+	return;
+}
+
 void dpcrtlmm_InstallTrapCallback(
   void(*UserCallbackProc)(
     const unsigned int TrapID,
     const char *TrapMessage
   ),
   const unsigned int AsHook
-);
+) {
+	horatio_InstallTrapCallback(
+		UserCallbackProc,
+		AsHook
+	);
+	return;
+}
+
 void dpcrtlmm_RemoveTrapCallback(
   void(*CurrentCallbackProc)(
     const unsigned int TrapID,
     const char *TrapDesc
   )
-);
-signed char dpcrtlmm_GetTrapCallbackInfo(void);
+) {
+	horatio_RemoveTrapCallback(
+		CurrentCallbackProc
+	);
+	return;
+}
+
+signed char dpcrtlmm_GetTrapCallbackInfo() {
+	return horatio_GetTrapCallbackInfo();
+}
+
 unsigned char dpcrtlmm_ModifyDescriptorFlags(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA *Ptr,
   const unsigned char *PNewFlags
-);
+) {
+	return horatio_ModifyDescriptorFlags(
+		PBlockArray,
+		Ptr,
+		PNewFlags
+	);
+}
+
 void dpcrtlmm_SetBlockLockingFlag(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA* Ptr,
   const unsigned int NewStatus
-);
+) {
+	horatio_SetBlockLockingFlag(
+		PBlockArray,
+		Ptr,
+		NewStatus
+	);
+	return;
+}
+
 unsigned int dpcrtlmm_IsBlockLocked(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA* Ptr
-);
+) {
+	return horatio_IsBlockLocked(
+		PBlockArray,
+		Ptr
+	);
+}
+
 void dpcrtlmm_ToggleBlockLockingStatus(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
   const void HORATIO_FARDATA* Ptr
-); /* If locked, unlocks, if unlocked, locks */
-unsigned char dpcrtlmm_AreTrapsEnabled(void);
-void dpcrtlmm_DisableTraps(void);
-void dpcrtlmm_EnableTraps(void);
-extern unsigned char dpcrtlmm__EnableTraps; /* Obsolete */
-unsigned long dpcrtlmm_GetBlockCount(void); /* Returns number of allocated blocks */
-void dpcrtlmm_GetStats(PS_HORATIO_STATS PReadStats);
-void dpcrtlmm_Dump(FILE* Target); /* Dumps a table of all active allocations with lots of detail */
-PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
+) {
+	horatio_ToggleBlockLockingStatus(
+		PBlockArray,
+		Ptr
+	);
+	return;
+}
+
+unsigned char dpcrtlmm_AreTrapsEnabled() {
+	return horatio_AreTrapsEnabled();
+}
+
+void dpcrtlmm_DisableTraps() {
+	return dpcrtlmm_DisableTraps();
+}
+
+void dpcrtlmm_EnableTraps() {
+	return horatio_EnableTraps();
+}
+
+unsigned long dpcrtlmm_GetBlockCount() {
+	return horatio_GetBlockCount();
+}
+
+void dpcrtlmm_GetStats(PS_HORATIO_STATS PReadStats) {
+	horatio_GetStats(
+		PReadStats
+	);
+	return;
+}
+
+void dpcrtlmm_Dump(FILE* Target) {
+	dpcrtlmm_Dump(
+		Target
+	);
+	return;
+}
+
+PS_HORATIO_VERSION dpcrtlmm_Ver(
+	PS_HORATIO_VERSION PVerStruct
+) {
+	return horatio_Ver(
+		PVerStruct
+	);
+}
