@@ -49,7 +49,7 @@ endif
 
 example1_SOURCES = example1.c
 example1_INCLUDES = horatio.h
-example1_LDADD = $(examples_LDADD)
+example1_LDADD = -ldpcrtlmm
 
 newbrand_SOURCES = newbrand.c
 newbrand_INCLUDES = horatio.h
@@ -66,7 +66,8 @@ example3_LDADD = $(examples_LDADD)
 INCLUDES = \
   -I.
 
-lib_LTLIBRARIES = libhoratio.la
+lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
+libdpcrtlmm_la_SOURCES = dpcrtlmm.c
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c
 libhoratio_la_SOURCES += hbdflags.c

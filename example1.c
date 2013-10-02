@@ -53,6 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
+#undef DPCRTLMM_LEGACY
 #include "horatio.h"
 
 int main(void);
