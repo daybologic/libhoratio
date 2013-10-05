@@ -82,7 +82,7 @@ int main() {
   InitArrays();
   /* Wow, a hook for a change ;), I just wanted the stats on trap */
   dpcrtlmm_InstallTrapCallback(myTrapHandler, 1U);
-  printf("DPCRTLMM TEST\n");
+  printf("Horatio\'s test\n");
   printf("-------------\n\n");
   printf("starting library\n");
   PrintVersion();
