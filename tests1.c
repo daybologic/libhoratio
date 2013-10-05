@@ -319,7 +319,6 @@ static void suite_core_Ver()
 	CU_ASSERT_PTR_EQUAL(pver, &ver);
 	CU_ASSERT_EQUAL(pver->Major, HORATIO_VERSION_MAJOR);
 	CU_ASSERT_EQUAL(pver->Minor, HORATIO_VERSION_MINOR);
-	CU_ASSERT_EQUAL(pver->Minor, HORATIO_VERSION_MINOR);
 	CU_ASSERT_EQUAL(pver->Patch, HORATIO_VERSION_PATCH);
 }
 /*-------------------------------------------------------------------------*/
