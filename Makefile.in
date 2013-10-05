@@ -66,7 +66,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 TESTS = example1$(EXEEXT) example2$(EXEEXT) example3$(EXEEXT) \
-	newbrand$(EXEEXT)
+	tests1$(EXEEXT) newbrand$(EXEEXT)
 check_PROGRAMS = $(am__EXEEXT_1)
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(nobase_include_HEADERS) \
@@ -115,7 +115,7 @@ am_libhoratio_la_OBJECTS = horatio.lo halloc.lo hbdflags.lo \
 	hvptrap.lo
 libhoratio_la_OBJECTS = $(am_libhoratio_la_OBJECTS)
 am__EXEEXT_1 = example1$(EXEEXT) example2$(EXEEXT) example3$(EXEEXT) \
-	newbrand$(EXEEXT)
+	tests1$(EXEEXT) newbrand$(EXEEXT)
 am_example1_OBJECTS = example1.$(OBJEXT)
 example1_OBJECTS = $(am_example1_OBJECTS)
 am__DEPENDENCIES_1 =
@@ -129,6 +129,9 @@ example3_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_newbrand_OBJECTS = newbrand.$(OBJEXT)
 newbrand_OBJECTS = $(am_newbrand_OBJECTS)
 newbrand_DEPENDENCIES = $(am__DEPENDENCIES_1)
+am_tests1_OBJECTS = tests1.$(OBJEXT)
+tests1_OBJECTS = $(am_tests1_OBJECTS)
+tests1_DEPENDENCIES = $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -152,9 +155,11 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libhoratio_la_SOURCES) $(example1_SOURCES) \
-	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES)
+	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES) \
+	$(tests1_SOURCES)
 DIST_SOURCES = $(libhoratio_la_SOURCES) $(example1_SOURCES) \
-	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES)
+	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES) \
+	$(tests1_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -298,6 +303,7 @@ AUTOMAKE_OPTIONS =
 # Add any explicit flags here, or on the configure command line.
 AM_CFLAGS = 
 examples_LDADD = -lhoratio
+tests_LDADD = -lhoratio -lcunit
 @HORATIO_THREADS_PTH_TRUE@AM_LDFLAGS = -lpth
 example1_SOURCES = example1.c
 example1_INCLUDES = horatio.h
@@ -311,6 +317,9 @@ example2_LDADD = $(examples_LDADD)
 example3_SOURCES = example3.c
 example3_INCLUDES = horatio.h
 example3_LDADD = $(examples_LDADD)
+tests1_SOURCES = tests1.c
+tests1_INCLUDES = horatio.h
+tests1_LDADD = $(tests_LDADD)
 INCLUDES = \
   -I.
 
@@ -430,6 +439,9 @@ example3$(EXEEXT): $(example3_OBJECTS) $(example3_DEPENDENCIES)
 newbrand$(EXEEXT): $(newbrand_OBJECTS) $(newbrand_DEPENDENCIES) 
 	@rm -f newbrand$(EXEEXT)
 	$(LINK) $(newbrand_OBJECTS) $(newbrand_LDADD) $(LIBS)
+tests1$(EXEEXT): $(tests1_OBJECTS) $(tests1_DEPENDENCIES) 
+	@rm -f tests1$(EXEEXT)
+	$(LINK) $(tests1_OBJECTS) $(tests1_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -462,6 +474,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/htrap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hvptrap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newbrand.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tests1.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
