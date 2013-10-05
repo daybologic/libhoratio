@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define DPCRTLMM_SOURCE /* We need to pretend to be internal */
+#define HORATIO_SOURCE /* We need to pretend to be internal */
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -47,7 +47,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HDRSTOP*/
 
 #include "dpcrtlmm.h"
-#include "dpc_build.h"
+#include "hbuild.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
 
@@ -317,10 +317,10 @@ static void suite_core_Ver()
 
 	pver = dpcrtlmm_Ver(&ver);
 	CU_ASSERT_PTR_EQUAL(pver, &ver);
-	CU_ASSERT_EQUAL(pver->Major, DPCRTLMM_VERSION_MAJOR);
-	CU_ASSERT_EQUAL(pver->Minor, DPCRTLMM_VERSION_MINOR);
-	CU_ASSERT_EQUAL(pver->Minor, DPCRTLMM_VERSION_MINOR);
-	CU_ASSERT_EQUAL(pver->Patch, DPCRTLMM_VERSION_PATCH);
+	CU_ASSERT_EQUAL(pver->Major, HORATIO_VERSION_MAJOR);
+	CU_ASSERT_EQUAL(pver->Minor, HORATIO_VERSION_MINOR);
+	CU_ASSERT_EQUAL(pver->Minor, HORATIO_VERSION_MINOR);
+	CU_ASSERT_EQUAL(pver->Patch, HORATIO_VERSION_PATCH);
 }
 /*-------------------------------------------------------------------------*/
 static void suite_trap_InstallTrapCallback()
