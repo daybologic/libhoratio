@@ -1,6 +1,6 @@
 /*
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
+Horatio's Memory Manager
+Copyright (c) 2000-2013, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTMM_HDRSTOP*/
 
 #define USING_DPCRTLMM /* Activate malloc() etc as macros */
-#include "dpcrtlmm.h"
+#include "horatio.h"
 
 /* main() belongs to DPCRTLMM, rename your old main my_main or something */
 static int my_main(const int argc, const char* argv[]);
