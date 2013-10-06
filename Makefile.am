@@ -39,11 +39,12 @@ AUTOMAKE_OPTIONS=
 # Add any explicit flags here, or on the configure command line.
 AM_CFLAGS=
 
-TESTS = example1 example2 example3 dpctest1 newbrand
+TESTS = example1 example2 example3 dpctest1 htest1 newbrand
 check_PROGRAMS = $(TESTS)
 examples_LDADD = -lhoratio
 # FIXME: The following line should have -lhoratio changed to -ldpcrtlmm
 dpctests_LDADD = -lhoratio -lcunit
+htests_LDADD = -lhoratio -lcunit
 
 if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
@@ -68,6 +69,10 @@ example3_LDADD = $(examples_LDADD)
 dpctest1_SOURCES = dpctest1.c
 dpctest1_INCLUDES = horatio.h
 dpctest1_LDADD = $(dpctests_LDADD)
+
+htest1_SOURCES = htest1.c
+htest1_INCLUDES = horatio.h
+htest1_LDADD = $(htests_LDADD)
 
 INCLUDES = \
   -I.
