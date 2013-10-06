@@ -42,8 +42,7 @@ AM_CFLAGS=
 TESTS = example1 example2 example3 dpctest1 htest1 newbrand
 check_PROGRAMS = $(TESTS)
 examples_LDADD = -lhoratio
-# FIXME: The following line should have -lhoratio changed to -ldpcrtlmm
-dpctests_LDADD = -lhoratio -lcunit
+dpctests_LDADD = -ldpcrtlmm -lcunit
 htests_LDADD = -lhoratio -lcunit
 
 if HORATIO_THREADS_PTH
