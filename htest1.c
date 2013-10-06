@@ -46,7 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
 # pragma hdrstop
 #endif /*HDRSTOP*/
 
-#include "dpcrtlmm.h"
+#include "horatio.h"
 #include "hbuild.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]);
 static bool ProcessOptions(int ArgC, char **ArgV);
 
 /* Suite initialisation routines */
-static int init_suite_core(void); /* Core library implementation testing: dpcrtlmm.c  */
+static int init_suite_core(void); /* Core library implementation testing: horatio.c  */
 static int init_suite_trap(void); /* Trap function testing: dpc_trap.c */
 static int init_suite_alloc(void); /* Alloc function test: dpc_alloc.c */
 
@@ -95,7 +95,7 @@ static void test_TrapCallback(const unsigned int, const char*);
 static char *GlueStrs[10]; /* A small cache used by the Glue() and Unglue() functions */
 static bool SandboxStarted = false;
 static unsigned short int DebugLevel = 0U;
-static PS_DPCRTLMM_BLOCKDESCARRAY BDASharedSingle = NULL;
+static PS_HORATIO_BLOCKDESCARRAY BDASharedSingle = NULL;
 /*-------------------------------------------------------------------------*/
 static bool ProcessOptions(int ArgC, char **ArgV)
 {
@@ -130,7 +130,7 @@ static int init_suite_trap()
 static int init_suite_alloc()
 {
 	if ( !BDASharedSingle ) {
-		BDASharedSingle = dpcrtlmm_CreateBlockArray();
+		BDASharedSingle = horatio_CreateBlockArray();
 		if ( !BDASharedSingle ) return 1;
 		return 0;
 	}
@@ -151,7 +151,7 @@ static int clean_suite_trap()
 static int clean_suite_alloc()
 {
 	if ( BDASharedSingle ) {
-		dpcrtlmm_DestroyBlockArray(BDASharedSingle);
+		horatio_DestroyBlockArray(BDASharedSingle);
 		BDASharedSingle = NULL;
 		return 0;
 	}
@@ -299,12 +299,12 @@ int main(int argc, char *argv[])
 
 	/* Run all tests using the CUnit Basic interface */
 	CU_basic_set_mode(CU_BRM_VERBOSE);
-	dpcrtlmm_Startup();
+	horatio_Startup();
 	CU_basic_run_tests();
 	failCount = CU_get_number_of_failure_records();
 	CU_cleanup_registry();
 	err = CU_get_error();
-	dpcrtlmm_Shutdown();
+	horatio_Shutdown();
 	if ( err != CUE_SUCCESS ) return err;
 	if ( failCount ) return EXIT_FAILURE;
 	return EXIT_SUCCESS;
@@ -312,10 +312,10 @@ int main(int argc, char *argv[])
 /*-------------------------------------------------------------------------*/
 static void suite_core_Ver()
 {
-	S_DPCRTLMM_VERSION ver;
-	PS_DPCRTLMM_VERSION pver;
+	S_HORATIO_VERSION ver;
+	PS_HORATIO_VERSION pver;
 
-	pver = dpcrtlmm_Ver(&ver);
+	pver = horatio_Ver(&ver);
 	CU_ASSERT_PTR_EQUAL(pver, &ver);
 	CU_ASSERT_EQUAL(pver->Major, HORATIO_VERSION_MAJOR);
 	CU_ASSERT_EQUAL(pver->Minor, HORATIO_VERSION_MINOR);
@@ -324,43 +324,43 @@ static void suite_core_Ver()
 /*-------------------------------------------------------------------------*/
 static void suite_trap_InstallTrapCallback()
 {
-	dpcrtlmm_InstallTrapCallback(test_TrapCallback, 0);
+	horatio_InstallTrapCallback(test_TrapCallback, 0);
 }
 /*-------------------------------------------------------------------------*/
 static void suite_alloc_AllocSimple()
 {
-	void DPCRTLMM_FARDATA *ptrDefault, *ptrSharedSingle;
+	void HORATIO_FARDATA *ptrDefault, *ptrSharedSingle;
 
-	ptrDefault = dpcrtlmm_Alloc(NULL, 1024);
+	ptrDefault = horatio_Alloc(NULL, 1024);
 	CU_ASSERT_PTR_NOT_NULL(ptrDefault);
-	ptrSharedSingle = dpcrtlmm_Alloc(BDASharedSingle, 1024);
+	ptrSharedSingle = horatio_Alloc(BDASharedSingle, 1024);
 	CU_ASSERT_PTR_NOT_NULL(ptrSharedSingle);
 
-	dpcrtlmm_Free(NULL, ptrDefault);
-	dpcrtlmm_Free(BDASharedSingle, ptrSharedSingle);
+	horatio_Free(NULL, ptrDefault);
+	horatio_Free(BDASharedSingle, ptrSharedSingle);
 }
 /*-------------------------------------------------------------------------*/
 static void suite_alloc_AllocLoop()
 {
 	unsigned int blockI;
-	void DPCRTLMM_FARDATA *blocksDefault[48];
-	void DPCRTLMM_FARDATA *blocksSharedSingle[64];
+	void HORATIO_FARDATA *blocksDefault[48];
+	void HORATIO_FARDATA *blocksSharedSingle[64];
 
 	for ( blockI = 0U; blockI < sizeof(blocksDefault)/sizeof(blocksDefault[0]); blockI++ ) {
-		blocksDefault[blockI] = dpcrtlmm_Alloc(NULL, blockI * 32);
+		blocksDefault[blockI] = horatio_Alloc(NULL, blockI * 32);
 		CU_ASSERT_PTR_NOT_NULL(blocksDefault[blockI]);
 	}
 	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
-		blocksSharedSingle[blockI] = dpcrtlmm_Alloc(BDASharedSingle, blockI * 96);
+		blocksSharedSingle[blockI] = horatio_Alloc(BDASharedSingle, blockI * 96);
 		CU_ASSERT_PTR_NOT_NULL(blocksSharedSingle[blockI]);
 	}
 
 	/* Cleanup */
 	for ( blockI = 0U; blockI < sizeof(blocksDefault)/sizeof(blocksDefault[0]); blockI++ ) {
-		dpcrtlmm_Free(NULL, blocksDefault[blockI]);
+		horatio_Free(NULL, blocksDefault[blockI]);
 	}
 	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
-		dpcrtlmm_Free(BDASharedSingle, blocksSharedSingle[blockI]);
+		horatio_Free(BDASharedSingle, blocksSharedSingle[blockI]);
 	}
 }
 /*-------------------------------------------------------------------------*/
