@@ -306,8 +306,7 @@ AUTOMAKE_OPTIONS =
 # Add any explicit flags here, or on the configure command line.
 AM_CFLAGS = 
 examples_LDADD = -lhoratio
-# FIXME: The following line should have -lhoratio changed to -ldpcrtlmm
-dpctests_LDADD = -lhoratio -lcunit
+dpctests_LDADD = -ldpcrtlmm -lcunit
 htests_LDADD = -lhoratio -lcunit
 @HORATIO_THREADS_PTH_TRUE@AM_LDFLAGS = -lpth
 example1_SOURCES = example1.c
