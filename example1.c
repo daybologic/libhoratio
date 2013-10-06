@@ -1,6 +1,6 @@
 /*
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
+Horatio's Memory Manager
+Copyright (c) 2000-2013, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
-#include "dpcrtlmm.h"
+#include "horatio.h"
 
 int main(void);
 static void PrintStats(const PS_DPCRTLMM_STATS PStats);

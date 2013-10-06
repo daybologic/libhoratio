@@ -1,46 +1,10 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
+
 /* Enable debug messages */
 #undef DEBUG
-
-/* Use debug hooks */
-#undef DPCRTLMM_DEBUGHOOKS
-
-/* Stream to print errors on */
-#undef DPCRTLMM_DEV_ERROR
-
-/* Use pragma hdrstop */
-#undef DPCRTLMM_HDRSTOP
-
-/* Number of entries in a debug hook chain */
-#undef DPCRTLMM_HOOKCHAIN_SIZE
-
-/* Enable logging to DPCRTLMM.LOG */
-#undef DPCRTLMM_LOG
-
-/* Disable special NULL array */
-#undef DPCRTLMM_NONULL_BLOCKDESCARRAY
-
-/* Number of entries in safety list */
-#undef DPCRTLMM_SAFETYLIST_MAXSIZE
-
-/* Thread support */
-#undef DPCRTLMM_THREADS
-
-/* Use code for NT threads */
-#undef DPCRTLMM_THREADS_NT
-
-/* Use code for GNU Portable Threads */
-#undef DPCRTLMM_THREADS_PTH
-
-/* Use code for POSIX threads */
-#undef DPCRTLMM_THREADS_PTHREAD
-
-/* Non-portable POSIX thread extensions */
-#undef DPCRTLMM_THREADS_PTHREAD_NP
-
-/* Enable far data (16-bit) */
-#undef DPCRTLMM_WANTFARDATA
 
 /* Define to 1 if you have the <alloc.h> header file. */
 #undef HAVE_ALLOC_H
@@ -50,6 +14,9 @@
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
+
+/* printf prefixes %p 0x */
+#undef HAVE_FORMAT_POINTER_PREFIX
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -70,6 +37,9 @@
 /* Define to 1 if you have the <pth.h> header file. */
 #undef HAVE_PTH_H
 
+/* Define to 1 if you have the `snprintf' function. */
+#undef HAVE_SNPRINTF
+
 /* Define to 1 if stdbool.h conforms to C99. */
 #undef HAVE_STDBOOL_H
 
@@ -78,6 +48,9 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
@@ -103,6 +76,49 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
+/* Use debug hooks */
+#undef HORATIO_DEBUGHOOKS
+
+/* Stream to print errors on */
+#undef HORATIO_DEV_ERROR
+
+/* Use pragma hdrstop */
+#undef HORATIO_HDRSTOP
+
+/* Number of entries in a debug hook chain */
+#undef HORATIO_HOOKCHAIN_SIZE
+
+/* Enable logging to HORATIO.LOG */
+#undef HORATIO_LOG
+
+/* Disable special NULL array */
+#undef HORATIO_NONULL_BLOCKDESCARRAY
+
+/* Number of entries in safety list */
+#undef HORATIO_SAFETYLIST_MAXSIZE
+
+/* Thread support */
+#undef HORATIO_THREADS
+
+/* Use code for NT threads */
+#undef HORATIO_THREADS_NT
+
+/* Use code for GNU Portable Threads */
+#undef HORATIO_THREADS_PTH
+
+/* Use code for POSIX threads */
+#undef HORATIO_THREADS_PTHREAD
+
+/* Non-portable POSIX thread extensions */
+#undef HORATIO_THREADS_PTHREAD_NP
+
+/* Enable far data (16-bit) */
+#undef HORATIO_WANTFARDATA
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#undef LT_OBJDIR
+
 /* Disable debug messages */
 #undef NDEBUG
 
@@ -118,11 +134,26 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
 
 /* Big endian byte order */
 #undef __B_ENDIAN__

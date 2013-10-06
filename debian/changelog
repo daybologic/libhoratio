@@ -1,4 +1,4 @@
-libdpcrtlmm (1.2.1) stable; urgency=low
+libhoratio (1.2.1) stable; urgency=low
 
   * ac3ecdae1f53: Just fix a typo: valud -> value
   * 527d382177c4: Add debian packaging, rebuild configure etc

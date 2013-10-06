@@ -39,50 +39,54 @@ AUTOMAKE_OPTIONS=
 # Add any explicit flags here, or on the configure command line.
 AM_CFLAGS=
 
-TESTS = example1 example2 example3
+TESTS = example1 example2 example3 newbrand
 check_PROGRAMS = $(TESTS)
-examples_LDADD = -ldpcrtlmm
+examples_LDADD = -lhoratio
 
-if DPCRTLMM_THREADS_PTH
+if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
 endif
 
 example1_SOURCES = example1.c
-example1_INCLUDES = dpcrtlmm.h
+example1_INCLUDES = horatio.h
 example1_LDADD = $(examples_LDADD)
 
+newbrand_SOURCES = newbrand.c
+newbrand_INCLUDES = horatio.h
+newbrand_LDADD = $(examples_LDADD)
+
 example2_SOURCES = example2.cpp dpccap.cpp
-example2_INCLUDES = dpcrtlmm.h dpccap.h
+example2_INCLUDES = horatio.h dpccap.h
 example2_LDADD = $(examples_LDADD)
 
 example3_SOURCES = example3.c
-example3_INCLUDES = dpcrtlmm.h
+example3_INCLUDES = horatio.h
 example3_LDADD = $(examples_LDADD)
 
 INCLUDES = \
   -I.
 
-lib_LTLIBRARIES = libdpcrtlmm.la
-libdpcrtlmm_la_SOURCES  = dpcrtlmm.c
-libdpcrtlmm_la_SOURCES += dpc_alloc.c
-libdpcrtlmm_la_SOURCES += dpc_bdflags.c
-libdpcrtlmm_la_SOURCES += dpc_biglock.c
-libdpcrtlmm_la_SOURCES += dpc_blkarray.c
-libdpcrtlmm_la_SOURCES += dpc_bloclock.c
-libdpcrtlmm_la_SOURCES += dpc_calloc.c
-libdpcrtlmm_la_SOURCES += dpc_dbghooks.c
-libdpcrtlmm_la_SOURCES += dpc_free.c
-libdpcrtlmm_la_SOURCES += dpc_getblksz.c
-libdpcrtlmm_la_SOURCES += dpc_iblkptr.c
-libdpcrtlmm_la_SOURCES += dpc_intdata.c
-libdpcrtlmm_la_SOURCES += dpc_isbad.c
-libdpcrtlmm_la_SOURCES += dpc_locktrap.c
-libdpcrtlmm_la_SOURCES += dpc_log.c
-libdpcrtlmm_la_SOURCES += dpc_realloc.c
-libdpcrtlmm_la_SOURCES += dpc_safelist.c
-libdpcrtlmm_la_SOURCES += dpc_stats.c
-libdpcrtlmm_la_SOURCES += dpc_trap.c
-libdpcrtlmm_la_SOURCES += dpc_vptrap.c
+lib_LTLIBRARIES = libhoratio.la
+libhoratio_la_SOURCES  = horatio.c
+libhoratio_la_SOURCES += halloc.c
+libhoratio_la_SOURCES += hbdflags.c
+libhoratio_la_SOURCES += hbiglock.c
+libhoratio_la_SOURCES += hblocarr.c
+libhoratio_la_SOURCES += hbloclck.c
+libhoratio_la_SOURCES += hcalloc.c
+libhoratio_la_SOURCES += hdbghook.c
+libhoratio_la_SOURCES += hfree.c
+libhoratio_la_SOURCES += hblocksz.c
+libhoratio_la_SOURCES += hiblkptr.c
+libhoratio_la_SOURCES += hintdata.c
+libhoratio_la_SOURCES += hisbad.c
+libhoratio_la_SOURCES += hlcktrap.c
+libhoratio_la_SOURCES += hlog.c
+libhoratio_la_SOURCES += hrealloc.c
+libhoratio_la_SOURCES += hsafelst.c
+libhoratio_la_SOURCES += hstats.c
+libhoratio_la_SOURCES += htrap.c
+libhoratio_la_SOURCES += hvptrap.c
 
-nobase_include_HEADERS = dpcrtlmm.h
-
+nobase_include_HEADERS =  horatio.h
+nobase_include_HEADERS += dpcrtlmm.h
