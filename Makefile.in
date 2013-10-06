@@ -107,6 +107,9 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
+libdpcrtlmm_la_LIBADD =
+am_libdpcrtlmm_la_OBJECTS = dpcrtlmm.lo
+libdpcrtlmm_la_OBJECTS = $(am_libdpcrtlmm_la_OBJECTS)
 libhoratio_la_LIBADD =
 am_libhoratio_la_OBJECTS = horatio.lo halloc.lo hbdflags.lo \
 	hbiglock.lo hblocarr.lo hbloclck.lo hcalloc.lo hdbghook.lo \
@@ -118,10 +121,10 @@ am__EXEEXT_1 = example1$(EXEEXT) example2$(EXEEXT) example3$(EXEEXT) \
 	newbrand$(EXEEXT)
 am_example1_OBJECTS = example1.$(OBJEXT)
 example1_OBJECTS = $(am_example1_OBJECTS)
-am__DEPENDENCIES_1 =
-example1_DEPENDENCIES = $(am__DEPENDENCIES_1)
+example1_DEPENDENCIES =
 am_example2_OBJECTS = example2.$(OBJEXT) dpccap.$(OBJEXT)
 example2_OBJECTS = $(am_example2_OBJECTS)
+am__DEPENDENCIES_1 =
 example2_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_example3_OBJECTS = example3.$(OBJEXT)
 example3_OBJECTS = $(am_example3_OBJECTS)
@@ -151,10 +154,12 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libhoratio_la_SOURCES) $(example1_SOURCES) \
-	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES)
-DIST_SOURCES = $(libhoratio_la_SOURCES) $(example1_SOURCES) \
-	$(example2_SOURCES) $(example3_SOURCES) $(newbrand_SOURCES)
+SOURCES = $(libdpcrtlmm_la_SOURCES) $(libhoratio_la_SOURCES) \
+	$(example1_SOURCES) $(example2_SOURCES) $(example3_SOURCES) \
+	$(newbrand_SOURCES)
+DIST_SOURCES = $(libdpcrtlmm_la_SOURCES) $(libhoratio_la_SOURCES) \
+	$(example1_SOURCES) $(example2_SOURCES) $(example3_SOURCES) \
+	$(newbrand_SOURCES)
 HEADERS = $(nobase_include_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -301,7 +306,7 @@ examples_LDADD = -lhoratio
 @HORATIO_THREADS_PTH_TRUE@AM_LDFLAGS = -lpth
 example1_SOURCES = example1.c
 example1_INCLUDES = horatio.h
-example1_LDADD = $(examples_LDADD)
+example1_LDADD = -ldpcrtlmm
 newbrand_SOURCES = newbrand.c
 newbrand_INCLUDES = horatio.h
 newbrand_LDADD = $(examples_LDADD)
@@ -314,7 +319,8 @@ example3_LDADD = $(examples_LDADD)
 INCLUDES = \
   -I.
 
-lib_LTLIBRARIES = libhoratio.la
+lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
+libdpcrtlmm_la_SOURCES = dpcrtlmm.c
 libhoratio_la_SOURCES = horatio.c halloc.c hbdflags.c hbiglock.c \
 	hblocarr.c hbloclck.c hcalloc.c hdbghook.c hfree.c hblocksz.c \
 	hiblkptr.c hintdata.c hisbad.c hlcktrap.c hlog.c hrealloc.c \
@@ -407,6 +413,8 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
+libdpcrtlmm.la: $(libdpcrtlmm_la_OBJECTS) $(libdpcrtlmm_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libdpcrtlmm_la_OBJECTS) $(libdpcrtlmm_la_LIBADD) $(LIBS)
 libhoratio.la: $(libhoratio_la_OBJECTS) $(libhoratio_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libhoratio_la_OBJECTS) $(libhoratio_la_LIBADD) $(LIBS)
 
@@ -438,6 +446,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpccap.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dpcrtlmm.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/example3.Po@am__quote@
