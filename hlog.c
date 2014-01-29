@@ -133,7 +133,7 @@ void horatio_int_Log(
       #endif /*HORATIO_LOG*/
 
       if ( Severity > HORATIO_LOG_MESSAGE ) /* Anything more severe than a warning */
-        fprintf(HORATIO_DEV_ERROR, formatMsg);
+        fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
     }
   }
   return;

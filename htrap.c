@@ -269,7 +269,7 @@ static void DefHandler(
   /*
     Output trap's message on the standard error stream
   */
-  fprintf(HORATIO_DEV_ERROR, TrapMsg);
+  fprintf(HORATIO_DEV_ERROR, "%s", TrapMsg);
   abort();
 }
 
