@@ -37,7 +37,8 @@ AUTOMAKE_OPTIONS=
 # -Wnested-externs -Wmissing-declarations -Wunknown-pragmas
 
 # Add any explicit flags here, or on the configure command line.
-AM_CFLAGS=
+AM_CFLAGS = \
+  -I.
 
 TESTS = example1 example2 example3 newbrand
 check_PROGRAMS = $(TESTS)
@@ -62,9 +63,6 @@ example2_LDADD = $(examples_LDADD)
 example3_SOURCES = example3.c
 example3_INCLUDES = horatio.h
 example3_LDADD = $(examples_LDADD)
-
-AM_CFLAGS = \
-  -I.
 
 lib_LTLIBRARIES = libhoratio.la
 libhoratio_la_SOURCES  = horatio.c
