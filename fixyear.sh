@@ -35,7 +35,7 @@
 set -e
 actual_year=`date +"%Y"`
 echo $actual_year
-for f in *.sh *.ac *.cpp *.h *.pl *.am *.c; do
+for f in debian/* COPYING *.sh *.ac *.cpp *.h *.pl *.am *.c; do
 	echo Fixing $f
 	sed -i "1,100 s/2000-[0-9][0-9][0-9][0-9]/2000-$actual_year/" $f
 done
