@@ -63,7 +63,7 @@ example3_SOURCES = example3.c
 example3_INCLUDES = horatio.h
 example3_LDADD = $(examples_LDADD)
 
-INCLUDES = \
+AM_CFLAGS = \
   -I.
 
 lib_LTLIBRARIES = libhoratio.la
