@@ -79,6 +79,8 @@ AC_DEFUN([AC_CHECK_FORMAT_POINTER_PREFIX],
   if test "$ac_cv_header_stdio_h" = "yes"; then
     AC_RUN_IFELSE(
     [
+        AC_LANG_SOURCE(
+            [
 #include <stdio.h>
 static char addr[[32]];
 int main() {
@@ -87,6 +89,8 @@ int main() {
     return 0;
   return 1;
 }
+            ]
+        )
     ],[
       ac_cv_format_pointer_prefix=yes
     ],[
