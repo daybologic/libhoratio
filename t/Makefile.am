@@ -34,6 +34,7 @@ AUTOMAKE_OPTIONS=
 TESTS = example1 example2 example3 newbrand dpctest1 htest1
 check_PROGRAMS = $(TESTS)
 test_LDADD = -lhoratio
+cunit_test_LDADD = $(test_LDADD) -lcunit
 
 if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
@@ -58,8 +59,8 @@ example3_LDADD = $(test_LDADD)
 
 dpctest1_SOURCES = dpctest1.c
 dpctest1_INCLUDES = horatio.h
-dpctest1_LDADD = $(dpctests_LDADD)
+dpctest1_LDADD = $(cunit_test_LDADD)
 
 htest1_SOURCES = htest1.c
 htest1_INCLUDES = horatio.h
-htest1_LDADD = $(htests_LDADD)
+htest1_LDADD = $(cunit_test_LDADD)
