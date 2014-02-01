@@ -31,7 +31,7 @@
 ACLOCAL_AMFLAGS=-I m4
 AUTOMAKE_OPTIONS=
 
-TESTS = example1 example2 example3 newbrand
+TESTS = example1 example2 example3 newbrand dpctest1 htest1
 check_PROGRAMS = $(TESTS)
 test_LDADD = -lhoratio
 
@@ -55,3 +55,11 @@ example2_LDADD = $(test_LDADD)
 example3_SOURCES = example3.c
 example3_AM_CFLAGS = horatio.h
 example3_LDADD = $(test_LDADD)
+
+dpctest1_SOURCES = dpctest1.c
+dpctest1_INCLUDES = horatio.h
+dpctest1_LDADD = $(dpctests_LDADD)
+
+htest1_SOURCES = htest1.c
+htest1_INCLUDES = horatio.h
+htest1_LDADD = $(htests_LDADD)
