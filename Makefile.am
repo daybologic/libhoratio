@@ -32,45 +32,45 @@ ACLOCAL_AMFLAGS=-I m4
 AUTOMAKE_OPTIONS=subdir-objects
 
 C_ONLY_WFLAGS = \
- -Wmissing-prototypes \
- -Wstrict-prototypes \
- -Wbad-function-cast \
- -Wmissing-declarations \
- -Wnested-externs
+	-Wmissing-prototypes \
+	-Wstrict-prototypes \
+	-Wbad-function-cast \
+	-Wmissing-declarations \
+	-Wnested-externs
 
 GENERAL_WFLAGS = \
- -Werror \
- -Wall \
- -W \
- -Wcast-qual \
- -Wcast-align \
- -Waggregate-return \
- -Wpointer-arith \
- -Wshadow -Winline \
- -Wredundant-decls \
- -Wwrite-strings \
- -Wformat=2 \
- -Wformat-security \
- -Wformat-nonliteral \
- -Wundef \
- -Wredundant-decls \
- -Wunknown-pragmas
+	-Werror \
+	-Wall \
+	-W \
+	-Wcast-qual \
+	-Wcast-align \
+	-Waggregate-return \
+	-Wpointer-arith \
+	-Wshadow -Winline \
+	-Wredundant-decls \
+	-Wwrite-strings \
+	-Wformat=2 \
+	-Wformat-security \
+	-Wformat-nonliteral \
+	-Wundef \
+	-Wredundant-decls \
+	-Wunknown-pragmas
 
 GENERAL_CC_FLAGS = \
- -g \
- -I$(top_srcdir)/../lib
+	-g \
+	-I$(top_srcdir)/../lib
 
 AM_CFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS) \
- $(C_ONLY_WFLAGS)
+	$(GENERAL_CC_FLAGS) \
+	$(GENERAL_WFLAGS) \
+	$(C_ONLY_WFLAGS)
 
 AM_CPPFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS)
+	$(GENERAL_CC_FLAGS) \
+	$(GENERAL_WFLAGS)
 
 AM_LDFLAGS = \
- -L$(top_srcdir)/../lib
+	-L$(top_srcdir)/../lib
 
 
 export AM_CPPFLAGS
