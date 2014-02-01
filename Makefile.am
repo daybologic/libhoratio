@@ -37,8 +37,6 @@ C_ONLY_WFLAGS = \
  -Wbad-function-cast \
  -Wmissing-declarations \
  -Wnested-externs
-dpctests_LDADD = -ldpcrtlmm -lcunit
-htests_LDADD = -lhoratio -lcunit
 
 GENERAL_WFLAGS = \
  -Wall \
