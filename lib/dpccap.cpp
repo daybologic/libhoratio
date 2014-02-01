@@ -509,12 +509,12 @@ THORATIO_MemManager::Dump(
 Overlord::
 #endif
 THORATIO_BlockArray::THORATIO_BlockArray(
-  bool Init
+  bool doInit
 )
   :
   _PblockArray(NULL)
 {
-  if ( Init )
+  if ( doInit )
     this->Init();
 }
 

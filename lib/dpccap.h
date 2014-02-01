@@ -121,7 +121,7 @@ namespace Overlord {
   private:
       PS_HORATIO_BLOCKDESCARRAY _PblockArray;
   public:
-    THORATIO_BlockArray(bool Init);
+    THORATIO_BlockArray(bool doInit);
     THORATIO_BlockArray();
     int Init();
 
