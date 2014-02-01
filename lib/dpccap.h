@@ -47,116 +47,221 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef __NO_NAMESPACES__
 namespace daybo {
 #endif /*!__NO_NAMESPACES__*/
-  class THORATIO_MemManager {
-  private:
-    int firstAccess;
-  public:
-    THORATIO_MemManager();
+	class THORATIO_MemManager {
+	private:
+		int firstAccess;
+	public:
+		THORATIO_MemManager();
 
-    ~THORATIO_MemManager();
+		~THORATIO_MemManager();
 
-    void Startup(); // Explicit startup (not necessary but you can call it)
+		// Explicit startup (not necessary but you can call it)
+		void Startup();
 
-    int InstallDebugHook(const unsigned short HookType, unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO));
+		int InstallDebugHook(
+			const unsigned short HookType,
+			unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+		);
 
-    unsigned GetDebugHookChainCount(const unsigned int HookType);
+		unsigned GetDebugHookChainCount(
+			const unsigned int HookType
+		);
 
-    unsigned GetDebugHookMatrixCount();
+		unsigned GetDebugHookMatrixCount();
 
-    unsigned int UninstallDebugHook(const unsigned short HookType, unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO));
+		unsigned int UninstallDebugHook(
+			const unsigned short HookType,
+			unsigned int (*HookProc2Remove)(
+				PS_HORATIO_DEBUGHOOKINFO
+			)
+		);
 
-    void* Alloc(const size_t NewBlockSize);
+		void *Alloc(
+			const size_t NewBlockSize
+		);
 
-    void* Alloc(const size_t NewBlockSize, const char* File, const unsigned int Line);
+		void *Alloc(
+			const size_t NewBlockSize,
+			const char *File,
+			const unsigned int Line
+		);
 
-    void Free(void* Ptr);
+		void Free(
+			void *Ptr
+		);
 
-    // Only of use within a hook, see my docs for this function in HORATIO, it's just the same
-    int IsDefaultBlockArray(PS_HORATIO_BLOCKDESCARRAY PBlockArray);
+		// Only of use within a hook, see my docs for this
+		// function in HORATIO, it's just the same
+		int IsDefaultBlockArray(
+			PS_HORATIO_BLOCKDESCARRAY PBlockArray
+		);
 
-    // I shouldn't have been using void* in this function really, correct that
-    // for the C++ layer
-    size_t GetBlockSize(const void* BlockPtr);
+		// I shouldn't have been using void* in this function
+		// really, correct that for the C++ layer
+		size_t GetBlockSize(
+			const void *BlockPtr
+		);
 
-    int IsBadBlockPtr(const void* BlockPtr);
+		int IsBadBlockPtr(
+			const void *BlockPtr
+		);
 
-    void* Realloc(void* OldBlockPtr, const size_t NewSize);
+		void *Realloc(
+			void *OldBlockPtr,
+			const size_t NewSize
+		);
 
-    void* Calloc(const unsigned int N, const size_t NewBlockSize);
+		void *Calloc(
+			const unsigned int N,
+			const size_t NewBlockSize
+		);
 
-    void* Calloc(const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
+		void *Calloc(
+			const unsigned int N,
+			const size_t NewBlockSize,
+			const char *File,
+			const unsigned int Line
+		);
 
-    void InstallTrapCallback( void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage), const unsigned int AsHook );
+		void InstallTrapCallback(
+			void (*UserCallbackProc)(
+				const unsigned int TrapID,
+				const char *TrapMessage
+			),
+			const unsigned int AsHook
+		);
 
-    void RemoveTrapCallback( void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc) );
-      
-    signed char GetTrapCallbackInfo();
+		void RemoveTrapCallback(
+			void (*CurrentCallbackProc)(
+				const unsigned int TrapID,
+				const char *TrapDesc
+			)
+		);
 
-    unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags);
+		signed char GetTrapCallbackInfo();
 
-    void SetBlockLockingFlag(const void* Ptr, const int NewStatus);
+		unsigned char ModifyDescriptorFlags(
+			const void *Ptr,
+			const unsigned char* PNewFlags
+		);
 
-    int IsBlockLocked(const void* Ptr);
+		void SetBlockLockingFlag(
+			const void *Ptr,
+			const int NewStatus
+		);
 
-    void LockBlock(const void* pBlock);
+		int IsBlockLocked(
+			const void *Ptr
+		);
 
-    void UnlockBlock(const void* pBlock);
+		void LockBlock(
+			const void *pBlock
+		);
 
-    void ToggleBlockLockingStatus(const void* Ptr);
+		void UnlockBlock(
+			const void *pBlock
+		);
 
-    void EnableTraps();
-    void DisableTraps();
-    int AreTrapsEnabled();
+		void ToggleBlockLockingStatus(
+			const void *Ptr
+		);
 
-    void GetStats(PS_HORATIO_STATS PReadStats);
+		void EnableTraps();
+		void DisableTraps();
+		int AreTrapsEnabled();
 
-    unsigned long GetBlockCount();
+		void GetStats(
+			PS_HORATIO_STATS PReadStats
+		);
 
-    PS_HORATIO_VERSION Ver(PS_HORATIO_VERSION PVerStruct);
+		unsigned long GetBlockCount();
 
-    void Dump(FILE* Target);
-  };
+		PS_HORATIO_VERSION Ver(
+			PS_HORATIO_VERSION PVerStruct
+		);
 
-  class THORATIO_BlockArray {
-  private:
-      PS_HORATIO_BLOCKDESCARRAY _PblockArray;
-  public:
-    THORATIO_BlockArray(bool doInit);
-    THORATIO_BlockArray();
-    int Init();
+		void Dump(
+			FILE *Target
+		);
+	};
 
-    // Destroys the block array, destructs the object
-    ~THORATIO_BlockArray();
+	class THORATIO_BlockArray {
+	private:
+		PS_HORATIO_BLOCKDESCARRAY _PblockArray;
+	public:
+		THORATIO_BlockArray(bool doInit);
+		THORATIO_BlockArray();
+		int Init();
 
-    void* Alloc(const size_t NewBlockSize); /* Allocates a block in this block array */
+		// Destroys the block array, destructs the object
+		~THORATIO_BlockArray();
 
-    void* Alloc(const size_t NewBlockSize, const char* File, const unsigned int Line);
+		void *Alloc(
+			const size_t NewBlockSize
+		); /* Allocates a block in this block array */
 
-    void Free(void* Ptr);
+		void *Alloc(
+			const size_t NewBlockSize,
+			const char *File,
+			const unsigned int Line
+		);
 
-    // horatio should be using a constant pointer for this!
-    size_t GetBlockSize(const void* BlockPtr) const;
+		void Free(
+			void *Ptr
+		);
 
-    int IsBadBlockPtr(const void* BlockPtr) const;
+		// horatio should be using a constant pointer for this!
+		size_t GetBlockSize(
+			const void *BlockPtr
+		) const;
 
-    void* Realloc(void* OldBlockPtr, const size_t NewSize);
+		int IsBadBlockPtr(
+			const void *BlockPtr
+		) const;
 
-    void* Calloc(const unsigned int N, const size_t NewBlockSize);
+		void *Realloc(
+			void *OldBlockPtr,
+			const size_t NewSize
+		);
 
-    void* Calloc(const unsigned int N, const size_t NewBlockSize, const char* File, const unsigned int Line);
+		void *Calloc(
+			const unsigned int N,
+			const size_t NewBlockSize
+		);
 
-    unsigned char ModifyDescriptorFlags(const void* Ptr, const unsigned char* PNewFlags);
+		void *Calloc(
+			const unsigned int N,
+			const size_t NewBlockSize,
+			const char *File,
+			const unsigned int Line
+		);
 
-    void SetBlockLockingFlag(const void* Ptr, int NewStatus);
+		unsigned char ModifyDescriptorFlags(
+			const void *Ptr,
+			const unsigned char *PNewFlags
+		);
 
-    int IsBlockLocked(const void* Ptr) const;
+		void SetBlockLockingFlag(
+			const void *Ptr,
+			int NewStatus
+		);
 
-    void LockBlock(const void* pBlock);
+		int IsBlockLocked(
+			const void *Ptr
+		) const;
 
-    void UnlockBlock(const void* pBlock);
+		void LockBlock(
+			const void *pBlock
+		);
 
-    void ToggleBlockLockingStatus(const void* Ptr);
-  };
+		void UnlockBlock(
+			const void *pBlock
+		);
+
+		void ToggleBlockLockingStatus(
+			const void *Ptr
+		);
+	};
 
 #ifndef __NO_NAMESPACES__
 } /*namespace daybo*/

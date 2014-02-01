@@ -41,12 +41,12 @@ POSSIBILITY OF SUCH DAMAGE.
 // and version.
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 #include <stddef.h> /* For NULL */
 #include <stdio.h>
 #ifdef HORATIO_HDRSTOP // Same as in library source
-#  pragma hdrstop
+# pragma hdrstop
 #endif //HORATIO_HDRSTOP
 
 #include "horatio.h" // Library header
@@ -73,10 +73,10 @@ THORATIO_MemManager::THORATIO_MemManager()
 daybo::
 #endif
 THORATIO_MemManager::~THORATIO_MemManager() {
-  if ( this->firstAccess == 0 ) { /* Has been accessed/started? */
-    horatio_Shutdown();
-    this->firstAccess = 1;
-  }
+	if ( this->firstAccess == 0 ) { /* Has been accessed/started? */
+		horatio_Shutdown();
+		this->firstAccess = 1;
+	}
 }
 
 // Explicit startup function
@@ -85,10 +85,10 @@ void
 daybo::
 #endif
 THORATIO_MemManager::Startup() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
 }
 
 int
@@ -96,14 +96,14 @@ int
 daybo::
 #endif
 THORATIO_MemManager::InstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_InstallDebugHook(HookType, NewHookProc);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_InstallDebugHook(HookType, NewHookProc);
 }
 
 unsigned
@@ -113,11 +113,11 @@ daybo::
 THORATIO_MemManager::GetDebugHookChainCount(
   const unsigned int HookType
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_GetDebugHookChainCount(HookType);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_GetDebugHookChainCount(HookType);
 }
 
 unsigned
@@ -125,11 +125,11 @@ unsigned
 daybo::
 #endif /*__NO_NAMESPACES__*/
 THORATIO_MemManager::GetDebugHookMatrixCount() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_GetDebugHookMatrixCount();
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_GetDebugHookMatrixCount();
 }
 
 unsigned int
@@ -137,14 +137,14 @@ unsigned int
 daybo::
 #endif
 THORATIO_MemManager::UninstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_UninstallDebugHook(HookType, HookProc2Remove);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_UninstallDebugHook(HookType, HookProc2Remove);
 }
 
 void*
@@ -152,13 +152,13 @@ void*
 daybo::
 #endif
 THORATIO_MemManager::Alloc(
-  const size_t NewBlockSize
+	const size_t NewBlockSize
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_Alloc(NULL, NewBlockSize);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_Alloc(NULL, NewBlockSize);
 }
 
 void*
@@ -166,15 +166,15 @@ void*
 daybo::
 #endif
 THORATIO_MemManager::Alloc(
-  const size_t NewBlockSize,
-  const char* File,
-  const unsigned int Line
+	const size_t NewBlockSize,
+	const char* File,
+	const unsigned int Line
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_AllocEx(NULL, NewBlockSize, File, Line);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_AllocEx(NULL, NewBlockSize, File, Line);
 }
 
 // Don't bother shielding the library from NULLs, the library
@@ -185,13 +185,13 @@ void
 daybo::
 #endif
 THORATIO_MemManager::Free(
-  void* Ptr
+	void* Ptr
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_Free(NULL, Ptr);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_Free(NULL, Ptr);
 }
 
 int
@@ -199,13 +199,13 @@ int
 daybo::
 #endif
 THORATIO_MemManager::IsDefaultBlockArray(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_IsDefaultBlockArray(PBlockArray);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_IsDefaultBlockArray(PBlockArray);
 }
 
 size_t
@@ -213,13 +213,13 @@ size_t
 daybo::
 #endif
 THORATIO_MemManager::GetBlockSize(
-  const void* BlockPtr
+	const void* BlockPtr
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_GetBlockSize(NULL, (const void*)BlockPtr);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_GetBlockSize(NULL, (const void*)BlockPtr);
 }
 
 int
@@ -227,13 +227,13 @@ int
 daybo::
 #endif
 THORATIO_MemManager::IsBadBlockPtr(
-  const void* BlockPtr
+	const void* BlockPtr
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_IsBadBlockPtr(NULL, BlockPtr);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_IsBadBlockPtr(NULL, BlockPtr);
 }
 
 void*
@@ -241,14 +241,14 @@ void*
 daybo::
 #endif
 THORATIO_MemManager::Realloc(
-  void* OldBlockPtr,
-  const size_t NewSize
+	void* OldBlockPtr,
+	const size_t NewSize
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_Realloc(NULL, OldBlockPtr, NewSize);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_Realloc(NULL, OldBlockPtr, NewSize);
 }
 
 void*
@@ -256,14 +256,14 @@ void*
 daybo::
 #endif
 THORATIO_MemManager::Calloc(
-  const unsigned int N,
-  const size_t NewBlockSize
+	const unsigned int N,
+	const size_t NewBlockSize
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_Calloc(NULL, N, NewBlockSize);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_Calloc(NULL, N, NewBlockSize);
 }
 
 void*
@@ -271,16 +271,16 @@ void*
 daybo::
 #endif
 THORATIO_MemManager::Calloc(
-  const unsigned int N,
-  const size_t NewBlockSize,
-  const char* File,
-  const unsigned int Line
+	const unsigned int N,
+	const size_t NewBlockSize,
+	const char* File,
+	const unsigned int Line
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_CallocEx(NULL, N, NewBlockSize, File, Line);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_CallocEx(NULL, N, NewBlockSize, File, Line);
 }
 
 void
@@ -288,14 +288,17 @@ void
 daybo::
 #endif
 THORATIO_MemManager::InstallTrapCallback(
-  void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage),
-  const unsigned int AsHook
+	void(*UserCallbackProc)(
+		const unsigned int TrapID,
+		const char* TrapMessage
+	),
+	const unsigned int AsHook
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_InstallTrapCallback(UserCallbackProc, AsHook);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_InstallTrapCallback(UserCallbackProc, AsHook);
 }
 
 void
@@ -303,13 +306,16 @@ void
 daybo::
 #endif
 THORATIO_MemManager::RemoveTrapCallback(
-  void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc)
+	void(*CurrentCallbackProc)(
+		const unsigned int TrapID,
+		const char* TrapDesc
+	)
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_RemoveTrapCallback(CurrentCallbackProc);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_RemoveTrapCallback(CurrentCallbackProc);
 }
 
 signed char
@@ -317,11 +323,11 @@ signed char
 daybo::
 #endif
 THORATIO_MemManager::GetTrapCallbackInfo() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_GetTrapCallbackInfo();
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_GetTrapCallbackInfo();
 }
 
 unsigned char
@@ -329,14 +335,14 @@ unsigned char
 daybo::
 #endif
 THORATIO_MemManager::ModifyDescriptorFlags(
-  const void* Ptr,
-  const unsigned char* PNewFlags
+	const void* Ptr,
+	const unsigned char* PNewFlags
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_ModifyDescriptorFlags(NULL, Ptr, PNewFlags);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_ModifyDescriptorFlags(NULL, Ptr, PNewFlags);
 }
 
 void
@@ -344,14 +350,14 @@ void
 daybo::
 #endif
 THORATIO_MemManager::SetBlockLockingFlag(
-  const void* Ptr,
-  const int NewStatus
+	const void* Ptr,
+	const int NewStatus
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_SetBlockLockingFlag(NULL, Ptr, (const unsigned int)NewStatus);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_SetBlockLockingFlag(NULL, Ptr, (const unsigned int)NewStatus);
 }
 
 int
@@ -359,13 +365,13 @@ int
 daybo::
 #endif
 THORATIO_MemManager::IsBlockLocked(
-  const void* Ptr
+	const void* Ptr
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_IsBlockLocked(NULL, Ptr);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_IsBlockLocked(NULL, Ptr);
 }
 
 void
@@ -373,13 +379,13 @@ void
 daybo::
 #endif
 THORATIO_MemManager::LockBlock(
-  const void* pBlock
+	const void* pBlock
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_SetBlockLockingFlag(NULL, pBlock, (1U));
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_SetBlockLockingFlag(NULL, pBlock, (1U));
 }
 
 void
@@ -387,13 +393,13 @@ void
 daybo::
 #endif
 THORATIO_MemManager::UnlockBlock(
-  const void* pBlock
+	const void* pBlock
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_SetBlockLockingFlag(NULL, pBlock, (0U));
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_SetBlockLockingFlag(NULL, pBlock, (0U));
 }
 
 void
@@ -401,13 +407,13 @@ void
 daybo::
 #endif
 THORATIO_MemManager::ToggleBlockLockingStatus(
-  const void* Ptr
+	const void* Ptr
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_ToggleBlockLockingStatus(NULL, Ptr);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_ToggleBlockLockingStatus(NULL, Ptr);
 }
 
 void
@@ -415,12 +421,12 @@ void
 daybo::
 #endif
 THORATIO_MemManager::EnableTraps() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  // Change HORATIO externed variable, quicker than a library call
-  horatio__EnableTraps = 1U;
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	// Change HORATIO externed variable, quicker than a library call
+	horatio__EnableTraps = 1U;
 }
 
 void
@@ -428,11 +434,11 @@ void
 daybo::
 #endif
 THORATIO_MemManager::DisableTraps() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio__EnableTraps = 0U;
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio__EnableTraps = 0U;
 }
 
 int
@@ -440,11 +446,11 @@ int
 daybo::
 #endif
 THORATIO_MemManager::AreTrapsEnabled() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio__EnableTraps;
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio__EnableTraps;
 }
 
 void
@@ -452,13 +458,13 @@ void
 daybo::
 #endif
 THORATIO_MemManager::GetStats(
-  PS_HORATIO_STATS PReadStats
+	PS_HORATIO_STATS PReadStats
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_GetStats(PReadStats);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_GetStats(PReadStats);
 }
 
 unsigned long
@@ -466,11 +472,11 @@ unsigned long
 daybo::
 #endif
 THORATIO_MemManager::GetBlockCount() {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_GetBlockCount();
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_GetBlockCount();
 }
 
 PS_HORATIO_VERSION
@@ -478,27 +484,27 @@ PS_HORATIO_VERSION
 daybo::
 #endif
 THORATIO_MemManager::Ver(
-  PS_HORATIO_VERSION PVerStruct
+	PS_HORATIO_VERSION PVerStruct
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  return horatio_Ver(PVerStruct);
-} 
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	return horatio_Ver(PVerStruct);
+}
 
 void
 #ifndef __NO_NAMESPACES__
 daybo::
 #endif
 THORATIO_MemManager::Dump(
-  FILE* Target
+	FILE* Target
 ) {
-  if ( this->firstAccess ) {
-    horatio_Startup();
-    this->firstAccess = 0;
-  }
-  horatio_Dump(Target);
+	if ( this->firstAccess ) {
+		horatio_Startup();
+		this->firstAccess = 0;
+	}
+	horatio_Dump(Target);
 }
 
 
@@ -509,23 +515,20 @@ THORATIO_MemManager::Dump(
 daybo::
 #endif
 THORATIO_BlockArray::THORATIO_BlockArray(
-  bool doInit
-)
-  :
-  _PblockArray(NULL)
+	bool doInit
+):
+	_PblockArray(NULL)
 {
-  if ( doInit )
-    this->Init();
+	if ( doInit ) this->Init();
 }
 
 #ifndef __NO_NAMESPACES__
 daybo::
 #endif
-THORATIO_BlockArray::THORATIO_BlockArray()
-  :
+THORATIO_BlockArray::THORATIO_BlockArray():
   _PblockArray(NULL)
 {
-  this->Init();
+	this->Init();
 }
 
 int
@@ -533,20 +536,20 @@ int
 daybo::
 #endif
 THORATIO_BlockArray::Init() {
-  int ret = 0;
+	int ret = 0;
 
-  if ( !_PblockArray ) {
-    _PblockArray = horatio_CreateBlockArray();
-    if ( _PblockArray ) ret = 1;
-  }
-  return ret;
+	if ( !_PblockArray ) {
+		_PblockArray = horatio_CreateBlockArray();
+		if ( _PblockArray ) ret = 1;
+	}
+	return ret;
 }
 
 #ifndef __NO_NAMESPACES__
 daybo::
 #endif
 THORATIO_BlockArray::~THORATIO_BlockArray() {
-  horatio_DestroyBlockArray(_PblockArray);
+	horatio_DestroyBlockArray(_PblockArray);
 }
 
 void*
@@ -554,9 +557,9 @@ void*
 daybo::
 #endif
 THORATIO_BlockArray::Alloc(
-  const size_t NewBlockSize
+	const size_t NewBlockSize
 ) {
-  return horatio_Alloc(_PblockArray, NewBlockSize);
+	return horatio_Alloc(_PblockArray, NewBlockSize);
 }
 
 void*
@@ -564,11 +567,11 @@ void*
 daybo::
 #endif
 THORATIO_BlockArray::Alloc(
-  const size_t NewBlockSize,
-  const char* File,
-  const unsigned int Line
+	const size_t NewBlockSize,
+	const char* File,
+	const unsigned int Line
 ) {
-  return horatio_AllocEx(_PblockArray, NewBlockSize, File, Line);
+	return horatio_AllocEx(_PblockArray, NewBlockSize, File, Line);
 }
 
 void
@@ -576,9 +579,9 @@ void
 daybo::
 #endif
 THORATIO_BlockArray::Free(
-  void* Ptr
+	void* Ptr
 ) {
-  horatio_Free(_PblockArray, Ptr);
+	horatio_Free(_PblockArray, Ptr);
 }
 
 size_t
@@ -586,9 +589,9 @@ size_t
 daybo::
 #endif
 THORATIO_BlockArray::GetBlockSize(
-  const void* BlockPtr
+	const void* BlockPtr
 ) const {
-  return horatio_GetBlockSize(_PblockArray, (const void*)BlockPtr);
+	return horatio_GetBlockSize(_PblockArray, (const void*)BlockPtr);
 }
 
 int
@@ -596,9 +599,9 @@ int
 daybo::
 #endif
 THORATIO_BlockArray::IsBadBlockPtr(
-  const void* BlockPtr
+	const void* BlockPtr
 ) const {
-  return horatio_IsBadBlockPtr(_PblockArray, BlockPtr);
+	return horatio_IsBadBlockPtr(_PblockArray, BlockPtr);
 }
 
 void*
@@ -606,10 +609,10 @@ void*
 daybo::
 #endif
 THORATIO_BlockArray::Realloc(
-  void* OldBlockPtr,
-  const size_t NewSize
+	void* OldBlockPtr,
+	const size_t NewSize
 ) {
-  return horatio_Realloc(_PblockArray, OldBlockPtr, NewSize);
+	return horatio_Realloc(_PblockArray, OldBlockPtr, NewSize);
 }
 
 void*
@@ -617,10 +620,10 @@ void*
 daybo::
 #endif
 THORATIO_BlockArray::Calloc(
-  const unsigned int N,
-  const size_t NewBlockSize
+	const unsigned int N,
+	const size_t NewBlockSize
 ) {
-  return horatio_Calloc(_PblockArray, N, NewBlockSize);
+	return horatio_Calloc(_PblockArray, N, NewBlockSize);
 }
 
 void*
@@ -628,12 +631,12 @@ void*
 daybo::
 #endif
 THORATIO_BlockArray::Calloc(
-  const unsigned int N,
-  const size_t NewBlockSize,
-  const char* File,
-  const unsigned int Line
+	const unsigned int N,
+	const size_t NewBlockSize,
+	const char* File,
+	const unsigned int Line
 ) {
-  return horatio_CallocEx(_PblockArray, N, NewBlockSize, File, Line);
+	return horatio_CallocEx(_PblockArray, N, NewBlockSize, File, Line);
 }
 
 unsigned char
@@ -641,10 +644,10 @@ unsigned char
 daybo::
 #endif
 THORATIO_BlockArray::ModifyDescriptorFlags(
-  const void* Ptr,
-  const unsigned char* PNewFlags
+	const void* Ptr,
+	const unsigned char* PNewFlags
 ) {
-  return horatio_ModifyDescriptorFlags(_PblockArray, Ptr, PNewFlags);
+	return horatio_ModifyDescriptorFlags(_PblockArray, Ptr, PNewFlags);
 }
 
 void
@@ -652,10 +655,14 @@ void
 daybo::
 #endif
 THORATIO_BlockArray::SetBlockLockingFlag(
-  const void* Ptr,
-  int NewStatus
+	const void* Ptr,
+	int NewStatus
 ) {
-  horatio_SetBlockLockingFlag(_PblockArray, Ptr, (const unsigned int)NewStatus);
+	horatio_SetBlockLockingFlag(
+		_PblockArray,
+		Ptr,
+		(const unsigned int)NewStatus
+	);
 }
 
 int
@@ -663,9 +670,9 @@ int
 daybo::
 #endif
 THORATIO_BlockArray::IsBlockLocked(
-  const void* Ptr
+	const void* Ptr
 ) const {
-  return horatio_IsBlockLocked(_PblockArray, Ptr);
+	return horatio_IsBlockLocked(_PblockArray, Ptr);
 }
 
 void
@@ -673,9 +680,9 @@ void
 daybo::
 #endif
 THORATIO_BlockArray::LockBlock(
-  const void* pBlock
+	const void* pBlock
 ) {
-  horatio_LockBlock(_PblockArray, pBlock);
+	horatio_LockBlock(_PblockArray, pBlock);
 }
 
 void
@@ -683,9 +690,9 @@ void
 daybo::
 #endif
 THORATIO_BlockArray::UnlockBlock(
-  const void* pBlock
+	const void* pBlock
 ) {
-  horatio_SetBlockLockingFlag(_PblockArray, pBlock, (0U));
+	horatio_SetBlockLockingFlag(_PblockArray, pBlock, (0U));
 }
 
 void
@@ -693,8 +700,7 @@ void
 daybo::
 #endif
 THORATIO_BlockArray::ToggleBlockLockingStatus(
-  const void* Ptr
+	const void* Ptr
 ) {
-  horatio_ToggleBlockLockingStatus(_PblockArray, Ptr);
+	horatio_ToggleBlockLockingStatus(_PblockArray, Ptr);
 }
-
