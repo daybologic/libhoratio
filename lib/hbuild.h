@@ -37,24 +37,24 @@ readonly and is included by the library, config.h is dynamically written
 by the config program and included in this file.
 
 
-3rd Mar 2000 - Overlord Added HORATIO_SAFETYLIST_MAXSIZE
-13th May 2000 - Overlord removed hack SDYNMEN_WANT_IGNORANCE, doesn't apply
+3rd Mar 2000 - Added HORATIO_SAFETYLIST_MAXSIZE
+13th May 2000 - Removed hack SDYNMEN_WANT_IGNORANCE, doesn't apply
                 since removal of dependancies to other libs (most notibly
                 synmem of course). Sorry this doesn't mean anything to
                 programmers outside of Daybo Logic. ignore.
-14th June 2000 - Overlord Added HORATIO_FARDATA to allow explicit far data
-19th July 2000 - Overlord added a macro to disallow NULL as a special built-in
+14th June 2000 - Added HORATIO_FARDATA to allow explicit far data
+19th July 2000 - Added a macro to disallow NULL as a special built-in
                  BLOCKDESCARRAY, the macro is called
                  HORATIO_NONULL_BLOCKDESCARRAY, find the define in this file &
                  uncomment it to restore old behaviour.
-21st July 2000 - Overlord added check for HORATIO_SOURCE to try to stop users
+21st July 2000 - Added check for HORATIO_SOURCE to try to stop users
                  making the mistake of including this in their programs.
-25th July 2000 - Overlord added HORATIO_STDBLOCKLIMIT for free versions
-17th Nov 2000 - Overlord stripped all stuff to do with limiting and pricing
+25th July 2000 - Added HORATIO_STDBLOCKLIMIT for free versions
+17th Nov 2000 - Stripped all stuff to do with limiting and pricing
                 and the like in preparation for GPL release.
-24th May 2001 - Overlord refined versioning system, 1.2 goes down to 1.1.4 due
+24th May 2001 - Refined versioning system, 1.2 goes down to 1.1.4 due
                 to HORATIO_VERSION_PATCH.
-9th June 2001 - Overlord took most options out and made them the responsibillty
+9th June 2001 - Took most options out and made them the responsibillty
                 of the config program and config.h
 */
 

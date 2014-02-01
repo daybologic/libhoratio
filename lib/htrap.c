@@ -112,7 +112,7 @@ void horatio_int_Trap(
     strcpy(trapsCopy, preFix);
     strcat(trapsCopy, Message);
 
-    /* The Overlord had to work this out by means of a flow chart */
+    /* Palmer had to work this out by means of a flow chart */
     if (_UserTrapCallback) { /* Is user callback installed? */
       _UserTrapCallback(Id, Message); /* Call user's callback */
       if (!_userTrapCallbackIsHook) /* Is handler, not hook? */

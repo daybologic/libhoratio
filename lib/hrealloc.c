@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #define HORATIO_SOURCE
 /* Created: UNKNOWN
-   Programmer: Overlord David Duncan Ross Palmer
+   Programmer: David Duncan Ross Palmer
    Library: HORATIO
    Language: ANSI C (1990 implementation)
    Purpose: HORATIO's memory user-memory reallocation
