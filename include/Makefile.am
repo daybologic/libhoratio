@@ -30,4 +30,6 @@
 
 AUTOMAKE_OPTIONS=subdir-objects
 
-nobase_include_HEADERS = horatio.h
+nobase_include_HEADERS  = horatio.h
+nobase_include_HEADERS += dpcrtlmm.h
+nobase_include_HEADERS += dpccap.h
