@@ -101,7 +101,7 @@ static void TrapOnBadBlockArray(
   const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
   /* locals */
-  const char* cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
+  const char *const cTrapMsg0 = "%s: The array base ptr %s%p was not found in the internal safety list";
   char *dynMsg; /* Dynamically allocated message string */
   size_t dynMsgSize = ((FuncName) ? (strlen(FuncName)) : (0)) + strlen(cTrapMsg0) + 32; /* Enough space for address and NULL (and more) */ 
   if ( !horatio_int_IsBadArrayPtr(PBlockArray) )
@@ -115,7 +115,10 @@ static void TrapOnBadBlockArray(
       #ifdef HAVE_SNPRINTF
       dynMsgSize-1,
       #endif /*HAVE_SNPRINTF*/
-      cTrapMsg0,
+      /*cTrapMsg0,*/
+      /* TODO: This is a temporary workaround for a warning that we need
+      to statically use this string, so that the compiler may validate it */
+      "%s: The array base ptr %s%p was not found in the internal safety list",
       (FuncName) ? (FuncName) : ("UNKNOWN"),
       HORATIO_FMTPTRPFX, PBlockArray
     );
