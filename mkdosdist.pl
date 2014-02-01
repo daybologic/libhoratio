@@ -50,125 +50,116 @@ my @all_files = ();
 print "Creating DOS distribution\n";
 
 if ( opendir(CURRENT, '.') ) {
-  @all_files = readdir(CURRENT);
-  closedir(CURRENT);
-  if ( IsCorrectDir() ) {
-    if ( mkdir('dos_dist') || -d 'dos_dist' ) {
-      DoCopy('dos_dist');
-    }
-    else {
-      Error ("Cannot create dos_dist/ subdirectory");
-    }
-  }
-  else {
-    Error "\"$dirvfn\" cannot be found, are you in the correct directory?";
-  }
-}
-else {
-  die $!;
+	@all_files = readdir(CURRENT);
+	closedir(CURRENT);
+	if ( IsCorrectDir() ) {
+		if ( mkdir('dos_dist') || -d 'dos_dist' ) {
+			DoCopy('dos_dist');
+		} else {
+			Error ("Cannot create dos_dist/ subdirectory");
+		}
+	} else {
+		Error "\"$dirvfn\" cannot be found, are you in the correct directory?";
+	}
+} else {
+	die $!;
 }
 
 exit 0;
 
-sub IsCorrectDir()
-{
-  foreach ( @all_files ) {
-    if ( $_ ) {
-      return 1 if $_ eq $dirvfn
-    }
-  }
-  return 0;
-}
-
-sub Error($)
-{
-  my $msg = $_[0];
-  printf "Error: %s\n", $msg;
-}
-
-sub DoCopy($)
-{
-  my $dir = $_[0];
-
-  foreach ( @all_files ) {
-    my $current = $_;
-    my $new; # New filename only
-    my $newloc; # New filename _and_ location.
-    my $uscore;
-
-    # Filter out files which aren't essential
-    if ( ($current ne 'COPYING') && ($current ne 'README')) {
-      next if (
-        !( $current =~ m/\.c$/ ) and
-        !( $current =~ m/\.h$/ ) and
-        !( $current =~ m/\.cpp/ )
-      );
-    }
-
-    $uscore = rindex($current, '_');
-    if ( $uscore == -1 ) {
-      # No underscore, copy verbatim
-      $new = $current;
-    }
-    else {
-      $new = substr($current, $uscore+1, (length($current)-($uscore+1)));
-    }
-    $newloc = $dir . '/' . $new;
-
-    copy ($current, $newloc) || die $!;
-  }
-  AllSeds($dir);
-}
-
-sub AllSeds($)
-{
-  my $dir = $_[0];
-
-  print "Changing filenames within files (this may take some time)\n";
-  if ( chdir($dir) ) {
-    my @all_new_files;
-    if ( opendir(DOSDIST, '.') ) {
-      @all_new_files = readdir(DOSDIST);
-      closedir(DOSDIST);
-    }
-    foreach ( @all_new_files ) {
-      my $curr_new_fn = $_;
-
-      if ( $curr_new_fn ne '.' && $curr_new_fn ne '..' ) {
-	print "Processing \"$curr_new_fn\"...\n";
-	foreach ( @all_files ) { # All original filenames
-	  my $uscore;
-	  my $current;
-	  my $new;
-	  my $line;
-
-	  $current = $_;
-          next if ( ($current eq '.') || ($current eq '..') );
-	  
-	  $uscore = rindex($current, '_');
-          if ( $uscore == -1 ) {
-            # No underscore, use verbatim
-            $new = $current;
-          }
-          else {
-            $new = substr($current, $uscore+1, (length($current)-($uscore+1)));
-          }
-
-          rename $curr_new_fn, 'work';
-	  open(WORKFILE, '< work');
-	  open(OUTFILE, "> $curr_new_fn") || die $!;
-	  
-	  while ( $line = <WORKFILE> ) {
-	    $line =~ s/$current/$new/g;
-	    print OUTFILE $line;
-	  }
-	  close(WORKFILE);
-	  close(OUTFILE);
-	  unlink 'work';
+sub IsCorrectDir() {
+	foreach ( @all_files ) {
+		if ( $_ ) {
+			return 1 if $_ eq $dirvfn
+		}
 	}
-      }
-    }
+	return 0;
+}
 
-    chdir '..';
-  }
+sub Error($) {
+	my $msg = $_[0];
+	printf "Error: %s\n", $msg;
+}
+
+sub DoCopy($) {
+	my $dir = $_[0];
+
+	foreach ( @all_files ) {
+		my $current = $_;
+		my $new; # New filename only
+		my $newloc; # New filename _and_ location.
+		my $uscore;
+
+		# Filter out files which aren't essential
+		if ( ($current ne 'COPYING') && ($current ne 'README')) {
+			next if (
+			    !( $current =~ m/\.c$/ ) and
+			    !( $current =~ m/\.h$/ ) and
+			    !( $current =~ m/\.cpp/ )
+			);
+		}
+
+		$uscore = rindex($current, '_');
+		if ( $uscore == -1 ) {
+			# No underscore, copy verbatim
+			$new = $current;
+		} else {
+			$new = substr($current, $uscore+1, (length($current)-($uscore+1)));
+		}
+		$newloc = $dir . '/' . $new;
+
+		copy ($current, $newloc) || die $!;
+	}
+	AllSeds($dir);
+}
+
+sub AllSeds($) {
+	my $dir = $_[0];
+
+	print "Changing filenames within files (this may take some time)\n";
+	if ( chdir($dir) ) {
+		my @all_new_files;
+		if ( opendir(DOSDIST, '.') ) {
+			@all_new_files = readdir(DOSDIST);
+			closedir(DOSDIST);
+		}
+		foreach ( @all_new_files ) {
+			my $curr_new_fn = $_;
+
+			if ( $curr_new_fn ne '.' && $curr_new_fn ne '..' ) {
+				print "Processing \"$curr_new_fn\"...\n";
+				foreach ( @all_files ) { # All original filenames
+					my $uscore;
+					my $current;
+					my $new;
+					my $line;
+
+					$current = $_;
+					next if ( ($current eq '.') || ($current eq '..') );
+
+					$uscore = rindex($current, '_');
+					if ( $uscore == -1 ) {
+						# No underscore, use verbatim
+						$new = $current;
+					} else {
+						$new = substr($current, $uscore+1, (length($current)-($uscore+1)));
+					}
+
+					rename $curr_new_fn, 'work';
+					open(WORKFILE, '< work');
+					open(OUTFILE, "> $curr_new_fn") || die $!;
+
+					while ( $line = <WORKFILE> ) {
+						$line =~ s/$current/$new/g;
+						print OUTFILE $line;
+					}
+					close(WORKFILE);
+					close(OUTFILE);
+					unlink 'work';
+				}
+			}
+		}
+
+		chdir '..';
+	}
 }

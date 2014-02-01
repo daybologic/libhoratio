@@ -30,37 +30,37 @@
 #POSSIBILITY OF SUCH DAMAGE.
 
 if ( opendir(CODEDIR, '.') ) {
-  my $fn;
-  do {
-    $fn = readdir(CODEDIR);
-    if ( $fn ) {
-      if ( ($fn ne '.') && ($fn ne '..') ) {
-        if (
-          ( $fn =~ m/\.c$/ ) or
-          ( $fn =~ m/\.h$/ ) or
-          ( $fn =~ m/\.cpp$/ )
-        ) {
-          my $line;
+	my $fn;
+	do {
+		$fn = readdir(CODEDIR);
+		if ( $fn ) {
+			if ( ($fn ne '.') && ($fn ne '..') ) {
+				if (
+				    ( $fn =~ m/\.c$/ ) or
+				    ( $fn =~ m/\.h$/ ) or
+				    ( $fn =~ m/\.cpp$/ )
+				) {
+					my $line;
 
-          print "Processing \"$fn\"...\n";
-          rename($fn, 'work') || die $!;
-          open(OLDFILE, '< work') || die $!;
-          open(NEWFILE, "> $fn") || die $!;
+					print "Processing \"$fn\"...\n";
+					rename($fn, 'work') || die $!;
+					open(OLDFILE, '< work') || die $!;
+					open(NEWFILE, "> $fn") || die $!;
 
-          do {
-            $line = <OLDFILE>;
-            if ( $line ) {
-              $line =~ s/\r\n/\n/g;
-              print NEWFILE $line;
-            }
-          } while ( $line );
+					do {
+						$line = <OLDFILE>;
+						if ( $line ) {
+							$line =~ s/\r\n/\n/g;
+							print NEWFILE $line;
+						}
+					} while ( $line );
 
-          close(OLDFILE);
-          close(NEWFILE);
-          unlink 'work';
-        }
-      }
-    }
-  } while ( $fn );
-  closedir(CODEDIR);
+					close(OLDFILE);
+					close(NEWFILE);
+					unlink 'work';
+				}
+			}
+		}
+	} while ( $fn );
+	closedir(CODEDIR);
 }
