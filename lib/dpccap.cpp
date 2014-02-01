@@ -53,15 +53,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpccap.h" // Class definitions
 
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager MemManager;
 
-// Overlord::THORATIO_MemManager
+// daybo::THORATIO_MemManager
 
 // Constructor, starts HORATIO
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::THORATIO_MemManager()
   : firstAccess(1)
@@ -70,7 +70,7 @@ THORATIO_MemManager::THORATIO_MemManager()
 
 // Destructor, shuts down HORATIO
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::~THORATIO_MemManager() {
   if ( this->firstAccess == 0 ) { /* Has been accessed/started? */
@@ -82,7 +82,7 @@ THORATIO_MemManager::~THORATIO_MemManager() {
 // Explicit startup function
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Startup() {
   if ( this->firstAccess ) {
@@ -93,7 +93,7 @@ THORATIO_MemManager::Startup() {
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::InstallDebugHook(
   const unsigned short HookType,
@@ -108,7 +108,7 @@ THORATIO_MemManager::InstallDebugHook(
 
 unsigned
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::GetDebugHookChainCount(
   const unsigned int HookType
@@ -122,7 +122,7 @@ THORATIO_MemManager::GetDebugHookChainCount(
 
 unsigned
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif /*__NO_NAMESPACES__*/
 THORATIO_MemManager::GetDebugHookMatrixCount() {
   if ( this->firstAccess ) {
@@ -134,7 +134,7 @@ THORATIO_MemManager::GetDebugHookMatrixCount() {
 
 unsigned int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::UninstallDebugHook(
   const unsigned short HookType,
@@ -149,7 +149,7 @@ THORATIO_MemManager::UninstallDebugHook(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Alloc(
   const size_t NewBlockSize
@@ -163,7 +163,7 @@ THORATIO_MemManager::Alloc(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Alloc(
   const size_t NewBlockSize,
@@ -182,7 +182,7 @@ THORATIO_MemManager::Alloc(
 // mistakes without this little fancy layer playing at being HORATIO
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Free(
   void* Ptr
@@ -196,7 +196,7 @@ THORATIO_MemManager::Free(
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::IsDefaultBlockArray(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray
@@ -210,7 +210,7 @@ THORATIO_MemManager::IsDefaultBlockArray(
 
 size_t
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::GetBlockSize(
   const void* BlockPtr
@@ -224,7 +224,7 @@ THORATIO_MemManager::GetBlockSize(
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::IsBadBlockPtr(
   const void* BlockPtr
@@ -238,7 +238,7 @@ THORATIO_MemManager::IsBadBlockPtr(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Realloc(
   void* OldBlockPtr,
@@ -253,7 +253,7 @@ THORATIO_MemManager::Realloc(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Calloc(
   const unsigned int N,
@@ -268,7 +268,7 @@ THORATIO_MemManager::Calloc(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Calloc(
   const unsigned int N,
@@ -285,7 +285,7 @@ THORATIO_MemManager::Calloc(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::InstallTrapCallback(
   void(*UserCallbackProc)(const unsigned int TrapID, const char* TrapMessage),
@@ -300,7 +300,7 @@ THORATIO_MemManager::InstallTrapCallback(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::RemoveTrapCallback(
   void(*CurrentCallbackProc)(const unsigned int TrapID, const char* TrapDesc)
@@ -314,7 +314,7 @@ THORATIO_MemManager::RemoveTrapCallback(
 
 signed char
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::GetTrapCallbackInfo() {
   if ( this->firstAccess ) {
@@ -326,7 +326,7 @@ THORATIO_MemManager::GetTrapCallbackInfo() {
 
 unsigned char
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::ModifyDescriptorFlags(
   const void* Ptr,
@@ -341,7 +341,7 @@ THORATIO_MemManager::ModifyDescriptorFlags(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::SetBlockLockingFlag(
   const void* Ptr,
@@ -356,7 +356,7 @@ THORATIO_MemManager::SetBlockLockingFlag(
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::IsBlockLocked(
   const void* Ptr
@@ -370,7 +370,7 @@ THORATIO_MemManager::IsBlockLocked(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::LockBlock(
   const void* pBlock
@@ -384,7 +384,7 @@ THORATIO_MemManager::LockBlock(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::UnlockBlock(
   const void* pBlock
@@ -398,7 +398,7 @@ THORATIO_MemManager::UnlockBlock(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::ToggleBlockLockingStatus(
   const void* Ptr
@@ -412,7 +412,7 @@ THORATIO_MemManager::ToggleBlockLockingStatus(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::EnableTraps() {
   if ( this->firstAccess ) {
@@ -425,7 +425,7 @@ THORATIO_MemManager::EnableTraps() {
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::DisableTraps() {
   if ( this->firstAccess ) {
@@ -437,7 +437,7 @@ THORATIO_MemManager::DisableTraps() {
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::AreTrapsEnabled() {
   if ( this->firstAccess ) {
@@ -449,7 +449,7 @@ THORATIO_MemManager::AreTrapsEnabled() {
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::GetStats(
   PS_HORATIO_STATS PReadStats
@@ -463,7 +463,7 @@ THORATIO_MemManager::GetStats(
 
 unsigned long
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::GetBlockCount() {
   if ( this->firstAccess ) {
@@ -475,7 +475,7 @@ THORATIO_MemManager::GetBlockCount() {
 
 PS_HORATIO_VERSION
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Ver(
   PS_HORATIO_VERSION PVerStruct
@@ -489,7 +489,7 @@ THORATIO_MemManager::Ver(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager::Dump(
   FILE* Target
@@ -503,10 +503,10 @@ THORATIO_MemManager::Dump(
 
 
 
-// Overlord::THORATIO_BlockArray
+// daybo::THORATIO_BlockArray
 
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::THORATIO_BlockArray(
   bool doInit
@@ -519,7 +519,7 @@ THORATIO_BlockArray::THORATIO_BlockArray(
 }
 
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::THORATIO_BlockArray()
   :
@@ -530,7 +530,7 @@ THORATIO_BlockArray::THORATIO_BlockArray()
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Init() {
   int ret = 0;
@@ -543,7 +543,7 @@ THORATIO_BlockArray::Init() {
 }
 
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::~THORATIO_BlockArray() {
   horatio_DestroyBlockArray(_PblockArray);
@@ -551,7 +551,7 @@ THORATIO_BlockArray::~THORATIO_BlockArray() {
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Alloc(
   const size_t NewBlockSize
@@ -561,7 +561,7 @@ THORATIO_BlockArray::Alloc(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Alloc(
   const size_t NewBlockSize,
@@ -573,7 +573,7 @@ THORATIO_BlockArray::Alloc(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Free(
   void* Ptr
@@ -583,7 +583,7 @@ THORATIO_BlockArray::Free(
 
 size_t
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::GetBlockSize(
   const void* BlockPtr
@@ -593,7 +593,7 @@ THORATIO_BlockArray::GetBlockSize(
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::IsBadBlockPtr(
   const void* BlockPtr
@@ -603,7 +603,7 @@ THORATIO_BlockArray::IsBadBlockPtr(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Realloc(
   void* OldBlockPtr,
@@ -614,7 +614,7 @@ THORATIO_BlockArray::Realloc(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Calloc(
   const unsigned int N,
@@ -625,7 +625,7 @@ THORATIO_BlockArray::Calloc(
 
 void*
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::Calloc(
   const unsigned int N,
@@ -638,7 +638,7 @@ THORATIO_BlockArray::Calloc(
 
 unsigned char
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::ModifyDescriptorFlags(
   const void* Ptr,
@@ -649,7 +649,7 @@ THORATIO_BlockArray::ModifyDescriptorFlags(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::SetBlockLockingFlag(
   const void* Ptr,
@@ -660,7 +660,7 @@ THORATIO_BlockArray::SetBlockLockingFlag(
 
 int
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::IsBlockLocked(
   const void* Ptr
@@ -670,7 +670,7 @@ THORATIO_BlockArray::IsBlockLocked(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::LockBlock(
   const void* pBlock
@@ -680,7 +680,7 @@ THORATIO_BlockArray::LockBlock(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::UnlockBlock(
   const void* pBlock
@@ -690,7 +690,7 @@ THORATIO_BlockArray::UnlockBlock(
 
 void
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_BlockArray::ToggleBlockLockingStatus(
   const void* Ptr

@@ -65,7 +65,7 @@ static void* nullarrptrs[4];
 static void* arrptrs[16];
 
 #ifndef __NO_NAMESPACES__
-  using namespace Overlord;
+  using namespace daybo;
 #endif /*!__NO_NAMESPACES__*/
 
 int main() {

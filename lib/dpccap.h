@@ -45,7 +45,7 @@ POSSIBILITY OF SUCH DAMAGE.
 // main object, don't create more than one, the object is externed
 
 #ifndef __NO_NAMESPACES__
-namespace Overlord {
+namespace daybo {
 #endif /*!__NO_NAMESPACES__*/
   class THORATIO_MemManager {
   private:
@@ -159,12 +159,12 @@ namespace Overlord {
   };
 
 #ifndef __NO_NAMESPACES__
-} /*namespace Overlord*/
+} /*namespace daybo*/
 #endif
 
 extern
 #ifndef __NO_NAMESPACES__
-Overlord::
+daybo::
 #endif
 THORATIO_MemManager MemManager; /* This is the object you should use */
 
