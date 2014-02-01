@@ -35,6 +35,7 @@ C_ONLY_WFLAGS = \
  -Wmissing-prototypes \
  -Wstrict-prototypes \
  -Wbad-function-cast \
+ -Wmissing-declarations \
  -Wnested-externs
 
 GENERAL_WFLAGS = \
@@ -53,7 +54,6 @@ GENERAL_WFLAGS = \
  -Wformat-nonliteral \
  -Wundef \
  -Wredundant-decls \
- -Wmissing-declarations \
  -Wunknown-pragmas
 
 GENERAL_CC_FLAGS = \
