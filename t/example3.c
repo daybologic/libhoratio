@@ -31,17 +31,17 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  This example should help end users to understand how to convert
-  old code (code which has not been built around the intimate DPCRTLMM
-  functions) into code which can use DPCRTLMM without being changed too
-  much.  Remember to use the define in every module.  The define
-  requires DPCRTLMM version 1.1.4, the NULL array used by the macros
-  secretly only came about in DPCRTLMM 1.1.0 (I think), so don't try to
-  use it with the old proprietary closed source DPCRTLMMs
-*/
+ * This example should help end users to understand how to convert
+ * old code (code which has not been built around the intimate DPCRTLMM
+ * functions) into code which can use DPCRTLMM without being changed too
+ * much.  Remember to use the define in every module.  The define
+ * requires DPCRTLMM version 1.1.4, the NULL array used by the macros
+ * secretly only came about in DPCRTLMM 1.1.0 (I think), so don't try to
+ * use it with the old proprietary closed source DPCRTLMMs
+ */
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
 #include <stdio.h> /* Required for dpcrtlmm.h since 1.1.4 */
@@ -55,7 +55,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_THREADS_PTH*/
 
 #ifdef DPCRTLMM_HDRSTOP
-#  pragma hdrstop  /* Precompile above headers if compiler supports it */
+# pragma hdrstop  /* Precompile above headers if compiler supports it */
 #endif /*DPCRTMM_HDRSTOP*/
 
 #define USING_DPCRTLMM /* Activate malloc() etc as macros */
@@ -70,119 +70,121 @@ static void Title(void); /* Just displays some information */
 static void Version(void); /* Prints the library version */
 
 int main(const int argc, const char *argv[]) {
-  if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
-    printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
-    return EXIT_FAILURE;
-  }
+	if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
+		printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
+		return EXIT_FAILURE;
+	}
 
 #ifdef DPCRTLMM_THREADS_PTH
-  if ( !pth_init() ) {
-    puts("Can\'t initialise GNU Portable Threads\n");
-    return EXIT_FAILURE;
-  }
+	if ( !pth_init() ) {
+		puts("Can\'t initialise GNU Portable Threads\n");
+		return EXIT_FAILURE;
+	}
 #endif /*DPCRTLMM_THREADS_PTH*/
 
-  dpcrtlmm_Startup();
-  return my_main(argc, argv);
+	dpcrtlmm_Startup();
+	return my_main(argc, argv);
 }
 
 static int my_main(const int argc, const char* argv[]) {
-  /* This is where the original program will begin, here's a
-  quick example of your program, allocating all the arguments,
-  using the dpcrtlmm_Dump and then releasing them. */
+	/*
+	 * This is where the original program will begin, here's a
+	 * quick example of your program, allocating all the arguments,
+	 * using the dpcrtlmm_Dump and then releasing them.
+	 */
 
-  int i;
-  char** copyvector; /* NULL terminated vector version of arguments */
+	int i;
+	char **copyvector; /* NULL terminated vector version of arguments */
 
-  Title();
-  /* Allocate vector */
-  copyvector = (char**)malloc( (argc + 1) * sizeof(char*) );
-  if ( !copyvector ) {
-    handler(copyvector);
-    return EXIT_FAILURE;
-  }
-  InitVector(copyvector, argc + 1);
+	Title();
+	/* Allocate vector */
+	copyvector = (char**)malloc( (argc + 1) * sizeof(char*) );
+	if ( !copyvector ) {
+		handler(copyvector);
+		return EXIT_FAILURE;
+	}
+	InitVector(copyvector, argc + 1);
 
-  for ( i = 0; i < argc; i++ ) {
-    if ( argv[i] ) {
-      if ( argv[i][0] ) { /* Not blank string */
-        copyvector[i] = (char*)malloc(
-          sizeof(char) * (strlen(argv[i]) + 1)
-        );
-        if ( !copyvector[i] ) {
-          handler(copyvector);
-          return EXIT_FAILURE;
-        }
-        strcpy(copyvector[i], argv[i]);
-      }
-    }
-  }
-  PrintInfo(copyvector);
+	for ( i = 0; i < argc; i++ ) {
+		if ( argv[i] ) {
+			if ( argv[i][0] ) { /* Not blank string */
+				copyvector[i] = (char*)malloc(
+					sizeof(char) * (strlen(argv[i]) + 1)
+				);
+				if ( !copyvector[i] ) {
+					handler(copyvector);
+					return EXIT_FAILURE;
+				}
+				strcpy(copyvector[i], argv[i]);
+			}
+		}
+	}
+	PrintInfo(copyvector);
 #ifndef NDEBUG
-  dpcrtlmm_Dump(stdout);
+	dpcrtlmm_Dump(stdout);
 #endif /*!NDEBUG*/
-  handler(copyvector); /* normal clean up */
-  return EXIT_SUCCESS;
+	handler(copyvector); /* normal clean up */
+	return EXIT_SUCCESS;
 }
 
 static void handler(char** vector) {
-  /* Vector cleaner */
-  if ( vector ) {
-    size_t i = 0U;
+	/* Vector cleaner */
+	size_t i = 0U;
 
-    while ( vector[i] ) {
-      free(vector[i]);
-      vector[i++] = NULL;
-    }
-    free(vector);
-  }
+	if ( !vector ) return;
+	while ( vector[i] ) {
+		free(vector[i]);
+		vector[i++] = NULL;
+	}
+	free(vector);
 }
 
 static void PrintInfo(char** vector) {
-  if ( vector ) {
-    size_t i = 0U;
+	size_t i = 0U;
 
-    while ( vector[i] ) {
-      printf("Vector element %u : \"%s\"\n", (unsigned int)i, vector[i]);
-      i++;
-    }
-  }
+	if ( !vector ) return;
+	while ( vector[i] ) {
+		printf(
+			"Vector element %u : \"%s\"\n",
+			(unsigned int)i, vector[i]
+		);
+		i++;
+	}
 }
 
 static void InitVector(char** vector, unsigned int n) {
-  if ( vector ) {
-    unsigned int i;
+	unsigned int i;
+	if ( !vector ) return;
 
-    for ( i = 0U; i < n; i++ )
-      vector[i] = NULL;
-  }
+	for ( i = 0U; i < n; i++ )
+		vector[i] = NULL;
 }
 
 static void Title() {
-  printf("DPCRTLMM ");
-  Version();
-  printf(" example program.\n");
-  printf("The command line is copied into a NULL\n");
-  printf("terminated vector type as much as you like and see the owners\n");
-  printf("of the individual addresses.\n\n");
+	printf("DPCRTLMM ");
+	Version();
+	printf(" example program.\n");
+	printf("The command line is copied into a NULL\n");
+	printf("terminated vector type as much as you like and see the owners\n");
+	printf("of the individual addresses.\n\n");
 }
 
 static void Version() {
-  S_DPCRTLMM_VERSION version;
+	S_DPCRTLMM_VERSION version;
 
-  dpcrtlmm_Ver(&version); /* Call lib to get version */
-  printf("%u.%u.%u", version.Major, version.Minor, version.Patch);
+	dpcrtlmm_Ver(&version); /* Call lib to get version */
+	printf("%u.%u.%u", version.Major, version.Minor, version.Patch);
 
-  if ( (version.Flags & DPCRTLMM_VERSION_BETA) )
-    fputc((int)'b', stdout); /* b for beta of library */
-  if ( (version.Flags & DPCRTLMM_VERSION_DEBUG) )
-    printf("%s", " (debug)");
-  if ( (version.Flags & DPCRTLMM_VERSION_PRIVATE) )
-    printf("%s", " (private)");
-  if ( (version.Flags & DPCRTLMM_VERSION_SPECIAL) )
-    printf("%s", " (special)");
-  if ( (version.Flags & DPCRTLMM_VERSION_MT) )
-    printf("%s", " (multi-threaded)");
+	if ( (version.Flags & DPCRTLMM_VERSION_BETA) )
+		fputc((int)'b', stdout); /* b for beta of library */
+	if ( (version.Flags & DPCRTLMM_VERSION_DEBUG) )
+		printf("%s", " (debug)");
+	if ( (version.Flags & DPCRTLMM_VERSION_PRIVATE) )
+		printf("%s", " (private)");
+	if ( (version.Flags & DPCRTLMM_VERSION_SPECIAL) )
+		printf("%s", " (special)");
+	if ( (version.Flags & DPCRTLMM_VERSION_MT) )
+		printf("%s", " (multi-threaded)");
 
-  return;
+	return;
 }

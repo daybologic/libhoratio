@@ -50,145 +50,145 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HORATIO_THREADS_PTH*/
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "horatio.h"
-/*-------------------------------------------------------------------------*/
+
 int main(void);
 static void PrintStats(const PS_HORATIO_STATS PStats);
 static void InitArrays(void);
 static void PrintVersion(void);
 static void myTrapHandler(
-  const unsigned int TrapID,
-  const char *TrapMsg
+	const unsigned int TrapID,
+	const char *TrapMsg
 );
 static void *nullarrptrs[16];
 static void *arrptrs[8];
-/*-------------------------------------------------------------------------*/
+
 int main() {
-  unsigned int i;
-  S_HORATIO_STATS stats;
-  PS_HORATIO_BLOCKDESCARRAY Parr;
+	unsigned int i;
+	S_HORATIO_STATS stats;
+	PS_HORATIO_BLOCKDESCARRAY Parr;
 
 #ifdef HORATIO_THREADS_PTH
-  if ( !pth_init() ) {
-    puts("Can\'t initialise GNU Portable Threads.\n");
-    return EXIT_FAILURE;
-  }
+	if ( !pth_init() ) {
+		puts("Can\'t initialise GNU Portable Threads.\n");
+		return EXIT_FAILURE;
+	}
 #endif /*HORATIO_THREADS_PTH*/
 
-  horatio_Startup();
-  InitArrays();
-  /* Wow, a hook for a change ;), I just wanted the stats on trap */
-  horatio_InstallTrapCallback(myTrapHandler, 1U);
-  printf("HORATIO TEST\n");
-  printf("-------------\n\n");
-  printf("starting library\n");
-  PrintVersion();
-  printf("Creating block array\n");
-  Parr = horatio_CreateBlockArray();
-  printf("ATTENTION! ATTENTION! 2MB test + leaks!!!!\n\n");
-  printf("NULL array test: ");
-  printf("Allocating 32 blocks of 32KB (1MB) - in NULL block array\n");
-  printf("Block: ");
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
-    printf("#%d ", i);
-    nullarrptrs[i] = horatio_Calloc(NULL, 4, 256); /* Allocate block */
-    if (!nullarrptrs[i])
-      printf("Failure");
-  }
-  printf("\n\n");
-  /* Output the statistics */
-  horatio_GetStats(&stats);
-  PrintStats(&stats);
-  printf("Allocating the explictly allocated block array, 8 2KB blocks\n");
-  printf("Block ");
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
-    printf("#%d ", i);
-    arrptrs[i] = horatio_Calloc(Parr, 2, 1024); /* Allocate block */
-    if (!arrptrs[i])
-      printf("Failure");
-  }
-  printf("\n\n");
-  /* Output stats again, this will test the peak indicator */
-  horatio_GetStats(&stats);
-  PrintStats(&stats);
-  
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-    horatio_Free(NULL, nullarrptrs[i]);
+	horatio_Startup();
+	InitArrays();
+	/* Wow, a hook for a change ;), I just wanted the stats on trap */
+	horatio_InstallTrapCallback(myTrapHandler, 1U);
+	printf("HORATIO TEST\n");
+	printf("-------------\n\n");
+	printf("starting library\n");
+	PrintVersion();
+	printf("Creating block array\n");
+	Parr = horatio_CreateBlockArray();
+	printf("ATTENTION! ATTENTION! 2MB test + leaks!!!!\n\n");
+	printf("NULL array test: ");
+	printf("Allocating 32 blocks of 32KB (1MB) - in NULL block array\n");
+	printf("Block: ");
+	for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
+		printf("#%d ", i);
+		/* Allocate block */
+		nullarrptrs[i] = horatio_Calloc(NULL, 4, 256);
+		if (!nullarrptrs[i]) printf("Failure");
+	}
+	printf("\n\n");
+	/* Output the statistics */
+	horatio_GetStats(&stats);
+	PrintStats(&stats);
+	printf(
+		"Allocating the explictly allocated block array, 8 2KB blocks\n"	);
+	printf("Block ");
+	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
+		printf("#%d ", i);
+		arrptrs[i] = horatio_Calloc(Parr, 2, 1024); /* Allocate block */
+		if (!arrptrs[i]) printf("Failure");
+	}
+	printf("\n\n");
+	/* Output stats again, this will test the peak indicator */
+	horatio_GetStats(&stats);
+	PrintStats(&stats);
 
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-    horatio_Free(Parr, arrptrs[i]);
+	for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
+		horatio_Free(NULL, nullarrptrs[i]);
 
-  printf("stop (wait for info dump if applicable!!)\n");
-  horatio_DestroyBlockArray(Parr);
-  horatio_GetStats(&stats);
-  PrintStats(&stats);
-  horatio_Shutdown();
-  printf("Successful execution\n");
-  return 0;
+	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
+		horatio_Free(Parr, arrptrs[i]);
+
+	printf("stop (wait for info dump if applicable!!)\n");
+	horatio_DestroyBlockArray(Parr);
+	horatio_GetStats(&stats);
+	PrintStats(&stats);
+	horatio_Shutdown();
+	printf("Successful execution\n");
+	return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static void PrintStats(const PS_HORATIO_STATS PStats) {
-  if (PStats) {
-    printf(
-      "Blocks allocated: %lu (peaked at %lu)\n",
-      PStats->Blocks.Allocated,
-      PStats->Blocks.Peak
-    );
-    printf(
-      "Amount locked: %lu\n",
-      PStats->Blocks.Locked
-    );
-    printf(
-      "Amount marked as unswappable: %lu\n",
-      PStats->Blocks.Unswappable
-    );
-    printf(
-      "Charge: %lu, peak: %lu\n",
-      PStats->Charge.Allocated,
-      PStats->Charge.Peak
-    );
-  }
+	if ( !PStats ) return;
+
+	printf(
+		"Blocks allocated: %lu (peaked at %lu)\n",
+		PStats->Blocks.Allocated,
+		PStats->Blocks.Peak
+	);
+	printf(
+		"Amount locked: %lu\n",
+		PStats->Blocks.Locked
+	);
+	printf(
+		"Amount marked as unswappable: %lu\n",
+		PStats->Blocks.Unswappable
+	);
+	printf(
+		"Charge: %lu, peak: %lu\n",
+		PStats->Charge.Allocated,
+		PStats->Charge.Peak
+	);
 }
-/*-------------------------------------------------------------------------*/
+
 static void InitArrays() {
-  size_t i;
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-    nullarrptrs[i] = NULL;
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-    arrptrs[i] = NULL;
+	size_t i;
+
+	for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
+		nullarrptrs[i] = NULL;
+	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
+		arrptrs[i] = NULL;
 }
-/*-------------------------------------------------------------------------*/
+
 static void PrintVersion() {
-  S_HORATIO_VERSION ver;
-  printf("Gathering library version info...");
-  horatio_Ver(&ver);
-  printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
-  printf("\n");
+	S_HORATIO_VERSION ver;
+	printf("Gathering library version info...");
+	horatio_Ver(&ver);
+	printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
+	printf("\n");
 }
-/*-------------------------------------------------------------------------*/
+
 static void myTrapHandler(
-  const unsigned int TrapID,
-  const char *TrapMsg
+	const unsigned int TrapID,
+	const char *TrapMsg
 ) {
-  /*
-    Why am I handling this trap?  I'm not, I install this as
-    a hook only.  Which means control is returned to the HORATIO rap
-    handler afterwards.
-  */
-  S_HORATIO_STATS stats;
-  puts("--------Caution! Stats display from trap hook!---------\n");
-  printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
-  horatio_GetStats(&stats);
-  PrintStats(&stats);
-  printf("Dumping library blocks!\n");
-  horatio_Dump(stdout);
-  /*
-    What could I have done with the trap message?  Sorry for the warning,
-    hey it's only a test
-  */
-  return;
+	/*
+	 * Why am I handling this trap?  I'm not, I install this as
+	 * a hook only.  Which means control is returned to the HORATIO rap
+	 * handler afterwards.
+	 */
+	S_HORATIO_STATS stats;
+	puts("--------Caution! Stats display from trap hook!---------\n");
+	printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
+	horatio_GetStats(&stats);
+	PrintStats(&stats);
+	printf("Dumping library blocks!\n");
+	horatio_Dump(stdout);
+	/*
+	 * What could I have done with the trap message?  Sorry for the warning,
+	 * hey it's only a test
+	 */
+	return;
 }
-/*-------------------------------------------------------------------------*/

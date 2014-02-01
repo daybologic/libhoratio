@@ -50,7 +50,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*DPCRTLMM_THREADS_PTH*/
 
 #ifdef DPCRTLMM_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*DPCRTLMM_HDRSTOP*/
 
 #include "horatio.h"
@@ -60,135 +60,134 @@ static void PrintStats(const PS_DPCRTLMM_STATS PStats);
 static void InitArrays(void);
 static void PrintVersion(void);
 static void myTrapHandler(
-  const unsigned int TrapID,
-  const char *TrapMsg
+	const unsigned int TrapID,
+	const char *TrapMsg
 );
 static void *nullarrptrs[16];
 static void *arrptrs[8];
 
 int main() {
-  unsigned int i;
-  S_DPCRTLMM_STATS stats;
-  PS_DPCRTLMM_BLOCKDESCARRAY Parr;
+	unsigned int i;
+	S_DPCRTLMM_STATS stats;
+	PS_DPCRTLMM_BLOCKDESCARRAY Parr;
 
 #ifdef DPCRTLMM_THREADS_PTH
-  if ( !pth_init() ) {
-    puts("Can\'t initialise GNU Portable Threads.\n");
-    return EXIT_FAILURE;
-  }
+	if ( !pth_init() ) {
+		puts("Can\'t initialise GNU Portable Threads.\n");
+		return EXIT_FAILURE;
+	}
 #endif /*DPCRTLMM_THREADS_PTH*/
 
-  dpcrtlmm_Startup();
-  InitArrays();
-  /* Wow, a hook for a change ;), I just wanted the stats on trap */
-  dpcrtlmm_InstallTrapCallback(myTrapHandler, 1U);
-  printf("DPCRTLMM TEST\n");
-  printf("-------------\n\n");
-  printf("starting library\n");
-  PrintVersion();
-  printf("Creating block array\n");
-  Parr = dpcrtlmm_CreateBlockArray();
-  printf("ATTENTION! ATTENTION! 2MB test + leaks!!!!\n\n");
-  printf("NULL array test: ");
-  printf("Allocating 32 blocks of 32KB (1MB) - in NULL block array\n");
-  printf("Block: ");
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
-    printf("#%d ", i);
-    nullarrptrs[i] = dpcrtlmm_Calloc(NULL, 4, 256); /* Allocate block */
-    if (!nullarrptrs[i])
-      printf("Failure");
-  }
-  printf("\n\n");
-  /* Output the statistics */
-  dpcrtlmm_GetStats(&stats);
-  PrintStats(&stats);
-  printf("Allocating the explictly allocated block array, 8 2KB blocks\n");
-  printf("Block ");
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
-    printf("#%d ", i);
-    arrptrs[i] = dpcrtlmm_Calloc(Parr, 2, 1024); /* Allocate block */
-    if (!arrptrs[i])
-      printf("Failure");
-  }
-  printf("\n\n");
-  /* Output stats again, this will test the peak indicator */
-  dpcrtlmm_GetStats(&stats);
-  PrintStats(&stats);
-  
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-    dpcrtlmm_Free(NULL, nullarrptrs[i]);
+	dpcrtlmm_Startup();
+	InitArrays();
+	/* Wow, a hook for a change ;), I just wanted the stats on trap */
+	dpcrtlmm_InstallTrapCallback(myTrapHandler, 1U);
+	printf("DPCRTLMM TEST\n");
+	printf("-------------\n\n");
+	printf("starting library\n");
+	PrintVersion();
+	printf("Creating block array\n");
+	Parr = dpcrtlmm_CreateBlockArray();
+	printf("ATTENTION! ATTENTION! 2MB test + leaks!!!!\n\n");
+	printf("NULL array test: ");
+	printf("Allocating 32 blocks of 32KB (1MB) - in NULL block array\n");
+	printf("Block: ");
+	for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ ) {
+		printf("#%d ", i);
+		/* Allocate block */
+		nullarrptrs[i] = dpcrtlmm_Calloc(NULL, 4, 256);
+		if (!nullarrptrs[i]) printf("Failure");
+	}
+	printf("\n\n");
+	/* Output the statistics */
+	dpcrtlmm_GetStats(&stats);
+	PrintStats(&stats);
+	printf(
+		"Allocating the explictly allocated block array, 8 2KB blocks\n"	);
+	printf("Block ");
+	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
+	printf("#%d ", i);
+	arrptrs[i] = dpcrtlmm_Calloc(Parr, 2, 1024); /* Allocate block */
+	if (!arrptrs[i]) printf("Failure");
+	}
+	printf("\n\n");
+	/* Output stats again, this will test the peak indicator */
+	dpcrtlmm_GetStats(&stats);
+	PrintStats(&stats);
 
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-    dpcrtlmm_Free(Parr, arrptrs[i]);
+	for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
+		dpcrtlmm_Free(NULL, nullarrptrs[i]);
 
-  printf("stop (wait for info dump if applicable!!)\n");
-  dpcrtlmm_DestroyBlockArray(Parr);
-  dpcrtlmm_GetStats(&stats);
-  PrintStats(&stats);
-  dpcrtlmm_Shutdown();
-  printf("Successful execution\n");
-  return 0;
+	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
+		dpcrtlmm_Free(Parr, arrptrs[i]);
+
+	printf("stop (wait for info dump if applicable!!)\n");
+	dpcrtlmm_DestroyBlockArray(Parr);
+	dpcrtlmm_GetStats(&stats);
+	PrintStats(&stats);
+	dpcrtlmm_Shutdown();
+	printf("Successful execution\n");
+	return 0;
 }
 
 static void PrintStats(const PS_DPCRTLMM_STATS PStats) {
-  if (PStats) {
-    printf(
-      "Blocks allocated: %lu (peaked at %lu)\n",
-      PStats->Blocks.Allocated,
-      PStats->Blocks.Peak
-    );
-    printf(
-      "Amount locked: %lu\n",
-      PStats->Blocks.Locked
-    );
-    printf(
-      "Amount marked as unswappable: %lu\n",
-      PStats->Blocks.Unswappable
-    );
-    printf(
-      "Charge: %lu, peak: %lu\n",
-      PStats->Charge.Allocated,
-      PStats->Charge.Peak
-    );
-  }
+	if (PStats) {
+		printf(
+			"Blocks allocated: %lu (peaked at %lu)\n",
+			PStats->Blocks.Allocated,
+			PStats->Blocks.Peak
+		);
+		printf(
+			"Amount locked: %lu\n",
+			PStats->Blocks.Locked
+		);
+		printf(
+			"Amount marked as unswappable: %lu\n",
+			PStats->Blocks.Unswappable
+		);
+		printf(
+			"Charge: %lu, peak: %lu\n",
+			PStats->Charge.Allocated,
+			PStats->Charge.Peak
+		);
+	}
 }
 
 static void InitArrays() {
-  size_t i;
-  for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
-    nullarrptrs[i] = NULL;
-  for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
-    arrptrs[i] = NULL;
+	size_t i;
+	for ( i = 0U; i < sizeof(nullarrptrs)/sizeof(nullarrptrs[0]); i++ )
+		nullarrptrs[i] = NULL;
+	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
+		arrptrs[i] = NULL;
 }
 
 static void PrintVersion() {
-  S_DPCRTLMM_VERSION ver;
-  printf("Gathering library version info...");
-  dpcrtlmm_Ver(&ver);
-  printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
-  printf("\n");
+	S_DPCRTLMM_VERSION ver;
+	printf("Gathering library version info...");
+	dpcrtlmm_Ver(&ver);
+	printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
+	printf("\n");
 }
 
 static void myTrapHandler(
-  const unsigned int TrapID,
-  const char *TrapMsg
+	const unsigned int TrapID,
+	const char *TrapMsg
 ) {
-  /*
-    Why am I handling this trap?  I'm not, I install this as
-    a hook only.  Which means control is returned to the DPCRTLMM rap
-    handler afterwards.
-  */
-  S_DPCRTLMM_STATS stats;
-  puts("--------Caution! Stats display from trap hook!---------\n");
-  printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
-  dpcrtlmm_GetStats(&stats);
-  PrintStats(&stats);
-  printf("Dumping library blocks!\n");
-  dpcrtlmm_Dump(stdout);
-  /*
-    What could I have done with the trap message?  Sorry for the warning,
-    hey it's only a test
-  */
+	/*
+	 * Why am I handling this trap?  I'm not, I install this as
+	 * a hook only.  Which means control is returned to the DPCRTLMM rap
+	 * handler afterwards.
+	 */
+	S_DPCRTLMM_STATS stats;
+	puts("--------Caution! Stats display from trap hook!---------\n");
+	printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
+	dpcrtlmm_GetStats(&stats);
+	PrintStats(&stats);
+	printf("Dumping library blocks!\n");
+	dpcrtlmm_Dump(stdout);
+	/*
+	 * What could I have done with the trap message?  Sorry for the warning,
+	 * hey it's only a test
+	 */
   return;
 }
-
