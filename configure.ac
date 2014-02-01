@@ -34,6 +34,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(horatio,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
+AM_SILENT_RULES([yes])
 AM_INIT_AUTOMAKE(horatio,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
 AC_CONFIG_SRCDIR([lib/horatio.c])
 AM_CONFIG_HEADER([config.h])
