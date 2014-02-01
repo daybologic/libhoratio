@@ -38,6 +38,7 @@ C_ONLY_WFLAGS = \
  -Wnested-externs
 
 GENERAL_WFLAGS = \
+ -Werror \
  -Wall \
  -W \
  -Wcast-qual \
