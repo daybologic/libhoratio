@@ -29,7 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 ACLOCAL_AMFLAGS=-I m4
-AUTOMAKE_OPTIONS=
+AUTOMAKE_OPTIONS=subdir-objects
 
 TESTS = example1 example2 example3 newbrand dpctest1 htest1
 check_PROGRAMS = $(TESTS)
