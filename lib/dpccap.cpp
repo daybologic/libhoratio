@@ -219,7 +219,7 @@ THORATIO_MemManager::GetBlockSize(
     horatio_Startup();
     this->firstAccess = 0;
   }
-  return horatio_GetBlockSize(NULL, (void*)BlockPtr);
+  return horatio_GetBlockSize(NULL, (const void*)BlockPtr);
 }
 
 int
@@ -588,7 +588,7 @@ Overlord::
 THORATIO_BlockArray::GetBlockSize(
   const void* BlockPtr
 ) const {
-  return horatio_GetBlockSize(_PblockArray, (void*)BlockPtr);
+  return horatio_GetBlockSize(_PblockArray, (const void*)BlockPtr);
 }
 
 int

@@ -55,12 +55,12 @@ POSSIBILITY OF SUCH DAMAGE.
 
 static size_t horatio_int_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *BlockPtr
+  const void HORATIO_FARDATA *const BlockPtr
 );
 
 size_t horatio_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *BlockPtr
+  const void HORATIO_FARDATA *const BlockPtr
 ) {
   size_t ret;
 
@@ -73,7 +73,7 @@ size_t horatio_GetBlockSize(
 
 static size_t horatio_int_GetBlockSize(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *BlockPtr
+  const void HORATIO_FARDATA *const BlockPtr
 ) {
   /* First test pointers */
   _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
