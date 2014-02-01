@@ -292,12 +292,12 @@ static unsigned int horatio_int_UninstallDebugHook(
 static unsigned int BadHookType(const unsigned int HookType) {
   unsigned int bad = 0U; /* Not a bad hook type yet... */
 
-#ifndef NDEBUG_ /* Debugging lib */
+# ifndef NDEBUG /* Debugging lib */
     assert( HookType <= HORATIO_DEBUGHOOK_LASTHOOK ); /* Check hook type is valid */
-  #else /* Not in debug mode, must handle this same trap differenty */
+# else /* Not in debug mode, must handle this same trap differenty */
     if ( !(HookType <= HORATIO_DEBUGHOOK_LASTHOOK) ) /* Check hook type is valid */
       bad = 1U; /* bad = TRUE */
-  #endif /*!NDEBUG*/
+# endif /*!NDEBUG*/
 
   return bad;
 }
