@@ -30,9 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-
-/* This is my little test app for my DPCRTLMM library
-   I use it to simmulate a caller to debug my library - C++ version */
+/*
+ * This is my little test app for my DPCRTLMM library
+ * I use it to simmulate a caller to debug my library - C++ version
+ */
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -165,9 +166,11 @@ static void myTrapHandler(
 	const unsigned int TrapID,
 	const char* TrapMsg
 ) {
-	/* Why am I handling this trap?  I'm not, I install this as a
-	hook only.  Which means control is returned to the DPCRTLMM rap handler
-	afterwards. */
+	/*
+	 * Why am I handling this trap?  I'm not, I install this as a
+	 * hook only.  Which means control is returned to the DPCRTLMM
+	 * trap handler afterards.
+	 */
 
 	S_DPCRTLMM_STATS stats;
 	printf("------------Caution! Stats display from trap hook!-----------\n");
@@ -175,7 +178,9 @@ static void myTrapHandler(
 	MemManager.GetStats(&stats);
 	PrintStats(&stats);
 	MemManager.Dump(stdout);
-	/* What could I have done with the trap message?  Sorry for the warning,
-	hey it's only a test */
+	/*
+	 * What could I have done with the trap message?
+	 * Sorry for the warning, hey it's only a test
+	 */
 	return;
 }
