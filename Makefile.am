@@ -41,7 +41,6 @@ dpctests_LDADD = -ldpcrtlmm -lcunit
 htests_LDADD = -lhoratio -lcunit
 
 GENERAL_WFLAGS = \
- -Werror \
  -Wall \
  -W \
  -Wcast-qual \
