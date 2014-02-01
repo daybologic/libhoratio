@@ -30,40 +30,6 @@
 
 AUTOMAKE_OPTIONS=
 
-#AM_CFLAGS= -g -Wall -W -Wcast-qual -Wcast-align -Waggregate-return -Wpointer-arith \
-# -Wshadow -Wmissing-prototypes -Winline -Wstrict-prototypes \
-# -Wredundant-decls -Wwrite-strings -Wformat=2 -Wformat-security \
-# -Wformat-nonliteral -Wundef -Wredundant-decls -Wbad-function-cast \
-# -Wnested-externs -Wmissing-declarations -Wunknown-pragmas
-
-# Add any explicit flags here, or on the configure command line.
-AM_CFLAGS = \
-  -I.
-
-TESTS = example1 example2 example3 newbrand
-check_PROGRAMS = $(TESTS)
-examples_LDADD = -lhoratio
-
-if HORATIO_THREADS_PTH
-AM_LDFLAGS= -lpth
-endif
-
-example1_SOURCES = example1.c
-example1_INCLUDES = horatio.h
-example1_LDADD = $(examples_LDADD)
-
-newbrand_SOURCES = newbrand.c
-newbrand_INCLUDES = horatio.h
-newbrand_LDADD = $(examples_LDADD)
-
-example2_SOURCES = example2.cpp dpccap.cpp
-example2_INCLUDES = horatio.h dpccap.h
-example2_LDADD = $(examples_LDADD)
-
-example3_SOURCES = example3.c
-example3_INCLUDES = horatio.h
-example3_LDADD = $(examples_LDADD)
-
 lib_LTLIBRARIES = libhoratio.la
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c

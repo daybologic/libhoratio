@@ -35,8 +35,9 @@
 AC_PREREQ(2.59)
 AC_INIT(horatio,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
 AM_INIT_AUTOMAKE(horatio,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
-AC_CONFIG_SRCDIR([horatio.c])
+AC_CONFIG_SRCDIR([lib/horatio.c])
 AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -320,5 +321,5 @@ AC_MSG_RESULT($log_enabled)
 
 
 # End of configuration
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile lib/Makefile t/Makefile)
 
