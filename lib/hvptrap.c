@@ -166,7 +166,7 @@ static void TrapOnBadBlockPtr(
   and if it's bad fire a trap. */
   if ( horatio_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) { /* Is bad block pointer? */
     char *PusedFuncName;
-    int pusedDynamic;
+    int pusedDynamic= 0;
     char blankStr[] = "";
 
     if (FuncName) {
@@ -178,7 +178,6 @@ static void TrapOnBadBlockPtr(
         strncat(PusedFuncName, FuncName, lenUsedFuncName);
       }
     } else {
-      pusedDynamic = 0;
       PusedFuncName = blankStr;
     }
 
