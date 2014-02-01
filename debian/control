@@ -21,3 +21,18 @@ Depends: libhoratio
 Description: Memory management/lead protection library dev headers
  This package includes horatio.h so that you can compile against
  libhoratio.
+
+Package: libhoratio-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: libhoratio (= ${binary:Version}),
+    ${misc:Depends}
+Description: Debugging symbols for libhoratio
+ These symbols are not required for ordinary use and debugging
+ of user-code.  They are for debugging the internals of the libhoratio
+ library, for maintainers, or anybody who suspects there may be a bug
+ within libhoratio itself.
+ .
+ Equally, it may be installed by programmers who want to learn more
+ about libhoratio, and contribute to development thereof.

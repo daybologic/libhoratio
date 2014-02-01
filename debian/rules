@@ -44,6 +44,9 @@ override_dh_auto_configure: autogen
 		--disable-dependency-tracking; \
 	fi
 
+override_dh_strip:
+	dh_strip --dbg-package=libhoratio-dbg
+
 maintainer : override_dh_auto_configure
 	make
 
