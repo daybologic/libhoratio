@@ -31,6 +31,12 @@
 
 set -e
 
+case "$1" in
+  -f)
+	rm -f configure
+	;;
+esac
+
 if [ -f configure ]; then
 	echo 'Skipping autoreconf -ivf; configure script already exists'
 else
