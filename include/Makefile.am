@@ -28,53 +28,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-ACLOCAL_AMFLAGS=-I m4
 AUTOMAKE_OPTIONS=subdir-objects
 
-C_ONLY_WFLAGS = \
-	-Wmissing-prototypes \
-	-Wstrict-prototypes \
-	-Wbad-function-cast \
-	-Wmissing-declarations \
-	-Wnested-externs
-
-GENERAL_WFLAGS = \
-	-Werror \
-	-Wall \
-	-W \
-	-Wcast-qual \
-	-Wcast-align \
-	-Waggregate-return \
-	-Wpointer-arith \
-	-Wshadow -Winline \
-	-Wredundant-decls \
-	-Wwrite-strings \
-	-Wformat=2 \
-	-Wformat-security \
-	-Wformat-nonliteral \
-	-Wundef \
-	-Wredundant-decls \
-	-Wunknown-pragmas
-
-GENERAL_CC_FLAGS = \
-	-g \
-	-I$(top_srcdir)/../include
-
-AM_CFLAGS = \
-	$(GENERAL_CC_FLAGS) \
-	$(GENERAL_WFLAGS) \
-	$(C_ONLY_WFLAGS)
-
-AM_CPPFLAGS = \
-	$(GENERAL_CC_FLAGS) \
-	$(GENERAL_WFLAGS)
-
-AM_LDFLAGS = \
-	-L$(top_srcdir)/../lib
-
-
-export AM_CPPFLAGS
-export AM_CFLAGS
-export AM_LDFLAGS
-
-SUBDIRS = lib include t
+nobase_include_HEADERS = horatio.h

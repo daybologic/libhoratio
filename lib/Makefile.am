@@ -52,5 +52,4 @@ libhoratio_la_SOURCES += hstats.c
 libhoratio_la_SOURCES += htrap.c
 libhoratio_la_SOURCES += hvptrap.c
 
-nobase_include_HEADERS =  horatio.h
-nobase_include_HEADERS += dpcrtlmm.h
+nobase_include_HEADERS = dpcrtlmm.h

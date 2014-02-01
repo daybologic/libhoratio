@@ -326,5 +326,5 @@ AC_MSG_RESULT($log_enabled)
 
 
 # End of configuration
-AC_OUTPUT(Makefile lib/Makefile t/Makefile)
+AC_OUTPUT(Makefile lib/Makefile include/Makefile t/Makefile)
 

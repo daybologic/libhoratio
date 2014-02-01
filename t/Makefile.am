@@ -34,6 +34,7 @@ AUTOMAKE_OPTIONS=subdir-objects
 TESTS = example1 example2 example3 newbrand
 check_PROGRAMS = $(TESTS)
 test_LDADD = -lhoratio
+check_HEADERS = ../include/horatio.h
 
 if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
@@ -41,17 +42,17 @@ endif
 
 
 example1_SOURCES = example1.c
-example1_INCLUDE = horatio.h
+example1_AM_CFLAGS = $(check_HEADERS)
 example1_LDADD = $(test_LDADD)
 
 newbrand_SOURCES = newbrand.c
-newbrand_AM_CFLAGS = horatio.h
+newbrand_AM_CFLAGS = $(check_HEADERS)
 newbrand_LDADD = $(test_LDADD)
 
 example2_SOURCES = example2.cpp ../lib/dpccap.cpp
-example2_AM_CPPFLAGS = horatio.h ../lib/dpccap.h
+example2_AM_CPPFLAGS = $(check_HEADERS) ../lib/dpccap.h
 example2_LDADD = $(test_LDADD)
 
 example3_SOURCES = example3.c
-example3_AM_CFLAGS = horatio.h
+example3_AM_CFLAGS = $(check_HEADERS)
 example3_LDADD = $(test_LDADD)
