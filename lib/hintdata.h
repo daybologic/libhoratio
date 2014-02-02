@@ -32,21 +32,47 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef INC_HORATIO_INTDATA_H
 #define INC_HORATIO_INTDATA_H
 
-/* WARNING! This header is for internal library use only, it contains
-internal data for the library. */
+/*
+ * WARNING! This header is for internal library use only, it contains
+ * internal data for the library.
+ */
 
 #include "hbuild.h" /* Build parameters */
 
 /* Internal library data */
-extern PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */
+
+/*
+ * List of pointers to arrays of block descriptors
+ * (for validating array base pointers)
+ */
+extern PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE];
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY /* New NULL block array support enabled? */
-  extern S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray; /* Always here, never created, never destroyed accessable by specifying NULL for an array pointer */
+/*
+ * Always here, never created, never destroyed accessable by specifying
+ * NULL for an array pointer
+ */
+  extern S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray;
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
-extern unsigned int horatio_int__libStarted; /* Set TRUE when library is started */
-extern void (*horatio_int__UserTrapCallback)(const unsigned int Id, const char* Message); /* The user trap handle must not be called by us unless is is a valid pointer */
-extern unsigned int horatio_int__userTrapCallbackIsHook; /* Indication as to the manner in which the user trap callback expects to be treated, as a hook or as a handler */
+
+/* Set horatio_int__libStarted to TRUE when library is started */
+extern unsigned int horatio_int__libStarted;
+
+/* The user trap handle must not be called by us unless is is a valid pointer */
+extern void (*horatio_int__UserTrapCallback)(
+	const unsigned int Id,
+	const char *Message
+);
+
+/*
+ * Indication as to the manner in which the user trap callback expects
+ * to be treated, as a hook or as a handler
+ */
+extern unsigned int horatio_int__userTrapCallbackIsHook;
 #ifdef HORATIO_DEBUGHOOKS
-extern unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length) */
+/*
+ * Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length)
+ */
+extern unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo);
 #endif /*HORATIO_DEBUGHOOKS*/
 #ifdef HORATIO_NONULL_BLOCKDESCARRAY
 # define horatio_int__ResolveArrayPtr(p) (p)  /* Resolving not neccersary, it's for the NULL array */
@@ -62,7 +88,7 @@ extern unsigned long horatio_int__allocPeak;
 /* Magic lazy references for library's own use */
 #define _safetyList horatio_int__safetyList
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY
-#  define _defaultArray horatio_int__defaultArray
+# define _defaultArray horatio_int__defaultArray
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 #define _libStarted horatio_int__libStarted
 #define _UserTrapCallback horatio_int__UserTrapCallback

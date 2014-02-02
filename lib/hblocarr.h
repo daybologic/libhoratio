@@ -38,15 +38,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 void horatio_int_DestroyBlockArray(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif /*!INC_HORATIO_BLKARRAY_H*/

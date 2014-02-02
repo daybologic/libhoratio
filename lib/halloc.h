@@ -34,22 +34,22 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_ALLOC_H
 
 #ifndef HORATIO_SOURCE
-#  error ("This header is for internal library use only, include horatio.h")
+# error ("This header is for internal library use only, include horatio.h")
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif /*__cplusplus*/
 
 void HORATIO_FARDATA *horatio_int_AllocEx(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const size_t NewBlockSize,
-  const char *File,
-  const unsigned int Line
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const size_t NewBlockSize,
+	const char *File,
+	const unsigned int Line
 );
 
 #ifdef __cplusplus
-  }
+}
 #endif /*__cplusplus*/
 
 #endif /*!INC_HORATIO_ALLOC_H*/

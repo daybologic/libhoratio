@@ -33,21 +33,24 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_IBLKPTR
 
 #ifndef HORATIO_SOURCE
-#  error ("iblkptr.h is for internal HORATIO usage only")
+# error ("iblkptr.h is for internal HORATIO usage only")
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
-unsigned int horatio_int_IndexFromBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
+unsigned int horatio_int_IndexFromBlockPtr(
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA* BlockPtr
+);
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
 
 #ifdef INC_HORATIO_INTDATA_H /* Build from inside? */
-#  define _IndexFromBlockPtr horatio_int_IndexFromBlockPtr /* Lazy shortcut */
+# define _IndexFromBlockPtr horatio_int_IndexFromBlockPtr /* Lazy shortcut */
 #else /* Build from outside? */
-#  error ("Clear off! This header is for internal library use")
+# error ("This header is for internal library use")
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #endif /*INC_HORATIO_IBLKPTR*/

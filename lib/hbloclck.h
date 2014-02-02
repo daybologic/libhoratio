@@ -34,31 +34,31 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_BLOCLOCK_H
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-#  error ("This header is not for you")
+# error ("This header is not for you")
 #endif /*HORATIO_SOURCE*/
 
 void horatio_int_SetBlockLockingFlag(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned int NewStatus
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned int NewStatus
 );
 
 unsigned int horatio_int_IsBlockLocked(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 );
 
 void horatio_int_ToggleBlockLockingStatus(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 );
 
 #ifdef __cplusplus
-  }
+}
 #endif /*__cplusplus*/
 
 #endif /*!INC_HORATIO_BLOCLOCK_H*/

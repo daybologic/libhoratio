@@ -34,18 +34,23 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_ISBAD_H
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-#  error ("This header is not for you")
+# error ("This header is not for you")
 #endif /*HORATIO_SOURCE*/
 
-unsigned int horatio_int_IsBadBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
-unsigned int horatio_int_IsBadArrayPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray);
+unsigned int horatio_int_IsBadBlockPtr(
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *BlockPtr
+);
+unsigned int horatio_int_IsBadArrayPtr(
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray
+);
 
 #ifdef __cplusplus
-  }
+}
 #endif /*__cplusplus*/
 
 #endif /*!INC_HORATIO_ISBAD_H*/

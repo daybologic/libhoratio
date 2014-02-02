@@ -29,21 +29,19 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
 /*
-#############################################################################
-# Functions for handling the safety list                                    #
-# HORATIO--The DayboLogic C-Runtime Memory Manager                         #
-# No functions here are for calling by the user, they are only for internal #
-# library use.                                                              #
-#############################################################################
-*/
+ * Functions for handling the safety list
+ * HORATIO--The DayboLogic C-Runtime Memory Manager
+ * No functions here are for calling by the user, they are only for internal
+ * library use.
+ */
 
 #ifndef INC_HORATIO_SAFETYLIST_H
 #define INC_HORATIO_SAFETYLIST_H
 
-
 #ifndef HORATIO_SOURCE /* Looks like a user inclusion! */
-#error The safety list is for internal use by HORATIO only
+# error The safety list is for internal use by HORATIO only
 #endif /*!HORATIO_SOURCE*/
 
 #ifdef __cplusplus
@@ -51,26 +49,28 @@ extern "C" {
 #endif /*__cplusplus*/
 
 unsigned int horatio_SafetyList_IsArrayPtrPresent(
-  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
+	const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 void horatio_SafetyList_Init(void);
 unsigned int horatio_SafetyList_CountUsed(void);
 unsigned int horatio_SafetyList_AddBase(
-  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
+	const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 unsigned int horatio_SafetyList_RemoveBase(
-  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
+	const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 );
 
 #ifdef __cplusplus
 }
 #endif /*__cplusplus*/
 
-/* Note these names are slightly over qualified so that things are safe with
-any given host program, slightly shorter names are available internally, and
-these functions are ONLY called internally anyway, the over qualification was
-to make the map file look cleaner so programmers working on something can
-ignore this library. */
+/*
+ * Note these names are slightly over qualified so that things are safe with
+ * any given host program, slightly shorter names are available internally, and
+ * these functions are ONLY called internally anyway, the over qualification was
+ * to make the map file look cleaner so programmers working on something can
+ * ignore this library.
+ */
 #define SafetyList_IsArrayPtrPresent    horatio_SafetyList_IsArrayPtrPresent
 #define SafetyList_Init                 horatio_SafetyList_Init
 #define SafetyList_CountUsed            horatio_SafetyList_CountUsed

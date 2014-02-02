@@ -34,13 +34,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_BIGLOCK_H
 
 #ifndef HORATIO_SOURCE
-#  error ("biglock is for internal library use")
+# error ("biglock is for internal library use")
 #endif
 
 #ifdef HORATIO_THREADS
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 void horatio_int_BigLockInit(void);
@@ -48,17 +48,17 @@ void horatio_int_BigLockUninit(void);
 void horatio_int_BigLock(int LockState);
 
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif /*HORATIO_THREADS*/
 
 #ifdef HORATIO_THREADS
-#  define LOCK horatio_int_BigLock(1);
-#  define UNLOCK horatio_int_BigLock(0);
+# define LOCK horatio_int_BigLock(1);
+# define UNLOCK horatio_int_BigLock(0);
 #else
-#  define LOCK
-#  define UNLOCK
+# define LOCK
+# define UNLOCK
 #endif /*HORATIO_THREADS*/
 
 #endif /*!INC_HORATIO_BIGLOCK_H*/

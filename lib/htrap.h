@@ -33,24 +33,24 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_TRAP_H
 
 #ifndef INC_HORATIO_INTDATA_H
-#  error ("Internal library users only!")
+# error ("Internal library users only!")
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif /*__cplusplus*/
 void horatio_int_Trap(
-  const unsigned int Id,
-  const char *Message
+	const unsigned int Id,
+	const char *Message
 ); /* Fire the specified trap */
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/
 
-/* NOTE: Prototype for InstallTrapHandler() is in HORATIO.H */
+/* NOTE: Prototype for InstallTrapHandler() is in horatio.h */
 
 #ifdef INC_HORATIO_INTDATA_H
-#  define Trap horatio_int_Trap
+# define Trap horatio_int_Trap
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #endif /*!INC_HORATIO_TRAP_H*/

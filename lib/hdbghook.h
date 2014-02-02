@@ -31,8 +31,8 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  Header for the debug hook executive and support code
-*/
+ * Header for the debug hook executive and support code
+ */
 
 #ifndef INC_HORATIO_DBGHOOKS_H
 #define INC_HORATIO_DBGHOOKS_H
@@ -42,35 +42,38 @@ extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-#  error ("Internal library users only!")
+# error ("Internal library users only!")
 #endif /*!HORATIO_SOURCE*/
 
 #ifdef HORATIO_DEBUGHOOKS
 
-void horatio_int_InitDebugHookMatrix(void); /* Call to clear all pointers in the matrix */
+/* Call to clear all pointers in the matrix */
+void horatio_int_InitDebugHookMatrix(void);
 
-/* Debug hook executive, caller must prepare information according to the
-rules first. */
+/*
+ * Debug hook executive, caller must prepare information according to the
+ * rules first.
+ */
 void horatio_int_CallDebugHook(
   const unsigned short HookType,
   const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
 );
 
 /*
-  For user mode functions declrs:
-  horatio_InstallDebugHook(),
-  horatio_GetDebugHookChainCount(),
-  horatio_GetDebugHookMatrixCount() &
-  horatio_UninstallDebugHook()
-
-  look in the public header horatio.h.
-*/
+ * For user mode functions declrs:
+ * horatio_InstallDebugHook(),
+ * horatio_GetDebugHookChainCount(),
+ * horatio_GetDebugHookMatrixCount() &
+ * horatio_UninstallDebugHook()
+ *
+ * look in the public header horatio.h.
+ */
 
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef INC_HORATIO_INTDATA_H
-#  define _InitDebugHookMatrix horatio_int_InitDebugHookMatrix
-#  define _CallHook horatio_int_CallHook
+# define _InitDebugHookMatrix horatio_int_InitDebugHookMatrix
+# define _CallHook horatio_int_CallHook
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #ifdef __cplusplus

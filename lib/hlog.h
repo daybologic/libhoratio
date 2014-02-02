@@ -37,40 +37,56 @@ extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-#error ("log.h is for HORATIO's internal use only")
+# error ("log.h is for HORATIO's internal use only")
 #endif /*!HORATIO_SOURCE*/
 
-/* 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
-messages, warnings and errors */
+/*
+ * 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
+ * messages, warnings and errors
+ */
 
 /* Types of logging messages */
 #define HORATIO_LOG_MESSAGE (0U) /* Only put in log */
 #define HORATIO_LOG_WARNING (1U) /* stderr and log */
-#define HORATIO_LOG_ERROR (2U) /* Same as error for now */
+#define HORATIO_LOG_ERROR   (2U) /* Same as error for now */
 /*
-  Even though error and warning do the same thing, they display different
-  messages in the log and on stderr
-*/
+ * Even though error and warning do the same thing, they display different
+ * messages in the log and on stderr
+ */
 
 /*
-  Write the message to the log (or do nothing if the log macro is undefined
-*/
+ * Write the message to the log (or do nothing if the log macro is undefined
+ */
 void horatio_int_Log(
-  const char *File,
-  const unsigned int Line,
-  const unsigned short Severity,
-  const char *Message
+	const char *File,
+	const unsigned int Line,
+	const unsigned short Severity,
+	const char *Message
 );
 
-/* To make my life easier... but MESSAGE is only defined for logging builds */
+/*
+ * To make our lives easier... but MESSAGE is only defined for logging builds
+ */
 #ifdef HORATIO_LOG
-#  define MESSAGE(sfn, sfl, msg) horatio_int_Log((sfn), (sfl), (const unsigned short)HORATIO_LOG_MESSAGE, (msg))
+# define MESSAGE(sfn, sfl, msg)                                             \
+    horatio_int_Log((sfn), (sfl),                                           \
+    (const unsigned short)HORATIO_LOG_MESSAGE, (msg)                        \
+)
 #else /* Non logging build */
-#  define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
+# define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
 #endif /*HORATIO_LOG*/
 
-#define WARNING(msg) horatio_int_Log((__FILE__), (__LINE__), (const unsigned short)HORATIO_LOG_WARNING, (msg))
-#define ERROR(msg) horatio_int_Log((__FILE__), (__LINE__), (const unsigned short)HORATIO_LOG_ERROR, (msg))
+#define WARNING(msg)                                                        \
+    horatio_int_Log(                                                        \
+        (__FILE__), (__LINE__),                                             \
+        (const unsigned short)HORATIO_LOG_WARNING, (msg)                    \
+    )
+
+#define ERROR(msg)                                                          \
+    horatio_int_Log(                                                        \
+    (__FILE__), (__LINE__),                                                 \
+    (const unsigned short)HORATIO_LOG_ERROR, (msg)                          \
+)
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -31,32 +31,32 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  Internal header for a trap I prepared earlier for when a block locking
-  violation ocours.
-  Created 23rd Feb 2000
-*/
+ * Internal header for a trap I prepared earlier for when a block locking
+ * violation ocours.
+ * Created 23rd Feb 2000
+ */
 
 #ifndef INC_HORATIO_LOCKTRAP_H
 #define INC_HORATIO_LOCKTRAP_H
 
 #ifndef HORATIO_SOURCE
-#  error ("locktrap.h is for internal HORATIO use")
+# error ("locktrap.h is for internal HORATIO use")
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 unsigned int horatio_int_LockTrap(
-  const char *FuncName,
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *BlockPtr
+	const char *FuncName,
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *BlockPtr
 );
 #ifdef __cplusplus
 }
 #endif
 
 #ifdef INC_HORATIO_INTDATA_H
-#  define _LockTrap horatio_int_LockTrap
+# define _LockTrap horatio_int_LockTrap
 #endif /*INC_HORATIO_INTDATA_H*/
 
 #endif /*!INC_HORATIO_LOCKTRAP_H*/

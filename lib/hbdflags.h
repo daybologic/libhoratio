@@ -34,21 +34,21 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_BDFLAGS_H
 
 #ifndef HORATIO_SOURCE
-#  error ("bdflags.h is for internal HORATIO use")
+# error ("bdflags.h is for internal HORATIO use")
 #endif
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 unsigned char horatio_int_ModifyDescriptorFlags(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned char *PNewFlags
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned char *PNewFlags
 );
 
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif /*!INC_HORATIO_BDFLAGS_H*/

@@ -36,9 +36,9 @@ POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif /*__cplusplus*/
 void horatio_int_VerifyPtrs(
-  const char *FuncName,
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *BlockPtr
+	const char *FuncName,
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *BlockPtr
 ); /* BlockPtr can be NULL */
 #ifdef __cplusplus
 } /* extern "C" */
