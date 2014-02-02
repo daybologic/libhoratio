@@ -72,6 +72,6 @@ unsigned int horatio_int_IndexFromBlockPtr(
     HORATIO_TRAP_INDEX_GEN_FAILED,
     "IndexFromBlockPtr(): Block not found, index not generated"
   );
-  return ~0; /* Buggered */
+  return ~0;
 }
 
