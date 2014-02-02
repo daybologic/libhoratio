@@ -98,41 +98,40 @@ void horatio_GetStats(
 static void CountFlagsInUse(
 	PS_HORATIO_STATS PFlagsStats
 ) {
-	if (PFlagsStats) {
-		unsigned int i;
+	if (!PFlagsStats) return;
+	unsigned int i;
 
-		/* First reset the counts in the stats struct */
-		PFlagsStats->Blocks.Locked = 0UL;
-		PFlagsStats->Blocks.Unswappable = 0UL;
+	/* First reset the counts in the stats struct */
+	PFlagsStats->Blocks.Locked = 0UL;
+	PFlagsStats->Blocks.Unswappable = 0UL;
 
-		/* Go through normal arrays */
-		for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ ) {
-			if (_safetyList[i]) { /* Used entry? */
-				unsigned int j;
-				for ( j = 0U; j < _safetyList[i]->Count; j++ ) {
-				unsigned char flags = _safetyList[i]
-					->Descriptors[j].Flags;
-
-				if ( (flags & 1) == 1) /* Lock bit set */
-					PFlagsStats->Blocks.Locked++;
-				if ( (flags & 2) == 2) /* NoSwap bit set */
-					PFlagsStats->Blocks.Unswappable++;
-				}
-			}
-		}
-		/* Extra support for the "NULL array" */
-#ifndef HORATIO_NONULL_BLOCKDESCARRAY
-		for ( i = 0U; i < _defaultArray.Count; i++ ) {
-			unsigned char flags
-				= _defaultArray.Descriptors[i].Flags;
+	/* Go through normal arrays */
+	for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ ) {
+		if (_safetyList[i]) { /* Used entry? */
+			unsigned int j;
+			for ( j = 0U; j < _safetyList[i]->Count; j++ ) {
+			unsigned char flags = _safetyList[i]
+				->Descriptors[j].Flags;
 
 			if ( (flags & 1) == 1) /* Lock bit set */
 				PFlagsStats->Blocks.Locked++;
 			if ( (flags & 2) == 2) /* NoSwap bit set */
 				PFlagsStats->Blocks.Unswappable++;
+			}
 		}
-#endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 	}
+	/* Extra support for the "NULL array" */
+#ifndef HORATIO_NONULL_BLOCKDESCARRAY
+	for ( i = 0U; i < _defaultArray.Count; i++ ) {
+		unsigned char flags
+			= _defaultArray.Descriptors[i].Flags;
+
+		if ( (flags & 1) == 1) /* Lock bit set */
+			PFlagsStats->Blocks.Locked++;
+		if ( (flags & 2) == 2) /* NoSwap bit set */
+			PFlagsStats->Blocks.Unswappable++;
+	}
+#endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 }
 
 void horatio_Dump(
@@ -190,22 +189,21 @@ static void CrackAndPrintFlags(
 	FILE *Target,
 	unsigned char Flags
 ) {
-	if ( Target ) {
-		int comma = 0;
-		fprintf(Target, "Flags=");
-		if ( (Flags & 1) == 1 ) {
-			fprintf(Target, "LOCKED");
-			comma = 1;
-		}
-		if ( (Flags & 2) == 2 ) {
-			if ( comma ) {
-				/*comma = 0;*/
-				fprintf(Target, ", ");
-			}
-			fprintf(Target, "NOSWAP");
-			/*comma = 1;*/
-		}
-		fprintf(Target, "\n");
+	if ( !Target ) return;
+	int comma = 0;
+	fprintf(Target, "Flags=");
+	if ( (Flags & 1) == 1 ) {
+		fprintf(Target, "LOCKED");
+		comma = 1;
 	}
+	if ( (Flags & 2) == 2 ) {
+		if ( comma ) {
+			/*comma = 0;*/
+			fprintf(Target, ", ");
+		}
+		fprintf(Target, "NOSWAP");
+		/*comma = 1;*/
+	}
+	fprintf(Target, "\n");
 	return;
 }
