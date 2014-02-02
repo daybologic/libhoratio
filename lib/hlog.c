@@ -31,33 +31,31 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-#############################################################################
-# Memory usage logging support for HORATIO                                 #
-# Only included if HORATIO_LOG is defined in build.h                       #
-# (Superseeded by --enable-log configuration option)                        #
-#############################################################################
-
-You might be wondering why I did not just get rid of the whole function if
-HORATIO_LOG was not defined.  Trouble is, even though it's never called if
-the macro is not defined, in some compilers there must be at least one
-external definition so I chose to get rid of the contents and disable the
-warning about the unused parameter, if getting rid of the warning actually
-causes a warning on your compiler, I aplogise!
-
-  - Does this apply any longer?  : DDRP
-*/
+ * Memory usage logging support for HORATIO
+ * Only included if HORATIO_LOG is defined in build.h
+ * (Superseeded by --enable-log configuration option)
+ *
+ * You might be wondering why I did not just get rid of the whole function if
+ * HORATIO_LOG was not defined.  Trouble is, even though it's never called if
+ * the macro is not defined, in some compilers there must be at least one
+ * external definition so I chose to get rid of the contents and disable the
+ * warning about the unused parameter, if getting rid of the warning actually
+ * causes a warning on your compiler, I aplogise!
+ *
+ * - Does this apply any longer?  : DDRP
+ */
 
 #define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
@@ -66,76 +64,88 @@ causes a warning on your compiler, I aplogise!
 #include "hlog.h"
 
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
-          strncat( \
-            (buff), \
-            (sourcestring), \
-            (sizeof((buff))/sizeof((buff)[0])-1) \
-            )
+    strncat( \
+        (buff), \
+        (sourcestring), \
+        (sizeof((buff))/sizeof((buff)[0])-1) \
+    )
 
 void horatio_int_Log(
-  const char *File,
-  const unsigned int Line,
-  const unsigned short Severity,
-  const char *Message
+	const char *File,
+	const unsigned int Line,
+	const unsigned short Severity,
+	const char *Message
 ) {
-  /*
-    String + safety for addons,
-    note that mallocations should not be made here
-  */
-  char formatMsg[MAX_TRAP_STRING_LENGTH + 1024 + 512];
-  char number[64]; /* Paranoia length number to string conversion */
+	/*
+	 * String + safety for addons,
+	 * note that mallocations should not be made here
+	 */
+	char formatMsg[MAX_TRAP_STRING_LENGTH + 1024 + 512];
+	char number[64]; /* Paranoia length number to string conversion */
 
-  #ifdef HORATIO_LOG
-  FILE* HLogFile; /* Handle for log file */
-  #endif /*HORATIO_LOG*/
+#ifdef HORATIO_LOG
+	FILE* HLogFile; /* Handle for log file */
+#endif /*HORATIO_LOG*/
 
-  if (Message) {
-    if (Message[0]) {
-      formatMsg[0] = '\0'; /* so strncat() knows where to begin */
-      STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
-      if ( File ) { /* Convert line number to string */
-        sprintf(
-          number,
-          #ifdef HAVE_SNPRINTF
-          sizeof(number)-1,
-          #endif /*HAVE_SNPRINTF*/
-          "%u",
-          Line
-        );
-      }
-      switch ( Severity ) {
-        case HORATIO_LOG_WARNING : {
-          STRNCAT_FIXEDBUFF(formatMsg, "Warning! ");
-          break;
-        }
-        case HORATIO_LOG_ERROR : {
-          STRNCAT_FIXEDBUFF(formatMsg, "FATAL ERROR! ");
-          break;
-        }
-      }
-      if ( File ) {
-        STRNCAT_FIXEDBUFF(formatMsg, File);
-        STRNCAT_FIXEDBUFF(formatMsg, ", L");
-        STRNCAT_FIXEDBUFF(formatMsg, number);
-        STRNCAT_FIXEDBUFF(formatMsg, ": ");
-      }
-      STRNCAT_FIXEDBUFF(formatMsg, Message);
-      STRNCAT_FIXEDBUFF(formatMsg, "\"\n"); /* Close quotes and end line */
+	if (Message) {
+		if (Message[0]) {
+			/* so strncat() knows where to begin */
+			formatMsg[0] = '\0';
+			STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
+			if ( File ) { /* Convert line number to string */
+				sprintf(
+					number,
+#ifdef HAVE_SNPRINTF
+					sizeof(number)-1,
+#endif /*HAVE_SNPRINTF*/
+					"%u",
+					Line
+				);
+			}
+			switch ( Severity ) {
+				case HORATIO_LOG_WARNING : {
+					STRNCAT_FIXEDBUFF(
+						formatMsg, "Warning! "
+					);
+					break;
+				}
+				case HORATIO_LOG_ERROR : {
+					STRNCAT_FIXEDBUFF(
+						formatMsg, "FATAL ERROR! "
+					);
+					break;
+				}
+			}
+			if ( File ) {
+				STRNCAT_FIXEDBUFF(formatMsg, File);
+				STRNCAT_FIXEDBUFF(formatMsg, ", L");
+				STRNCAT_FIXEDBUFF(formatMsg, number);
+				STRNCAT_FIXEDBUFF(formatMsg, ": ");
+			}
+			STRNCAT_FIXEDBUFF(formatMsg, Message);
+			/* Close quotes and end line */
+			STRNCAT_FIXEDBUFF(formatMsg, "\"\n");
 
-      /* Determine what do do with the message based on it's severity */
-      /* Everything goes in the log... */
-      #ifdef HORATIO_LOG
-      HLogFile = fopen("HORATIO.LOG", "at"); /* Append/overwrite text file */
-      if (HLogFile) { /* Log opened? */
-        fputs(formatMsg, HLogFile); /* Output log msg to log file */
-        fclose(HLogFile); /* Close the log file */
-      }
-      #endif /*HORATIO_LOG*/
+			/*
+			 * Determine what to do with the message
+			 * based on it's severity.
+			 */
+#ifdef HORATIO_LOG
+			/* Everything goes in the log... */
+			/* Append/overwrite text file */
+			HLogFile = fopen("HORATIO.LOG", "at");
+			if (HLogFile) { /* Log opened? */
+				/* Output log msg to log file */
+				fputs(formatMsg, HLogFile);
+				fclose(HLogFile); /* Close the log file */
+			}
+#endif /*HORATIO_LOG*/
 
-      if ( Severity > HORATIO_LOG_MESSAGE ) /* Anything more severe than a warning */
-        fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
-    }
-  }
-  return;
+			if ( Severity > HORATIO_LOG_MESSAGE ) {
+				/* Anything more severe than a warning */
+				fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
+			}
+		}
+	}
+	return;
 }
-

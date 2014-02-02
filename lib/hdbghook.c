@@ -31,18 +31,19 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  The debug hook executive and supporting code
-  written (and perfomed by David Duncan Ross Palmer.
-
-  File DBGHOOKS.C
-  Library: HORATIO Memory Manager
-  Created 24th February 2000
-*/
+ * The debug hook executive and supporting code
+ * written (and perfomed by David Duncan Ross Palmer.
+ *
+ * File DBGHOOKS.C
+ * Library: HORATIO Memory Manager
+ * Created 24th February 2000
+ */
 
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
+
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -60,246 +61,319 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef HORATIO_DEBUGHOOKS
 
 static unsigned int BadHookType(
-  const unsigned int HookType
+	const unsigned int HookType
 );
 
 static unsigned int horatio_int_InstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 );
 
 static unsigned int horatio_int_GetDebugHookChainCount(
-  const unsigned int HookType
+	const unsigned int HookType
 );
 
 static unsigned int horatio_int_GetDebugHookMatrixCount(
-  void
+	void
 );
 
 static unsigned int horatio_int_UninstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 );
 
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 unsigned int horatio_InstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
-  unsigned int ret;
+	unsigned int ret;
 
-  LOCK
-  ret = horatio_int_InstallDebugHook(HookType, NewHookProc);
-  UNLOCK
+	LOCK
+	ret = horatio_int_InstallDebugHook(HookType, NewHookProc);
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 unsigned int horatio_GetDebugHookChainCount(
-  const unsigned int HookType
+	const unsigned int HookType
 ) {
-  unsigned int ret;
+	unsigned int ret;
 
-  LOCK
-  ret = horatio_int_GetDebugHookChainCount(HookType);
-  UNLOCK
+	LOCK
+	ret = horatio_int_GetDebugHookChainCount(HookType);
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 unsigned int horatio_GetDebugHookMatrixCount() {
-  unsigned int ret;
+	unsigned int ret;
 
-  LOCK
-  ret = horatio_int_GetDebugHookMatrixCount();
-  UNLOCK
+	LOCK
+	ret = horatio_int_GetDebugHookMatrixCount();
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 unsigned int horatio_UninstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
-  unsigned int ret;
+	unsigned int ret;
 
-  LOCK
-  ret = horatio_int_UninstallDebugHook(HookType, HookProc2Remove);
-  UNLOCK
+	LOCK
+	ret = horatio_int_UninstallDebugHook(HookType, HookProc2Remove);
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 void horatio_int_InitDebugHookMatrix() {
-  /* Initialize or clear the debug hook matrix */
-  unsigned int chainI; /* Used during initialization of chains loop */
+	/* Initialize or clear the debug hook matrix */
+	unsigned int chainI; /* Used during initialization of chains loop */
 
-  for ( chainI = 0U; chainI < HORATIO_HOOKCHAIN_SIZE; chainI++ ) {
-    unsigned int hookTypeI; /* Nested loop to process chains for other hook types */
+	for ( chainI = 0U; chainI < HORATIO_HOOKCHAIN_SIZE; chainI++ ) {
+		/* Nested loop to process chains for other hook types */
+		unsigned int hookTypeI;
 
-    for ( hookTypeI = 0U; hookTypeI < HORATIO_DEBUGHOOK_LASTHOOK+1; hookTypeI++ ) {
-      unsigned int (*NULLHookPtr)(PS_HORATIO_DEBUGHOOKINFO) = NULL; /* Make NULL pointer */
+		for (
+			hookTypeI = 0U;
+			hookTypeI < HORATIO_DEBUGHOOK_LASTHOOK+1;
+			hookTypeI++
+		) {
+			unsigned int (*NULLHookPtr)(PS_HORATIO_DEBUGHOOKINFO)
+				= NULL; /* Make NULL pointer */
 
-      horatio_int__debugHookMatrix[(size_t)chainI][(size_t)hookTypeI] = NULLHookPtr; /* Init element */
-    }
-  }
-  return;
+			horatio_int__debugHookMatrix[
+				(size_t)chainI][(size_t)hookTypeI
+			] = NULLHookPtr; /* Init element */
+		}
+	}
+	return;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 void horatio_int_CallDebugHook(
-  const unsigned short HookType,
-  const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
+	const unsigned short HookType,
+	const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
 ) {
-  /* locals */
-  S_HORATIO_DEBUGHOOKINFO debugHookInfo; /* Local copy of caller's stuff */
-  unsigned int allHooksLoop; /* Used to control processing of all the hooks loop */
+	/* locals */
 
-  /* We must copy the debug hook information from the caller so that hook
-  functions may change information before it is passed on to the next hook
-  function, if they so desire, without damanging the person who called the
-  trap executive (incase they use the original pointers somehow), though I
-  can't think how they can offhand, still... */
+	/* Local copy of caller's stuff */
+	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 
-  if (BadHookType(HookType)) { /* Bad hook type (out of range in matrix) */
-    ERROR("CallDebugHook: Internal library error, HookType out of range!");
-    return;
-  }
+	/* Used to control processing of all the hooks loop */
+	unsigned int allHooksLoop;
 
-  debugHookInfo = *PDebugHookInfo; /* Copy details by auto C deref */
+	/*
+	 * We must copy the debug hook information from the caller so that hook
+	 * functions may change information before it is passed on to the next
+	 * hook function, if they so desire, without damanging the person who
+	 * called the trap executive (incase they use the original pointers
+	 * somehow), though I can't think how they can offhand, still...
+	 */
 
-  for ( allHooksLoop = 0U; allHooksLoop < HORATIO_HOOKCHAIN_SIZE; allHooksLoop++ ) { /* All viable hook locations in the chain */
-    unsigned int (*HookProc)(PS_HORATIO_DEBUGHOOKINFO) = _debugHookMatrix[allHooksLoop][HookType]; /* Get hook function pointer from chain */
+	if (BadHookType(HookType)) {
+		/* Bad hook type (out of range in matrix) */
+		ERROR(
+			"CallDebugHook: Internal library error, "
+			"HookType out of range!"
+		);
+		return;
+	}
 
-    if ( !HookProc ) /* No hook info */
-      continue; /* Move onto next hook pointer */
+	debugHookInfo = *PDebugHookInfo; /* Copy details by auto C deref */
 
-    if ( !HookProc(&debugHookInfo) ) /* Call hook procedure */
-      break; /* Hook requested not to pass information onto following hooks */
-  }
-  return; /* All hook calls are done */
+	for (
+		allHooksLoop = 0U;
+		allHooksLoop < HORATIO_HOOKCHAIN_SIZE;
+		allHooksLoop++
+	) { /* All viable hook locations in the chain */
+
+	/* Get hook function pointer from chain */
+	unsigned int (*HookProc)(PS_HORATIO_DEBUGHOOKINFO)
+		= _debugHookMatrix[allHooksLoop][HookType];
+
+	if ( !HookProc ) /* No hook info */
+		continue; /* Move onto next hook pointer */
+
+	if ( !HookProc(&debugHookInfo) ) /* Call hook procedure */
+		/*
+		 * Hook requested not to pass information
+		 * on to following hooks
+		 */
+		break;
+	}
+	return; /* All hook calls are done */
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 static unsigned int horatio_int_InstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
-  /* This function has added support for HORATIO_HOOK_ALL */
-  unsigned int i; /* looping */
-  unsigned int set = 0U; /* set = FALSE */
+	/* This function has added support for HORATIO_HOOK_ALL */
+	unsigned int i; /* looping */
+	unsigned int set = 0U; /* set = FALSE */
 
-  if (HookType != HORATIO_HOOK_ALL) { /* Specific hook, not general hook */
-    if (BadHookType(HookType)) return 0U; /* Ensure hook type is valid */
-    /* Find the first free entry in the chain */
-    for ( i = 0U; i < HORATIO_HOOKCHAIN_SIZE; i++ ) {
-      if ( !_debugHookMatrix[i][HookType] ) { /* Found free entry? */
-        _debugHookMatrix[i][HookType] = NewHookProc; /* Install hook proc */
-        set = 1U; /* Remember at least one hook was installed: set 'set' TRUE */
-        break; /* Don't keep looping */
-      }
-    }
-  } else { /* General hook that wants everything! */
-    unsigned short nextHook;
+	if (HookType != HORATIO_HOOK_ALL) {
+		/* Specific hook, not general hook; ensure type is valid */
+		if (BadHookType(HookType)) return 0U;
 
-    for ( nextHook = (unsigned short)0x0000U; nextHook < HORATIO_DEBUGHOOK_LASTHOOK; nextHook++ ) { /* Go through all valid hook types */
-      if ( !horatio_InstallDebugHook(nextHook, NewHookProc) ) { /* Call ourselves back to sort it out */
-        /* Failed to install a hook? */
-        horatio_UninstallDebugHook(HORATIO_HOOK_ALL, NewHookProc); /* Remove all of the hooks which are for this address */
-        return 0U; /* Report failure for the whole lot, FALSE return */
-      }
-      set = 1U; /* Report success, in a while */
-    }
-  }
+		/* Find the first free entry in the chain */
+		for ( i = 0U; i < HORATIO_HOOKCHAIN_SIZE; i++ ) {
+			if ( !_debugHookMatrix[i][HookType] ) {
+				/* Found free entry; Install hook proc */
+				_debugHookMatrix[i][HookType] = NewHookProc;
+				/*
+				 * Remember at least one hook was installed:
+				 * set 'set' TRUE
+				 */
+				set = 1U;
+				break; /* Don't keep looping */
+			}
+		}
+	} else { /* General hook that wants everything! */
+		unsigned short nextHook;
 
-  return set; /* No space for handler */
+		for (
+			nextHook = (unsigned short)0x0000U;
+			nextHook < HORATIO_DEBUGHOOK_LASTHOOK;
+			nextHook++
+		) { /* Go through all valid hook types */
+			/* Call ourselves back to sort it out */
+			if (!horatio_InstallDebugHook(nextHook, NewHookProc)) {
+				/*
+				 * Failed to install a hook?  Remove all of
+				 * the hooks which are for this address
+				 */
+				horatio_UninstallDebugHook(
+					HORATIO_HOOK_ALL, NewHookProc
+				);
+				/*
+				 * Report failure for the whole lot,
+				 * FALSE return
+				 */
+				return 0U;
+			}
+			set = 1U; /* Report success, in a while */
+		}
+	}
+
+	return set; /* No space for handler */
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 static unsigned int horatio_int_GetDebugHookChainCount(
-  const unsigned int HookType
+	const unsigned int HookType
 ) {
-  unsigned int i;
-  unsigned total = 0U;
+	unsigned int i;
+	unsigned total = 0U;
 
-  if (!BadHookType(HookType)) {
-    for ( i = 0U; i < HORATIO_HOOKCHAIN_SIZE; i++ ) { /* All hook positions */
-      if ( _debugHookMatrix[i][HookType] ) /* Hook installed at this point in the chain? */
-        total++; /* Increment count */
-    }
-  }
-  return total;
+	if (!BadHookType(HookType)) {
+		/* Loop through all hook positions */
+		for ( i = 0U; i < HORATIO_HOOKCHAIN_SIZE; i++ ) {
+			if ( _debugHookMatrix[i][HookType] ) {
+				/* Hook installed at this point in the chain? */
+				total++; /* Increment count */
+			}
+		}
+	}
+	return total;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 static unsigned int horatio_int_GetDebugHookMatrixCount(void) {
-  unsigned int i;
-  unsigned total = 0U;
+	unsigned int i;
+	unsigned total = 0U;
 
-  for ( i = 0U; i <= HORATIO_DEBUGHOOK_LASTHOOK; i++ ) /* All types of hooks */
-    total += horatio_int_GetDebugHookChainCount(i); /* Add chain contents to total for all chains */
+	/* Loop through all types of hooks */
+	for ( i = 0U; i <= HORATIO_DEBUGHOOK_LASTHOOK; i++ ) {
+		/* Add chain contents to total for all chains */
+		total += horatio_int_GetDebugHookChainCount(i);
+	}
 
-  return total; /* Give total to caller */
+	return total; /* Give total to caller */
 }
 
 #ifdef HORATIO_DEBUGHOOKS
 static unsigned int horatio_int_UninstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
-  /* This function has added support for HORATIO_HOOK_ALL */
+	/* This function has added support for HORATIO_HOOK_ALL */
 
-  unsigned int i;
-  unsigned int retStatus = 0U; /* Return status FALSE by default */
+	unsigned int i;
+	unsigned int retStatus = 0U; /* Return status FALSE by default */
 
-  if (HookType != HORATIO_HOOK_ALL) { /* Specific hook type request */
-    if (BadHookType(HookType)) return 0U;
+	if (HookType != HORATIO_HOOK_ALL) { /* Specific hook type request */
+		if (BadHookType(HookType)) return 0U;
 
-    for ( i = 0U; i < HORATIO_DEBUGHOOK_LASTHOOK; i++ ) { /* Process all entries in the chain */
-      if ( _debugHookMatrix[i][HookType] == HookProc2Remove ) { /* Found entry */
-        retStatus = 1U; /* We found it! Return TRUE */
-        _debugHookMatrix[i][HookType] = NULL; /* Delete address of hook proc */
-        /* Not breaking the loop so we can remove duplicates too, say for
-        example the user installed the same hook proc twice for the same type */
-      }
-    }
-  } else { /* HookType is general */
-    unsigned short si; /* Used for loop */
-    retStatus = 1U; /* We always say success */
+		/* Process all entries in the chain */
+		for ( i = 0U; i < HORATIO_DEBUGHOOK_LASTHOOK; i++ ) {
+			if (_debugHookMatrix[i][HookType] == HookProc2Remove) {
+				/* Found entry */
+				retStatus = 1U; /* We found it! Return TRUE */
+				/* Delete address of hook proc */
+				_debugHookMatrix[i][HookType] = NULL;
+				/*
+				 * Not breaking the loop so we can remove
+				 * duplicates too, say for example the user
+				 * installed the same hook proc twice for the
+				 * same type
+				 */
+			}
+		}
+	} else { /* HookType is general */
+		unsigned short si; /* Used for loop */
+		retStatus = 1U; /* We always say success */
 
-    for (si = (unsigned short)(0x0000U); si <= HORATIO_DEBUGHOOK_LASTHOOK; si++) /* All possible debug hook types */
-      horatio_UninstallDebugHook(si, HookProc2Remove); /* Uninstall this hook from this type */
-  }
+		for (
+			si = (unsigned short)(0x0000U);
+			si <= HORATIO_DEBUGHOOK_LASTHOOK;
+			si++
+		) /* All possible debug hook types */
+			horatio_UninstallDebugHook(
+				si,
+				HookProc2Remove
+			); /* Uninstall this hook from this type */
+	  }
 
-  return retStatus; /* Give status to caller */
+	  return retStatus; /* Give status to caller */
 }
 #endif /*HORATIO_DEBUGHOOKS*/
 
 #ifdef HORATIO_DEBUGHOOKS
 static unsigned int BadHookType(const unsigned int HookType) {
-  unsigned int bad = 0U; /* Not a bad hook type yet... */
+	unsigned int bad = 0U; /* Not a bad hook type yet... */
 
 # ifndef NDEBUG /* Debugging lib */
-    assert( HookType <= HORATIO_DEBUGHOOK_LASTHOOK ); /* Check hook type is valid */
+	/* Check hook type is valid */
+	assert(HookType <= HORATIO_DEBUGHOOK_LASTHOOK);
+
 # else /* Not in debug mode, must handle this same trap differenty */
-    if ( !(HookType <= HORATIO_DEBUGHOOK_LASTHOOK) ) /* Check hook type is valid */
-      bad = 1U; /* bad = TRUE */
+	/* Check hook type is valid */
+	if ( !(HookType <= HORATIO_DEBUGHOOK_LASTHOOK) )
+		bad = 1U; /* bad = TRUE */
+
 # endif /*!NDEBUG*/
 
-  return bad;
+	return bad;
 }
 #endif /*HORATIO_DEBUGHOOKS*/
-

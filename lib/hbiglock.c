@@ -32,7 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
 #ifndef _RECURSIVE
@@ -45,7 +45,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h"
@@ -55,99 +55,100 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef HORATIO_THREADS
 
 #ifdef HORATIO_THREADS_PTHREAD
-#  ifndef HORATIO_THREADS_PTHREAD_NP
-#    pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for HORATIO access from user callbacks.  Callbacks have the power to deadlock a thread"
-#  endif /*!HORATIO_THREADS_PTHREAD_NP*/
+# ifndef HORATIO_THREADS_PTHREAD_NP
+#  pragma message "Threads on POSIX configured as max portabillty doesn't support recursion, required for HORATIO access from user callbacks.  Callbacks have the power to deadlock a thread"
+# endif /*!HORATIO_THREADS_PTHREAD_NP*/
 #endif /*HORATIO_THREADS_PTHREAD*/
 
 #if defined(HORATIO_THREADS_NT)
-#  include <windows.h>
+# include <windows.h>
 #elif defined(HORATIO_THREADS_PTH)
-#  include <pth.h>
+# include <pth.h>
 #elif defined(HORATIO_THREADS_PTHREAD)
-#  include <errno.h>
-#  include <pthread.h>
+# include <errno.h>
+# include <pthread.h>
 #endif
 
 /*
-  Sometimes configure tells us we have non-portable functions available
-  but the macro PTHREAD_MUTEX_RECURSIVE_NP is not really available at
-  all.  If that is the case, revoke what configure set up for us
-*/
+ * Sometimes configure tells us we have non-portable functions available
+ * but the macro PTHREAD_MUTEX_RECURSIVE_NP is not really available at
+ * all.  If that is the case, revoke what configure set up for us
+ */
 #ifdef HORATIO_THREADS_PTHREAD
-#  ifdef HORATIO_THREADS_PTHREAD_NP
-#    ifndef PTHREAD_MUTEX_RECURSIVE_NP
-#      undef HORATIO_THREADS_PTHREAD_NP
-#    endif /*!PTHREAD_MUTEX_RECURSIVE_NP*/
-#  endif /*HORATIO_THREADS_PTHREAD_NP*/
+# ifdef HORATIO_THREADS_PTHREAD_NP
+#  ifndef PTHREAD_MUTEX_RECURSIVE_NP
+#   undef HORATIO_THREADS_PTHREAD_NP
+#  endif /*!PTHREAD_MUTEX_RECURSIVE_NP*/
+# endif /*HORATIO_THREADS_PTHREAD_NP*/
 #endif /*HORATIO_THREADS_PTHREAD*/
 
 #ifdef HORATIO_THREADS_NT
 
-#  define Mutant CRITICAL_SECTION
-#  define InitialiseMutant(x) InitializeCriticalSection((x))
-#  define LockMutant(x) EnterCriticalSection((x))
-#  define UnlockMutant(x) LeaveCriticalSection((x))
-#  define DestroyMutant(x) DeleteCriticalSection((x))
+# define Mutant CRITICAL_SECTION
+# define InitialiseMutant(x) InitializeCriticalSection((x))
+# define LockMutant(x) EnterCriticalSection((x))
+# define UnlockMutant(x) LeaveCriticalSection((x))
+# define DestroyMutant(x) DeleteCriticalSection((x))
 
 #elif defined(HORATIO_THREADS_PTH)
 
-#  define Mutant pth_mutex_t
-#  define InitialiseMutant(x) pth_mutex_init((x))
-#  define LockMutant(x) pth_mutex_acquire((x), (0), (NULL))
-#  define UnlockMutant(x) pth_mutex_release((x))
-#  define DestroyMutant(x) pth_mutex_init((x))
+# define Mutant pth_mutex_t
+# define InitialiseMutant(x) pth_mutex_init((x))
+# define LockMutant(x) pth_mutex_acquire((x), (0), (NULL))
+# define UnlockMutant(x) pth_mutex_release((x))
+# define DestroyMutant(x) pth_mutex_init((x))
 
 #elif defined(HORATIO_THREADS_PTHREAD)
 
-#  define Mutant pthread_mutex_t
-#  ifdef HORATIO_THREADS_PTHREAD_NP /* Supporting non-portable extension? */
-#    define InitialiseMutant(x) InitNPMutant((x))
-#  else
-#    define InitialiseMutant(x) pthread_mutex_init((x), NULL)
-#  endif /*HORATIO_MAXPORT*/
-#  define LockMutant(x) pthread_mutex_lock((x))
-#  define UnlockMutant(x) pthread_mutex_unlock((x))
-#  define DestroyMutant(x) pthread_mutex_destroy((x))
+# define Mutant pthread_mutex_t
+# ifdef HORATIO_THREADS_PTHREAD_NP /* Supporting non-portable extension? */
+#  define InitialiseMutant(x) InitNPMutant((x))
+# else
+#  define InitialiseMutant(x) pthread_mutex_init((x), NULL)
+# endif /*HORATIO_MAXPORT*/
+# define LockMutant(x) pthread_mutex_lock((x))
+# define UnlockMutant(x) pthread_mutex_unlock((x))
+# define DestroyMutant(x) pthread_mutex_destroy((x))
 
 #endif /*HORATIO_THREADS_NT*/
 
 static Mutant bigLock;
 
 #ifdef HORATIO_THREADS_PTHREAD
-#  ifdef HORATIO_THREADS_PTHREAD_NP
-    void InitNPMutant(pthread_mutex_t* PMutant);
-#  endif /*HORATIO_THREADS_PTHREAD_NP*/
+# ifdef HORATIO_THREADS_PTHREAD_NP
+void InitNPMutant(pthread_mutex_t* PMutant);
+# endif /*HORATIO_THREADS_PTHREAD_NP*/
 #endif /*HORATIO_THREADS_PTHREAD*/
 
 void horatio_int_BigLockInit() {
-  InitialiseMutant(&bigLock);
+	InitialiseMutant(&bigLock);
 }
 
 void horatio_int_BigLockUninit() {
-  DestroyMutant(&bigLock);
+	DestroyMutant(&bigLock);
 }
 
 void horatio_int_BigLock(int LockState) {
-  if ( LockState )
-    LockMutant(&bigLock);
-  else
-    UnlockMutant(&bigLock);
+	if ( LockState )
+		LockMutant(&bigLock);
+	else
+		UnlockMutant(&bigLock);
 }
 
 #ifdef HORATIO_THREADS_PTHREAD
 #ifdef HORATIO_THREADS_PTHREAD_NP
 void InitNPMutant(pthread_mutex_t* PMutant) {
-  pthread_mutexattr_t attributes;
+	pthread_mutexattr_t attributes;
 
-  pthread_mutexattr_init(&attributes);
-  pthread_mutexattr_setkind_np(&attributes, PTHREAD_MUTEX_RECURSIVE_NP);
-  pthread_mutex_init(PMutant, &attributes);
-  pthread_mutexattr_destroy(&attributes);
+	pthread_mutexattr_init(&attributes);
+	pthread_mutexattr_setkind_np(&attributes, PTHREAD_MUTEX_RECURSIVE_NP);
+	pthread_mutex_init(PMutant, &attributes);
+	pthread_mutexattr_destroy(&attributes);
 }
 #endif /*HORATIO_THREADS_PTHREAD_NP*/
 #endif /*HORATIO_THREADS_PTHREAD*/
 
 #else /* !HORATIO_THREADS -- Threads not required */
-  char horatio_int_BigLockDummyVar; /* Need at least one external to comply with ANSI */
+/* Need at least one external to comply with ANSI */
+char horatio_int_BigLockDummyVar;
 #endif /*HORATIO_THREADS*/

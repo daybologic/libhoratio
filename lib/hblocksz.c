@@ -35,13 +35,13 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 #include <stdio.h>
 #include <stddef.h>
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
@@ -54,44 +54,49 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hisbad.h" /* Internal interface to block testers */
 
 static size_t horatio_int_GetBlockSize(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *const BlockPtr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *const BlockPtr
 );
 
 size_t horatio_GetBlockSize(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *const BlockPtr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *const BlockPtr
 ) {
-  size_t ret;
+	size_t ret;
 
-  LOCK
-  ret = horatio_int_GetBlockSize(PBlockArray, BlockPtr);
-  UNLOCK
+	LOCK
+	ret = horatio_int_GetBlockSize(PBlockArray, BlockPtr);
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 
 static size_t horatio_int_GetBlockSize(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *const BlockPtr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *const BlockPtr
 ) {
-  /* First test pointers */
-  _VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
+	/* First test pointers */
+	_VerifyPtrs("GetBlockSize()", PBlockArray, NULL);
 
-  if (horatio_int_IsBadBlockPtr(PBlockArray, BlockPtr)) { /* Block pointer is invalid? */
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1];
+	if (horatio_int_IsBadBlockPtr(PBlockArray, BlockPtr)) {
+		/* Block pointer is invalid? */
+		char trapMsg[MAX_TRAP_STRING_LENGTH+1];
 
-    sprintf(
-      trapMsg,
-      #ifdef HAVE_SNPRINTF
-      MAX_TRAP_STRING_LENGTH,
-      #endif /*HAVE_SNPRINTF*/
-      "Attempt to GetBlockSize() unknown block at base %s%p, in array base: %s%p",
-      HORATIO_FMTPTRPFX, BlockPtr,
-      HORATIO_FMTPTRPFX, (void*)PBlockArray
-    );
-    Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg);
-  }
-  return _ResolveArrayPtr(PBlockArray)->Descriptors[ _IndexFromBlockPtr(PBlockArray, BlockPtr) ].Size;
+		sprintf(
+			trapMsg,
+#ifdef HAVE_SNPRINTF
+			MAX_TRAP_STRING_LENGTH,
+#endif /*HAVE_SNPRINTF*/
+			"Attempt to GetBlockSize() "
+			"unknown block at base %s%p, in array base: %s%p",
+			HORATIO_FMTPTRPFX, BlockPtr,
+			HORATIO_FMTPTRPFX, (void*)PBlockArray
+		);
+		Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg);
+	}
+
+	return _ResolveArrayPtr(
+		PBlockArray)->Descriptors[
+			_IndexFromBlockPtr(PBlockArray, BlockPtr)
+		].Size;
 }
-

@@ -31,41 +31,71 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  This internal data is shared between the internal and user-called
-  functions in the memory manager library. - David Duncan Ross Palmer
-  Oh, and init of this data is not done here, it is done within
-  horatio.c : horatio_Startup().
-*/
+ * This internal data is shared between the internal and user-called
+ * functions in the memory manager library. - David Duncan Ross Palmer
+ * Oh, and init of this data is not done here, it is done within
+ * horatio.c : horatio_Startup().
+ */
 
 #define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
 #include <stddef.h>
 #include <stdio.h>
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
 #include "hintdata.h"
 
-PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE]; /* List of pointers to arrays of block descriptors (for validating array base pointers) */
-#ifndef HORATIO_NONULL_BLOCKDESCARRAY /* New NULL block array support enabled? */
-  S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray = { 0U, NULL }; /* This is the built-in array, it is never created or destroyed but it's contents must be what I'm setting them to now when the program ends! */
+/*
+ * List of pointers to arrays of block descriptors
+ * (for validating array base pointers)
+ */
+PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE];
+
+#ifndef HORATIO_NONULL_BLOCKDESCARRAY /* NULL block array support enabled? */
+/*
+ * This is the built-in array, it is never created or destroyed but it's
+ * contents must be what I'm setting them to now when the program ends!
+ */
+S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray
+	= { 0U, NULL };
+
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
-unsigned int horatio_int__libStarted = 0U; /* Set TRUE when library is started */
-void (*horatio_int__UserTrapCallback)(const unsigned int Id, const char* Message) = NULL; /* The user trap handle must not be called by us unless is is a valid pointer */
-unsigned int horatio_int__userTrapCallbackIsHook = 0U; /* The trap callback is TRUE=a hook, FALSE=a handler */
+
+/* Set TRUE when library is started */
+unsigned int horatio_int__libStarted = 0U;
+
+/* The user trap handle must not be called by us unless is is a valid pointer */
+void (*horatio_int__UserTrapCallback)(
+	const unsigned int Id,
+	const char *Message
+) = NULL;
+
+/* The trap callback is TRUE=a hook, FALSE=a handler */
+unsigned int horatio_int__userTrapCallbackIsHook = 0U;
+
 #ifdef HORATIO_DEBUGHOOKS
 unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix */
 #endif /*HORATIO_DEBUGHOOKS*/
-/* For statistics */
+
+/*
+ * For statistics
+ */
 unsigned long horatio_int__blockCount = 0U;
-unsigned long horatio_int__blockCountPeak = 0U; /* The most BlockCount has been */
-unsigned long horatio_int__allocCharge = 0U; /* Allocation charge (amount allocated in all blocks) */
-unsigned long horatio_int__allocPeak = 0U; /* Allocation charge peak, maximum ever allocated */
+
+/* The most BlockCount has been */
+unsigned long horatio_int__blockCountPeak = 0U;
+
+/* Allocation charge (amount allocated in all blocks) */
+unsigned long horatio_int__allocCharge = 0U;
+
+/* Allocation charge peak, maximum ever allocated */
+unsigned long horatio_int__allocPeak = 0U;

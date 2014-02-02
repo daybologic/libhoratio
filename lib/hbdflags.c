@@ -31,18 +31,20 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  Raw block descriptor flag modifiers
-  Now supports NULL arrays
-*/
+ * Raw block descriptor flag modifiers
+ * Now supports NULL arrays
+ */
 #define HORATIO_SOURCE
+
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
+
 #include <stddef.h>
 #include <string.h> /* memset() */
 #include <stdio.h>
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
@@ -55,71 +57,77 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbdflags.h"
 
 /*
-  NOTE: Adding of the hook caller in here has caused two variables
-  both holding the index of the block, this should be optimised away when
-  I can be bothered
-*/
+ * NOTE: Adding of the hook caller in here has caused two variables
+ * both holding the index of the block, this should be optimised away when
+ * I can be bothered
+ */
 
 unsigned char horatio_ModifyDescriptorFlags(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned char *PNewFlags
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned char *PNewFlags
 ) {
-  unsigned char ret;
+	unsigned char ret;
 
-  LOCK
-  ret = horatio_int_ModifyDescriptorFlags(
-    PBlockArray,
-    Ptr,
-    PNewFlags
-  );
-  UNLOCK
+	LOCK
+	ret = horatio_int_ModifyDescriptorFlags(
+		PBlockArray,
+		Ptr,
+		PNewFlags
+	);
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 
 unsigned char horatio_int_ModifyDescriptorFlags(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned char *PNewFlags
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned char *PNewFlags
 ) {
-  /* locals */
-  const char funcName[] = "ModifyDescriptorFlags()"; /* Name of this function */
-  unsigned int blockIndex; /* Index of block descriptor into the array */
-  unsigned char oldFlags; /* Old flags, returned to caller */
-  #ifdef HORATIO_DEBUGHOOKS
-  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
-  unsigned int indexOfBlock;
-  #endif /*HORATIO_DEBUGHOOKS*/
-  PS_HORATIO_BLOCKDESCARRAY PRArr; /* Holds resolved pointer array */
+	/* locals */
 
-  /* Bah, this is a pain supporting this particular hook */
-  #ifdef HORATIO_DEBUGHOOKS
-  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+	/* Name of this function */
+	const char funcName[] = "ModifyDescriptorFlags()";
 
-  debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
-  indexOfBlock = horatio_int_IndexFromBlockPtr(PBlockArray, Ptr);
-  /* Looked up the right descriptor to suit hook requirements */
-  debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)->Descriptors[indexOfBlock];
-  debugHookInfo.HookType = HORATIO_HOOK_MODIFYDESCFLAGS;
-  #endif /*HORATIO_DEBUGHOOKS*/
+	unsigned int blockIndex; /* Index of block descriptor into the array */
+	unsigned char oldFlags; /* Old flags, returned to caller */
+#ifdef HORATIO_DEBUGHOOKS
+	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+	unsigned int indexOfBlock;
+#endif /*HORATIO_DEBUGHOOKS*/
+	PS_HORATIO_BLOCKDESCARRAY PRArr; /* Holds resolved pointer array */
 
-  _VerifyPtrs(funcName, PBlockArray, Ptr); /* Make sure invalid pointers don't get past here */
+	/* Bah, this is a pain supporting this particular hook */
+#ifdef HORATIO_DEBUGHOOKS
+	memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
 
-  PRArr = _ResolveArrayPtr(PBlockArray); /* Makes NULL goto &_defaultArray */
-  blockIndex = _IndexFromBlockPtr(PRArr, Ptr); /* Get the index */
-  oldFlags = PRArr->Descriptors[blockIndex].Flags; /* Save current flags */
-  if (PNewFlags) /* Caller passed new flags */
-    PRArr->Descriptors[blockIndex].Flags = *PNewFlags; /* Modify the flags */
+	debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
+	indexOfBlock = horatio_int_IndexFromBlockPtr(PBlockArray, Ptr);
+	/* Looked up the right descriptor to suit hook requirements */
+	debugHookInfo.PRelDesc
+		= &_ResolveArrayPtr(PBlockArray)->Descriptors[indexOfBlock];
+	debugHookInfo.HookType = HORATIO_HOOK_MODIFYDESCFLAGS;
+#endif /*HORATIO_DEBUGHOOKS*/
 
-  #ifdef HORATIO_DEBUGHOOKS
-  debugHookInfo.Success = 1U;
-  debugHookInfo.Misc0 = (unsigned long)oldFlags;
-  debugHookInfo.Misc1 = (unsigned long)( (PNewFlags) ? (*PNewFlags) : (oldFlags) );
-  horatio_int_CallDebugHook(HORATIO_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
-  #endif /*HORATIO_DEBUGHOOKS*/
+	/* Make sure invalid pointers don't get past here */
+	_VerifyPtrs(funcName, PBlockArray, Ptr);
 
-  return oldFlags; /* Give the old flags back to the caller */
+	/* Makes NULL goto &_defaultArray */
+	PRArr = _ResolveArrayPtr(PBlockArray);
+	blockIndex = _IndexFromBlockPtr(PRArr, Ptr); /* Get the index */
+	oldFlags = PRArr->Descriptors[blockIndex].Flags; /* Save flags */
+	if (PNewFlags) /* Caller passed new flags - modify the flags */
+		PRArr->Descriptors[blockIndex].Flags = *PNewFlags;
+
+#ifdef HORATIO_DEBUGHOOKS
+	debugHookInfo.Success = 1U;
+	debugHookInfo.Misc0 = (unsigned long)oldFlags;
+	debugHookInfo.Misc1
+		= (unsigned long)( (PNewFlags) ? (*PNewFlags) : (oldFlags) );
+
+	horatio_int_CallDebugHook(HORATIO_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
+#endif /*HORATIO_DEBUGHOOKS*/
+
+	return oldFlags; /* Give the old flags back to the caller */
 }
-
-

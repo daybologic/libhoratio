@@ -29,16 +29,17 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-/* Incase you're wondering why HORATIO_SOURCE appears at the top of all
-sources, it's to do with build.h.  That header is for the compilation of the
-library only, not to be included in user programs.  If users include build.h
-the definition won't exist and build.h will tell them off! */
 
 /*
-  Allocations on behalf of callers are done with HORATIO_MALLOC,
-  internal allocations are done with malloc() and failure should be
-  ignored by checking for NULL.
-*/
+ * Incase you're wondering why HORATIO_SOURCE appears at the top of all
+ * sources, it's to do with build.h.  That header is for the compilation of the
+ * library only, not to be included in user programs.  If users include build.h
+ * the definition won't exist and build.h will tell them off!
+ *
+ * Allocations on behalf of callers are done with HORATIO_MALLOC,
+ * internal allocations are done with malloc() and failure should be
+ * ignored by checking for NULL.
+ */
 
 #define HORATIO_SOURCE
 
@@ -51,7 +52,7 @@ the definition won't exist and build.h will tell them off! */
 #include <stdio.h>
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
@@ -65,97 +66,114 @@ the definition won't exist and build.h will tell them off! */
 #include "hblocarr.h" /* Internal interface to block arrays */
 
 /*
-Minimal stuff here please, if possible promote granularity by using other C files
-*/
+ * Minimal stuff here please,
+ * if possible promote granularity by using other C files
+ */
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
-/* Called by TrapUnFreedArrays(), not by other functions,
-TrapUnFreedBlocks() does processing for a block array, I had
-to put it in a separate function so it could be called in
-two different locations, the safety list loop and then for the
-built-in array, returns number of bytes wasted, the called wil
-add this to the total leakage */
+/*
+ * Called by TrapUnFreedArrays(), not by other functions,
+ * TrapUnFreedBlocks() does processing for a block array, I had
+ * to put it in a separate function so it could be called in
+ * two different locations, the safety list loop and then for the
+ * built-in array, returns number of bytes wasted, the called wil
+ * add this to the total leakage
+ */
 static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr);
 unsigned char horatio__EnableTraps = 1U;
 
 PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct) {
-  /* No need to lock the big global lock for this, only reading readonly data. */
-  if (PVerStruct) {
-    /* Load version information into the caller's structure */
-    PVerStruct->Major = HORATIO_VERSION_MAJOR;
-    PVerStruct->Minor = HORATIO_VERSION_MINOR;
-    PVerStruct->Patch = HORATIO_VERSION_PATCH;
-    PVerStruct->Flags = (unsigned char)0U;
-    #ifdef DEBUG
-      PVerStruct->Flags |= HORATIO_VERSION_DEBUG;
-    #endif /*DEBUG*/
-    #ifdef PRIVATE
-      PVerStruct->Flags |= HORATIO_VERSION_PRIVATE;
-    #endif /*PRIVATE*/
-    #ifdef SPECIAL
-      PVerStruct->Flags |= HORATIO_VERSION_SPECIAL;
-    #endif /*SPECIAL*/
-    #ifdef HORATIO_THREADS
-      PVerStruct->Flags |= HORATIO_VERSION_MT;
-    #endif /*HORATIO_THREADS*/
-  }
-  return PVerStruct;
+	/*
+	 * No need to lock the big global lock for this,
+	 * only reading readonly data.
+	 */
+	if (PVerStruct) {
+		/* Load version information into the caller's structure */
+		PVerStruct->Major = HORATIO_VERSION_MAJOR;
+		PVerStruct->Minor = HORATIO_VERSION_MINOR;
+		PVerStruct->Patch = HORATIO_VERSION_PATCH;
+		PVerStruct->Flags = (unsigned char)0U;
+#ifdef DEBUG
+		PVerStruct->Flags |= HORATIO_VERSION_DEBUG;
+#endif /*DEBUG*/
+#ifdef PRIVATE
+		PVerStruct->Flags |= HORATIO_VERSION_PRIVATE;
+#endif /*PRIVATE*/
+#ifdef SPECIAL
+		PVerStruct->Flags |= HORATIO_VERSION_SPECIAL;
+#endif /*SPECIAL*/
+#ifdef HORATIO_THREADS
+		PVerStruct->Flags |= HORATIO_VERSION_MT;
+#endif /*HORATIO_THREADS*/
+	}
+	return PVerStruct;
 }
 
 void horatio_Startup() {
-  if (!_libStarted) {
-    /* Initialization of internal library data */
-    _libStarted = 1U; /* The library is started now */
-    _UserTrapCallback = NULL; /* No user trap handler installed */
-    SafetyList_Init(); /* Init the safety list */
-    #ifdef HORATIO_DEBUGHOOKS
-      horatio_int_InitDebugHookMatrix(); /* Init the debug hook matrix */
-    #endif /*HORATIO_DEBUGHOOKS*/
-    #ifdef HORATIO_THREADS
-      horatio_int_BigLockInit();
-    #endif /*HORATIO_THREADS*/
-  } else { /* This has been done before! */
-    #ifdef HORATIO_DEBUGHOOKS
-    S_HORATIO_DEBUGHOOKINFO debugHookInfo;
-    memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
-    horatio_int_CallDebugHook(HORATIO_HOOK_STARTUP, &debugHookInfo);
-    #endif /*HORATIO_DEBUGHOOKS*/
-    Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
-  }
-  MESSAGE(NULL, 0, "Library started");
-  return;
+	if (!_libStarted) {
+		/* Initialization of internal library data */
+		_libStarted = 1U; /* The library is started now */
+		_UserTrapCallback = NULL; /* No user trap handler installed */
+		SafetyList_Init(); /* Init the safety list */
+#ifdef HORATIO_DEBUGHOOKS
+		/* Init the debug hook matrix */
+		horatio_int_InitDebugHookMatrix();
+#endif /*HORATIO_DEBUGHOOKS*/
+#ifdef HORATIO_THREADS
+		horatio_int_BigLockInit();
+#endif /*HORATIO_THREADS*/
+	} else { /* This has been done before! */
+#ifdef HORATIO_DEBUGHOOKS
+		S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+		memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+		horatio_int_CallDebugHook(HORATIO_HOOK_STARTUP, &debugHookInfo);
+#endif /*HORATIO_DEBUGHOOKS*/
+		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
+	}
+	MESSAGE(NULL, 0, "Library started");
+	return;
 }
 
 void horatio_Shutdown() {
-  /* Don't moan about my double use of the define, I like it this
-  way, it feels cleaner, declarations separated! */
-  #ifdef HORATIO_DEBUGHOOKS
-  S_HORATIO_DEBUGHOOKINFO debugHookInfo;
-  #endif /*HORATIO_DEBUGHOOKS*/
-  #ifdef HORATIO_DEBUGHOOKS
-  memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
-  #endif /*HORATIO_DEBUGHOOKS*/
 
-  if (_libStarted) {
-    /* Cleanup of internal library data */
-    _libStarted = 0U; /* The library has been shut down */
-    #ifdef HORATIO_THREADS
-      horatio_int_BigLockUninit();
-    #endif /*HORATIO_THREADS*/
-    #ifdef HORATIO_DEBUGHOOKS
-      debugHookInfo.Success = 1U; /* Normal call to shutdown even if leaks are caught */
-      horatio_int_CallDebugHook(HORATIO_HOOK_SHUTDOWN, &debugHookInfo);
-    #endif /*HORATIO_DEBUGHOOKS*/
-    TrapUnFreedArrays(); /* Output log information if memory has not been released */
-    MESSAGE(NULL, 0, "Library shutdown");
-  } else { /* This has been done before! */
-    /* Call hooks and fire trap */
-    #ifdef HORATIO_DEBUGHOOKS
-    debugHookInfo.Success = 0U; /* Failed */
-    horatio_int_CallDebugHook(HORATIO_HOOK_SHUTDOWN, &debugHookInfo);
-    #endif /*HORATIO_DEBUGHOOKS*/
-    Trap(HORATIO_TRAP_MUL_SHUTDOWN, "Multiple calls of Shutdown()");
-  }
-  return;
+#ifdef HORATIO_DEBUGHOOKS
+
+	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+	memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+
+#endif /*HORATIO_DEBUGHOOKS*/
+
+	if (_libStarted) {
+		/* Cleanup of internal library data */
+		_libStarted = 0U; /* The library has been shut down */
+#ifdef HORATIO_THREADS
+		horatio_int_BigLockUninit();
+#endif /*HORATIO_THREADS*/
+#ifdef HORATIO_DEBUGHOOKS
+		/* Normal call to shutdown even if leaks are caught */
+		debugHookInfo.Success = 1U;
+		horatio_int_CallDebugHook(
+			HORATIO_HOOK_SHUTDOWN,
+			&debugHookInfo
+		);
+#endif /*HORATIO_DEBUGHOOKS*/
+		/* Output log information if memory has not been released */
+		TrapUnFreedArrays(); 
+		MESSAGE(NULL, 0, "Library shutdown");
+	} else { /* This has been done before! */
+		/* Call hooks and fire trap */
+#ifdef HORATIO_DEBUGHOOKS
+		debugHookInfo.Success = 0U; /* Failed */
+		horatio_int_CallDebugHook(
+			HORATIO_HOOK_SHUTDOWN,
+			&debugHookInfo
+		);
+#endif /*HORATIO_DEBUGHOOKS*/
+		Trap(
+			HORATIO_TRAP_MUL_SHUTDOWN,
+			"Multiple calls of Shutdown()"
+		);
+	}
+	return;
 }
 
 unsigned int horatio_IsStarted() {

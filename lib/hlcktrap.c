@@ -30,25 +30,27 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* A trap I prepared earlier - fires trap on a locking violation, call this
-at the begining of any function which invariably leads to block descriptors
-being modified or deleted (except for flag changes).  This will return
-FALSE normally.  If it returns TRUE it because the block is locked, the
-caller should then make steps not to modify the block.  This TRUE return only
-ocours when trapping is off or handled by the user who chose to ignore the
-trap.  Otherwise the function does not return. */
+/*
+ * A trap I prepared earlier - fires trap on a locking violation, call this
+ * at the begining of any function which invariably leads to block descriptors
+ * being modified or deleted (except for flag changes).  This will return
+ * FALSE normally.  If it returns TRUE it because the block is locked, the
+ * caller should then make steps not to modify the block.  This TRUE return only
+ * ocours when trapping is off or handled by the user who chose to ignore the
+ * trap.  Otherwise the function does not return.
+ */
 
 #define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
 #include <stddef.h>
 #include <stdio.h>
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
@@ -60,31 +62,37 @@ trap.  Otherwise the function does not return. */
 #include "hlcktrap.h"
 
 unsigned int horatio_int_LockTrap(
-  const char *FuncName,
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *BlockPtr
+	const char *FuncName,
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *BlockPtr
 ) {
-  /* Block locked? */
-  if (horatio_int_IsBlockLocked(PBlockArray, BlockPtr)) {
-    char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For this trap message */
+	/* Block locked? */
+	if (horatio_int_IsBlockLocked(PBlockArray, BlockPtr)) {
+		char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* For this message */
 
-    sprintf(
-      trapMsg,
-      #ifdef HAVE_SNPRINTF
-      MAX_TRAP_STRING_LENGTH,
-      #endif /*HAVE_SNPRINTF*/
-      "%s: (locking violation) Block %s%p in array %s%p, flag dump: %X",
-      FuncName,
-      HORATIO_FMTPTRPFX, (void*)PBlockArray,
-      HORATIO_FMTPTRPFX, BlockPtr,
-      (unsigned short)horatio_int_ModifyDescriptorFlags(
-        PBlockArray,
-        BlockPtr,
-        NULL
-      )
-    );
-    Trap(HORATIO_TRAP_LOCKINGVIOLATION, trapMsg); /* Execute the trap */
-    return 1U; /* If the trap recovered let program go on and notify user that trap ocourred */
-  }
-  return 0U; /* Block not locked */
+		sprintf(
+			trapMsg,
+	#ifdef HAVE_SNPRINTF
+			MAX_TRAP_STRING_LENGTH,
+	#endif /*HAVE_SNPRINTF*/
+			"%s: (locking violation) Block %s%p in "
+			"array %s%p, flag dump: %X",
+			FuncName,
+			HORATIO_FMTPTRPFX, (void*)PBlockArray,
+			HORATIO_FMTPTRPFX, BlockPtr,
+			(unsigned short)horatio_int_ModifyDescriptorFlags(
+				PBlockArray,
+				BlockPtr,
+				NULL
+			)
+		);
+		/* Execute the trap */
+		Trap(HORATIO_TRAP_LOCKINGVIOLATION, trapMsg);
+		/*
+		 * If the trap recovered let program go on and notify
+		 * user that trap ocourred
+		 */
+		return 1U;
+	}
+	return 0U; /* Block not locked */
 }

@@ -31,14 +31,16 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  Module for handling memory block lock flags,
-  Created 22nd Feb 2000
-*/
+ * Module for handling memory block lock flags,
+ * Created 22nd Feb 2000
+ */
 
 #define HORATIO_SOURCE
+
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
+
 #include <stddef.h>
 #include <stdio.h>
 #ifdef HORATIO_HDRSTOP
@@ -52,77 +54,76 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbloclck.h"
 
 void horatio_SetBlockLockingFlag(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned int NewStatus
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned int NewStatus
 ) {
-  LOCK
-  horatio_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
-  UNLOCK
+	LOCK
+	horatio_int_SetBlockLockingFlag(PBlockArray, Ptr, NewStatus);
+	UNLOCK
 }
 
 unsigned int horatio_IsBlockLocked(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 ) {
-  unsigned int ret;
+	unsigned int ret;
 
-  LOCK
-  ret = horatio_int_IsBlockLocked(PBlockArray, Ptr);
-  UNLOCK
+	LOCK
+	ret = horatio_int_IsBlockLocked(PBlockArray, Ptr);
+	UNLOCK
 
-  return ret;
+	return ret;
 }
 
 void horatio_ToggleBlockLockingStatus(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 ) {
-  LOCK
-  horatio_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
-  UNLOCK
+	LOCK
+	horatio_int_ToggleBlockLockingStatus(PBlockArray, Ptr);
+	UNLOCK
 }
 
 void horatio_int_SetBlockLockingFlag(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned int NewStatus
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned int NewStatus
 ) {
-  unsigned char flags;
+	unsigned char flags;
 
-  /* Get current flags */
-  flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
-  if (NewStatus) /* Locking? */
-    flags |= 1; /* Set lock bit */
-  else /* Unlocking? */
-    flags |= ~1; /* Clear lock bit */
+	/* Get current flags */
+	flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
+	if (NewStatus) /* Locking? */
+		flags |= 1; /* Set lock bit */
+	else /* Unlocking? */
+		flags |= ~1; /* Clear lock bit */
 
-  /* Set the new flags */
-  horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
-  return; /* That was simple enough, I can drink some water now */
+	/* Set the new flags */
+	horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
+	return; /* That was simple enough, I can drink some water now */
 }
 
 unsigned int horatio_int_IsBlockLocked(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 ) {
-  unsigned char flags;
+	unsigned char flags;
 
-  /* Get the flags for the descriptor */
-  flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
-  if ( ((flags & 1) == 1) ) /* The lock bit is set? */
-    return 1U; /* Yes, the block is locked */
-  return 0U; /* No, the block is not locked */
+	/* Get the flags for the descriptor */
+	flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
+	if ( ((flags & 1) == 1) ) /* The lock bit is set? */
+		return 1U; /* Yes, the block is locked */
+
+	return 0U; /* No, the block is not locked */
 }
 
 void horatio_int_ToggleBlockLockingStatus(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 ) {
-  /* Get current status */
-  unsigned int oldLockStat = horatio_int_IsBlockLocked(PBlockArray, Ptr);
-  /* Set locking state as NOT current locking state */
-  horatio_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat);
+	/* Get current status */
+	unsigned int oldLockStat = horatio_int_IsBlockLocked(PBlockArray, Ptr);
+	/* Set locking state as NOT current locking state */
+	horatio_int_SetBlockLockingFlag(PBlockArray, Ptr, !oldLockStat);
 }
-
-

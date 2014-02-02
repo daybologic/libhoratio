@@ -31,26 +31,25 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-#############################################################################
-# Functions for handling the safety list                                    #
-# HORATIO--The DayboLogic C-Runtime Memory Manager                         #
-# No functions here are for calling by the user, they are only for internal #
-# library use.                                                              #
-#############################################################################
-Created May 3rd 2000
-*/
+ * Functions for handling the safety list
+ * HORATIO--The DayboLogic C-Runtime Memory Manager
+ * No functions here are for calling by the user, they are only for internal
+ * library use.
+ *
+ * Created May 3rd 2000
+ */
 
 #define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H
-#  include "config.h"
+# include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
 #include <stddef.h>
 #include <stdio.h>
 
 #ifdef HORATIO_HDRSTOP
-#  pragma hdrstop
+# pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
 #include "hbuild.h" /* General build parameters */
@@ -59,79 +58,88 @@ Created May 3rd 2000
 #include "hsafelst.h"
 
 unsigned int horatio_SafetyList_IsArrayPtrPresent(
-  const PS_HORATIO_BLOCKDESCARRAY ArrayBase
+	const PS_HORATIO_BLOCKDESCARRAY ArrayBase
 ) {
-  if (ArrayBase) {
-    unsigned int sli; /* Used for processing of the list */
-    for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ )
-      if (_safetyList[sli] == ArrayBase) return 1U;
-  }
-  return 0U; /* Not present or bad params */
+	if (ArrayBase) {
+		unsigned int sli; /* Used for processing of the list */
+		for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ )
+			if (_safetyList[sli] == ArrayBase) return 1U;
+	}
+	return 0U; /* Not present or bad params */
 }
 
 void horatio_SafetyList_Init() {
-  unsigned int i;
+	unsigned int i;
 
-  /* All possible entries in list */
-  for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ )
-    _safetyList[i] = NULL; /* Zero pointer */
+	/* All possible entries in list */
+	for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ )
+		_safetyList[i] = NULL; /* Zero pointer */
 
-  return;
+	return;
 }
 
 unsigned int horatio_SafetyList_CountUsed() {
-  unsigned int sli, slc = 0U;
+	unsigned int sli, slc = 0U;
 
-  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
-    if (_safetyList[sli]) /* Valid pointer in list? */
-      slc++; /* Increment count */
-  }
+	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
+		if (_safetyList[sli]) /* Valid pointer in list? */
+			slc++; /* Increment count */
+	}
 
-  return slc; /* Give count to caller */
+	return slc; /* Give count to caller */
 }
 
 unsigned int horatio_SafetyList_AddBase(
-  const PS_HORATIO_BLOCKDESCARRAY PArrayBase
+	const PS_HORATIO_BLOCKDESCARRAY PArrayBase
 ) {
-  unsigned int sli;
+	unsigned int sli;
 
-  /*
-    Sorry, this slows things down, must check to see if already here
-    otherwise it would cause false leaks later.
-  */
-  if (SafetyList_IsArrayPtrPresent(PArrayBase)) return 0U;
+	/*
+	 * Sorry, this slows things down, must check to see if already here
+	 * otherwise it would cause false leaks later.
+	 */
+	if (SafetyList_IsArrayPtrPresent(PArrayBase)) return 0U;
 
-  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
-    if (!_safetyList[sli]) { /* First free entry? */
-      _safetyList[sli] = PArrayBase; /* Store base in safety list */
-      return 1U; /* Done, abort loop, report success */
-    }
-  }
+	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
+		if (!_safetyList[sli]) { /* First free entry? */
+			/* Store base in safety list */
+			_safetyList[sli] = PArrayBase;
+			return 1U; /* Done, abort loop, report success */
+		}
+	}
 
-  return 0U; /* Damn, no free entries */
+	return 0U; /* Damn, no free entries */
 
-  /* If you do find that AddBase() fails increase the fixed list size, the
-  definition can be found in BUILD.H and then rebuild the library, or cut
-  down on the number of block arrays used in the program, this involves quite
-  a bit of restructuring of the program but can reduce overhead, the other
-  side effect is to make if more difficult to localize a leak, however. */
+	/*
+	 * If you do find that AddBase() fails increase the fixed list size,
+	 * the definition can be found in build.h and then rebuild the library,
+	 * or cut down on the number of block arrays used in the program,
+	 * this involves quite a bit of restructuring of the program but can
+	 * reduce overhead, the other side effect is to make if more difficult
+	 * to localize a leak, however.
+	 */
 }
 
 unsigned int horatio_SafetyList_RemoveBase(
-  const PS_HORATIO_BLOCKDESCARRAY PArrayBase
+	const PS_HORATIO_BLOCKDESCARRAY PArrayBase
 ) {
-  unsigned int sli;
+	unsigned int sli;
 
-  /* This is faster than adding because we have no need for a separate search,
-  if it is not found the function fails, it is is the entry is set to NULL,
-  which is an effective removal. */
+	/*
+	 * This is faster than adding because we have no need for a separate
+	 * search, if it is not found the function fails, it is is the entry
+	 * is set to NULL, which is an effective removal.
+	 */
 
-  for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
-    if (_safetyList[sli] == PArrayBase) { /* Found the base in question? */
-      _safetyList[sli] = NULL; /* Mark entry in list as unused */
-      return 1U; /* Successfully removed */
-    }
-  }
-  return 0U; /* Looks like the item was not present */
+	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
+		if (_safetyList[sli] == PArrayBase) {
+			/*
+			 * Found the base in question.  Mark entry in the list
+			 * as unused.
+			 */
+			_safetyList[sli] = NULL;
+			return 1U; /* Successfully removed */
+		}
+	}
+	return 0U; /* Looks like the item was not present */
 }
-
