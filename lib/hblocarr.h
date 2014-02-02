@@ -1,5 +1,6 @@
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+/*
+Horatio's Memory Manager
+Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,3 +28,25 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+*/
+
+#ifndef INC_HORATIO_BLKARRAY_H
+#define INC_HORATIO_BLKARRAY_H
+
+#ifndef HORATIO_SOURCE
+# error ("Use horatio.h not seperate, internal headers")
+#endif /*HORATIO_SOURCE*/
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+void horatio_int_DestroyBlockArray(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+);
+
+#ifdef __cplusplus
+  }
+#endif
+
+#endif /*!INC_HORATIO_BLKARRAY_H*/

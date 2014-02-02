@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 # Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
+# Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,10 +33,12 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(horatio,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
-AM_INIT_AUTOMAKE(horatio,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
-AC_CONFIG_SRCDIR([horatio.c])
+AC_INIT([horatio],[1.2.1])
+AM_SILENT_RULES([yes])
+AC_CONFIG_SRCDIR([lib/horatio.c])
 AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CXX
@@ -78,6 +80,8 @@ AC_DEFUN([AC_CHECK_FORMAT_POINTER_PREFIX],
   if test "$ac_cv_header_stdio_h" = "yes"; then
     AC_RUN_IFELSE(
     [
+        AC_LANG_SOURCE(
+            [
 #include <stdio.h>
 static char addr[[32]];
 int main() {
@@ -86,6 +90,8 @@ int main() {
     return 0;
   return 1;
 }
+            ]
+        )
     ],[
       ac_cv_format_pointer_prefix=yes
     ],[
@@ -333,5 +339,5 @@ AC_MSG_RESULT($log_enabled)
 
 
 # End of configuration
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile lib/Makefile t/Makefile)
 

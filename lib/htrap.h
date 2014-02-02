@@ -1,5 +1,6 @@
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+/*
+Horatio's Memory Manager
+Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,3 +28,29 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+*/
+#ifndef INC_HORATIO_TRAP_H
+#define INC_HORATIO_TRAP_H
+
+#ifndef INC_HORATIO_INTDATA_H
+#  error ("Internal library users only!")
+#endif /*INC_HORATIO_INTDATA_H*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif /*__cplusplus*/
+void horatio_int_Trap(
+  const unsigned int Id,
+  const char *Message
+); /* Fire the specified trap */
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /*__cplusplus*/
+
+/* NOTE: Prototype for InstallTrapHandler() is in HORATIO.H */
+
+#ifdef INC_HORATIO_INTDATA_H
+#  define Trap horatio_int_Trap
+#endif /*INC_HORATIO_INTDATA_H*/
+
+#endif /*!INC_HORATIO_TRAP_H*/

@@ -1,5 +1,6 @@
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+/*
+Horatio's Memory Manager
+Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,3 +28,24 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+*/
+#ifndef INC_HORATIO_VPTRAP_H
+#define INC_HORATIO_VPTRAP_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /*__cplusplus*/
+void horatio_int_VerifyPtrs(
+  const char *FuncName,
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
+); /* BlockPtr can be NULL */
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /*__cplusplus*/
+
+#ifdef INC_HORATIO_INTDATA_H
+# define _VerifyPtrs horatio_int_VerifyPtrs
+#endif /*INC_HORATIO_INTDATA_H*/
+
+#endif /*!INC_HORATIO_VPTRAP_H*/

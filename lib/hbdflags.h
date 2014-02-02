@@ -1,5 +1,6 @@
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+/*
+Horatio's Memory Manager
+Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,3 +28,27 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+*/
+
+#ifndef INC_HORATIO_BDFLAGS_H
+#define INC_HORATIO_BDFLAGS_H
+
+#ifndef HORATIO_SOURCE
+#  error ("bdflags.h is for internal HORATIO use")
+#endif
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+unsigned char horatio_int_ModifyDescriptorFlags(
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *Ptr,
+  const unsigned char *PNewFlags
+);
+
+#ifdef __cplusplus
+  }
+#endif
+
+#endif /*!INC_HORATIO_BDFLAGS_H*/

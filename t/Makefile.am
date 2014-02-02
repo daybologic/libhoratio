@@ -31,50 +31,27 @@
 ACLOCAL_AMFLAGS=-I m4
 AUTOMAKE_OPTIONS=subdir-objects
 
-C_ONLY_WFLAGS = \
- -Wmissing-prototypes \
- -Wstrict-prototypes \
- -Wbad-function-cast \
- -Wmissing-declarations \
- -Wnested-externs
+TESTS = example1 example2 example3 newbrand
+check_PROGRAMS = $(TESTS)
+test_LDADD = -lhoratio
 
-GENERAL_WFLAGS = \
- -Werror \
- -Wall \
- -W \
- -Wcast-qual \
- -Wcast-align \
- -Waggregate-return \
- -Wpointer-arith \
- -Wshadow -Winline \
- -Wredundant-decls \
- -Wwrite-strings \
- -Wformat=2 \
- -Wformat-security \
- -Wformat-nonliteral \
- -Wundef \
- -Wredundant-decls \
- -Wunknown-pragmas
-
-GENERAL_CC_FLAGS = \
- -g \
- -I$(top_srcdir)/../lib
-
-AM_CFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS) \
- $(C_ONLY_WFLAGS)
-
-AM_CPPFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS)
-
-AM_LDFLAGS = \
- -L$(top_srcdir)/../lib
+if HORATIO_THREADS_PTH
+AM_LDFLAGS= -lpth
+endif
 
 
-export AM_CPPFLAGS
-export AM_CFLAGS
-export AM_LDFLAGS
+example1_SOURCES = example1.c
+example1_INCLUDE = horatio.h
+example1_LDADD = $(test_LDADD)
 
-SUBDIRS = lib t
+newbrand_SOURCES = newbrand.c
+newbrand_AM_CFLAGS = horatio.h
+newbrand_LDADD = $(test_LDADD)
+
+example2_SOURCES = example2.cpp ../lib/dpccap.cpp
+example2_AM_CPPFLAGS = horatio.h ../lib/dpccap.h
+example2_LDADD = $(test_LDADD)
+
+example3_SOURCES = example3.c
+example3_AM_CFLAGS = horatio.h
+example3_LDADD = $(test_LDADD)

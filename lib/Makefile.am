@@ -28,53 +28,30 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-ACLOCAL_AMFLAGS=-I m4
 AUTOMAKE_OPTIONS=subdir-objects
 
-C_ONLY_WFLAGS = \
- -Wmissing-prototypes \
- -Wstrict-prototypes \
- -Wbad-function-cast \
- -Wmissing-declarations \
- -Wnested-externs
+lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
+libdpcrtlmm_la_SOURCES = dpcrtlmm.c
+libhoratio_la_SOURCES  = horatio.c
+libhoratio_la_SOURCES += halloc.c
+libhoratio_la_SOURCES += hbdflags.c
+libhoratio_la_SOURCES += hbiglock.c
+libhoratio_la_SOURCES += hblocarr.c
+libhoratio_la_SOURCES += hbloclck.c
+libhoratio_la_SOURCES += hcalloc.c
+libhoratio_la_SOURCES += hdbghook.c
+libhoratio_la_SOURCES += hfree.c
+libhoratio_la_SOURCES += hblocksz.c
+libhoratio_la_SOURCES += hiblkptr.c
+libhoratio_la_SOURCES += hintdata.c
+libhoratio_la_SOURCES += hisbad.c
+libhoratio_la_SOURCES += hlcktrap.c
+libhoratio_la_SOURCES += hlog.c
+libhoratio_la_SOURCES += hrealloc.c
+libhoratio_la_SOURCES += hsafelst.c
+libhoratio_la_SOURCES += hstats.c
+libhoratio_la_SOURCES += htrap.c
+libhoratio_la_SOURCES += hvptrap.c
 
-GENERAL_WFLAGS = \
- -Werror \
- -Wall \
- -W \
- -Wcast-qual \
- -Wcast-align \
- -Waggregate-return \
- -Wpointer-arith \
- -Wshadow -Winline \
- -Wredundant-decls \
- -Wwrite-strings \
- -Wformat=2 \
- -Wformat-security \
- -Wformat-nonliteral \
- -Wundef \
- -Wredundant-decls \
- -Wunknown-pragmas
-
-GENERAL_CC_FLAGS = \
- -g \
- -I$(top_srcdir)/../lib
-
-AM_CFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS) \
- $(C_ONLY_WFLAGS)
-
-AM_CPPFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS)
-
-AM_LDFLAGS = \
- -L$(top_srcdir)/../lib
-
-
-export AM_CPPFLAGS
-export AM_CFLAGS
-export AM_LDFLAGS
-
-SUBDIRS = lib t
+nobase_include_HEADERS =  horatio.h
+nobase_include_HEADERS += dpcrtlmm.h

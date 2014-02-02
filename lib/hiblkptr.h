@@ -1,5 +1,6 @@
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+/*
+Horatio's Memory Manager
+Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,3 +28,26 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+*/
+#ifndef INC_HORATIO_IBLKPTR
+#define INC_HORATIO_IBLKPTR
+
+#ifndef HORATIO_SOURCE
+#  error ("iblkptr.h is for internal HORATIO usage only")
+#endif /*HORATIO_SOURCE*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif /*__cplusplus*/
+unsigned int horatio_int_IndexFromBlockPtr(const PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void HORATIO_FARDATA* BlockPtr);
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /*__cplusplus*/
+
+#ifdef INC_HORATIO_INTDATA_H /* Build from inside? */
+#  define _IndexFromBlockPtr horatio_int_IndexFromBlockPtr /* Lazy shortcut */
+#else /* Build from outside? */
+#  error ("Clear off! This header is for internal library use")
+#endif /*INC_HORATIO_INTDATA_H*/
+
+#endif /*INC_HORATIO_IBLKPTR*/

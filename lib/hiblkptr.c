@@ -1,5 +1,6 @@
-Daybo Logic C RTL Memory Manager
-Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+/*
+Horatio's Memory Manager
+Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,3 +28,50 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/*******************************************************
+ * Internal function for getting the index of a block  *
+ * within an array, now supports NULL arrays           *
+ *******************************************************/
+#define HORATIO_SOURCE
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif /*HAVE_CONFIG_H*/
+
+#include <stddef.h>
+#include <stdio.h>
+
+#ifdef HORATIO_HDRSTOP
+#  pragma hdrstop
+#endif /*HORATIO_HDRSTOP*/
+
+#include "hbuild.h" /* General build parameters */
+#include "horatio.h" /* Main library header */
+#include "hintdata.h" /* Internal data */
+#include "htrap.h" /* Trap support */
+#include "hvptrap.h" /* For _VerifyPtrs() */
+#include "hiblkptr.h"
+
+unsigned int horatio_int_IndexFromBlockPtr(
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const void HORATIO_FARDATA *BlockPtr
+) {
+  unsigned int i;
+  PS_HORATIO_BLOCKDESCARRAY PRArr; /* Resolved array pointer */
+
+  _VerifyPtrs("IndexFromBlockPtr()", PBlockArray, NULL);
+
+  PRArr = _ResolveArrayPtr(PBlockArray);
+  for ( i = 0U; i < PRArr->Count; i++ ) {
+    if ( PRArr->Descriptors[i].PBase == BlockPtr ) /* Found it */
+      return i; /* Give index to caller */
+  }
+
+  Trap(
+    HORATIO_TRAP_INDEX_GEN_FAILED,
+    "IndexFromBlockPtr(): Block not found, index not generated"
+  );
+  return ~0;
+}
+

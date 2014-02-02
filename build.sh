@@ -1,3 +1,4 @@
+#!/bin/sh
 # Daybo Logic C RTL Memory Manager
 # Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
@@ -28,53 +29,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-ACLOCAL_AMFLAGS=-I m4
-AUTOMAKE_OPTIONS=subdir-objects
+# This script is designed for in-tree maintainers, and is not used by the
+# Debian package.
 
-C_ONLY_WFLAGS = \
- -Wmissing-prototypes \
- -Wstrict-prototypes \
- -Wbad-function-cast \
- -Wmissing-declarations \
- -Wnested-externs
-
-GENERAL_WFLAGS = \
- -Werror \
- -Wall \
- -W \
- -Wcast-qual \
- -Wcast-align \
- -Waggregate-return \
- -Wpointer-arith \
- -Wshadow -Winline \
- -Wredundant-decls \
- -Wwrite-strings \
- -Wformat=2 \
- -Wformat-security \
- -Wformat-nonliteral \
- -Wundef \
- -Wredundant-decls \
- -Wunknown-pragmas
-
-GENERAL_CC_FLAGS = \
- -g \
- -I$(top_srcdir)/../lib
-
-AM_CFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS) \
- $(C_ONLY_WFLAGS)
-
-AM_CPPFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS)
-
-AM_LDFLAGS = \
- -L$(top_srcdir)/../lib
-
-
-export AM_CPPFLAGS
-export AM_CFLAGS
-export AM_LDFLAGS
-
-SUBDIRS = lib t
+make -f debian/rules maintainer
+exit $?;

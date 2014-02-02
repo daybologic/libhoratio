@@ -1,3 +1,4 @@
+#!/bin/sh
 # Daybo Logic C RTL Memory Manager
 # Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
@@ -28,53 +29,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-ACLOCAL_AMFLAGS=-I m4
-AUTOMAKE_OPTIONS=subdir-objects
-
-C_ONLY_WFLAGS = \
- -Wmissing-prototypes \
- -Wstrict-prototypes \
- -Wbad-function-cast \
- -Wmissing-declarations \
- -Wnested-externs
-
-GENERAL_WFLAGS = \
- -Werror \
- -Wall \
- -W \
- -Wcast-qual \
- -Wcast-align \
- -Waggregate-return \
- -Wpointer-arith \
- -Wshadow -Winline \
- -Wredundant-decls \
- -Wwrite-strings \
- -Wformat=2 \
- -Wformat-security \
- -Wformat-nonliteral \
- -Wundef \
- -Wredundant-decls \
- -Wunknown-pragmas
-
-GENERAL_CC_FLAGS = \
- -g \
- -I$(top_srcdir)/../lib
-
-AM_CFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS) \
- $(C_ONLY_WFLAGS)
-
-AM_CPPFLAGS = \
- $(GENERAL_CC_FLAGS) \
- $(GENERAL_WFLAGS)
-
-AM_LDFLAGS = \
- -L$(top_srcdir)/../lib
+# This script is designed for maintainers
 
 
-export AM_CPPFLAGS
-export AM_CFLAGS
-export AM_LDFLAGS
+set -e
+actual_year=`date +"%Y"`
+echo $actual_year
+for f in debian/* COPYING *.sh *.ac *.cpp *.h *.pl *.am *.c; do
+	echo Fixing $f
+	sed -i "1,100 s/2000-[0-9][0-9][0-9][0-9]/2000-$actual_year/" $f
+done
 
-SUBDIRS = lib t
+exit 0;
