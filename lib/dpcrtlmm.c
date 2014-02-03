@@ -42,6 +42,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #  include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
+#include <stdio.h>
+
 #ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
@@ -164,10 +166,12 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 }
 
 unsigned int dpcrtlmm_IsBadArrayPtr(
+  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
+) {
 	return horatio_IsBadArrayPtr(
 		PBlockArray
 	);
-);
+}
 
 void HORATIO_FARDATA *dpcrtlmm_Realloc(
   PS_HORATIO_BLOCKDESCARRAY PBlockArray,
@@ -297,7 +301,7 @@ void dpcrtlmm_GetStats(PS_HORATIO_STATS PReadStats) {
 	return;
 }
 
-void dpcrtlmm_Dump(FILE* Target) {
+void dpcrtlmm_Dump(FILE *Target) {
 	dpcrtlmm_Dump(
 		Target
 	);
