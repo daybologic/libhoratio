@@ -99,6 +99,24 @@ static unsigned int GrowBlockArray(
 #define OURLOG_POS(sev, msg) \
   OURLOG(__FILE__, __LINE__, (sev), (msg))
 /*-------------------------------------------------------------------------*/
+const char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const char *SrcStr,
+  const char *File,
+  const unsigned int Line
+) {
+  const char DPCRTLMM_FARDATA *ret = dpcrtlmm_int_AllocEx(
+    PBlockArray,
+    strlen(SrcStr)+1,
+    File,
+    Line
+  );
+
+  if ( ret ) strcpy(ret, SrcStr);
+
+  return ret;
+}
+/*-------------------------------------------------------------------------*/
 void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const size_t NewBlockSize,

@@ -343,11 +343,25 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
   const unsigned int Line
 );
 
+/*
+ * Strdup() behaves like the strdup() function, it is a wrapper around
+ * DPCRTLMM's own Alloc(), and no error checking is done on anything you
+ * pass to it.  A string which must be freed in the usual way is returned.
+ */
+const char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const char *SrcStr,
+  const char *File,
+  const unsigned int Line
+);
+
 /* Alloc() "backwards compatibillity", it's actually a lot easier to use
 this version, so I recommend it.  This adds transparent file/line support for
 the logs. */
 #define dpcrtlmm_Alloc(blkarray, blksize) \
         dpcrtlmm_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__))
+#define dpcrtlmm_Strdup(blkarray, blksize) \
+	dpcrtlmm_StrdupEx((blkarray), (blksize), (__FILE__), (__LINE__))
 
 /* Free() - BlockPtr - Pass a pointer to the block to free, attempting to
 free a block we don't own will cause a trap which crashes the program,
@@ -656,6 +670,7 @@ done with usedpcrtlmm.h or similar */
 #  ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
 #    error ("You must configure as --enable-null-array to use USING_DPCRTLMM")
 #  else
+#    define strdup(s)     dpcrtlmm_Strdup(NULL, (s))
 #    define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
 #    define free(p)       dpcrtlmm_Free(NULL, (p))
 #    define calloc(n, s)  dpcrtlmm_Calloc(NULL, (n), (s))
