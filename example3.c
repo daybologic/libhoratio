@@ -68,6 +68,7 @@ static void PrintInfo(char** vector); /* Prints strings from vector */
 static void InitVector(char** vector, unsigned int n);
 static void Title(void); /* Just displays some information */
 static void Version(void); /* Prints the library version */
+static void strdup_test(void);
 
 int main(const int argc, const char *argv[])
 {
@@ -97,6 +98,8 @@ static int my_main(const int argc, const char* argv[])
   char** copyvector; /* NULL terminated vector version of arguments */
 
   Title();
+  strdup_test();
+
   /* Allocate vector */
   copyvector = (char**)malloc( (argc + 1) * sizeof(char*) );
   if ( !copyvector ) {
@@ -192,4 +195,18 @@ static void Version()
     printf("%s", " (multi-threaded)");
 
   return;
+}
+
+static void strdup_test() {
+  const char *testStr = "Horatio will soon arrive!";
+  const char *testStrCopy;
+
+  testStrCopy = strdup(testStr);
+  if ( testStrCopy && strcmp(testStrCopy, testStr) == 0 ) {
+    printf("strdup returned \"%s\": OK\n", testStrCopy);
+    free(testStrCopy);
+    return;
+  }
+  puts("strdup failed");
+  abort();
 }
