@@ -33,7 +33,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT([horatio],[1.2.1])
+AC_INIT([horatio],[1.3.0])
 AM_SILENT_RULES([yes])
 AC_CONFIG_SRCDIR([lib/horatio.c])
 AM_CONFIG_HEADER([config.h])

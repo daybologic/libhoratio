@@ -424,7 +424,27 @@ void HORATIO_FARDATA* horatio_AllocEx(
  */
 #define horatio_Alloc(blkarray, blksize) \
         horatio_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__))
+        
+/*
+ * Strdup() behaves like the strdup() function, it is a wrapper around
+ * HORATIO's own Alloc(), and no error checking is done on anything you
+ * pass to it.  A string which must be freed in the usual way is returned.
+ */
+const char HORATIO_FARDATA *horatio_StrdupEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const char *SrcStr,
+  const char *File,
+  const unsigned int Line
+);
 
+#define horatio_Strdup(blkarray, blksize) \
+	horatio_StrdupEx((blkarray), (blksize), (__FILE__), (__LINE__))
+
+#define dpcrtlmm_Strdup \
+  horatio_Strdup
+#define dpcrtlmm_StrdupEx
+  horatio_StrdupEx
+  
 /*
  * Free() - BlockPtr - Pass a pointer to the block to free, attempting to
  * free a block we don't own will cause a trap which crashes the program,
@@ -919,6 +939,7 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
 #  define PS_DPC_VERSION PS_HORATIO_VERSION
 #endif /*HORATIO_LAZYHACK*/
 
+#    define strdup(s)     dpcrtlmm_Strdup(NULL, (s))
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/

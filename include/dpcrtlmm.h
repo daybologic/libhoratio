@@ -29,6 +29,20 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+/*
+ * Strdup() behaves like the strdup() function, it is a wrapper around
+ * DPCRTLMM's own Alloc(), and no error checking is done on anything you
+ * pass to it.  A string which must be freed in the usual way is returned.
+ */
+const char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
+  PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
+  const char *SrcStr,
+  const char *File,
+  const unsigned int Line
+);
+
+#define dpcrtlmm_Strdup(blkarray, blksize) \
+	dpcrtlmm_StrdupEx((blkarray), (blksize), (__FILE__), (__LINE__))
 
 /*
   Legacy support header -- dpcrtlmm.h
@@ -38,3 +52,4 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "horatio.h"
+#    define strdup(s)     dpcrtlmm_Strdup(NULL, (s))

@@ -99,6 +99,24 @@ static unsigned int GrowBlockArray(
 #define OURLOG_POS(sev, msg) \
 	OURLOG(__FILE__, __LINE__, (sev), (msg))
 
+const char HORATIO_FARDATA *horatio_StrdupEx(
+  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+  const char *SrcStr,
+  const char *File,
+  const unsigned int Line
+) {
+  const char HORATIO_FARDATA *ret = horatio_int_AllocEx(
+    PBlockArray,
+    strlen(SrcStr)+1,
+    File,
+    Line
+  );
+
+  if ( ret ) strcpy(ret, SrcStr);
+
+  return ret;
+}
+
 void HORATIO_FARDATA *horatio_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const size_t NewBlockSize,
