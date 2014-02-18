@@ -348,7 +348,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
  * DPCRTLMM's own Alloc(), and no error checking is done on anything you
  * pass to it.  A string which must be freed in the usual way is returned.
  */
-const char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
+char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const char *SrcStr,
   const char *File,
