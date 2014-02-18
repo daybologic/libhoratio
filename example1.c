@@ -72,7 +72,7 @@ int main()
   S_DPCRTLMM_STATS stats;
   PS_DPCRTLMM_BLOCKDESCARRAY Parr;
   const char *title = "DPCRTLMM TEST";
-  const char *titleCopy;
+  char *titleCopy;
 
 #ifdef DPCRTLMM_THREADS_PTH
   if ( !pth_init() ) {

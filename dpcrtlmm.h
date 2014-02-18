@@ -348,7 +348,7 @@ void DPCRTLMM_FARDATA* dpcrtlmm_AllocEx(
  * DPCRTLMM's own Alloc(), and no error checking is done on anything you
  * pass to it.  A string which must be freed in the usual way is returned.
  */
-const char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
+char DPCRTLMM_FARDATA *dpcrtlmm_StrdupEx(
   PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray,
   const char *SrcStr,
   const char *File,
@@ -670,6 +670,9 @@ done with usedpcrtlmm.h or similar */
 #  ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
 #    error ("You must configure as --enable-null-array to use USING_DPCRTLMM")
 #  else
+#    ifdef strdup
+#      undef strdup
+#    endif /*strdup*/
 #    define strdup(s)     dpcrtlmm_Strdup(NULL, (s))
 #    define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
 #    define free(p)       dpcrtlmm_Free(NULL, (p))

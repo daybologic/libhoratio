@@ -199,7 +199,7 @@ static void Version()
 
 static void strdup_test() {
   const char *testStr = "Horatio will soon arrive!";
-  const char *testStrCopy;
+  char *testStrCopy;
 
   testStrCopy = strdup(testStr);
   if ( testStrCopy && strcmp(testStrCopy, testStr) == 0 ) {

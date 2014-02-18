@@ -106,6 +106,6 @@ non-ANSI, configure with configure --enable-fardata */
 /* Library version information can be set here */
 #define DPCRTLMM_VERSION_MAJOR (1)
 #define DPCRTLMM_VERSION_MINOR (3)
-#define DPCRTLMM_VERSION_PATCH (0)
+#define DPCRTLMM_VERSION_PATCH (1)
 /*-------------------------------------------------------------------------*/
 #endif /*!INC_DPCRTLMM_BUILD_H*/
