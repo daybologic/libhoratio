@@ -193,15 +193,15 @@ static void Version() {
 }
 
 static void strdup_test() {
-  const char *testStr = "Horatio will soon arrive!";
-  const char *testStrCopy;
+	const char *testStr = "Horatio will soon arrive!";
+	char *testStrCopy;
 
-  testStrCopy = strdup(testStr);
-  if ( testStrCopy && strcmp(testStrCopy, testStr) == 0 ) {
-    printf("strdup returned \"%s\": OK\n", testStrCopy);
-    free(testStrCopy);
-    return;
-  }
-  puts("strdup failed");
-  abort();
+	testStrCopy = strdup(testStr);
+	if ( testStrCopy && strcmp(testStrCopy, testStr) == 0 ) {
+		printf("strdup returned \"%s\": OK\n", testStrCopy);
+		free(testStrCopy);
+		return;
+	}
+	puts("strdup failed");
+	abort();
 }

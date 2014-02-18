@@ -102,37 +102,37 @@ extern "C" {
  * 2-7 - Reserved, must be zero
  */
 typedef struct _S_HORATIO_BLOCKDESCRIPTOR { /* A block descriptor */
-  void HORATIO_FARDATA *PBase; /* Raw pointer to the base address of the block */
-  size_t Size; /* Number of bytes which block is in length */
-  unsigned char Flags;
-  unsigned int SourceLine; /* Line number at which the block was allocated */
-  char *SourceFile; /* Dynamic, filename of place where allocation was requested */
+	void HORATIO_FARDATA *PBase; /* Raw pointer to the base address of the block */
+	size_t Size; /* Number of bytes which block is in length */
+	unsigned char Flags;
+	unsigned int SourceLine; /* Line number at which the block was allocated */
+	char *SourceFile; /* Dynamic, filename of place where allocation was requested */
 } S_HORATIO_BLOCKDESCRIPTOR, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCRIPTOR,
   S_DPCRTLMM_BLOCKDESCRIPTOR, DPCRTLMM_FARDATA *PS_DPCRTLMM_BLOCKDESCRIPTOR;
 
 typedef struct _S_HORATIO_BLOCKDESCARRAY { /* Array of block descriptors */
-  unsigned int Count; /* Number of elements (block descriptors) */
-  PS_HORATIO_BLOCKDESCRIPTOR Descriptors; /* Raw array of blocks descs (each element is a BLOCKDESCRIPTOR, NOT a pointer to a BLOCKDESCRIPTOR) */
+	unsigned int Count; /* Number of elements (block descriptors) */
+	PS_HORATIO_BLOCKDESCRIPTOR Descriptors; /* Raw array of blocks descs (each element is a BLOCKDESCRIPTOR, NOT a pointer to a BLOCKDESCRIPTOR) */
 } S_HORATIO_BLOCKDESCARRAY, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCARRAY,
   S_DPCRTLMM_BLOCKDESCARRAY, HORATIO_FARDATA *PS_DPCRTLMM_BLOCKDESCARRAY;
 
 typedef struct _S_HORATIO_STATS { /* Statistics info for horatio_GetStats() */
-  struct {
-    unsigned long Allocated, /* Blocks allocated */
-    Locked, /* Number of blocks locked (cannot be released), <= Allocated */
-    Unswappable, /* Number of blocks which may not be swapped */
-    Peak; /* The peak number of blocks allocated */
-  } Blocks;
-  struct {
-    unsigned long Allocated, /* Contains number of bytes used by all blocks */
-    Peak; /* The peak of memory usage, how much was used by all the blocks at one time (Allocated's peak) */
-  } Charge;
+	struct {
+		unsigned long Allocated, /* Blocks allocated */
+		Locked, /* Number of blocks locked (cannot be released), <= Allocated */
+		Unswappable, /* Number of blocks which may not be swapped */
+		Peak; /* The peak number of blocks allocated */
+	} Blocks;
+	struct {
+		unsigned long Allocated, /* Contains number of bytes used by all blocks */
+		Peak; /* The peak of memory usage, how much was used by all the blocks at one time (Allocated's peak) */
+	} Charge;
 } S_HORATIO_STATS, HORATIO_FARDATA *PS_HORATIO_STATS,
   S_DPCRTLMM_STATS, HORATIO_FARDATA *PS_DPCRTLMM_STATS;
 
 typedef struct _S_HORATIO_VERSION {
-  unsigned char Major, Minor, Patch;
-  unsigned char Flags; /* See mnemonics below */
+	unsigned char Major, Minor, Patch;
+	unsigned char Flags; /* See mnemonics below */
 } S_HORATIO_VERSION, HORATIO_FARDATA *PS_HORATIO_VERSION,
   S_DPCRTLMM_VERSION, HORATIO_FARDATA *PS_DPCRTLMM_VERSION;
 
@@ -160,17 +160,17 @@ typedef struct _S_HORATIO_VERSION {
  */
 
 typedef struct _S_HORATIO_DEBUGHOOKINFO { /* Information passed to hooks */
-  PS_HORATIO_BLOCKDESCARRAY PRelArr; /* Relevent block array (if NULL ignore), if resizing this is the old state */
-  PS_HORATIO_BLOCKDESCRIPTOR PRelDesc; /* Relevent block descriptor (if NULL ignore) */
-  unsigned short HookType; /* The identifier is used so that a hook function can determine the hooktype so that it can handle more than one type of hook if it wants to */
-  unsigned int AllocReq; /* Allocation / new size request */
-  unsigned int Success; /* If set call was successful, if FALSE the call failed or caused a trap */
-  unsigned long Misc0; /* Not reserved, used for extra information which is hook type dependant */
-  unsigned long Misc1;
-  /* Reserved for future use, all are zero at the moment */
-  unsigned int ReservedUINT;
-  unsigned short ReservedUSHORT;
-  unsigned long ReservedULONG;
+	PS_HORATIO_BLOCKDESCARRAY PRelArr; /* Relevent block array (if NULL ignore), if resizing this is the old state */
+	PS_HORATIO_BLOCKDESCRIPTOR PRelDesc; /* Relevent block descriptor (if NULL ignore) */
+	unsigned short HookType; /* The identifier is used so that a hook function can determine the hooktype so that it can handle more than one type of hook if it wants to */
+	unsigned int AllocReq; /* Allocation / new size request */
+	unsigned int Success; /* If set call was successful, if FALSE the call failed or caused a trap */
+	unsigned long Misc0; /* Not reserved, used for extra information which is hook type dependant */
+	unsigned long Misc1;
+	/* Reserved for future use, all are zero at the moment */
+	unsigned int ReservedUINT;
+	unsigned short ReservedUSHORT;
+	unsigned long ReservedULONG;
 
 } S_HORATIO_DEBUGHOOKINFO, HORATIO_FARDATA *PS_HORATIO_DEBUGHOOKINFO,
   S_DPCRTLMM_DEBUGHOOKINFO, HORATIO_FARDATA *PS_DPCRTLMM_DEBUGHOOKINFO;
@@ -352,8 +352,8 @@ typedef struct _S_HORATIO_DEBUGHOOKINFO { /* Information passed to hooks */
  */
 
 unsigned int horatio_InstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 );
 #define dpcrtlmm_InstallDebugHook \
         horatio_InstallDebugHook
@@ -362,7 +362,7 @@ unsigned int horatio_InstallDebugHook(
  * Counts the number of hooks installed for this type of hook
  */
 unsigned int horatio_GetDebugHookChainCount(
-  const unsigned int HookType
+	const unsigned int HookType
 );
 #define dpcrtlmm_GetDebugHookChainCount \
         horatio_GetDebugHookChainCount
@@ -371,9 +371,7 @@ unsigned int horatio_GetDebugHookChainCount(
  *Counts the number of hooks in the entire debug hook matrix,
  *that is the total number of hooks for all types
  */
-unsigned int horatio_GetDebugHookMatrixCount(
-  void
-);
+unsigned int horatio_GetDebugHookMatrixCount(void);
 #define dpcrtlmm_GetDebugHookMatrixCount \
         horatio_GetDebugHookMatrixCount
 
@@ -381,8 +379,8 @@ unsigned int horatio_GetDebugHookMatrixCount(
  * Remove the said hook, type of hook must be specified in order to find it
  */
 unsigned int horatio_UninstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 );
 #define dpcrtlmm_UninstallDebugHook \
         horatio_UninstallDebugHook
@@ -407,10 +405,10 @@ unsigned int horatio_UninstallDebugHook(
  * memory to allocate a block of NewBlockSize.
  */
 void HORATIO_FARDATA* horatio_AllocEx(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const size_t NewBlockSize,
-  const char *File,
-  const unsigned int Line
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const size_t NewBlockSize,
+	const char *File,
+	const unsigned int Line
 );
 #define dpcrtlmm_AllocEx \
         horatio_AllocEx
@@ -424,27 +422,27 @@ void HORATIO_FARDATA* horatio_AllocEx(
  */
 #define horatio_Alloc(blkarray, blksize) \
         horatio_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__))
-        
+
 /*
  * Strdup() behaves like the strdup() function, it is a wrapper around
  * HORATIO's own Alloc(), and no error checking is done on anything you
  * pass to it.  A string which must be freed in the usual way is returned.
  */
-const char HORATIO_FARDATA *horatio_StrdupEx(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const char *SrcStr,
-  const char *File,
-  const unsigned int Line
+char HORATIO_FARDATA *horatio_StrdupEx(
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const char *SrcStr,
+	const char *File,
+	const unsigned int Line
 );
 
 #define horatio_Strdup(blkarray, blksize) \
 	horatio_StrdupEx((blkarray), (blksize), (__FILE__), (__LINE__))
 
 #define dpcrtlmm_Strdup \
-  horatio_Strdup
-#define dpcrtlmm_StrdupEx
-  horatio_StrdupEx
-  
+	horatio_Strdup
+#define dpcrtlmm_StrdupEx \
+	horatio_StrdupEx
+
 /*
  * Free() - BlockPtr - Pass a pointer to the block to free, attempting to
  * free a block we don't own will cause a trap which crashes the program,
@@ -452,8 +450,8 @@ const char HORATIO_FARDATA *horatio_StrdupEx(
  * cause because Free() wouldn't be able to see it.
  */
 void horatio_Free(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	void HORATIO_FARDATA *Ptr
 );
 #define dpcrtlmm_Free \
         horatio_Free
@@ -469,14 +467,12 @@ void horatio_Free(
  * be allocated, if so NULL is returned, a trap is not fired, perhaps the
  * caller can cope or crash the program with a trap themselves.
  */
-PS_HORATIO_BLOCKDESCARRAY horatio_CreateBlockArray(
-  void
-);
+PS_HORATIO_BLOCKDESCARRAY horatio_CreateBlockArray(void);
 #define dpcrtlmm_CreateBlockArray \
         horatio_CreateBlockArray
 
 void horatio_DestroyBlockArray(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 #define dpcrtlmm_DestroyBlockArray \
         horatio_DestroyBlockArray
@@ -489,7 +485,7 @@ void horatio_DestroyBlockArray(
  * to determine if that is the case, it will also report 1U (TRUE) for NULL
  */
 unsigned int horatio_IsDefaultBlockArray(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 #define dpcrtlmm_IsDefaultBlockArray \
         horatio_IsDefaultBlockArray
@@ -533,8 +529,8 @@ unsigned int horatio_IsStarted(void);
  * the block size!
  */
 size_t horatio_GetBlockSize(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *const BlockPtr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *const BlockPtr
 );
 #define dpcrtlmm_GetBlockSize \
         horatio_GetBlockSize
@@ -550,8 +546,8 @@ size_t horatio_GetBlockSize(
  * blocks for users would not be an option.
  */
 unsigned int horatio_IsBadBlockPtr(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *BlockPtr
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *BlockPtr
 );
 #define dpcrtlmm_IsBadBlockPtr \
         horatio_IsBadBlockPtr
@@ -563,7 +559,7 @@ unsigned int horatio_IsBadBlockPtr(
  * array of block descriptors is safe.
  */
 unsigned int horatio_IsBadArrayPtr(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
 #define dpcrtlmm_IsBadArrayPtr \
         horatio_IsBadArrayPtr
@@ -583,8 +579,9 @@ unsigned int horatio_IsBadArrayPtr(
  * NewSize - New size in bytes of the block.
  */
 void HORATIO_FARDATA *horatio_Realloc(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *OldBlockPtr, const size_t NewSize
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	void HORATIO_FARDATA *OldBlockPtr,
+	const size_t NewSize
 );
 #define dpcrtlmm_Realloc \
         horatio_Realloc
@@ -598,11 +595,11 @@ void HORATIO_FARDATA *horatio_Realloc(
  * as well do so too.  NULL is returned if the block cannot be allocated.
  */
 void HORATIO_FARDATA *horatio_CallocEx(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const unsigned int N,
-  const size_t NewBlockSize,
-  const char *File,
-  const unsigned int Line
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const unsigned int N,
+	const size_t NewBlockSize,
+	const char *File,
+	const unsigned int Line
 );
 #define horatio_Calloc(blkarray, n, blksize) \
         horatio_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
@@ -626,11 +623,11 @@ void HORATIO_FARDATA *horatio_CallocEx(
  * passing NULL to this function, use horatio_RemoveTrapCallback()
  */
 void horatio_InstallTrapCallback(
-  void(*UserCallbackProc)(
-    const unsigned int TrapID,
-    const char *TrapMessage
-  ),
-  const unsigned int AsHook
+	void(*UserCallbackProc)(
+		const unsigned int TrapID,
+		const char *TrapMessage
+	),
+	const unsigned int AsHook
 );
 #define dpcrtlmm_InstallTrapCallback \
         horatio_InstallTrapCallback
@@ -641,10 +638,10 @@ void horatio_InstallTrapCallback(
  * know you know and are not making a dreadful mistake
  */
 void horatio_RemoveTrapCallback(
-  void(*CurrentCallbackProc)(
-    const unsigned int TrapID,
-    const char *TrapDesc
-  )
+	void(*CurrentCallbackProc)(
+		const unsigned int TrapID,
+		const char *TrapDesc
+	)
 );
 #define dpcrtlmm_RemoveTrapCallback \
         horatio_RemoveTrapCallback
@@ -678,9 +675,9 @@ signed char horatio_GetTrapCallbackInfo(void);
  * comment out the line installing the handler, or don't turn off trapping)
  */
 unsigned char horatio_ModifyDescriptorFlags(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned char *PNewFlags
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned char *PNewFlags
 );
 #define dpcrtlmm_ModifyDescriptorFlags \
         horatio_ModifyDescriptorFlags
@@ -692,16 +689,16 @@ unsigned char horatio_ModifyDescriptorFlags(
  * of the trap, so don't get confused!
  */
 void horatio_SetBlockLockingFlag(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA* Ptr,
-  const unsigned int NewStatus
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA* Ptr,
+	const unsigned int NewStatus
 );
 #define dpcrtlmm_SetBlockLockingFlag \
         horatio_SetBlockLockingFlag
 
 unsigned int horatio_IsBlockLocked(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA* Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA* Ptr
 );
 #define dpcrtlmm_IsBlockLocked \
         horatio_IsBlockLocked
@@ -718,8 +715,8 @@ unsigned int horatio_IsBlockLocked(
         horatio_UnlockBlock
 
 void horatio_ToggleBlockLockingStatus(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA* Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA* Ptr
 ); /* If locked, unlocks, if unlocked, locks */
 #define dpcrtlmm_ToggleBlockLockingStatus \
         horatio_ToggleBlockLockingStatus
@@ -839,6 +836,10 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
 #      define calloc(n, s)  MemManager.Calloc((n), (s), __FILE__, __LINE__)
 #      define realloc(p, s) MemManager.Realloc((p), (s))
 #    else
+#      ifdef strdup
+#       undef strdup
+#      endif /*strdup*/
+#      define strdup(s)     horatio_Strdup(NULL, (s))
 #      define malloc(s)     horatio_Alloc(NULL, (s))
 #      define free(p)       horatio_Free(NULL, (p))
 #      define calloc(n, s)  horatio_Calloc(NULL, (n), (s))
@@ -938,8 +939,6 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
 #  define S_DPC_VERSION S_HORATIO_VERSION
 #  define PS_DPC_VERSION PS_HORATIO_VERSION
 #endif /*HORATIO_LAZYHACK*/
-
-#    define strdup(s)     dpcrtlmm_Strdup(NULL, (s))
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /*__cplusplus*/

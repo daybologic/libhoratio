@@ -70,8 +70,8 @@ int main() {
 	unsigned int i;
 	S_DPCRTLMM_STATS stats;
 	PS_DPCRTLMM_BLOCKDESCARRAY Parr;
-  const char *title = "HORATIO TEST";
-  const char *titleCopy;
+	const char *title = "HORATIO TEST";
+	char *titleCopy;
 
 #ifdef DPCRTLMM_THREADS_PTH
 	if ( !pth_init() ) {
@@ -84,7 +84,7 @@ int main() {
 	InitArrays();
 	/* Wow, a hook for a change ;), I just wanted the stats on trap */
 	dpcrtlmm_InstallTrapCallback(myTrapHandler, 1U);
-  printf("%s\n", title);
+	printf("%s\n", title);
 	printf("-------------\n\n");
 	printf("starting library\n");
 	PrintVersion();
@@ -105,21 +105,22 @@ int main() {
 	dpcrtlmm_GetStats(&stats);
 	PrintStats(&stats);
 	printf(
-		"Allocating the explictly allocated block array, 8 2KB blocks\n"	);
+		"Allocating the explictly allocated block array, 8 2KB blocks\n"
+	);
 	printf("Block ");
 	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
-	printf("#%d ", i);
-	arrptrs[i] = dpcrtlmm_Calloc(Parr, 2, 1024); /* Allocate block */
-	if (!arrptrs[i]) printf("Failure");
+		printf("#%d ", i);
+		arrptrs[i] = dpcrtlmm_Calloc(Parr, 2, 1024); /* Allocate block */
+		if (!arrptrs[i]) printf("Failure");
 	}
 	printf("\n\n");
-  printf("Running strdup ... ");
-  titleCopy = dpcrtlmm_Strdup(NULL, title);
-  if ( strcmp(title, titleCopy) != 0 ) {
-    printf("failure\n");
-    return EXIT_FAILURE;
-  }
-  printf("success\n");
+	printf("Running strdup ... ");
+	titleCopy = dpcrtlmm_Strdup(NULL, title);
+	if ( strcmp(title, titleCopy) != 0 ) {
+		printf("failure\n");
+		return EXIT_FAILURE;
+	}
+	printf("success\n");
 	/* Output stats again, this will test the peak indicator */
 	dpcrtlmm_GetStats(&stats);
 	PrintStats(&stats);
@@ -130,7 +131,7 @@ int main() {
 	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ )
 		dpcrtlmm_Free(Parr, arrptrs[i]);
 
-  dpcrtlmm_Free(NULL, titleCopy);
+	dpcrtlmm_Free(NULL, titleCopy);
 	printf("stop (wait for info dump if applicable!!)\n");
 	dpcrtlmm_DestroyBlockArray(Parr);
 	dpcrtlmm_GetStats(&stats);
