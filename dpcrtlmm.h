@@ -670,6 +670,9 @@ done with usedpcrtlmm.h or similar */
 #  ifdef DPCRTLMM_NONULL_BLOCKDESCARRAY
 #    error ("You must configure as --enable-null-array to use USING_DPCRTLMM")
 #  else
+#    ifdef strdup
+#      undef strdup
+#    endif /*strdup*/
 #    define strdup(s)     dpcrtlmm_Strdup(NULL, (s))
 #    define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
 #    define free(p)       dpcrtlmm_Free(NULL, (p))
