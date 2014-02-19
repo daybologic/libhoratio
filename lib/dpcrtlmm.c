@@ -90,13 +90,12 @@ void HORATIO_FARDATA* dpcrtlmm_AllocEx(
 	const char *File,
 	const unsigned int Line
 ) {
-	horatio_AllocEx(
+	return horatio_AllocEx(
 		PBlockArray,
 		NewBlockSize,
 		File,
 		Line
 	);
-	return;
 }
 
 void dpcrtlmm_Free(
@@ -178,12 +177,11 @@ void HORATIO_FARDATA *dpcrtlmm_Realloc(
 	void HORATIO_FARDATA *OldBlockPtr,
 	const size_t NewSize
 ) {
-	horatio_Realloc(
+	return horatio_Realloc(
 		PBlockArray,
 		OldBlockPtr,
 		NewSize
 	);
-	return;
 }
 
 void HORATIO_FARDATA *dpcrtlmm_CallocEx(
@@ -193,14 +191,13 @@ void HORATIO_FARDATA *dpcrtlmm_CallocEx(
 	const char *File,
 	const unsigned int Line
 ) {
-	horatio_CallocEx(
+	return horatio_CallocEx(
 		PBlockArray,
 		N,
 		NewBlockSize,
 		File,
 		Line
 	);
-	return;
 }
 
 void dpcrtlmm_InstallTrapCallback(
