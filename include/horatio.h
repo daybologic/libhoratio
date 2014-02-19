@@ -381,8 +381,8 @@ unsigned int horatio_GetDebugHookChainCount(
 #endif /*DPCRTLMM_LEGACY*/
 
 /*
- *Counts the number of hooks in the entire debug hook matrix,
- *that is the total number of hooks for all types
+ * Counts the number of hooks in the entire debug hook matrix,
+ * that is the total number of hooks for all types
  */
 unsigned int horatio_GetDebugHookMatrixCount(void);
 #ifdef DPCRTLMM_LEGACY
