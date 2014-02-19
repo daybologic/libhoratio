@@ -32,9 +32,10 @@ POSSIBILITY OF SUCH DAMAGE.
 
 /*
   Legacy support header -- dpcrtlmm.h
-  We merely forward everything to horatio.h
-
   Please change your code to #include "horatio.h"!
 */
 
+#ifndef DPCRTLMM_LEGACY
+# define DPCRTLMM_LEGACY
+#endif /*DPCRTLMM_LEGACY*/
 #include "horatio.h"

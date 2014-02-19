@@ -108,7 +108,7 @@ int main() {
 	printf("Block ");
 	for ( i = 0U; i < sizeof(arrptrs)/sizeof(arrptrs[0]); i++ ) {
 		printf("#%d ", i);
-		arrptrs[i] = dpcrtlmm_block_Calloc(blockDesc, 8, 128); /* Allocate block */
+		arrptrs[i] = horatio_block_Calloc(blockDesc, 8, 128); /* Allocate block */
 		if (!arrptrs[i])
 			printf("Failure");
 	}
@@ -157,7 +157,7 @@ static void PrintVersion() {
 	S_DPCRTLMM_VERSION ver;
 
 	printf("Gathering library version info...");
-	dpcrtlmm_Ver(&ver);
+	horatio_Ver(&ver);
 	printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
 	printf("\n");
 }
