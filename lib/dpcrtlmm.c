@@ -53,8 +53,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "horatio.h" /* Main library header */
 
 unsigned int dpcrtlmm_InstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
 	return horatio_InstallDebugHook(
 		HookType,
@@ -63,7 +63,7 @@ unsigned int dpcrtlmm_InstallDebugHook(
 }
 
 unsigned int dpcrtlmm_GetDebugHookChainCount(
-  const unsigned int HookType
+	const unsigned int HookType
 ) {
 	return horatio_GetDebugHookChainCount(
 		HookType
@@ -75,8 +75,8 @@ unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
 }
 
 unsigned int dpcrtlmm_UninstallDebugHook(
-  const unsigned short HookType,
-  unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
+	const unsigned short HookType,
+	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 ) {
 	return horatio_UninstallDebugHook(
 		HookType,
@@ -85,10 +85,10 @@ unsigned int dpcrtlmm_UninstallDebugHook(
 }
 
 void HORATIO_FARDATA* dpcrtlmm_AllocEx(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const size_t NewBlockSize,
-  const char *File,
-  const unsigned int Line
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const size_t NewBlockSize,
+	const char *File,
+	const unsigned int Line
 ) {
 	horatio_AllocEx(
 		PBlockArray,
@@ -100,8 +100,8 @@ void HORATIO_FARDATA* dpcrtlmm_AllocEx(
 }
 
 void dpcrtlmm_Free(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	void HORATIO_FARDATA *Ptr
 ) {
 	horatio_Free(
 		PBlockArray,
@@ -115,7 +115,7 @@ PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray() {
 }
 
 void dpcrtlmm_DestroyBlockArray(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
 	horatio_DestroyBlockArray(
 		PBlockArray
@@ -124,7 +124,7 @@ void dpcrtlmm_DestroyBlockArray(
 }
 
 unsigned int dpcrtlmm_IsDefaultBlockArray(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
 	return horatio_IsDefaultBlockArray(
 		PBlockArray
@@ -146,8 +146,8 @@ unsigned int dpcrtlmm_IsStarted() {
 }
 
 size_t dpcrtlmm_GetBlockSize(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *BlockPtr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	void HORATIO_FARDATA *BlockPtr
 ) {
 	return horatio_GetBlockSize(
 		PBlockArray,
@@ -156,8 +156,8 @@ size_t dpcrtlmm_GetBlockSize(
 }
 
 unsigned int dpcrtlmm_IsBadBlockPtr(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *BlockPtr
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *BlockPtr
 ) {
 	return horatio_IsBadBlockPtr(
 		PBlockArray,
@@ -166,7 +166,7 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 }
 
 unsigned int dpcrtlmm_IsBadArrayPtr(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 ) {
 	return horatio_IsBadArrayPtr(
 		PBlockArray
@@ -174,8 +174,9 @@ unsigned int dpcrtlmm_IsBadArrayPtr(
 }
 
 void HORATIO_FARDATA *dpcrtlmm_Realloc(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  void HORATIO_FARDATA *OldBlockPtr, const size_t NewSize
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	void HORATIO_FARDATA *OldBlockPtr,
+	const size_t NewSize
 ) {
 	horatio_Realloc(
 		PBlockArray,
@@ -186,11 +187,11 @@ void HORATIO_FARDATA *dpcrtlmm_Realloc(
 }
 
 void HORATIO_FARDATA *dpcrtlmm_CallocEx(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const unsigned int N,
-  const size_t NewBlockSize,
-  const char *File,
-  const unsigned int Line
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const unsigned int N,
+	const size_t NewBlockSize,
+	const char *File,
+	const unsigned int Line
 ) {
 	horatio_CallocEx(
 		PBlockArray,
@@ -203,11 +204,11 @@ void HORATIO_FARDATA *dpcrtlmm_CallocEx(
 }
 
 void dpcrtlmm_InstallTrapCallback(
-  void(*UserCallbackProc)(
-    const unsigned int TrapID,
-    const char *TrapMessage
-  ),
-  const unsigned int AsHook
+	void(*UserCallbackProc)(
+		const unsigned int TrapID,
+		const char *TrapMessage
+	),
+	const unsigned int AsHook
 ) {
 	horatio_InstallTrapCallback(
 		UserCallbackProc,
@@ -217,10 +218,10 @@ void dpcrtlmm_InstallTrapCallback(
 }
 
 void dpcrtlmm_RemoveTrapCallback(
-  void(*CurrentCallbackProc)(
-    const unsigned int TrapID,
-    const char *TrapDesc
-  )
+	void(*CurrentCallbackProc)(
+		const unsigned int TrapID,
+		const char *TrapDesc
+	)
 ) {
 	horatio_RemoveTrapCallback(
 		CurrentCallbackProc
@@ -233,9 +234,9 @@ signed char dpcrtlmm_GetTrapCallbackInfo() {
 }
 
 unsigned char dpcrtlmm_ModifyDescriptorFlags(
-  const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA *Ptr,
-  const unsigned char *PNewFlags
+	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr,
+	const unsigned char *PNewFlags
 ) {
 	return horatio_ModifyDescriptorFlags(
 		PBlockArray,
@@ -245,9 +246,9 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
 }
 
 void dpcrtlmm_SetBlockLockingFlag(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA* Ptr,
-  const unsigned int NewStatus
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA* Ptr,
+	const unsigned int NewStatus
 ) {
 	horatio_SetBlockLockingFlag(
 		PBlockArray,
@@ -258,8 +259,8 @@ void dpcrtlmm_SetBlockLockingFlag(
 }
 
 unsigned int dpcrtlmm_IsBlockLocked(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA* Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 ) {
 	return horatio_IsBlockLocked(
 		PBlockArray,
@@ -268,8 +269,8 @@ unsigned int dpcrtlmm_IsBlockLocked(
 }
 
 void dpcrtlmm_ToggleBlockLockingStatus(
-  PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-  const void HORATIO_FARDATA* Ptr
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const void HORATIO_FARDATA *Ptr
 ) {
 	horatio_ToggleBlockLockingStatus(
 		PBlockArray,
