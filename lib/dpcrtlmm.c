@@ -146,7 +146,7 @@ unsigned int dpcrtlmm_IsStarted() {
 
 size_t dpcrtlmm_GetBlockSize(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	void HORATIO_FARDATA *BlockPtr
+	const void HORATIO_FARDATA *const BlockPtr
 ) {
 	return horatio_GetBlockSize(
 		PBlockArray,
