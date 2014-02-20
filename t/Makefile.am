@@ -55,4 +55,4 @@ example2_LDADD = $(test_LDADD)
 
 example3_SOURCES = example3.c
 example3_AM_CFLAGS = $(check_HEADERS)
-example3_LDADD = $(test_LDADD)
+example3_LDADD = -lhoratio -ldpcrtlmm

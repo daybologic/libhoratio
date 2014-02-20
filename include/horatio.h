@@ -928,10 +928,8 @@ void dpcrtlmm_Dump(FILE *Target);
 
 /* Call this to get the library version info */
 PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
-PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
 #ifdef DPCRTLMM_LEGACY
-#define dpcrtlmm_Ver \
-        horatio_Ver
+PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
 #endif /*DPCRTLMM_LEGACY*/
 
 /* I have my own MIN/MAXs here, use these only if you want to */

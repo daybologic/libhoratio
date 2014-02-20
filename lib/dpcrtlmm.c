@@ -48,7 +48,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #  pragma hdrstop
 #endif /*HORATIO_HDRSTOP*/
 
-#undef DPCRTLMM_LEGACY /* Don't map our wrappers back to the horatio functions */
+#ifndef DPCRTLMM_LEGACY
+# define DPCRTLMM_LEGACY
+#endif /*DPCRTLMM_LEGACY*/
+
 #include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
 
