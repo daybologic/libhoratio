@@ -663,6 +663,9 @@ void HORATIO_FARDATA *horatio_CallocEx(
 	const char *File,
 	const unsigned int Line
 );
+#define horatio_Calloc(blkarray, n, blksize) \
+        horatio_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
+
 #ifdef DPCRTLMM_LEGACY
 void HORATIO_FARDATA *dpcrtlmm_CallocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
@@ -671,11 +674,9 @@ void HORATIO_FARDATA *dpcrtlmm_CallocEx(
 	const char *File,
 	const unsigned int Line
 );
-
+#define dpcrtlmm_Calloc(blkarray, n, blksize) \
+        dpcrtlmm_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
 #endif /*DPCRTLMM_LEGACY*/
-
-#define horatio_Calloc(blkarray, n, blksize) \
-        horatio_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
 
 /*
  * When a trap is fired, the default behaviour of the program is to put

@@ -101,7 +101,7 @@ static int my_main(const int argc, const char* argv[]) {
   strdup_test();
 
 	/* Allocate vector */
-	copyvector = (char**)malloc( (argc + 1) * sizeof(char*) );
+	copyvector = (char**)calloc((argc + 1),sizeof(char*));
 	if ( !copyvector ) {
 		handler(copyvector);
 		return EXIT_FAILURE;
