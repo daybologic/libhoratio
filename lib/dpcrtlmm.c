@@ -111,6 +111,21 @@ void HORATIO_FARDATA* dpcrtlmm_AllocEx(
 	);
 }
 
+char HORATIO_FARDATA *dpcrtlmm_StrdupEx(
+	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
+	const char *SrcStr,
+	const char *File,
+	const unsigned int Line
+) {
+	deprecated("StrdupEx");
+	return horatio_StrdupEx(
+		PBlockArray,
+		SrcStr,
+		File,
+		Line
+	);
+}
+
 void dpcrtlmm_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
