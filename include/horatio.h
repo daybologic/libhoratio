@@ -808,10 +808,10 @@ unsigned int dpcrtlmm_IsBlockLocked(
 #define horatio_UnlockBlock(pArr, pBlock) horatio_SetBlockLockingFlag(pArr, pBlock, (0U));
 
 #ifdef DPCRTLMM_LEGACY
-#define dpcrtlmm_LockBlock \
-        horatio_LockBlock
-#define dpcrtlmm_UnlockBlock \
-        horatio_UnlockBlock
+# define dpcrtlmm_LockBlock \
+   horatio_LockBlock
+# define dpcrtlmm_UnlockBlock \
+   horatio_UnlockBlock
 #endif /*DPCRTLMM_LEGACY*/
 
 void horatio_ToggleBlockLockingStatus(
