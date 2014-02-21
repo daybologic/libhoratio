@@ -62,6 +62,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpcrtlmm.h"
 
 /* main() belongs to DPCRTLMM, rename your old main my_main or something */
+static unsigned int hookCounter(PS_HORATIO_DEBUGHOOKINFO debugHookInfo);
 static int my_main(const int argc, const char* argv[]);
 static void handler(char** vector); /* Incase we can't allocate enough */
 static void PrintInfo(char** vector); /* Prints strings from vector */
@@ -87,6 +88,11 @@ int main(const int argc, const char *argv[]) {
 	return my_main(argc, argv);
 }
 
+static unsigned int hookCounter(PS_HORATIO_DEBUGHOOKINFO debugHookInfo) {
+	printf("hookCounter called for %s\n", (const char *)debugHookInfo->Misc0);
+	return 0;
+}
+
 static int my_main(const int argc, const char* argv[]) {
 	/*
 	 * This is where the original program will begin, here's a
@@ -98,7 +104,11 @@ static int my_main(const int argc, const char* argv[]) {
 	char **copyvector; /* NULL terminated vector version of arguments */
 
 	Title();
-  strdup_test();
+	strdup_test();
+	dpcrtlmm_InstallDebugHook(
+		HORATIO_HOOK_LEGACY,
+		hookCounter
+	);
 
 	/* Allocate vector */
 	copyvector = (char**)calloc((argc + 1),sizeof(char*));

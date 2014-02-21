@@ -43,6 +43,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif /*HAVE_CONFIG_H*/
 
 #include <stdio.h>
+#include <string.h>
 
 #ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
@@ -54,9 +55,30 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "hbuild.h" /* General build parameters */
 #include "horatio.h" /* Main library header */
+#include "hdbghook.h" /* Debug hook executive and support functions */
 
 static void deprecated(const char *const funcName) {
+#ifdef HORATIO_DEBUGHOOKS
+	unsigned short int hookType = HORATIO_HOOK_LEGACY;
+	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
+#endif /*HORATIO_DEBUGHOOKS*/
+
 	fprintf(stderr, "Deprecated function call: dpcrtlmm_%s\n", funcName);
+
+	/* Call the debug hook executive */
+#ifdef HORATIO_DEBUGHOOKS
+	/* Init structure */
+	memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
+	/*debugHookInfo.PRelArr = PRArr;
+	debugHookInfo.PRelDesc = genBlockPtr;*/
+	debugHookInfo.HookType = hookType;
+	debugHookInfo.AllocReq = (unsigned int)0;
+	debugHookInfo.Success = 1U; /* TRUE */
+	debugHookInfo.Misc0 = (unsigned long)funcName;
+	debugHookInfo.Misc1 = 0; /* FIXME */
+	horatio_int_CallDebugHook(hookType, &debugHookInfo);
+#endif /*HORATIO_DEBUGHOOKS*/
+
 	return;
 }
 
