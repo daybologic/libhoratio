@@ -44,7 +44,7 @@ endif
 
 example1_SOURCES = example1.c
 example1_AM_CFLAGS = $(check_HEADERS)
-example1_LDADD = $(test_LDADD)
+example1_LDADD = $(test_LDADD) -ldpcrtlmm
 
 newbrand_SOURCES = newbrand.c
 newbrand_AM_CFLAGS = $(check_HEADERS)
@@ -60,7 +60,7 @@ example3_LDADD = -lhoratio -ldpcrtlmm
 
 dpctest1_SOURCES = dpctest1.c
 dpctest1_INCLUDES = horatio.h
-dpctest1_LDADD = $(cunit_test_LDADD)
+dpctest1_LDADD = $(cunit_test_LDADD) -ldpcrtlmm
 
 htest1_SOURCES = htest1.c
 htest1_INCLUDES = horatio.h

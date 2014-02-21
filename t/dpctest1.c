@@ -46,6 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
 # pragma hdrstop
 #endif /*HDRSTOP*/
 
+#define DPCRTLMM_LEGACY
 #include "dpcrtlmm.h"
 #include "hbuild.h"
 
