@@ -10,6 +10,7 @@ Vcs-Browser: http://svn.daybologic.co.uk/trac/dpcrtlmm/
 
 Package: libhoratio
 Architecture: any
+Conflicts: libdpcrtlmm
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Memory management/leak protection library for C apps
  This library is in its basic form a drop-in replacement for malloc() etc,
@@ -17,7 +18,8 @@ Description: Memory management/leak protection library for C apps
 
 Package: libhoratio-dev
 Architecture: any
-Depends: libhoratio
+Conflicts: libdpcrtlmm-dev
+Depends: libhoratio (= ${binary:Version})
 Description: Memory management/lead protection library dev headers
  This package includes horatio.h so that you can compile against
  libhoratio.
