@@ -1,3 +1,12 @@
+2.0.0
+-----
+  * DPCRTLMM has re-branded to libhoratio!
+  * The new libdpcrtlmm wrapper is not a full library, it is a legacy
+    wrapper, which passes calls on to libhoratio, and you will need to link
+    with both.
+  * All legacy calls will emit a warning for one major revision, and
+    the legacy symbols and defs will be stripped at revision 3.x.x
+
 1.3.1
 -----
   * Fix bugs in implementation of strdup(),
@@ -7,71 +16,431 @@
 -----
   * 31c91ca539eb: Support strdup().
 
-1.2
----
-DDRP - Add GNU autoconf support, remove old configurator.
-DDRP - Rename _Trap to Trap internally
-DDRP - Change license to a BSD-style license for all code.
-DDRP - Examples no longer cause leaks on purpose because automated
-       calls to make check might be taking place by something
-       bigger than us.
+2006-02-23
+----------
+  * General tidy up for new configure system
+
+2006-02-21
+----------
+  * License change
+
+1.2.0 - 2006-02-22
+------------------
+  * Add GNU autoconf support, remove old configurator.
+  * Rename _Trap to Trap internally
+  * Change license to a BSD-style license for all code.
+  * Examples no longer cause leaks on purpose because automated
+    calls to make check might be taking place by something bigger than us.
+
+2005-04-14
+----------
+  * Fix %p printing warning, some re-formatting.
+
+2002-09-16
+----------
+  * Fix infinite loop in dpcrtlmm_Dump() and add array pointer to dump.
 
 1.1.6
 -----
-DDRP - Add support to 'make install' on UNIX-like systems
-DDRP - Elimination of new spurious warnings from GCC 3.3 about %p printing
-DDRP - Some code re-formatting to my newer style
-DDRP - One newline added to an error message
-DDRP - __INC_DPCRTLMM_H changed to INC_DPCRTLMM_H in dpcrtlmm.h
-DDRP - Removed use of chown during installation, if installing as
-       root, this shouldn't matter and group ownership of root's files
-       differs on the BSDs.  Let me know how this goes.
-DDRP - Elimination of new spurious warnings from GCC 4.0 about %u printing
-DDRP - Remove superfluous semi-colon from dpccap.h end of namespace
-DDRP - Dependent on supplementary scripts package for OC libtool 0.9
+  * Add support to 'make install' on UNIX-like systems
+  * Elimination of new spurious warnings from GCC 3.3 about %p printing
+  * Some code re-formatting to my newer style
+  * One newline added to an error message
+  * __INC_DPCRTLMM_H changed to INC_DPCRTLMM_H in dpcrtlmm.h
+  * Removed use of chown during installation, if installing as
+    root, this shouldn't matter and group ownership of root's files
+    differs on the BSDs.  Let me know how this goes.
+  * Elimination of new spurious warnings from GCC 4.0 about %u printing
+  * Remove superfluous semi-colon from dpccap.h end of namespace
+  * Dependent on supplementary scripts package for OC libtool 0.9
 
 1.1.6-pre3
 ----------
-DDRP - Display array pointer in dpcrtlmm_Dump()
-DDRP - Fix infinite loop in dpcrtlmm_Dump()
+  * Display array pointer in dpcrtlmm_Dump()
+  * Fix infinite loop in dpcrtlmm_Dump()
 
 1.1.6-pre2
 ----------
-DDRP - Rename source files to prevent conflicts with C runtime lib
-DDRP - Borland makefile cleans up Borland's TDS files
-DDRP - Delete out of date dpcrtlmm.mak (Microsoft)
+  * Rename source files to prevent conflicts with C runtime lib
+  * Borland makefile cleans up Borland's TDS files
+  * Delete out of date dpcrtlmm.mak (Microsoft)
 
 1.1.6-pre1
 -----
-DDRP - Changed a call of a user function in TrapUnFreedArrays(), which led to a biglock locking after the biglock was uninitialised.
-DDRP - Created much needed dpcrtlmm_IsStarted()
-DDRP - Added DPCRTLMM_PRIVATE and DPCRTLMM_SPECIAL to version information and autoconfiguration.
-DDRP - Added mnemonics for version flags.
-DDRP - Safer handling of string buffers in log.c
-DDRP - Added line/file info to log files, removed some verbose messages.
+  * Changed a call of a user function in TrapUnFreedArrays(), which led
+    to a biglock locking after the biglock was uninitialised.
+  * Created much needed dpcrtlmm_IsStarted()
+  * Added DPCRTLMM_PRIVATE and DPCRTLMM_SPECIAL to version information
+    and autoconfiguration.
+  * Added mnemonics for version flags.
+  * Safer handling of string buffers in log.c
+  * Added line/file info to log files, removed some verbose messages.
 
 1.1.5
 -----
-DDRP - Problem with make all in Makefile.bor, fixed.
-DDRP - Fixed bug with SafetyList_CountFree()
-DDRP - Removed implict int usage in two public functions which deal with the debug hook matrix (implicit ints are illegal under C99)
-DDRP - Created a big lock to make the library thread safe through mutual exclusion
-DDRP - Possible minor bug in shutdown(), moved a call to MESSAGE.
-DDRP - Removed an inclusion of signal.h, I cannot figure out why I was using it.
-DDRP - Changed example1 & 2 slightly to avoid warnings on Borland C++
-DDRP - Trap enablement functions have been made thread safe, the extern dpcrtlmm__EnableTraps is now considered obsolete.
+  * Problem with make all in Makefile.bor, fixed.
+  * Fixed bug with SafetyList_CountFree()
+  * Removed implict int usage in two public functions which deal with the
+    debug hook matrix (implicit ints are illegal under C99)
+  * Created a big lock to make the library thread safe through mutual exclusion
+  * Possible minor bug in shutdown(), moved a call to MESSAGE.
+  * Removed an inclusion of signal.h, I cannot figure out why I was using it.
+  * Changed example1 & 2 slightly to avoid warnings on Borland C++
+
+1.1.5b - 2001-08-01
+-------------------
+  * Release DPCRTLMM 1.1.5b  as source.
+  * Trap enablement functions have been made thread safe, the extern
+    dpcrtlmm__EnableTraps is now considered obsolete.
 
 1.1.4
 -----
-DDRP - Finally started keeping a ChangeLog
-DDRP - Added source file and line number storage, AllocEx, CallocEx used, old functions are now macros but only work in C not C++.
-DDRP - Added patch number to version function
-DDRP - Added block information dumper dpcrtlmm_Dump()
-DDRP - #define USING_DPCRTLMM added to make macros malloc(),realloc(),calloc() and free() use DPCRTLMM
-DDRP - example3 rewritten
-DDRP - Added C based autoconfigurator, build.h only adds more information to the config options now, users have no need to edit it
-DDRP - Made stderr usage optional, defaults to stdout
-DDRP - Bug fix: Disabling the NULL array from the configurator caused code to try to access the default array even so, used ifdefs around such code.
-NOTICE! Changes to user source might be needed, include stdio.h!
+  * Finally started keeping a ChangeLog
+  * Added source file and line number storage, AllocEx, CallocEx used,
+    old functions are now macros but only work in C not C++.
+  * Added patch number to version function
+  * Added block information dumper dpcrtlmm_Dump()
+  * #define USING_DPCRTLMM added to make macros malloc(),realloc(),
+    calloc() and free() use DPCRTLMM
+  * example3 rewritten
+  * Added C based autoconfigurator, build.h only adds more information
+    to the config options now, users have no need to edit it
+  * Made stderr usage optional, defaults to stdout
+  * Bug fix: Disabling the NULL array from the configurator caused code
+    to try to access the default array even so, used ifdefs around such code.
+    NOTICE! Changes to user source might be needed, include stdio.h!
 
-Note: I used to keep changes in docs/help.html before 1.1.4
+2001-07-31
+----------
+  * Added support for big lock (thread safety).
+
+2001-06-07
+----------
+  * From now on read the ChangeLog, which will list all patches since the
+    last release.  Important postings (like the above but only if they are
+    of consequence) now go to the mailing list instead.
+
+2001-05-24
+----------
+  * Added dump and supported functions.
+
+2000-12-12
+----------
+  * Fixed yesterdays bug with the C++ example not running the trap handler
+    after it had installed it when a trap was fired from the library.
+    Turned out that the library was started after the trap handler was
+    installed.
+  * Seems not even the GNU C compiler's -ansi -pedantic -Wall mode spots
+    all warnings, on Micro$oft Visual C++ it spotted the missing const in
+    parameter 1 of the trap handler.  This only affected the examples not
+    the library.  Be clear about my meaning of resetting the library in a
+    session by starting it up and shutting it down.  I'm not sure
+    everything would be cleared, indeed at the moment it probally wouldn't
+    be and I will fix this later.  Also I wouldn't advocate such a thing.
+
+2000-12-11
+----------
+  * Fixed a bug which I saw by reading the source, statistics for block
+    flags were not being returned to the caller from the function
+    dpcrtlmm_GetStats( ).  Also got rid of an unneccersary structure.  Is
+    was this, forgetting to copy from the structure back to the stats
+    structure which was the bug.
+  * Fixed bug in C++ example (example2.cpp), it an instance of
+    Overlord::TDPCRTLMM_MemManager, which is illegal and probally a mistake
+    many users will make.  The real version is global and called
+    MemManager, storage reference dpccap.cpp.
+  * Another bug found:  Installed trap handler (which displays the stats
+    again as a test) in example2.cpp, does not work in example1.c.  It's
+    unclear as to what differs at the moment.
+  * Managed to get rid of two unneccersary integers in dpcrtlmm.c.
+    Functions can use _libStarted (an internal variable).  This would mean
+    the library could be restarted from the same session and save a little
+    memory.
+  * Removed the structure that communicated between both functions to carry
+    counts of flags.  Bug fix, the swappable and locked block counts in the
+    statistics didn't make it back to the caller's structure.
+
+
+2000-12-01
+----------
+  * To fix a possible porting problem I no longer assume
+    that realloc() will allocate when called with NULL, newSize
+
+2000-11
+-------
+  * strtstop.c was renamed husk.c but then removed all together and put
+    the startup and shutdown functions from husk.c into dpcrtlmm.c.
+  * dpcrtlmm.c contained a #pragma use which caused a warning, I got rid
+    of that and got rid of all copyright notices from
+    dpcrtlmm.c which would end up in the library.
+  * Changed all files to GPL license.
+  * Virtually rewrote dpccap.cpp, it's now completely ANSI/ISO
+    C++.  I'm not so sure of my '\' line continutation problems in
+    September, whatever now, it works.
+  * realloc() issues resolved!  I found out recently that
+    realloc(NULL, 1024); for example won't neccersarily allocate memory
+    so I've added a run-time warning printed to stderr if somebody tries
+    this with DPCRTLMM.  Also if somebody tried to use realloc() as a free-er.
+
+2000-09-05
+----------
+  * I had two different versions of the isbad.c functions, in the C file
+    they were constant and in dpcrtlmm.h they were not, caused me two
+    warnings on Visual C++ so I corrected the copy on dpcrtlmm.h, so the
+    formal version is constant, people.
+
+2000-08-29
+----------
+  * The GNU C compiler does not support line continuation characters ('\'),
+    I believed my source was all ANSI C because I use the -A switch on the
+    Borland compiler.  To get rid of line continuations I made changes to
+    dpcrtlmm.h and safelist.h.  Of course this does not affect the use of
+    the library and it certainly is not worth releasing a new version for.
+  * Other porting issues still exist in dpccap.cpp (my C++ encapsulation
+    layer), it seems that GNU are right up to date with ANSI/ISO C++ and
+    have removed except.h, the new version is simply called except, I have
+    not changed these yet as xalloc is still used in this module, it works
+    with warnings on Borland C++.  Today I added a clean section to the
+    makefile.
+  * Attention programmers! There was a typo
+    'dpcinstalltrapcallback' in the lazy lazy section of dpcrtlmm.h was
+    actually typed 'dpcinstallrrapcallback', sorry about that!
+
+2000-08-24
+----------
+  * Created a Makefile for Borland C++
+
+1.1.0 - 2000-08-03
+------------------
+  * Changes between 1.0 and 1.1 are reasonably simple and will only affect
+    people who have used the hooking system properly, I had discovered that
+    Misc0 and Misc1 are unsigned int and are used as pointers sometimes,
+    this works ok in flat model but when segmented the segment is lost, so
+    now they are unsigned longs, the trap DPCRTLMM_HOOK_TRAPENABLEMENT was
+    removed because it never worked, this is because the variable in
+    question is externed so I can't monitor it.  I could not support
+    DPCRRLMM_HOOK_INSTHOOK and REMHOOK either, inst hook was too mashed, it
+    even calls itself so hooking would be made very difficult indeed.
+
+1.0.0 - 2000-08-01
+------------------
+  * Altered the way the version number is reported, it now puts data into a
+    small structure, S_DPCRTLMM_VERSION, removed the define from build.h
+    and made the structure in dpcrtlmm.h
+  * I don't think the debug hooks are properly set up I noticed
+    dpcrtlmm_CreateBlockArray( ) at no time lead to the hook chain being
+    processed.  Must fix this in all functions I suspect.
+  * Added dpcrtlmm_IsDefaultBlockArray( )
+  * Whoops saw dpcrtlmm_Realloc( ) forgot to resolve NULL arrays, fixed.
+  * Invalid page faults were being caused at the end, changed
+    raise(SIGABRT) to abort( ), then found this wasn't the real cause, the
+    real cause was the library was designed for the static run time library
+    and then example was built for the DLL version.  I'll leave that as
+    abort( ) anyway.
+
+2000-07-31
+----------
+  * Hmm, this morning the program no longer halts, if anybody out there
+    decides to read this revision history I'd really like to know what was
+    going on!  Not a lot of programming done today, too hot.  Only 7 hours
+    until it's midnight in the USA so I should have the demos built by
+    then.
+
+2000-07-30
+----------
+  * The change to the loop has (or perhaps not but I suspect it's this) has
+    caused the machine to halt running as a 16-bit program under DOS.  I
+    have been trying to debug it all day but it's very hard to see what
+    goes wrong, might have to re-write this loop in the next release, it's
+    too close to release day now, I'll have to say that the library is
+    currently limited to flat builds ie. 32-bit.
+  * Wrote dpcrtlmm_Ver( ), which uses DPCRTLMM_VER as in build.h
+
+
+2000-07-29
+----------
+  * The trap unfreed arrays routine was always seeing one less block then
+    it should, traced the problem down to a loop which looked at
+    PArr->Count but that count was being changed by dpcrtlmm_Free( ) which
+    the routine was calling as automatic garbage collection on every
+    unreleased block it found.  I changed it to while ( PArr->Count ) and
+    took off element 0
+
+2000-07-28
+----------
+  * Renamed getstats.c stats.c
+  * added support for the default array into
+CountFlagsInUse( ).  It seems Alloc( ) is correctly allocating blocks
+in the default array because of the NULL array resolver macro, must be
+Free( ) that is not so aware.  I have noticed that GrowBlockArray( ) is
+relying on the run-time library realloc( ) to accept NULL and pass it
+on to alloc( ), I'm not sure that this is always supported, I may have
+to change it.  Had to make some changes to isbad.c both IsBad...( )
+calls did not resolve array pointers and [32]dpclrtmm_IsBadArrayPtr( )
+was so somple it was just asking the safety list.  Some functions may
+try dereferencing NULL pointers without resolving them first so I'll
+have to find all this instances of this behaviour, all functions which
+are exposed in the library so the user can call them will probally be
+affected.
+    Whoops!  vptrap.c is a bit odd, looking for bad blocks is simple,
+it called IsBadBlockPtr( ), seems logical, and yet the trap on a bad
+array pointer (the trap above) decides to call the safety list itself,
+hmm, it might be more advisable to call IsBadArrayPtr( ) of course,
+changing code again....
+
+2000-07-27
+----------
+  * Fixed a link problem and Mike agreed to test the library.
+  * Got Alloc()/Free() to update statistics
+  * Got code to work to nag user and terminate the program if more than
+    DPCRTLMM_STDBLOCKLIMIT blocks are used in the program, oh and no worries
+    it doesn't nag registered users.
+  * int_data.c: Added dpcrtlmm_int__blockCount, it's used instead of a time consuming
+    loop through all blockarrays, for the call dpcrtlmm_GetBlockCount()
+  * Added dpcrtlmm_int__blockCountPeak
+  * Added dpcrtlmm_int__allocCharge & dpcrtlmm_int__allocPeak
+
+
+2000-07-26
+----------
+  * Added a new module getstats.c, countains these functions:
+    dpcrtlmm_GetBlockCount( ) & dpcrtlmm_GetStats( ), GetStats( )
+    is very simple and it uses _blockCount which I added to intdata.c.
+    Alloc()/Free() don't update the counter yet
+  * Limited library to 50 blocks for standard builds, first set up a define
+    in build.h so I could modify it easily and then put all the statistics
+    (except flag counting) into internal vars (intdata.c).  Flag counting
+    is done by an internal routine called CountFlagsInUse( ), I put that in
+    getstats.c
+  * Added dpcrtlmm_AreTrapsEnabled( )
+  * There is now an extern in town called dpcrtlmm__EnableTraps, it used to
+    be an internal variable called dpcrtlmm_int__enableTraps, now
+    the modifiers dpcrtlmm_EnableTraps( ), dpcrtlmm_DisableTraps( ) &
+    dpcrtlmm_AreTrapsEnabled( ) are just macros to use it.
+  * The simple module enbltrap.c was redundant, deleted it.
+
+2000-07-24
+----------
+  * Limited block descriptor arrays to 64 entries in standard builds
+
+2000-07-21
+----------
+  * Corrected an assertion failure due to the new NULL block array.
+  * In the betas, when DPCRTLMM_LOG was not defined the messages were not output
+    to a log file but the messages were still taking space in the resulting
+    program, got rid of most of them, some are used as traps too so I
+    couldn't get rid of them.
+  * To try to stop users making the mistake of including build.h in their own
+    programs I made build.h look for a macro I define in my source only.
+  * Loads of warnings about variables that were never used when I tried to
+    define DPCRTLMM_LOG for an experiment, filtered them all out, all
+    the #ifdef DPCRTLMM_LOG #endif /*DPCRTLMM_LOG*/ stuff everywhere looks
+    a mess though.
+  * Added DPCRTLMM_SOURCE at the top of int_data.c
+
+2000-07-20
+----------
+  * In adding the support for default block arrays I had to split up the
+    trap routine called TrapUnFreedArrays() in strtstop.c into a new
+    routine also TrapUnFreedBlocks().
+  * I realized that not all data which is unfreed (garbage) is just arrays
+    now due to the default array which is never destroyed but can contain blocks.
+  * I renamed the define DPCRTLMM_TRAP_UNFREED_ARRAYS to DPCRTLMM_TRAP_UNFREED_DATA.
+    If you used this (which I doubt) at this stage just rename the macro in your
+    code.
+
+2000-07-19
+----------
+  * Coverted all the filenames to lower case and all the #includes to lower
+    case for compatibility with UNIX systems.
+  * Tried and failed miserably to create a working makefile and the Borland
+    C++ IDE auto-generated one came up with warnings about some of my
+    symbols not being in the library, works ok from the IDE and I don't
+    ever get warnings for it so I gave up on this for now.  The library is
+    saimple enough to build I feel.
+  * Merged BBATRAP and BBPTRAP, well, put them in the same module with
+    another function call _VerifyPtrs() which calls both, this stops having
+    to do both calls in some functions which looks untidy.  Both functions
+    were always called at once anyway, the new module is called vptrap.c
+  * In realloc.c the string "Realloc()" was used twice, optimized out
+    second instance.
+  * Noticed quite a few modules called the old BBA trap and did not
+    have a pointer to verify also, so I changed _VerifyPtrs() slightly so
+    argument three could be NULL and the second trap call would be
+    skipped.  Well mustn't grumble, it still feels cleaner this way and I
+    got rid of a whole module in effect!
+  * Free() used the string "Free()" twice, made it share a variable, only
+    has an effect on non-optimizing compilers which don't support duplicate
+    strings merged.
+  * Removed all #pragma hdrstop PCH support unless DPCRTLMM_HDRSTOP is
+    defined, to save annoying warnings to people who's compiler does not
+    understand the pragma
+  * Added support for NULL as the default built-in block array, define
+    DPCRTLMM_NONULL_BLOCKDESCARRAY in build.h to restore old behaviour, old
+    behaviour was to say that NULL was not a valid block desc array and
+    crash the program.
+  * Added a hack table for shorter function names, this was suggested
+    by Jeremy and will also shorten the structure names.  Developers
+    already using the library can totally ignore this.
+  * Added dpcrtlmm_int__defaultArray (the NULL array) to int_data.c
+
+2000-06-14
+----------
+  * In 16-bit memory models on x86 processors, if the data segment is near
+    the pointers do not mean anything to the hosting program when given to
+    it, the near pointers are for us with DPCRTLMM's own assumed data
+    segment, therefore explicit far data is needed, added a macro to
+    build.h for doing so and severely modified the documentation.
+
+2000-05-10
+----------
+  * There was a bug in the new safety list which stopped the whole library
+    working, a single missing '!' (logical not).  Republishing the library.
+
+2000-05-05
+----------
+  * Wrote documentation for library and released it on the Daybo Logic web
+    site http://www.daybologic.co.uk
+  * Disabled defintion of hook traps while they are turned off in standard builds
+
+2000-05-04
+----------
+  * Compiled in the new SAFELIST.C and tried to build the library muliple times
+    until all references to other Daybo Logic stuff were stripped out.
+  * BOOL had to change to unsigned int, however the user of the library may still
+    treat these values as BOOL/TRUE/FALSE even though they are used as unsigned
+    ints inside the library.  The user can only do this if they have their own
+    compatible versions of BOOL/TRUE/FALSE which most developers have by now, or
+    can easily make them if they do now have them.
+  * Changed defintion of _safeList and all people who used it had to be altered
+    to be aware of the new definition.
+  * Wrote a new page on the web site offering it for sale.
+  * Changed definition of _safetyList from S_GENLIST _safetyList
+
+2000-05-03
+----------
+  * Totally got rid of SAFELIST.C/.H and decided to start again.  The
+    declaration of the safety list object is in INTDATA.C and the size is
+    determined in the configuration file BUILD.H
+  * The new SAFELIST.C will contain simple functions to save having to
+    write the list processing several times, code to count the number of items,
+    code to add a new one at the first blank entry and remove items.
+    There is no need for a linked list or shift up code because it's a fixed
+    size determined at compile time therefore anything which is not a valid
+    entry will just be NULL.
+
+2000-05-02
+----------
+  * Removed dependencies that made this library rely on other Daybo Logic
+    libraries, this will mean the library can be used by Colelus without
+    disrupting the portability of the Colelus source tree.  This step
+    involves stripping out all references to STDS\DLSTRLIB.H a very
+    annoying thing to do because all code which is Daybo Logic shared code
+    (and therefore not part of Colelus) should include this header.
+    However if this library source is to be made available to the public too,
+    this dependancy must go.
+  * The other dependency which follows in a similar fasion is the use of the
+    generic list object as the list of block arrays, the so-called safety
+    list. To avoid this I will design a safety list object type which is only
+    used by us and indeed only makes sense to us!
+    This new object definition is in SAFELIST.H and the code to run is SAFELIST.C
