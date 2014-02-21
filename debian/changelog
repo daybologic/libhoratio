@@ -1,207 +1,208 @@
 libhoratio (2.0.0) stable; urgency=low
 
   * New branding release (libhoratio)
-  * 366b1f21bd28: Resolve issue #1 File/line reports in C++ report wrong block owner
-  * 33736302080f: Merge default release tag back into develop branch
-  * 3ed96b3b9f5f: Temporary branch for cleaning up documentation and copyright notices.
-  * 2e239229b403: Change old (c) notices from 2006 to 2012 for a future release.
-  * b7d972cabc76: Minor copyright and contact changes to documentation.
-  * b68e50c2e799: Remove references to obsolete email address.  Tell people to use bitbucket instead.
-  * c071f47cfde3: Update the BUGS list after filing them properly in bitbucket's issue tracker.
-  * 260ec0cf7ef1: Update credits
-  * 4dda6857628c: Freshen branch from develop
-  * 1e78ed098abf: Closing feature branch; work complete.  Ready to be merged.
-  * 7aed2e36348a: Housekeeping; Changes to copyright notices, and cleanup of old timestamps.
-  * 47688ce322b7: List bitbucket issue #4 (confirmed) in BUGS
-  * a433d40878e8: Fix issue #4 where %p was printed to DPCRTLMM.LOG when a block base descriptor address was verified.
-  * dceb759571df: Define HAVE_FORMAT_POINTER_PREFIX & DPCRTLMM_FMTPTRPFX via config.h
-  * a85501adae34: Esnure all printf references to %p are prefixed by DPCRTLMM_FMTPTRPFX
-  * 7291669d1719: Close issue branch: i/4
-  * 40d392ca2e3a: Accept issue 4 resolution
-  * c4851c4620f7: CFLAGS is a user variable, advised by GNU autotools that we should use AM_CFLAGS
-  * 44fe5cc188ca: Merge c4851c4620f7 AM_CFLAGS warning.
-  * 7686ce793d71: Remove opinion/comment on how much memory is leaked and suggested action.
-  * 63816f9d2c12: Use consistent content email address -> palmer@overchat.org
-  * 026aa2c9e8ef: Prepare for 2013, when I hope next to release libdpcrtlmm
-  * c4737a2e9893: Merged in daybologic/dpcrtlmm-palmer/f/201108-palmer-notices (pull request #4)
-  * 9831b60d4a8d: Remove history from web documentation
-  * afb0f529b639: Move all Changelog (history) out of HTML documentation and into the ChangeLog
-  * 19905524b30b: Drop a useless ChangeLog entry (2000-07-18),
-  * a5e45f673abd: Move inline history from dpc_intdata.c into ChangeLog
-  * 8fecdff7e098: Move history comments from realloc and stats into ChangeLog
-  * cfd8e77d469b: Reformat and clean up the ChangeLog
-  * 8c3237cbdc64: Re-number help section 4.1 to 4.0 due to removed 4.0 History
-  * 6d2f46d3be6c: Clean up and consolidate the changelog history
-  * 717745b51243: Close branch f/201108-palmer-notices
-  * de9833fea7ee: Merge closed head.
-  * 1848ff61dfc0: Remove some trailing whitespace from dpc_stats.c
-  * 9ed833e08026: Remove trailing whitespace from within BSD license notices.
-  * afbdf74332a8: More files with BSD banners with trailing whitespace
-  * 2c7037227e27: Cuddle _all_ the function definitions
-  * 5fe30a152114: Cuddle all compound statements.
-  * bcc118e6fc3c: Merge heads for upstream notice changes with reformatting of code styles.
-  * 75dbe9a66817: Document issue #6
-  * 4e9045bb5757: Map sprintf on to snprintf, if it is available
-  * 822fb2c8e893: Alloc code; Track logMsgRemaining when HAVE_SNPRINTF is defined.
-  * 023e066b1795: Start migrating free() over to snprintf()
-  * c91fb24793d9: No point in several logic blocks redefining the local error string buffer
-  * 776e25b38c3e: Prepare for snprintf() use in dpc_vptrap.c
-  * a8c0ade0381b: Prepare for snprintf() use in dpcrtlmm.c
-  * f15be105c53b: Freshen branch from develop
-  * 6a3e2a167831: acinclude.m4 is not supported by some versions of autoconf
-  * 1b45215a3071: Freshen branch from develop
-  * e477b255630d: Move all the remaining sprintf() calls over to snprintf() compatible calls
-  * c63f3b3e7ab3: Merge partial issue #6 fix (snprintf() support).
-  * 4625e990ba37: Remove references to other libraries, and re-word library description.
-  * 48431f1167e7: Remove some slang from the comments.
-  * 832440cf62f1: Strip C function separators, because they break the '{' and '}' keys in vim
-  * b8563447b0f0: Strip C++ function separators, because they break the '{' and '}' keys in vim
-  * 657d5e3d8775: Rename primary user header, as start of re-branding project
-  * aaa6c1417be0: Rename all references to dpcrtlmm.h
-  * 4b1845d0fdc8: Rename dpcrtlmm.h references within Makefile.am
-  * 4557eea21d45: Premature function renaming, we'll deal with this in due course
-  * cfb2a79ba3fc: Rename references to DPCRTLMM to HORATIO in horatio.h
-  * 9e3762f6da56: Added a bunch of legacy macros, to support existing code.
-  * 106eb96fb396: Fix some errors in horatio.h;
-  * c29785dc67b9: Various fixups to pre-processor defines
-  * edb934c38e4a: Typos and fixes to MIN/MAX
-  * 179b3d6d74f4: Add legacy dpcrtlmm.h into the header list again
-  * 75148d75f582: Added new test, which uses DPCRTLMM via the new libhoratio name, only
-  * 3461f1da5ccf: Change name in BSD copyright notices in most C-type files.
-  * caccce74e055: Change package name for Debian;
-  * ca5032dfc51a: Merge from master develop branch
-  * 82f059c47ad4: Put a restricted header in place, which will only contain horatio.
-  * d1de2d86b83f: Remove the legacy support from the restricted header.
-  * 40db06adb04a: Gratuitously replace every C reference to DPCRTLMM with HORATIO
-  * 9280a46d2d71: Replace references to DPCRTLMM with HORATIO in dpc*.h
-  * ba64de887159: Re-generate autoconf system with autoreconf -ivf
-  * d08505c359ce: It was incorrect to use the restricted header in the legacy examples
-  * 17573459417f: Partial re-branding of C++ classes... if anybody has a more robust way, I'm all ears
-  * b38a8395c3e4: Brutal change, breaking everything, by moving all references to dpcrtlmm to horatio in all core C files
-  * f8aabc7f8c4a: Rename all references for dpcrtlmm to horatio within internal data header
-  * bef9c645bc71: Rename the dpcrtlmm_ functions to horatio_ within all headers.
-  * 906be415ba99: Apply previous commit as a patch to the temporary restricted header
-  * d2f3bb3b68ef: Further references to dpcrtlmm removed
-  * 3e83c70d7551: Restore a historical fact
-  * f0d9085ae87b: Add dpcrtlmm_ macros for user functions
-  * e8adae727a46: Switch all names within dpccap.cpp, because we use restricted header
-  * d59957c2b204: A few more missing legacy macros which mattered under C++
-  * 6cf3a3e928e5: Merge heads
-  * c0273421b50c: Added NEWS file to announce libhoratio
-  * 6a2491e193e9: Changed NEWS file and logo of Horatio's head
-  * 468387ae92dd: Added description of Copyright on Horatio's image
-  * 54b6370281a1: Mass, automagic change within help.html, of all references
-  * 8268ae2d23a7: Documentation re-branding.
-  * d52c8d2173c3: Remove the temporary restricted header
-  * 2c0b5694bf96: Whoops, legacy macro DPCRTLMM_FARDATA was missing when defined in config.h
-  * 71edb66e343b: Rename all C language files because of the new branding.
-  * 943c04fe00da: Rename library, and C files within autotooks config
-  * f23f7296b4a8: horatio should be libhoratio
-  * 2213fd1c6e30: Wrong filename in Makefile.am
-  * 79b246891f93: Rename references to headers within C files
-  * e65a8629d5cd: More renamed references to C files due to re-branding
-  * e8908e7c36a6: Re-run autoreconf -ivf after repackaging.
-  * 3b2da8c18ac9: Rename package install scripts (Debian)
-  * 57a8aed8a44e: Merged in daybologic/libhoratio-palmer/f/201309-palmer-rebrand (pull request #8)
-  * f6ce55f7c7b6: Build system improvements, which allow us to deprecate shipping configure
-  * b37e5a7d8e3a: Fix two format security problems picked up by CClang.
-  * fe24c45021a9: Remove the configure script and depend on libtool.
-  * 4a1f7752f298: INCLUDES is legacy name for automake, compiler-specific flags.
-  * 4b958242a420: Remove AM_CFLAGS conflict
-  * 526bf67eb131: Adding license/copyright headers to new files, and debian/rules
-  * bd2f2d1cf1e4: Added quick script to replace Copyright year in all source files, for maintainers.
-  * 57287e07a58f: Update copyright year for all code: 2013 -> 2014
-  * 3228a133eb8d: Makefile.in is intermediate output, and should not be version controlled.
-  * d21fc847dafd: Include debian/* and the COPYING file in the copyright year changes.
-  * 65604230052f: Move the main source code under lib/, as part of a tidy-up.
-  * 19aac771022f: Move Makefile.am into lib/
-  * 8ebb5419bcd4: Added new root Makefile.am to recurse into lib/
-  * 71cbcf7029fb: Added in-tree M4 macros for autoconf.
-  * dd6728ac80e2: Toolchain rebuild only.
-  * 5858ad38b326: Move all test suites under t/
-  * 275698b4835a: Update autotools after move to m4 in-tree and lib/ and t/ sub-dirs.
-  * db2346ce95ce: Use AC_LANG_SOURCE in our M4 macros, to prevent noisy warnings
-  * 8f739d2b7486: Build a -dbg debug package, under Debian.
-  * 803d5b9671dd: Enable silent build
-  * c4810742f2d7: Start treating warnings as errors
-  * 871fd92659ff: Invalid reference to 'NDEBUG_' rather than 'NDEBUG'.
-  * b4c06d7213a1: Nasty workaround for a compiler warning, where gcc cannot analyse
-  * e9f524e6b27c: pusedDynamic may be used uninitialised
-  * b16fcb8cc40b: GetBlockSize requires only needs a constant pointer to the block
-  * 8bbf76e99112: Change parameter to C++ constructor to 'doInit', rather than 'init'.
-  * 9bf35a365736: -Wmissing-declarations is not available on g++ 4.2.1 (legacy).
-  * acc815fc915c: Move away from the 'Overlord::' namespace, and into the 'daybo::' namespace.
-  * 41abaaa50bff: Strip all reference to 'Overlord', which is a legacy nickname
-  * 1209ae49d7dc: We are getting warnings to add subdir-objects as an Automake option.
-  * 5a026e954542: AM_INIT_AUTOMAKE now recommends no arguments are given.
-  * d3119c055132: Move the Perl scripts over to tabs, rather than spaces for indentation.
-  * cc964890f388: Use tabs in Makefile.am
-  * f1020e42a2dc: Move Perl scripts under utils/
-  * 6ceb45c25ebe: Move the fixyear.sh script under utils/
-  * a15792aa168e: Migrate unit tests example1, newbrand and example3 over to tab-based spacing.
-  * 64cfdf27316f: Re-indent t/example2.cpp using tabs, rather than spaces
-  * 9793e3472453: Re-format multi-line comments in t/example2.cpp
-  * f3f9df9cfdda: Re-format all the code in the C++ portion of the library
-  * a09d2b645686: Re-format multi-line comments within lib/horatio.h
-  * 5de0c06c8a18: Added a -f flag to autogen.sh to force configure to be re-generated
-  * eb9fec2d8518: Moved autogen.sh into utils/
-  * bc48d2d00426: Moved build.sh into utils/
-  * 556f4c1f7913: Mark eol.pl and mkdosdist.pl in thje utils/ directory, as executable
-  * 0df93f37bdd7: Moved dpccap.h and horatio.h into include/, rathe than lib/
-  * aa52761ee13d: Move the legacy header; dpcrtlmm.h into include/ not lib/
-  * 664cb21a8328: Re-format all internal header files
-  * 114c3d5ea68e: Massive re-formatting of the main library code.
-  * e5410fc33044: hstats: Superfluous block; we should return early
-  * 35424a25ceff: Rebuild config.h.in
-  * 49783df72968: Re-branding branch no longer required, rebranding can happen in develop
-  * 70cf165280ee: Merge in branch closure only; f/201309-palmer-rebrand
-  * e712c61e8719: Merged default down into develop
-  * 2ffe546e78af: All fixups after merge of strdup() feature via default (1.3.0)
-  * acf81faea7db: Need to retain libhoratio as title in debian/changelog
-  * 1bfbf7a0ea23: Merged default down into develop
-  * 2bde9a14daf2: undef of strdup macro already done, brought in via legacy merge
-  * 73fbd56bf850: Head of debian/changelog must use new library name
-  * f00a02e2fab4: Remove some inappropriate language from source only.
-  * f97503cb28cd: Begin dpcrtlmm.c legacy wrapper
-  * 85bc43f5e521: Add support for --with-dpcrtlmm flag (legacy support)
-  * e5abf27e7f05: You'll need to --enable-dpcrtlmm to get DPCRTLMM_LEGACY,
-  * 713042f63a88: Only define legacy functions/macros when the user enables it
-  * 4c2407d8bb79: Re-generate autoreconf -ivf
-  * 3237a18fbebc: Add dpcrtlmm_InstallDebugHook() wrapper
-  * 0ab47465a58f: Add all the prototypes from horatio.h
-  * b0ac21731498: Switch out dpcrtlmm.c entries which are horatio_ for dpcrtlmm_
-  * c7202ac281e8: Manually craft all legacy wrappers.
-  * 5cf30e5c21ea: example1 shall be linked via legacy linkage (dpcrtlmm.c).
-  * 92d2e8aad4d9: Re-generate Makefile.in
-  * f836f6f335ea: Merge upstream experimental repository into Palmer's fork
-  * 0a1732102215: Merge from master develop branch
-  * 5ff861c6136a: Merge in Palmer's experimental fork (at this stage, most things were merged)
-  * 5cd4766b12da: Merge from master develop branch
-  * 3c6787a31c15: Moved dpcrtlmm.c (legacy wrappers) into lib/
-  * 1d9b71aafd25: Turn off warnings as errors in the re-branding branch.
-  * 23b96ae65a1f: rebuild config.h.in
-  * c31de9523195: Fix some rather obvious errors in dpcrtlmm.c
-  * 601f23d2a1f6: Merge in Palmer's experimental fork (no-op)
-  * 1b8191c0ff1a: Merge branch closure (no-op)
-  * d72730db5869: Re-close branch
-  * 6e915866169f: Merge experimental re-branding legacy support
-  * b140cefecbd7: Ensure example code is using the right headers for the symbols they expect to use.
-  * addd887b84e5: Reformat prototypes in legacy wrapper
-  * fcd0e5ed2169: Re-formatting indentation of a comment
-  * 7231d4e43586: Added missing legacy prototypes for the dpcrtlmm.c wrappers
-  * 9434a2ba497e: Fix some return values within the dpcrtlmm.c wrappers
-  * b779cc8a85b0: Fix prototype for legacy dpcrtlmm_GetBlockSize wrapper
-  * 65da49023673: Print a deprecated function call warning to stderr for all legacy ABI wrappers
-  * 4e95c4e9d6fa: Experimentally map dpcrtlmm_Ver call via actual legacy library
-  * 1799c7786fac: Pass all legacy calls via the real legacy library, rather than magicking them away
-  * c693533335df: Add missing dpcrtlmm_StrdupEx() wrapper in dpcrtlmm.c
-  * d139fe71b76c: Fix legacy dpcrtlmm_CallocEx mapping
-  * 46bf6ed91dff: Re-formatting only; in dpcrtlmm_LockBlock;
-  * d9c09c1216f7: Add legacy conflicts rule, and ensure dev package depends on same binary version
-  * 10ec741ef440: Bump to 2.0.0
-  * 9682d1f637c5: Make major notes for the new release in ChangeLog
-  * 9ba0facb950a: Create release branch for 2.0.x releases
   * 34a693537034: Bump the revision in debian/changelog
+  * 9ba0facb950a: Create release branch for 2.0.x releases
+  * 9682d1f637c5: Make major notes for the new release in ChangeLog
+  * 10ec741ef440: Bump to 2.0.0
+  * d9c09c1216f7: Add legacy conflicts rule, and ensure dev package depends on same binary version
+  * 46bf6ed91dff: Re-formatting only; in dpcrtlmm_LockBlock;
+  * d139fe71b76c: Fix legacy dpcrtlmm_CallocEx mapping
+  * c693533335df: Add missing dpcrtlmm_StrdupEx() wrapper in dpcrtlmm.c
+  * 1799c7786fac: Pass all legacy calls via the real legacy library, rather than magicking them away
+  * 4e95c4e9d6fa: Experimentally map dpcrtlmm_Ver call via actual legacy library
+  * 65da49023673: Print a deprecated function call warning to stderr for all legacy ABI wrappers
+  * b779cc8a85b0: Fix prototype for legacy dpcrtlmm_GetBlockSize wrapper
+  * 9434a2ba497e: Fix some return values within the dpcrtlmm.c wrappers
+  * 7231d4e43586: Added missing legacy prototypes for the dpcrtlmm.c wrappers
+  * fcd0e5ed2169: Re-formatting indentation of a comment
+  * addd887b84e5: Reformat prototypes in legacy wrapper
+  * b140cefecbd7: Ensure example code is using the right headers for the symbols they expect to use.
+  * 6e915866169f: Merge experimental re-branding legacy support
+  * d72730db5869: Re-close branch
+  * 1b8191c0ff1a: Merge branch closure (no-op)
+  * 601f23d2a1f6: Merge in Palmer's experimental fork (no-op)
+  * c31de9523195: Fix some rather obvious errors in dpcrtlmm.c
+  * 23b96ae65a1f: rebuild config.h.in
+  * 1d9b71aafd25: Turn off warnings as errors in the re-branding branch.
+  * 3c6787a31c15: Moved dpcrtlmm.c (legacy wrappers) into lib/
+  * 5cd4766b12da: Merge from master develop branch
+  * 5ff861c6136a: Merge in Palmer's experimental fork (at this stage, most things were merged)
+  * 0a1732102215: Merge from master develop branch
+  * f836f6f335ea: Merge upstream experimental repository into Palmer's fork
+  * 92d2e8aad4d9: Re-generate Makefile.in
+  * 5cf30e5c21ea: example1 shall be linked via legacy linkage (dpcrtlmm.c).
+  * c7202ac281e8: Manually craft all legacy wrappers.
+  * b0ac21731498: Switch out dpcrtlmm.c entries which are horatio_ for dpcrtlmm_
+  * 0ab47465a58f: Add all the prototypes from horatio.h
+  * 3237a18fbebc: Add dpcrtlmm_InstallDebugHook() wrapper
+  * 4c2407d8bb79: Re-generate autoreconf -ivf
+  * 713042f63a88: Only define legacy functions/macros when the user enables it
+  * e5abf27e7f05: You'll need to --enable-dpcrtlmm to get DPCRTLMM_LEGACY,
+  * 85bc43f5e521: Add support for --with-dpcrtlmm flag (legacy support)
+  * f97503cb28cd: Begin dpcrtlmm.c legacy wrapper
+  * f00a02e2fab4: Remove some inappropriate language from source only.
+  * 73fbd56bf850: Head of debian/changelog must use new library name
+  * 2bde9a14daf2: undef of strdup macro already done, brought in via legacy merge
+  * 1bfbf7a0ea23: Merged default down into develop
+  * acf81faea7db: Need to retain libhoratio as title in debian/changelog
+  * 2ffe546e78af: All fixups after merge of strdup() feature via default (1.3.0)
+  * e712c61e8719: Merged default down into develop
+  * 70cf165280ee: Merge in branch closure only; f/201309-palmer-rebrand
+  * 49783df72968: Re-branding branch no longer required, rebranding can happen in develop
+  * 35424a25ceff: Rebuild config.h.in
+  * e5410fc33044: hstats: Superfluous block; we should return early
+  * 114c3d5ea68e: Massive re-formatting of the main library code.
+  * 664cb21a8328: Re-format all internal header files
+  * aa52761ee13d: Move the legacy header; dpcrtlmm.h into include/ not lib/
+  * 0df93f37bdd7: Moved dpccap.h and horatio.h into include/, rathe than lib/
+  * 556f4c1f7913: Mark eol.pl and mkdosdist.pl in thje utils/ directory, as executable
+  * bc48d2d00426: Moved build.sh into utils/
+  * eb9fec2d8518: Moved autogen.sh into utils/
+  * 5de0c06c8a18: Added a -f flag to autogen.sh to force configure to be re-generated
+  * a09d2b645686: Re-format multi-line comments within lib/horatio.h
+  * f3f9df9cfdda: Re-format all the code in the C++ portion of the library
+  * 9793e3472453: Re-format multi-line comments in t/example2.cpp
+  * 64cfdf27316f: Re-indent t/example2.cpp using tabs, rather than spaces
+  * a15792aa168e: Migrate unit tests example1, newbrand and example3 over to tab-based spacing.
+  * 6ceb45c25ebe: Move the fixyear.sh script under utils/
+  * f1020e42a2dc: Move Perl scripts under utils/
+  * cc964890f388: Use tabs in Makefile.am
+  * d3119c055132: Move the Perl scripts over to tabs, rather than spaces for indentation.
+  * 5a026e954542: AM_INIT_AUTOMAKE now recommends no arguments are given.
+  * 1209ae49d7dc: We are getting warnings to add subdir-objects as an Automake option.
+  * 41abaaa50bff: Strip all reference to 'Overlord', which is a legacy nickname
+  * acc815fc915c: Move away from the 'Overlord::' namespace, and into the 'daybo::' namespace.
+  * 9bf35a365736: -Wmissing-declarations is not available on g++ 4.2.1 (legacy).
+  * 8bbf76e99112: Change parameter to C++ constructor to 'doInit', rather than 'init'.
+  * b16fcb8cc40b: GetBlockSize requires only needs a constant pointer to the block
+  * e9f524e6b27c: pusedDynamic may be used uninitialised
+  * b4c06d7213a1: Nasty workaround for a compiler warning, where gcc cannot analyse
+  * 871fd92659ff: Invalid reference to 'NDEBUG_' rather than 'NDEBUG'.
+  * c4810742f2d7: Start treating warnings as errors
+  * 803d5b9671dd: Enable silent build
+  * 8f739d2b7486: Build a -dbg debug package, under Debian.
+  * db2346ce95ce: Use AC_LANG_SOURCE in our M4 macros, to prevent noisy warnings
+  * 275698b4835a: Update autotools after move to m4 in-tree and lib/ and t/ sub-dirs.
+  * 5858ad38b326: Move all test suites under t/
+  * dd6728ac80e2: Toolchain rebuild only.
+  * 71cbcf7029fb: Added in-tree M4 macros for autoconf.
+  * 8ebb5419bcd4: Added new root Makefile.am to recurse into lib/
+  * 19aac771022f: Move Makefile.am into lib/
+  * 65604230052f: Move the main source code under lib/, as part of a tidy-up.
+  * d21fc847dafd: Include debian/* and the COPYING file in the copyright year changes.
+  * 3228a133eb8d: Makefile.in is intermediate output, and should not be version controlled.
+  * 57287e07a58f: Update copyright year for all code: 2013 -> 2014
+  * bd2f2d1cf1e4: Added quick script to replace Copyright year in all source files, for maintainers.
+  * 526bf67eb131: Adding license/copyright headers to new files, and debian/rules
+  * 4b958242a420: Remove AM_CFLAGS conflict
+  * 4a1f7752f298: INCLUDES is legacy name for automake, compiler-specific flags.
+  * fe24c45021a9: Remove the configure script and depend on libtool.
+  * b37e5a7d8e3a: Fix two format security problems picked up by CClang.
+  * f6ce55f7c7b6: Build system improvements, which allow us to deprecate shipping configure
+  * 57a8aed8a44e: Merged in daybologic/libhoratio-palmer/f/201309-palmer-rebrand (pull request #8)
+  * 3b2da8c18ac9: Rename package install scripts (Debian)
+  * e8908e7c36a6: Re-run autoreconf -ivf after repackaging.
+  * e65a8629d5cd: More renamed references to C files due to re-branding
+  * 79b246891f93: Rename references to headers within C files
+  * 2213fd1c6e30: Wrong filename in Makefile.am
+  * f23f7296b4a8: horatio should be libhoratio
+  * 943c04fe00da: Rename library, and C files within autotooks config
+  * 71edb66e343b: Rename all C language files because of the new branding.
+  * 2c0b5694bf96: Whoops, legacy macro DPCRTLMM_FARDATA was missing when defined in config.h
+  * d52c8d2173c3: Remove the temporary restricted header
+  * 8268ae2d23a7: Documentation re-branding.
+  * 54b6370281a1: Mass, automagic change within help.html, of all references
+  * 468387ae92dd: Added description of Copyright on Horatio's image
+  * 6a2491e193e9: Changed NEWS file and logo of Horatio's head
+  * c0273421b50c: Added NEWS file to announce libhoratio
+  * 6cf3a3e928e5: Merge heads
+  * d59957c2b204: A few more missing legacy macros which mattered under C++
+  * e8adae727a46: Switch all names within dpccap.cpp, because we use restricted header
+  * f0d9085ae87b: Add dpcrtlmm_ macros for user functions
+  * 3e83c70d7551: Restore a historical fact
+  * d2f3bb3b68ef: Further references to dpcrtlmm removed
+  * 906be415ba99: Apply previous commit as a patch to the temporary restricted header
+  * bef9c645bc71: Rename the dpcrtlmm_ functions to horatio_ within all headers.
+  * f8aabc7f8c4a: Rename all references for dpcrtlmm to horatio within internal data header
+  * b38a8395c3e4: Brutal change, breaking everything, by moving all references to dpcrtlmm to horatio in all core C files
+  * 17573459417f: Partial re-branding of C++ classes... if anybody has a more robust way, I'm all ears
+  * d08505c359ce: It was incorrect to use the restricted header in the legacy examples
+  * ba64de887159: Re-generate autoconf system with autoreconf -ivf
+  * 9280a46d2d71: Replace references to DPCRTLMM with HORATIO in dpc*.h
+  * 40db06adb04a: Gratuitously replace every C reference to DPCRTLMM with HORATIO
+  * d1de2d86b83f: Remove the legacy support from the restricted header.
+  * 82f059c47ad4: Put a restricted header in place, which will only contain horatio.
+  * ca5032dfc51a: Merge from master develop branch
+  * caccce74e055: Change package name for Debian;
+  * 3461f1da5ccf: Change name in BSD copyright notices in most C-type files.
+  * 75148d75f582: Added new test, which uses DPCRTLMM via the new libhoratio name, only
+  * 179b3d6d74f4: Add legacy dpcrtlmm.h into the header list again
+  * edb934c38e4a: Typos and fixes to MIN/MAX
+  * c29785dc67b9: Various fixups to pre-processor defines
+  * 106eb96fb396: Fix some errors in horatio.h;
+  * 9e3762f6da56: Added a bunch of legacy macros, to support existing code.
+  * cfb2a79ba3fc: Rename references to DPCRTLMM to HORATIO in horatio.h
+  * 4557eea21d45: Premature function renaming, we'll deal with this in due course
+  * 4b1845d0fdc8: Rename dpcrtlmm.h references within Makefile.am
+  * aaa6c1417be0: Rename all references to dpcrtlmm.h
+  * 657d5e3d8775: Rename primary user header, as start of re-branding project
+  * b8563447b0f0: Strip C++ function separators, because they break the '{' and '}' keys in vim
+  * 832440cf62f1: Strip C function separators, because they break the '{' and '}' keys in vim
+  * 48431f1167e7: Remove some slang from the comments.
+  * 4625e990ba37: Remove references to other libraries, and re-word library description.
+  * c63f3b3e7ab3: Merge partial issue #6 fix (snprintf() support).
+  * e477b255630d: Move all the remaining sprintf() calls over to snprintf() compatible calls
+  * 1b45215a3071: Freshen branch from develop
+  * 6a3e2a167831: acinclude.m4 is not supported by some versions of autoconf
+  * f15be105c53b: Freshen branch from develop
+  * a8c0ade0381b: Prepare for snprintf() use in dpcrtlmm.c
+  * 776e25b38c3e: Prepare for snprintf() use in dpc_vptrap.c
+  * c91fb24793d9: No point in several logic blocks redefining the local error string buffer
+  * 023e066b1795: Start migrating free() over to snprintf()
+  * 822fb2c8e893: Alloc code; Track logMsgRemaining when HAVE_SNPRINTF is defined.
+  * 4e9045bb5757: Map sprintf on to snprintf, if it is available
+  * 75dbe9a66817: Document issue #6
+  * bcc118e6fc3c: Merge heads for upstream notice changes with reformatting of code styles.
+  * 5fe30a152114: Cuddle all compound statements.
+  * 2c7037227e27: Cuddle _all_ the function definitions
+  * afbdf74332a8: More files with BSD banners with trailing whitespace
+  * 9ed833e08026: Remove trailing whitespace from within BSD license notices.
+  * 1848ff61dfc0: Remove some trailing whitespace from dpc_stats.c
+  * de9833fea7ee: Merge closed head.
+  * 717745b51243: Close branch f/201108-palmer-notices
+  * 6d2f46d3be6c: Clean up and consolidate the changelog history
+  * 8c3237cbdc64: Re-number help section 4.1 to 4.0 due to removed 4.0 History
+  * cfd8e77d469b: Reformat and clean up the ChangeLog
+  * 8fecdff7e098: Move history comments from realloc and stats into ChangeLog
+  * a5e45f673abd: Move inline history from dpc_intdata.c into ChangeLog
+  * 19905524b30b: Drop a useless ChangeLog entry (2000-07-18),
+  * afb0f529b639: Move all Changelog (history) out of HTML documentation and into the ChangeLog
+  * 9831b60d4a8d: Remove history from web documentation
+  * c4737a2e9893: Merged in daybologic/dpcrtlmm-palmer/f/201108-palmer-notices (pull request #4)
+  * 026aa2c9e8ef: Prepare for 2013, when I hope next to release libdpcrtlmm
+  * 63816f9d2c12: Use consistent content email address -> palmer@overchat.org
+  * 7686ce793d71: Remove opinion/comment on how much memory is leaked and suggested action.
+  * 44fe5cc188ca: Merge c4851c4620f7 AM_CFLAGS warning.
+  * c4851c4620f7: CFLAGS is a user variable, advised by GNU autotools that we should use AM_CFLAGS
+  * 40d392ca2e3a: Accept issue 4 resolution
+  * 7291669d1719: Close issue branch: i/4
+  * a85501adae34: Esnure all printf references to %p are prefixed by DPCRTLMM_FMTPTRPFX
+  * dceb759571df: Define HAVE_FORMAT_POINTER_PREFIX & DPCRTLMM_FMTPTRPFX via config.h
+  * a433d40878e8: Fix issue #4 where %p was printed to DPCRTLMM.LOG when a block base descriptor address was verified.
+  * 47688ce322b7: List bitbucket issue #4 (confirmed) in BUGS
+  * 7aed2e36348a: Housekeeping; Changes to copyright notices, and cleanup of old timestamps.
+  * 1e78ed098abf: Closing feature branch; work complete.  Ready to be merged.
+  * 4dda6857628c: Freshen branch from develop
+  * 260ec0cf7ef1: Update credits
+  * c071f47cfde3: Update the BUGS list after filing them properly in bitbucket's issue tracker.
+  * b68e50c2e799: Remove references to obsolete email address.  Tell people to use bitbucket instead.
+  * b7d972cabc76: Minor copyright and contact changes to documentation.
+  * 2e239229b403: Change old (c) notices from 2006 to 2012 for a future release.
+  * 3ed96b3b9f5f: Temporary branch for cleaning up documentation and copyright notices.
+  * 33736302080f: Merge default release tag back into develop branch
+  * 366b1f21bd28: Resolve issue #1 File/line reports in C++ report wrong block owner
+
  -- David Duncan Ross Palmer <palmer@overchat.org>  Fri, 21 Feb 2014 00:37:03 +0000
 
 libdpcrtlmm (1.3.1) stable; urgency=low
