@@ -97,8 +97,7 @@ static bool SandboxStarted = false;
 static unsigned short int DebugLevel = 0U;
 static PS_HORATIO_BLOCKDESCARRAY BDASharedSingle = NULL;
 
-static bool ProcessOptions(int ArgC, char **ArgV)
-{
+static bool ProcessOptions(int ArgC, char **ArgV) {
 	int c;
 	opterr = 0;
 
@@ -117,18 +116,15 @@ static bool ProcessOptions(int ArgC, char **ArgV)
 	return true;
 }
 
-static int init_suite_core()
-{
+static int init_suite_core() {
 	return 0;
 }
 
-static int init_suite_trap()
-{
+static int init_suite_trap() {
 	return 0;
 }
 
-static int init_suite_alloc()
-{
+static int init_suite_alloc() {
 	if ( !BDASharedSingle ) {
 		BDASharedSingle = horatio_CreateBlockArray();
 		if ( !BDASharedSingle ) return 1;
@@ -138,18 +134,15 @@ static int init_suite_alloc()
 	return 1;
 }
 
-static int clean_suite_core()
-{
+static int clean_suite_core() {
 	return 0;
 }
 
-static int clean_suite_trap()
-{
+static int clean_suite_trap() {
 	return 0;
 }
 
-static int clean_suite_alloc()
-{
+static int clean_suite_alloc() {
 	if ( BDASharedSingle ) {
 		horatio_DestroyBlockArray(BDASharedSingle);
 		BDASharedSingle = NULL;
@@ -159,8 +152,7 @@ static int clean_suite_alloc()
 	return 1;
 }
 
-static void Die(const char *File, const unsigned int Line, const char *Message)
-{
+static void Die(const char *File, const unsigned int Line, const char *Message) {
 	unsigned int l = strlen(Message);
 	if ( l && l-1 == '\n' ) {
 		fprintf(stderr, "%s", Message);
@@ -170,8 +162,7 @@ static void Die(const char *File, const unsigned int Line, const char *Message)
 	abort();
 }
 
-static const char *Glue(const char *Str1, const char *Str2)
-{
+static const char *Glue(const char *Str1, const char *Str2) {
 	static const char empty[] = "";
 	size_t i;
 	int loc = -1;
@@ -199,8 +190,7 @@ static const char *Glue(const char *Str1, const char *Str2)
 	return GlueStrs[loc];
 }
 
-static void Unglue()
-{
+static void Unglue() {
 	size_t i;
 	for ( i = 0U; i < sizeof(GlueStrs)/sizeof(GlueStrs[0]); i++ ) {
 		if ( GlueStrs[i] ) {
@@ -212,8 +202,7 @@ static void Unglue()
 	}
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	CU_ErrorCode err;
 	unsigned int failCount;
 	size_t testI, suiteI;
@@ -310,8 +299,7 @@ int main(int argc, char *argv[])
 	return EXIT_SUCCESS;
 }
 
-static void suite_core_Ver()
-{
+static void suite_core_Ver() {
 	S_HORATIO_VERSION ver;
 	PS_HORATIO_VERSION pver;
 
@@ -322,13 +310,11 @@ static void suite_core_Ver()
 	CU_ASSERT_EQUAL(pver->Patch, HORATIO_VERSION_PATCH);
 }
 
-static void suite_trap_InstallTrapCallback()
-{
+static void suite_trap_InstallTrapCallback() {
 	horatio_InstallTrapCallback(test_TrapCallback, 0);
 }
 
-static void suite_alloc_AllocSimple()
-{
+static void suite_alloc_AllocSimple() {
 	void HORATIO_FARDATA *ptrDefault, *ptrSharedSingle;
 
 	ptrDefault = horatio_Alloc(NULL, 1024);
@@ -340,8 +326,7 @@ static void suite_alloc_AllocSimple()
 	horatio_Free(BDASharedSingle, ptrSharedSingle);
 }
 
-static void suite_alloc_AllocLoop()
-{
+static void suite_alloc_AllocLoop() {
 	unsigned int blockI;
 	void HORATIO_FARDATA *blocksDefault[48];
 	void HORATIO_FARDATA *blocksSharedSingle[64];
@@ -364,6 +349,5 @@ static void suite_alloc_AllocLoop()
 	}
 }
 
-static void test_TrapCallback(const unsigned int tn, const char* str)
-{
+static void test_TrapCallback(const unsigned int tn, const char* str) {
 }
