@@ -290,6 +290,15 @@ typedef struct _S_HORATIO_DEBUGHOOKINFO { /* Information passed to hooks */
  * set in Misc1's lo-word's lo-byte.
  */
 
+#define HORATIO_HOOK_LEGACY ((unsigned short)(0x000BU))
+/*
+ * A legacy function was called, typically dpcrtlmm_*
+   Misc0 contains a pointer to the name of the function which was called.
+   Misc1 contains a pointer to the function itself, which should not be called,
+   since you may not know what parameters are to be passed to the function from
+   the context, reliably.
+*/
+
 /*
  * No hooks are available for locking functions as monitoring the descriptor
  * flags (bit 0) is enough to be able to monitor the locking status.
@@ -313,7 +322,7 @@ typedef struct _S_HORATIO_DEBUGHOOKINFO { /* Information passed to hooks */
  * or if the code is similar in all hook procs.
  */
 
-#define HORATIO_DEBUGHOOK_LASTHOOK ( HORATIO_HOOK_MODIFYDESCFLAGS ) /* Last available hook type */
+#define HORATIO_DEBUGHOOK_LASTHOOK ( HORATIO_HOOK_LEGACY ) /* Last available hook type */
 
 /* This is the definition of a hook function for reference only :
         BOOL (*HookFunc)( PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo );
