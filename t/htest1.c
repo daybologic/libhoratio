@@ -55,7 +55,7 @@ enum testResultType {
 	TEST_FAIL = 1,
 	TEST_OK = 0
 };
-/*-------------------------------------------------------------------------*/
+
 int main(int argc, char *argv[]);
 
 /* Command-line argument processing */
@@ -91,12 +91,12 @@ static void suite_alloc_AllocLoop(void);
 
 /* Incidental functions */
 static void test_TrapCallback(const unsigned int, const char*);
-/*-------------------------------------------------------------------------*/
+
 static char *GlueStrs[10]; /* A small cache used by the Glue() and Unglue() functions */
 static bool SandboxStarted = false;
 static unsigned short int DebugLevel = 0U;
 static PS_HORATIO_BLOCKDESCARRAY BDASharedSingle = NULL;
-/*-------------------------------------------------------------------------*/
+
 static bool ProcessOptions(int ArgC, char **ArgV)
 {
 	int c;
@@ -116,17 +116,17 @@ static bool ProcessOptions(int ArgC, char **ArgV)
 
 	return true;
 }
-/*-------------------------------------------------------------------------*/
+
 static int init_suite_core()
 {
 	return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static int init_suite_trap()
 {
 	return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static int init_suite_alloc()
 {
 	if ( !BDASharedSingle ) {
@@ -137,17 +137,17 @@ static int init_suite_alloc()
 
 	return 1;
 }
-/*-------------------------------------------------------------------------*/
+
 static int clean_suite_core()
 {
 	return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static int clean_suite_trap()
 {
 	return 0;
 }
-/*-------------------------------------------------------------------------*/
+
 static int clean_suite_alloc()
 {
 	if ( BDASharedSingle ) {
@@ -158,7 +158,7 @@ static int clean_suite_alloc()
 
 	return 1;
 }
-/*-------------------------------------------------------------------------*/
+
 static void Die(const char *File, const unsigned int Line, const char *Message)
 {
 	unsigned int l = strlen(Message);
@@ -169,7 +169,7 @@ static void Die(const char *File, const unsigned int Line, const char *Message)
 	}
 	abort();
 }
-/*-------------------------------------------------------------------------*/
+
 static const char *Glue(const char *Str1, const char *Str2)
 {
 	static const char empty[] = "";
@@ -198,7 +198,7 @@ static const char *Glue(const char *Str1, const char *Str2)
 	}
 	return GlueStrs[loc];
 }
-/*-------------------------------------------------------------------------*/
+
 static void Unglue()
 {
 	size_t i;
@@ -211,7 +211,7 @@ static void Unglue()
 		}
 	}
 }
-/*-------------------------------------------------------------------------*/
+
 int main(int argc, char *argv[])
 {
 	CU_ErrorCode err;
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
 	if ( failCount ) return EXIT_FAILURE;
 	return EXIT_SUCCESS;
 }
-/*-------------------------------------------------------------------------*/
+
 static void suite_core_Ver()
 {
 	S_HORATIO_VERSION ver;
@@ -321,12 +321,12 @@ static void suite_core_Ver()
 	CU_ASSERT_EQUAL(pver->Minor, HORATIO_VERSION_MINOR);
 	CU_ASSERT_EQUAL(pver->Patch, HORATIO_VERSION_PATCH);
 }
-/*-------------------------------------------------------------------------*/
+
 static void suite_trap_InstallTrapCallback()
 {
 	horatio_InstallTrapCallback(test_TrapCallback, 0);
 }
-/*-------------------------------------------------------------------------*/
+
 static void suite_alloc_AllocSimple()
 {
 	void HORATIO_FARDATA *ptrDefault, *ptrSharedSingle;
@@ -339,7 +339,7 @@ static void suite_alloc_AllocSimple()
 	horatio_Free(NULL, ptrDefault);
 	horatio_Free(BDASharedSingle, ptrSharedSingle);
 }
-/*-------------------------------------------------------------------------*/
+
 static void suite_alloc_AllocLoop()
 {
 	unsigned int blockI;
@@ -363,8 +363,7 @@ static void suite_alloc_AllocLoop()
 		horatio_Free(BDASharedSingle, blocksSharedSingle[blockI]);
 	}
 }
-/*-------------------------------------------------------------------------*/
+
 static void test_TrapCallback(const unsigned int tn, const char* str)
 {
 }
-/*-------------------------------------------------------------------------*/
