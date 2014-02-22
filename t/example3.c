@@ -71,6 +71,8 @@ static void Title(void); /* Just displays some information */
 static void Version(void); /* Prints the library version */
 static void strdup_test(void);
 
+static unsigned short int hookCount = 0U;
+
 int main(const int argc, const char *argv[]) {
 	if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
 		printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
@@ -90,6 +92,7 @@ int main(const int argc, const char *argv[]) {
 
 static unsigned int hookCounter(PS_HORATIO_DEBUGHOOKINFO debugHookInfo) {
 	printf("hookCounter called for %s\n", (const char *)debugHookInfo->Misc0);
+	hookCount++;
 	return 0;
 }
 
@@ -137,6 +140,8 @@ static int my_main(const int argc, const char* argv[]) {
 	dpcrtlmm_Dump(stdout);
 #endif /*!NDEBUG*/
 	handler(copyvector); /* normal clean up */
+
+	printf("hookCount total %u\n", hookCount);
 	return EXIT_SUCCESS;
 }
 
