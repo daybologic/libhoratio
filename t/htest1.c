@@ -64,11 +64,13 @@ static bool ProcessOptions(int ArgC, char **ArgV);
 /* Suite initialisation routines */
 static int init_suite_core(void); /* Core library implementation testing: horatio.c  */
 static int init_suite_trap(void); /* Trap function testing: dpc_trap.c */
+static int init_suite_dbghook(void); /* Debug hook testing: hdbghook.c */
 static int init_suite_alloc(void); /* Alloc function test: dpc_alloc.c */
 
 /* Suite cleanup routines */
 static int clean_suite_core(void);
 static int clean_suite_trap(void);
+static int clean_suite_dbghook(void);
 static int clean_suite_alloc(void);
 
 /* This function aborts the program under extraordinary circumstances */
@@ -84,6 +86,9 @@ static void suite_core_Ver(void);
 
 /* Test suite trap */
 static void suite_trap_InstallTrapCallback(void);
+
+/* Test suite debug hook */
+static void suite_dbghook_InstallDebugHook(void);
 
 /* Test suite allloc */
 static void suite_alloc_AllocSimple(void);
