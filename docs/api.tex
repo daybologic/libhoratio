@@ -8,11 +8,11 @@
 \apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
 \usepackage{hyperref}
 \begin{document}
-\title{DPCRTLMM Programmers\' Guide}\author{Daybo Logic}
+\title{libhoratio Programmers\' Guide}\author{Daybo Logic}
 \maketitle
 \newpage
-\textbf{\underline{Daybo Logic's C memory management library
-V1.2.0}}
+\textbf{\underline{Horatio's C memory management library
+VFIXME}}
 \\
 \textbf{\underline{technical documentation}}
 \par \textbf{\underline{Contents}}
@@ -120,13 +120,13 @@ Frequently Asked Questions and common
 compile problems
 \par Q - I am using ./configure -$\,$-enable-threads -$\,$-with-gnu-pth to link
 with the GNU Portable Threads library.~ As soon as my program
-initialises the DPCRTLMM library, the program crashes with a
+initialises the Horatio library, the program crashes with a
 segmentation fault.~ Is this a bug?\\
 A - No, GNU Portable Threads needs explicit initialisation before
-use.~ DPCRTLMM uses GNU Portable threads for an internal lock and
-initialises this lock when DPCRTLMM is initialised.~ It is your
+use.~ Horatio uses GNU Portable threads for an internal lock and
+initialises this lock when Horatio is initialised.~ It is your
 program's responsibility to initialise GNU Portable Threads before
-DPCRTLMM is initialised.~ You will need to call pth\_init( ) at
+Horatio is initialised.~ You will need to call pth\_init( ) at
 some point before \href{#Startup}{dpcrtlmm\_Startup}( ) is called.\\
 
 \par Q - Error dpcrtlmm.h (line number): Declaration missing ;
@@ -168,7 +168,7 @@ else
 fails just compile for the compact/large or huge model.
 
 \par Q - I want to compile for 16-bit x86 processors in small memory
-models.~ However, the pointers returned from DPCRTLMM use my
+models.~ However, the pointers returned from Horatio use my
 segment address and not real segment address,~ When I try to
 success these pointers, the program crashes, or unexpected results
 happen.\\
@@ -177,7 +177,7 @@ with -$\,$-enable-fardata to enable explicit support.~ Unfortunately,
 this is not within the scope of ANSI C and you may find difficulty
 compiling.~ If your compiler cannot support explicit far pointers,
 you may be forced to compile for another memory model or not use
-DPCRTLMM at all.\\
+Horatio at all.\\
 
 \par Q - My program is crashing unexpectedly when I try to free blocks of
 memory (or earlier while using the memory manager)
@@ -225,7 +225,7 @@ want to build and run some
 example/test programs.\\
 Finally, as root, type make
 install.\\
-The DPCRTLMM library is now
+The Horatio library is now
 installed and ready for use by your system.\\
 \\
 Compiling under Win32 (Borland C):\\
@@ -265,7 +265,7 @@ far or near pointers any more.\\
 \\
 Since version 1.2.0, the old config program has been removed.~ It
 has been replaced with a GNU autoconf generated configure script.~
-This is good news for the portability and maintenance of DPCRTMM on
+This is good news for the portability and maintenance of Horatio on
 UNIX platforms but it does means that pure DOS and Win32 users must
 either run the script via Cygwin (Win32) only, or edit config.h
 manually and then build their own makefile for their compiler.~
@@ -286,26 +286,26 @@ rather than the pthread (POSIX threads) API.\\
 \par -$\,$-enable-debug
 \\
 This option defines DEBUG, it means extra debugging code is added to
-DPCRTLMM for when I am debugging it, it does not add any extra
+Horatio for when it is being debugged, it does not add any extra
 information
 for debugging your programs, only to my code.~ This could cause
 the
 library to abort on assert( ) traps and such.~ If you want to help
-submit problems with DPCRTLMM, make sure it's built with
+submit problems with Horatio, make sure it's built with
 -$\,$-enable-debug.~
-This will also add symbolic debug information to DPCRTLMM where
+This will also add symbolic debug information to Horatio where
 possible.\\
 
 \par -$\,$-enable-threads
 \\
-Enables multithread safety.~ Note: This does not inply support,
-DPCRTLMM can't handle threads portably for logging purposes etc.~
-This option makes sure that DPCRTLMM is mutually exclusive, that is, if
+Enables multithread safety.~ Note: This does not imply support,
+Horatio can't handle threads portably for logging purposes etc.~
+This option makes sure that Horatio is mutually exclusive, that is, if
 two threads attempt to call the library at the same time, one will
 succeed
 and one will have to wait until the first finishes.~ This stops
 internal
-corruption of DPCRTLMM's data structures but adds overhead, don't use
+corruption of Horatio's data structures but adds overhead, don't use
 it
 if you don't use pre-emptive threads.~ This is supported only on
 the
@@ -318,7 +318,7 @@ uses the GNU Portable Threads rather than POSIX threads.~ You will
 get a warning if you specifiy -$\,$-enable-win32 and -$\,$-with-gnu-pth because
 at time of writing, The GNU Portable Threads are only supported on
 UNIX-like platforms.~ Your program is resonsible for initialising
-the GNU Portable Threads library before DPCRTLMM is started.\\
+the GNU Portable Threads library before Horatio is started.\\
 
 \par -$\,$-enable-stderr
 \\
@@ -327,8 +327,8 @@ redirected separately from the normal standard output stream.\\
 
 \par -$\,$-with-hook-chain-size:nnnn
 \\
-The default hook chain size is 32.~ In DPCRTLMM before it was
-Open Sourced advanced debug hooks were only allowed in paid-for
+The default hook chain size is 32.~ In Horatio before it was
+Open-asorced advanced debug hooks were only supported in commericial
 versions.~
 to get rid of them set this to zero.~ Otherwise a debug matrix is
 used, a matrix of chains of hooks.~ Callers may install hooks into
@@ -359,9 +359,9 @@ space or provide more space.
 \\
 For tiny, small and compact memory models in 16-bit segmented systems
 ONLY.~ This makes sure pointers are not truncated between callers
-in modules using near pointers and the DPCRTLMM library in other
+in modules using near pointers and the Horatio library in other
 modules
-using near pointers.~ This ensures the DPCRTLMM library explictly
+using near pointers.~ This ensures the Horatio library explictly
 uses far pointers and the host program's code knows it.~ Far
 pointers are non-ANSI, therefore, if this doesn't work,
 editing build.h might be necessary, see the \href{#FAQ}{FAQ}.~
@@ -475,8 +475,8 @@ is the primary structure for producing a leak report.
 If you already have a program to convert to use the library I suggest
 this.~ Download at least version 1.1.4 and define USING\_DPCRTLMM
 before
-including dpcrtlmm.h in each module.~ This makes malloc( ),
-calloc( ), realloc( ) and free( ), call DPCRTLMM instead.~ Also,
+including horatio.h in each module.~ This makes malloc( ),
+calloc( ), realloc( ) and free( ), call Horatio instead.~ Also,
 since the library should
 be started and shutdown correctly, I recommend code similar to example3
 as a typical transparent usage program.
@@ -719,7 +719,7 @@ because of the block descriptor array.~ Block descriptor arrays
 are
 for organisation purposes, use \href{#CreateBlockArray}{dpcrtlmm\_CreateBlockArray(
 )} to get one before allocating any blocks of memory or specify NULL
-to use the array provided by DPCRTLMM (the NULL array is not available
+to use the array provided by Horatio (the NULL array is not available
 if the library is configured -$\,$-with-no-null-array).~ The size in
 bytes of
 the desired block should be specified.~ NULL is returned if the
@@ -841,11 +841,11 @@ unsigned int dpcrtlmm\_IsStarted(void);
 \\
 Version: 1.1.6
 \\
-This function returns nonzero if DPCRTLMM has been started.~ It
-is intended to be used by libraries which rely on DPCRTLMM for
+This function returns nonzero if Horatio has been started.~ It
+is intended to be used by libraries which rely on Horatio for
 debugging
 memory but need to know whether the program which uses it already uses
-DPCRTLMM in oder to know when to start or stop the library or to leave
+Horatio in oder to know when to start or stop the library or to leave
 well alone.
 \\
 size\_t dpcrtlmm\_GetBlockSize(
@@ -1072,7 +1072,7 @@ Although there are a few leaks that can't be tracked down it's stable
 and
 users would have nothing to complain about.~ They won't be too
 happy
-if DPCRTLMM keeps outputting all the mistakes at the end.~
+if Horatio keeps outputting all the mistakes at the end.~
 Removing
 the library may not be feasible if the program is designed intimately
 around
@@ -1124,7 +1124,7 @@ I return them the same structure, passing NULL does nothing.
 void dpcrtlmm\_Dump(FILE* Target);
 \\
 Dumps a listing of all allocated blocks of memory which are currently
-managed by DPCRTLMM. Target may be any stream which allows writing, for
+managed by Horatio. Target may be any stream which allows writing, for
 example stdout, stderr or a writable file. The output may be used for
 knowing
 what state memory is in at any time without having to wait until a trap
