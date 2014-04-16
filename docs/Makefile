@@ -1,6 +1,6 @@
 #!/usr/bin/make -k
 
-pdfs = $(shell ls *.tex | sh -x ../bin/rsed "s/tex$$/pdf/")
+pdfs = $(shell ls *.tex | sh -x ../utils/rsed "s/tex$$/pdf/")
 #SHARED = daybo.sty
 SHARED=
 
