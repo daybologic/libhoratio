@@ -203,11 +203,11 @@ Compiling under UNIX:\\
 \\
 Unpack the souce tarball with the
 following command:\\
-tar -zxvf dpcrtlmm-1.2.0.tar.gz or\\
-tar -jxvf dpcrtlmm-1.2.0.tar.bz2
+tar -zxvf horatio-FIXME.tar.gz or\\
+tar -jxvf horatio-FIXME.tar.bz2
 if you are using the bzip2ed version.\\
 \\
-cd dpcrtlmm-1.2.0/\\
+cd horatio-FIXME/\\
 ./configure -$\,$-help\\
 \\
 This will display a large output
@@ -240,7 +240,7 @@ Compiling under Win32 (Open Watcom C):\\
 Compiling under DOS (Turbo C):\\
 First, you will need to have
 either a Win32 or UNIX-like box available and have Perl
-installed.~ Then run perl ./mkdosdist.pl\\
+installed.~ Then run perl ./utils/mkdosdist.pl\\
 This will update all of the of the source files in a sub-directory
 called dos\_dist/ and rename them to DOS compatible names.\\
 Finally, it will process each of the files multiple times to rename any
@@ -456,7 +456,7 @@ arrays
 used throughout the program.~ The interface to this list is kept
 internal
 to the library, if you want to access it you could always add it to
-DPCRTLMM.H,
+horatio.h,
 although there should be no reason to do this.~ The safety list's
 size can be adjusted at configuration time via the
 -$\,$-with-safety-list-size option.\\
@@ -474,7 +474,7 @@ is the primary structure for producing a leak report.
 \textbf{3.1~ Getting started}
 \\
 If you already have a program to convert to use the library I suggest
-this.~ Download at least version 1.1.4 and define USING\_DPCRTLMM
+this.~ Download at least version 1.1.4 and define USING\_HORATIO
 before
 including horatio.h in each module.~ This makes malloc( ),
 calloc( ), realloc( ) and free( ), call Horatio instead.~ Also,
@@ -572,7 +572,7 @@ users sees.
 No documentation is supplied or can be found that I have written for
 the hidden functions which I believe it is not worth library users
 trying
-to access.~ The file DPCRTLMM.H contains most structures that will
+to access.~ The file horatio.H contains most structures that will
 be of any interest too.~ If you have the library source you can
 read
 all the other headers to discover the hidden interface if you are that
