@@ -4,9 +4,11 @@ pdfs = $(shell ls *.tex | sh -x ../utils/rsed "s/tex$$/pdf/")
 #SHARED = daybo.sty
 SHARED=
 IDENT=.ident
+VERSION=.version
+CONFIGURE_AC=../configure.ac
 
 .PHONY: all
-all: ident $(pdfs)
+all: ident version $(pdfs)
 	@echo Done.
 
 # nb. multiple calls to pdflatex required, this is not a mistake.
@@ -18,10 +20,14 @@ all: ident $(pdfs)
 		pdflatex $<)
 	rm -f $(basename $<).toc $(basename $<).aux $(basename $<).log  $(basename $<).out
 
+.PHONY: version
+version:
+	../utils/version -c $(CONFIGURE_AC) > $(VERSION)
+
 .PHONY: ident
 ident:
 	hg ident > $(IDENT)
 
 .PHONY: clean
 clean:
-	rm -f *.pdf *.toc *.aux *.log *.out $(IDENT)
+	rm -f *.pdf *.toc *.aux *.log *.out $(IDENT) $(VERSION)

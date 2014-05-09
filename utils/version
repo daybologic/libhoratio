@@ -1,0 +1,39 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use diagnostics;
+
+package main;
+use autodie;
+use Getopt::Std;
+
+use constant CONFIGURE => 'configure.ac';
+use constant MACRO     => 'AC_INIT';
+
+use constant EXIT_FAILURE => (1);
+use constant EXIT_SUCCESS => (0);
+
+sub main();
+
+sub main() {
+	my ($conf, %opts, $configure);
+
+	getopts('c:', \%opts) || return EXIT_FAILURE();
+	$configure = $opts{'c'} || CONFIGURE();
+	open($conf, '<', $configure);
+	while ( my $line = <$conf> ) {
+		my @cols;
+
+		$line =~ m/^(\w+)\(/o;
+		next if ( !$1 || $1 ne MACRO() );
+		@cols = split(m/\,/o, $line);
+		printf("%s\n", $cols[1]);
+		last;
+	}
+	close($conf);
+	return EXIT_SUCCESS();
+}
+
+exit(main());
+1;
