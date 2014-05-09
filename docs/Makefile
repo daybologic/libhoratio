@@ -25,8 +25,8 @@ version:
 	../utils/version -c $(CONFIGURE_AC) > $(VERSION)
 
 .PHONY: ident
-ident:
-	hg ident > $(IDENT)
+ident: ../utils/hgident
+	../utils/hgident > $(IDENT)
 
 .PHONY: clean
 clean:

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+scriptdir=`dirname $0`
+
+$scriptdir/have-hg
+
+if [ "$?" == "0" ]; then
+	hg ident;
+elif [ "$?" == "1" ]; then
+	echo "Unavailable";
+else
+	exit "$?";
+fi;
+
+exit 0;
