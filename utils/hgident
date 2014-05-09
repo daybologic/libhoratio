@@ -7,7 +7,9 @@ $scriptdir/have-hg
 if [ "$?" == "0" ]; then
 	hg ident;
 elif [ "$?" == "1" ]; then
-	echo "Unavailable";
+	user=`whoami`
+	host=`hostname -f`
+	echo "Non-RCS build by $user@$host"
 else
 	exit "$?";
 fi;
