@@ -3,9 +3,10 @@
 pdfs = $(shell ls *.tex | sh -x ../utils/rsed "s/tex$$/pdf/")
 #SHARED = daybo.sty
 SHARED=
+IDENT=.ident
 
 .PHONY: all
-all: $(pdfs)
+all: ident $(pdfs)
 	@echo Done.
 
 # nb. multiple calls to pdflatex required, this is not a mistake.
@@ -17,6 +18,10 @@ all: $(pdfs)
 		pdflatex $<)
 	rm -f $(basename $<).toc $(basename $<).aux $(basename $<).log  $(basename $<).out
 
+.PHONY: ident
+ident:
+	hg ident > $(IDENT)
+
 .PHONY: clean
 clean:
-	rm -f *.pdf *.toc *.aux *.log *.out
+	rm -f *.pdf *.toc *.aux *.log *.out $(IDENT)
