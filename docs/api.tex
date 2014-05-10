@@ -114,7 +114,7 @@ features.~
 Eventually the whole source was open sourced under the GNU General
 Public
 License.~ IN 2006, the library was re-released under a BSD-style
-license.~ The author of the library can be conacted by visiting
+license.~ The author of the library can be contacted by visiting
 the following web-site: \href{http://www.daybologic.co.uk/mailddrp/}{\url{http://www.daybologic.co.uk/mailddrp/}}.~
 I especially welcome bug reports, feature requests and technical
 questions.\\
@@ -137,7 +137,7 @@ some point before \href{#Startup}{horatio\_Startup}( ) is called.\\
 \par Q - Error horatio.h (line number): Declaration missing ;
 \\
 A - The following answer applies to 16-bit segmented programming
-only.~ This only happens if you selected to have explict far data
+only.~ This only happens if you selected to have explicit far data
 for the 16-bit tiny, small
 or medium memory models.~ The answer is one of these solutions I
 hope,
@@ -149,7 +149,7 @@ The other problem is on line 112 (ish) of BUILD.H \#define
 DPCRTLMM\_FARDATA
 \_ \_ far, change the \_ \_ far bit to just far and try again.~ Look
 for
-what the 'far' keyword equivilant is in your language.~ If you
+what the 'far' keyword equivalent is in your language.~ If you
 still
 have problems contact me.
 
@@ -164,7 +164,7 @@ from one compiler to the next when one strays from ANSI.~ In
 BUILD.H
 there are a list of functions here, change them to point to your
 compiler's
-equivilant functions if you can discover what they are.~ If you
+equivalent functions if you can discover what they are.~ If you
 don't
 have any you will have to give up and turn off this option, make sure
 you
@@ -206,7 +206,7 @@ last minute notes may be added in a file called README if these do not
 work.\\
 Compiling under UNIX:\\
 \\
-Unpack the souce tarball with the
+Unpack the source tarball with the
 following command:\\
 tar -zxvf horatio-FIXME.tar.gz or\\
 tar -jxvf horatio-FIXME.tar.bz2
@@ -254,7 +254,7 @@ Warning: Do not run the mkdosdist.pl script if you have built the
 sources under another OS because you will have your own\\
 config.h which will over-write the DOS-crafted one which is stored as
 dos\_dist/config.h.\\
-You now have a useable source for building with Turbo C.~ I have
+You now have a usable source for building with Turbo C.~ I have
 also supplied project files which may or may not work for you.\\
 I built them from the directory c:$\backslash$horatio.~ If it works, you
 might be able to get away with typing:\\
@@ -265,7 +265,7 @@ to get things to work.~ I found that things generally worked only
 if built with a large memory model.~ This is generally what you\\
 will need to do nowadays anyway, as people don't tend to explicitly use
 far or near pointers any more.\\
-TODO: This DOS support all needs updating because of the library rebranding to Horatio\\
+TODO: This DOS support all needs updating because of the library re-branding to Horatio\\
 \\
 \textbf{1.5~ Configuration options explained}
 \\
@@ -304,7 +304,7 @@ possible.\\
 
 \par -$\,$-enable-threads
 \\
-Enables multithread safety.~ Note: This does not imply support,
+Enables multi-thread safety.~ Note: This does not imply support,
 Horatio can't handle threads portably for logging purposes etc.~
 This option makes sure that Horatio is mutually exclusive, that is, if
 two threads attempt to call the library at the same time, one will
@@ -321,9 +321,9 @@ following platforms: POSIX, Win32.\\
 This will enable you to build against the GNU Portable Threads library,
 rather than the POSIX threads API.~ This is useful if your program
 uses the GNU Portable Threads rather than POSIX threads.~ You will
-get a warning if you specifiy -$\,$-enable-win32 and -$\,$-with-gnu-pth because
+get a warning if you specify -$\,$-enable-win32 and -$\,$-with-gnu-pth because
 at time of writing, The GNU Portable Threads are only supported on
-UNIX-like platforms.~ Your program is resonsible for initialising
+UNIX-like platforms.~ Your program is responsible for initialising
 the GNU Portable Threads library before Horatio is started.\\
 
 \par -$\,$-enable-stderr
@@ -334,7 +334,7 @@ redirected separately from the normal standard output stream.\\
 \par -$\,$-with-hook-chain-size:nnnn
 \\
 The default hook chain size is 32.~ In Horatio before it was
-Open-asorced advanced debug hooks were only supported in commericial
+Open-sourced advanced debug hooks were only supported in commercial
 versions.~
 to get rid of them set this to zero.~ Otherwise a debug matrix is
 used, a matrix of chains of hooks.~ Callers may install hooks into
@@ -346,7 +346,7 @@ allocation type of hook.~ If one does not plan to use this
 feature,
 set this to zero to avoid space wastage.~ Being a matrix, a high
 value will occupy a large amount of space quickly.~ The total size
-used can be calculated by the hook chainsize, multiplied by the size of
+used can be calculated by the hook chain size, multiplied by the size of
 a hook pointer, multiplied by the number of debuggable hook types (eg.
 allocation is one specific type of debug hook).\\
 
@@ -367,7 +367,7 @@ For tiny, small and compact memory models in 16-bit segmented systems
 ONLY.~ This makes sure pointers are not truncated between callers
 in modules using near pointers and the Horatio library in other
 modules
-using near pointers.~ This ensures the Horatio library explictly
+using near pointers.~ This ensures the Horatio library explicitly
 uses far pointers and the host program's code knows it.~ Far
 pointers are non-ANSI, therefore, if this doesn't work,
 editing build.h might be necessary, see the \href{#FAQ}{FAQ}.~
@@ -384,7 +384,7 @@ When I created the new NULL (default) array so that calls could be
 made to \href{#Alloc}{horatio\_Alloc}( ) and other functions
 without
 specifying a block array, I realised that existing code might be broken
-if it accidently failed to created a new block array and then used
+if it accidentally failed to created a new block array and then used
 it.~
 Therefore I have always kept up an effort to make sure that the new
 NULL
@@ -393,7 +393,7 @@ really is for legacy support only.\\
 
 \par -$\,$-enable-log
 \\
-A file called HORATIO.LOG wil be created and record the activity of
+A file called HORATIO.LOG will be created and record the activity of
 every library call.~ This is an alternative to installing debug
 hooks.~ Do not forget to disable this feature before releasing
 your program!~ HORATIO.LOG can grow very quickly!\\
@@ -416,11 +416,11 @@ reading email from folk who are using my software.\\
 The library has been tested on the following platforms: Win16, Win32,
 DOS (16-bit and 32-bit builds), Debian GNU/Linux, Raspian and FreeBSD.\\
 I aim to make sure this library can be built anywhere and if you have
-any specfic problems building it, please let me know.\\
+any specific problems building it, please let me know.\\
 \\
 \textbf{3.0~ Concepts and structures used by the library}
 \\
-The primary memory managment structure is called a block descriptor,
+The primary memory management structure is called a block descriptor,
 it contains basic information about a block of memory allocated by the
 program, it is not normally directly accessed by a program, it is
 generally
@@ -436,7 +436,7 @@ meanings.
 array.~
 I recommend that every C file maintains it's own array.~ When a
 block
-is allocated it's decriptor is always inserted into one of these arrays
+is allocated it's descriptor is always inserted into one of these arrays
 and nearly every library call will want to know the address of one of
 these
 arrays.~ This only causes a problem if the program~ passes a
@@ -555,7 +555,7 @@ could get from the debug info structure passed to it, the hook type is
 not used and is a waste.~ This does not affect callers of the
 library,
 since the debug hook executive cannot be called from outside.
-\par Swapping to disk should be implemented with an LRU algortihm, based
+\par Swapping to disk should be implemented with an LRU algorithm, based
 on the flag in block descriptor (unswappable, bit 1) and the block
 descriptor
 may have to be extended with more fields to support this.
@@ -569,7 +569,7 @@ though
 they already know the pointers are safe, to avoid this I may make an
 inner
 shell, where the user calls safety wrappers around the real library and
-all functions call the inner shell functions and not the entrypoints
+all functions call the inner shell functions and not the entry points
 the
 users sees.
 \\
