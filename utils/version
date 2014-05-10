@@ -6,6 +6,7 @@ use diagnostics;
 
 package main;
 use autodie;
+use Data::Dumper;
 use Getopt::Std;
 
 use constant CONFIGURE => 'configure.ac';
@@ -23,13 +24,21 @@ sub main() {
 	$configure = $opts{'c'} || CONFIGURE();
 	open($conf, '<', $configure);
 	while ( my $line = <$conf> ) {
-		my @cols;
+		my (@cols, $ver, $macro);
 
-		$line =~ m/^(\w+)\(/o;
-		next if ( !$1 || $1 ne MACRO() );
+		chomp($line);
 		@cols = split(m/\,/o, $line);
-		printf("%s\n", $cols[1]);
-		last;
+
+		$cols[0] =~ m/^\s*([A-Z0-9_]+)/o if ( $cols[0] );
+		$macro = $1;
+		next if ( !$macro || $macro ne MACRO() );
+
+		$ver = $cols[1];
+		$ver =~ s/\[//;
+		$ver =~ s/\]//;
+		$ver =~ s/\(//;
+		$ver =~ s/\)//;
+		printf("%s\n", $ver);
 	}
 	close($conf);
 	return EXIT_SUCCESS();
