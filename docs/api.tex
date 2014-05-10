@@ -254,7 +254,7 @@ This will update all of the of the source files in a sub-directory
 called dos\_dist/ and rename them to DOS compatible names.\\
 Finally, it will process each of the files multiple times to rename any
 internal references to the old filenames (this may take some time).\\
-Warning: Do not run the mkdosdist.pl script if you have build the
+Warning: Do not run the mkdosdist.pl script if you have built the
 sources under another OS because you will have your own\\
 config.h which will over-write the DOS-crafted one which is stored as
 dos\_dist/config.h.\\
@@ -298,7 +298,7 @@ rather than the pthread (POSIX threads) API.\\
 This option defines DEBUG, it means extra debugging code is added to
 Horatio for when it is being debugged, it does not add any extra
 information
-for debugging your programs, only to my code.~ This could cause
+for debugging your programs, only to the codebase.~ This could cause
 the
 library to abort on assert( ) traps and such.~ If you want to help
 submit problems with Horatio, make sure it's built with
@@ -375,8 +375,8 @@ using near pointers.~ This ensures the Horatio library explictly
 uses far pointers and the host program's code knows it.~ Far
 pointers are non-ANSI, therefore, if this doesn't work,
 editing build.h might be necessary, see the \href{#FAQ}{FAQ}.~
-If you enable this option on 32-bit platforms, you will just break the
-build.\\
+If you enable this option on 32 or 64-bit platforms, you will just
+break the build.\\
 
 \par -$\,$-enable-hdrstop\\
 This will produce \#pragma hdrstop and allow pre-defined header
@@ -418,7 +418,7 @@ reading email from folk who are using my software.\\
 \textbf{2.2~ What platforms is the library available for}
 \\
 The library has been tested on the following platforms: Win16, Win32,
-DOS (16-bit and 32-bit builds), GNU/Linux and FreeBSD.\\
+DOS (16-bit and 32-bit builds), Debian GNU/Linux, Raspian and FreeBSD.\\
 I aim to make sure this library can be built anywhere and if you have
 any specfic problems building it, please let me know.\\
 \\
