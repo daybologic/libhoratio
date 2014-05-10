@@ -21,7 +21,7 @@ all: ident version $(pdfs)
 	rm -f $(basename $<).toc $(basename $<).aux $(basename $<).log  $(basename $<).out
 
 .PHONY: version
-version: $(CONFIGURE_AC)
+version: $(CONFIGURE_AC) ../utils/version
 	../utils/version -c $(CONFIGURE_AC) > $(VERSION)
 
 .PHONY: ident
