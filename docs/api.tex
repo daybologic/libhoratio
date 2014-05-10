@@ -132,9 +132,9 @@ use.~ Horatio uses GNU Portable threads for an internal lock and
 initialises this lock when Horatio is initialised.~ It is your
 program's responsibility to initialise GNU Portable Threads before
 Horatio is initialised.~ You will need to call pth\_init( ) at
-some point before \href{#Startup}{dpcrtlmm\_Startup}( ) is called.\\
+some point before \href{#Startup}{horatio\_Startup}( ) is called.\\
 
-\par Q - Error dpcrtlmm.h (line number): Declaration missing ;
+\par Q - Error horatio.h (line number): Declaration missing ;
 \\
 A - The following answer applies to 16-bit segmented programming
 only.~ This only happens if you selected to have explict far data
@@ -256,10 +256,10 @@ config.h which will over-write the DOS-crafted one which is stored as
 dos\_dist/config.h.\\
 You now have a useable source for building with Turbo C.~ I have
 also supplied project files which may or may not work for you.\\
-I built them from the directory c:$\backslash$dpcrtlmm.~ If it works, you
+I built them from the directory c:$\backslash$horatio.~ If it works, you
 might be able to get away with typing:\\
-tc /b dpcrtlmm.prj\\
-This will build dpcrtlmm.lib from the sources.~ You may need to
+tc /b horatio.prj\\
+This will build horatio.lib from the sources.~ You may need to
 mess around with memory models and the contents of config.h\\
 to get things to work.~ I found that things generally worked only
 if built with a large memory model.~ This is generally what you\\
@@ -381,7 +381,7 @@ and will just produce a warning for every file if it is not supported.\\
 
 \par -$\,$-with-no-null-array\\
 When I created the new NULL (default) array so that calls could be
-made to \href{#Alloc}{dpcrtlmm\_Alloc}( ) and other functions
+made to \href{#Alloc}{horatio\_Alloc}( ) and other functions
 without
 specifying a block array, I realised that existing code might be broken
 if it accidently failed to created a new block array and then used
@@ -583,81 +583,81 @@ be of any interest too.~ If you have the library source you can
 read
 all the other headers to discover the hidden interface if you are that
 nosey.
-\par \href{#InstallDebugHook}{dpcrtlmm\_InstallDebugHook( )}
+\par \href{#InstallDebugHook}{horatio\_InstallDebugHook( )}
 \\
-\href{#GetDebugHookChainCount}{dpcrtlmm\_GetDebugHookChainCount(
+\href{#GetDebugHookChainCount}{horatio\_GetDebugHookChainCount(
 )}
 \\
-\href{#GetDebugHookMatrixCount}{dpcrtlmm\_GetDebugHookMatrixCount(
+\href{#GetDebugHookMatrixCount}{horatio\_GetDebugHookMatrixCount(
 )}
 \\
-\href{#UninstallDebugHook}{dpcrtlmm\_UninstallDebugHook( )}
+\href{#UninstallDebugHook}{horatio\_UninstallDebugHook( )}
 \\
-\href{#Alloc}{dpcrtlmm\_Alloc( )}
+\href{#Alloc}{horatio\_Alloc( )}
 \\
-\href{#Free}{dpcrtlmm\_Free( )}
+\href{#Free}{horatio\_Free( )}
 \\
-\href{#CreateBlockArray}{dpcrtlmm\_CreateBlockArray( )}
+\href{#CreateBlockArray}{horatio\_CreateBlockArray( )}
 \\
-\href{#DestroyBlockArray}{dpcrtlmm\_DestroyBlockArray( )}
+\href{#DestroyBlockArray}{horatio\_DestroyBlockArray( )}
 \\
-\href{#IsDefaultBlockArray}{dpcrtlmm\_IsDefaultBlockArray( )}
+\href{#IsDefaultBlockArray}{horatio\_IsDefaultBlockArray( )}
 \\
-\href{#Startup}{dpcrtlmm\_Startup( )}
+\href{#Startup}{horatio\_Startup( )}
 \\
-\href{#Shutdown}{dpcrtlmm\_Shutdown( )}
+\href{#Shutdown}{horatio\_Shutdown( )}
 \\
-\href{#IsStarted}{dpcrtlmm\_IsStarted( )}
+\href{#IsStarted}{horatio\_IsStarted( )}
 \\
-\href{#GetBlockSize}{dpcrtlmm\_GetBlockSize( )}
+\href{#GetBlockSize}{horatio\_GetBlockSize( )}
 \\
-\href{#IsBasBlockPtr}{dpcrtlmm\_IsBadBlockPtr( )}
+\href{#IsBasBlockPtr}{horatio\_IsBadBlockPtr( )}
 \\
-\href{#IsBadArrayPtr}{dpcrtlmm\_IsBadArrayPtr( )}
+\href{#IsBadArrayPtr}{horatio\_IsBadArrayPtr( )}
 \\
-\href{#Realloc}{dpcrtlmm\_Realloc( )}
+\href{#Realloc}{horatio\_Realloc( )}
 \\
-\href{#Calloc}{dpcrtlmm\_Calloc( )}
+\href{#Calloc}{horatio\_Calloc( )}
 \\
-\href{#InstallTrapCallback}{dpcrtlmm\_InstallTrapCallback( )}
+\href{#InstallTrapCallback}{horatio\_InstallTrapCallback( )}
 \\
-\href{#RemoveTrapCallback}{dpcrtlmm\_RemoveTrapCallback( )}
+\href{#RemoveTrapCallback}{horatio\_RemoveTrapCallback( )}
 \\
-\href{#GetTrapCallbackInfo}{dpcrtlmm\_GetTrapCallbackInfo( )}
+\href{#GetTrapCallbackInfo}{horatio\_GetTrapCallbackInfo( )}
 \\
-\href{#ModifyDescriptorFlags}{dpcrtlmm\_ModifyDescriptorFlags( )}
+\href{#ModifyDescriptorFlags}{horatio\_ModifyDescriptorFlags( )}
 \\
-\href{#SetBlockLockingFlag}{dpcrtlmm\_SetBlockLockingFlag( )}
+\href{#SetBlockLockingFlag}{horatio\_SetBlockLockingFlag( )}
 \\
-\href{#IsBlockLocked}{dpcrtlmm\_IsBlockLocked( )}
+\href{#IsBlockLocked}{horatio\_IsBlockLocked( )}
 \\
-\href{#LockBlock}{dpcrtlmm\_LockBlock( ) \& dpcrtlmm\_UnlockBlock(
+\href{#LockBlock}{horatio\_LockBlock( ) \& horatio\_UnlockBlock(
 )}
 \\
-\href{#ToggleBlockLockingStatus}{dpcrtlmm\_ToggleBlockLockingStatus(
+\href{#ToggleBlockLockingStatus}{horatio\_ToggleBlockLockingStatus(
 )}
 \\
-\href{#EnableTraps}{dpcrtlmm\_EnableTraps( )}
+\href{#EnableTraps}{horatio\_EnableTraps( )}
 \\
-\href{#DisableTraps}{dpcrtlmm\_DisableTraps( )}
+\href{#DisableTraps}{horatio\_DisableTraps( )}
 \\
-\href{#AreTrapsEnabled}{dpcrtlmm\_AreTrapsEnabled( )}
+\href{#AreTrapsEnabled}{horatio\_AreTrapsEnabled( )}
 \\
-\href{#GetStats}{dpcrtlmm\_GetStats( )}
+\href{#GetStats}{horatio\_GetStats( )}
 \\
-\href{#GetBlockCount}{dpcrtlmm\_GetBlockCount( )}
+\href{#GetBlockCount}{horatio\_GetBlockCount( )}
 \\
-\href{#Ver}{dpcrtlmm\_Ver( )}
+\href{#Ver}{horatio\_Ver( )}
 \\
-\href{#Dump}{dpcrtlmm\_Dump( )}
+\href{#Dump}{horatio\_Dump( )}
 
 \par External variables
 \\
-\href{#\_EnableTraps}{dpcrtlmm\_\_EnableTraps}
+\href{#\_EnableTraps}{horatio\_\_EnableTraps}
 \\
 \textbf{5.1~ Descriptions of all functions and their use}
 \\
-unsigned int dpcrtlmm\_InstallDebugHook(const
+unsigned int horatio\_InstallDebugHook(const
 unsigned short HookType, unsigned
 int(*NewHookProc)(PS\_DPCRTLMM\_DEBUGHOOKINFO));
 \\
@@ -682,17 +682,17 @@ deadlock the library under threaded builds where mutual exclusion locks
 do not support recursion.
 \\
 unsigned int
-dpcrtlmm\_GetDebugHookChainCount(const
+horatio\_GetDebugHookChainCount(const
 unsigned int HookType);
 \\
 Returns the number of hooks installed for this
 hook type, it is not valid to use DPCRTLMM\_HOOK\_ALL, for this
 functionalliy
-use \href{#GetDebugHookMatrixCount}{dpcrtlmm\_GetDebugHookMatrixCount(
+use \href{#GetDebugHookMatrixCount}{horatio\_GetDebugHookMatrixCount(
 )}
 \\
 unsigned int
-dpcrtlmm\_GetDebugHookMatrixCount(void);
+horatio\_GetDebugHookMatrixCount(void);
 \\
 Counts the number of hooks in the entire debug hook matrix, that is
 the total number of hooks for all types, it is very unlikely that a
@@ -701,7 +701,7 @@ will have a practical use for this, I just thought I'd add it really,
 plus
 it has a cool name!
 \\
-unsigned int dpcrtlmm\_UninstallDebugHook(const
+unsigned int horatio\_UninstallDebugHook(const
 unsigned short HookType, unsigned
 int(*HookProc2Remove)(PS\_DPCRTLMM\_DEBUGHOOKINFO));
 \\
@@ -715,7 +715,7 @@ handler must be specified.~ On success 1 (true) is returned
 otherwise
 0 (false) is returned.
 \\
-void* dpcrtlmm\_Alloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
+void* horatio\_Alloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const size\_t NewBlockSize);
 \\
 This function is the main allocation function, the equivillant to
@@ -724,7 +724,7 @@ malloc(
 only
 because of the block descriptor array.~ Block descriptor arrays
 are
-for organisation purposes, use \href{#CreateBlockArray}{dpcrtlmm\_CreateBlockArray(
+for organisation purposes, use \href{#CreateBlockArray}{horatio\_CreateBlockArray(
 )} to get one before allocating any blocks of memory or specify NULL
 to use the array provided by Horatio (the NULL array is not available
 if the library is configured -$\,$-with-no-null-array).~ The size in
@@ -739,7 +739,7 @@ will not see allocation requests unless they are valid, I'll fix this
 by
 the next version.
 \\
-void dpcrtlmm\_Free(PS\_DPCRTLMM\_BLOCKDESCARRAY
+void horatio\_Free(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, void* Ptr);
 \\
 This function is the main deallocation function, the equivilant to
@@ -754,19 +754,19 @@ dereference
 the PRelDesc field, the descriptor will have already been released.
 \\
 PS\_DPCRTLMM\_BLOCKDESCARRAY
-dpcrtlmm\_CreateBlockArray(void);
+horatio\_CreateBlockArray(void);
 \\
 Creates a new block descriptor array.~ A block descriptor array
 is returned and should be kept.~ Then during allocations one can
 use
 the returned pointer in the first parameter.~ Don't forget to free
-all blocks from an array and destroy it with \href{#DestroyBlockArray}{dpcrtlmm\_DestroyBlockArray(
+all blocks from an array and destroy it with \href{#DestroyBlockArray}{horatio\_DestroyBlockArray(
 )} before the returned pointer goes out of scope.~ I recommend
 each module, or each major section of a large project has it's own
 block
 descriptor array.~ I also recommend that the main module of the
 program
-and any shared memory should use the "NULL" block array, when \href{#Alloc}{dpcrtlmm\_Alloc(
+and any shared memory should use the "NULL" block array, when \href{#Alloc}{horatio\_Alloc(
 )} asks for a pointer to a block array just supply NULL to use
 it.~
 Hooking this event is allowed, hooks will be executed whether this
@@ -775,7 +775,7 @@ succeeds or fails, check the Success indicator of the debug hook info
 your
 hook is passed.
 \\
-void dpcrtlmm\_DestroyBlockArray(
+void horatio\_DestroyBlockArray(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray );
 \\
@@ -784,13 +784,13 @@ allowed, the reason is NULL for a block descriptor array represents an
 internal default array which the user is not allowed to destroy.~
 If the pointer supplied is not in the internal safety list as a valid
 block
-array allocated by \href{#CreateBlockArray}{dpcrtlmm\_CreateBlockArray(
+array allocated by \href{#CreateBlockArray}{horatio\_CreateBlockArray(
 )}, a trap will be executed.~ There is no return value.~
 Hooks
 will normally see both success and failure, check the Success entry of
 the debug hook info.
 \\
-unsigned int dpcrtlmm\_IsDefaultBlockArray(
+unsigned int horatio\_IsDefaultBlockArray(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray );
 \\
@@ -806,7 +806,7 @@ is the unresolved user version.~ Hooking this function is not
 supported,
 if you want it, call me.
 \\
-void dpcrtlmm\_Startup(void);
+void horatio\_Startup(void);
 \\
 Before one calls any other functions in this library, the library must
 be started, this allows various initialization tasks, there are
@@ -818,7 +818,7 @@ call
 the test, the behaviour of the program calling the library before it is
 started is undefined and could end in disaster.
 \\
-void dpcrtlmm\_Shutdown(void);
+void horatio\_Shutdown(void);
 \\
 If one ends the program without shutting down the library the whole
 point of this library becomes hidden, calling this function does not
@@ -844,7 +844,7 @@ GlobalStartup(
 about
 it.
 \\
-unsigned int dpcrtlmm\_IsStarted(void);
+unsigned int horatio\_IsStarted(void);
 \\
 Version: 1.1.6
 \\
@@ -855,7 +855,7 @@ memory but need to know whether the program which uses it already uses
 Horatio in oder to know when to start or stop the library or to leave
 well alone.
 \\
-size\_t dpcrtlmm\_GetBlockSize(
+size\_t horatio\_GetBlockSize(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, void* BlockPtr);
 \\
@@ -864,7 +864,7 @@ address of the allocated block must be specified also.~ The size
 will
 be returned.
 \\
-unsigned int dpcrtlmm\_IsBadBlockPtr(
+unsigned int horatio\_IsBadBlockPtr(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* BlockPtr);
 \\
@@ -877,10 +877,10 @@ valid
 for a valid block array (supplied) the function returns 1U (true),
 meaning
 "yes, this block ptr is bad".~ If the block is valid 0U (false) is
-returned.~ To avoid a trap and test an array pointer call \href{#IsBadArrayPtr}{dpcrtlmm\_IsBadArrayPtr(
+returned.~ To avoid a trap and test an array pointer call \href{#IsBadArrayPtr}{horatio\_IsBadArrayPtr(
 )}
 \\
-unsigned int dpcrtlmm\_IsBadArrayPtr(
+unsigned int horatio\_IsBadArrayPtr(
 PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray );
 \\
@@ -893,7 +893,7 @@ so is the resolved version but it's unlikely you'll see that unless
 your
 code is a hook.
 \\
-void* dpcrtlmm\_Realloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
+void* horatio\_Realloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, void* OldBlockPtr, const size\_t NewSize);
 \\
 Reallocates a block, equivilant to C runtime library call realloc(
@@ -903,7 +903,7 @@ be specified, it can be NULL to specify the default array.~ The
 pointer
 to the block of memory to resize should be specified next, followed by
 the desired new size.~ Attempting to resize to 0 is equivillant to
-\href{#Free}{dpcrtlmm\_Free(
+\href{#Free}{horatio\_Free(
 )} I rely on your run-time library supporting this bahaviour
 however,
 in the next version I want to make sure it will work whether your
@@ -926,14 +926,14 @@ the
 reallocation is successful, therefore the hook routine(s) will only see
 Success = 1.
 \\
-void* dpcrtlmm\_Calloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
+void* horatio\_Calloc(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const unsigned int N, const size\_t NewBlockSize);
 \\
 Equivilant to C run time library calloc( ) purely a wrapper around
-alloc( N * NewBlockSize ) everything else is the same.~ See \href{#Alloc}{dpcrtlmm\_Alloc(
+alloc( N * NewBlockSize ) everything else is the same.~ See \href{#Alloc}{horatio\_Alloc(
 )} for more information
 \\
-void dpcrtlmm\_InstallTrapCallback(
+void horatio\_InstallTrapCallback(
 void(*UserCallbackProc)(const
 unsigned int TrapID, const char* TrapMessage), const unsigned int
 AsHook
@@ -954,19 +954,19 @@ trap
 is fired but if it returns the default library handler is called
 anyway.~
 It just gets a preview.~ Do not try to remove a handler by passing
-NULL to this function, use \href{#RemoveTrapCallback}{dpcrtlmm\_RemoveTrapCallback(
+NULL to this function, use \href{#RemoveTrapCallback}{horatio\_RemoveTrapCallback(
 )}
 \\
-void dpcrtlmm\_RemoveTrapCallback(
+void horatio\_RemoveTrapCallback(
 void(*CurrentCallbackProc)(const
 unsigned int TrapID, const char* TrapDesc) );
 \\
-Removes a trap handler which was installed by \href{#InstallTrapCallback}{dpcrtlmm\_InstallTrapHandler(
+Removes a trap handler which was installed by \href{#InstallTrapCallback}{horatio\_InstallTrapHandler(
 )}, must pass address so we know you know and are not making a
 dreadful
 mistake, there is no return value.
 \\
-signed char dpcrtlmm\_GetTrapCallbackInfo(void);
+signed char horatio\_GetTrapCallbackInfo(void);
 \\
 Sometimes the user of the library has installed a handler for traps
 instead of the default library handler, the function returns very
@@ -991,7 +991,7 @@ could
 lead to unpredictable results.
 \\
 unsigned char
-dpcrtlmm\_ModifyDescriptorFlags(const
+horatio\_ModifyDescriptorFlags(const
 PS\_DPCRTLMM\_BLOCKDESCARRAY PBlockArray, const void* Ptr, const unsigned
 char* PNewFlags);
 \\
@@ -1022,7 +1022,7 @@ turn
 off trapping).
 \\
 void
-dpcrtlmm\_SetBlockLockingFlag(PS\_DPCRTLMM\_BLOCKDESCARRAY
+horatio\_SetBlockLockingFlag(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* Ptr, const unsigned int NewStatus);
 \\
 Locks or unlocks a block of memory.~ When a block of memory is
@@ -1033,7 +1033,7 @@ result of the call, the function \href{#ModifyDescriptorFlags}{ModifyDescriptorF
 NewStatus is a boolean, nonzero = true, zero = false.
 \\
 unsigned int
-dpcrtlmm\_IsBlockLocked(PS\_DPCRTLMM\_BLOCKDESCARRAY
+horatio\_IsBlockLocked(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);
 \\
 Simply returns the boolean status 1 if the block specified has been
@@ -1041,36 +1041,36 @@ locked or 0 if it has not.~ When a block is locked, it cannot be
 freed
 or resized.
 \\
-\#define dpcrtlmm\_LockBlock(pArr, pBlock)
-dpcrtlmm\_SetBlockLockingFlag(pArr,
+\#define horatio\_LockBlock(pArr, pBlock)
+horatio\_SetBlockLockingFlag(pArr,
 pBlock, (1U));
 \\
-\#define dpcrtlmm\_UnlockBlock(pArr, pBlock)
-dpcrtlmm\_SetBlockLockingFlag(pArr,
+\#define horatio\_UnlockBlock(pArr, pBlock)
+horatio\_SetBlockLockingFlag(pArr,
 pBlock, (0U));
 \\
 Both of these functions are simple macros to lock and unlock blocks
-of memory see \href{#SetBlockLockingFlag}{dpcrtlmm\_SetBlockLockingFlag(
+of memory see \href{#SetBlockLockingFlag}{horatio\_SetBlockLockingFlag(
 )}
 \\
 void
-dpcrtlmm\_ToggleBlockLockingStatus(PS\_DPCRTLMM\_BLOCKDESCARRAY
+horatio\_ToggleBlockLockingStatus(PS\_DPCRTLMM\_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);
 \\
 If the said block is locked, it will be unlocked and vice versa, not
 sure if anyone will bother to use this function really
 \\
-void dpcrtlmm\_EnableTraps(void);
+void horatio\_EnableTraps(void);
 \\
-See \href{#DisableTraps}{dpcrtlmm\_DisableTraps( )}, normally
+See \href{#DisableTraps}{horatio\_DisableTraps( )}, normally
 only that will be used in a program for the reasons described.~
 The
 only reason one might want to use this function is for temporary things
 say like, disable traps, perform actions, re-enable traps.~
 Implemented
-as a macro, see dpcrtlmm\_\_EnableTraps
+as a macro, see horatio\_\_EnableTraps
 \\
-void dpcrtlmm\_DisableTraps(void);
+void horatio\_DisableTraps(void);
 \\
 Normally when the library starts traps are enabled, however let's say
 that the program is massive, a deadline is coming and it must be
@@ -1086,15 +1086,15 @@ around
 it so the answer is to disable the traps, just call this function once
 after starting the library to avoid traps.~ Implemented as a
 macro,
-see dpcrtlmm\_\_EnableTraps
+see horatio\_\_EnableTraps
 \\
-unsigned char dpcrtlmm\_AreTrapsEnabled(void);
+unsigned char horatio\_AreTrapsEnabled(void);
 \\
 Returns whether traps are enabled or not, 1U means enabled 0U if
 not.~
-Implemented as a macro, see \href{#_EnableTraps}{dpcrtlmm\_\_EnableTraps}
+Implemented as a macro, see \href{#_EnableTraps}{horatio\_\_EnableTraps}
 \\
-void dpcrtlmm\_GetStats(PS\_DPCRTLMM\_STATS
+void horatio\_GetStats(PS\_DPCRTLMM\_STATS
 PReadStats);
 \\
 Returns memory statistics for the library, such as, number of allocated
@@ -1114,7 +1114,7 @@ loop to check the flags of all descriptors, shouldn't reduce
 performance
 too much but remember that the function should not be called too often.
 \\
-unsigned long dpcrtlmm\_GetBlockCount(void);
+unsigned long horatio\_GetBlockCount(void);
 \\
 Returns the number of blocks allocated, don't worry I'm not completely
 mad, the count is stored internally it is not worked out by this
@@ -1122,13 +1122,13 @@ function,
 I don't go mad, looping through all the arrays looking for blocks!
 \\
 PS\_DPCRTLMM\_VERSION
-dpcrtlmm\_Ver(PS\_DPCRTLMM\_VERSION
+horatio\_Ver(PS\_DPCRTLMM\_VERSION
 PVerStruct);
 \\
 Returns library version info, the caller supplies the structure and
 I return them the same structure, passing NULL does nothing.
 \\
-void dpcrtlmm\_Dump(FILE* Target);
+void horatio\_Dump(FILE* Target);
 \\
 Dumps a listing of all allocated blocks of memory which are currently
 managed by Horatio. Target may be any stream which allows writing, for
@@ -1137,24 +1137,24 @@ knowing
 what state memory is in at any time without having to wait until a trap
 for a leak dump.
 \\
-extern unsigned char dpcrtlmm\_\_EnableTraps;
+extern unsigned char horatio\_\_EnableTraps;
 \\
 This can be used to disable/enable traps, while it is off no trap will
 be executed and if the program makes a mistake it could crash, if can
 either
-be modified directly or with the macros \href{#EnableTraps}{dpcrtlmm\_EnableTraps(
-)}, \href{#DisableTraps}{dpcrtlmm\_DisableTraps( )} and \href{#AreTrapsEnabled}{dpcrtlmm\_AreTrapsEnabled(
+be modified directly or with the macros \href{#EnableTraps}{horatio\_EnableTraps(
+)}, \href{#DisableTraps}{horatio\_DisableTraps( )} and \href{#AreTrapsEnabled}{horatio\_AreTrapsEnabled(
 )}.~ Generally one will want to switch it off when releasing a
-program, simple start the program with a call to \href{#Startup}{dpcrtlmm\_Startup(
+program, simple start the program with a call to \href{#Startup}{horatio\_Startup(
 )} and then set this variable to 0U, the two valid states are 0U =
 no
 traps, 1U = traps will be used.~ 1U is the default.~ If you
 have
-the absoluetely version (source) this variable is store in dpcrtlmm.c
+the absoluetely version (source) this variable is store in horatio.c
 \\
 ~
 
-\par For the lastest news check the~ \href{http://www.daybologic.co.uk/dev/dpcrtlmm}{web
+\par For the lastest news check the~ \href{http://www.daybologic.co.uk/dev/horatio}{web
 page}~ and update your documentation \& library regularly,
 remember
 updates cost nothing.~ If you have an equiry of a more technical
