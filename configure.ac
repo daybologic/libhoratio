@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 # Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
+# Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,10 +33,12 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
-AM_INIT_AUTOMAKE(dpcrtlmm,1.2.1,[David Duncan Ross Palmer <palmer@overchat.org>])
-AC_CONFIG_SRCDIR([dpcrtlmm.c])
+AC_INIT([horatio],[1.3.0])
+AM_SILENT_RULES([yes])
+AC_CONFIG_SRCDIR([lib/horatio.c])
 AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CXX
@@ -78,6 +80,8 @@ AC_DEFUN([AC_CHECK_FORMAT_POINTER_PREFIX],
   if test "$ac_cv_header_stdio_h" = "yes"; then
     AC_RUN_IFELSE(
     [
+        AC_LANG_SOURCE(
+            [
 #include <stdio.h>
 static char addr[[32]];
 int main() {
@@ -86,6 +90,8 @@ int main() {
     return 0;
   return 1;
 }
+            ]
+        )
     ],[
       ac_cv_format_pointer_prefix=yes
     ],[
@@ -112,7 +118,7 @@ AC_CHECK_FUNCS([atexit memset snprintf])
 # Extra configuration
 dnl pthread non-portable support
 if test "$pthread_mutexattr_setkind_np" = "yes"; then
-  AC_DEFINE([DPCRTLMM_THREADS_PTHREAD_NP], [], [Non-portable POSIX thread extensions])
+  AC_DEFINE([HORATIO_THREADS_PTHREAD_NP], [], [Non-portable POSIX thread extensions])
 fi
 
 dnl Test whether %p prefixes addresses with 0x
@@ -155,7 +161,7 @@ AC_ARG_ENABLE(
   [threads_enabled=no]
 )
 if test "$threads_enabled" = "yes"; then
-  AC_DEFINE([DPCRTLMM_THREADS], [], [Thread support])
+  AC_DEFINE([HORATIO_THREADS], [], [Thread support])
 fi
 AC_MSG_RESULT($threads_enabled)
 
@@ -167,9 +173,22 @@ AC_ARG_ENABLE(
   [hdrstop_enabled=no]
 )
 if test "$hdrstop_enabled" = "yes"; then
-  AC_DEFINE([DPCRTLMM_HDRSTOP], [], [Use pragma hdrstop])
+  AC_DEFINE([HORATIO_HDRSTOP], [], [Use pragma hdrstop])
 fi
 AC_MSG_RESULT($hdrstop_enabled)
+
+dnl --enable-dpcrtlmm
+AC_MSG_CHECKING([whether to enable support for dpcrtlmm names (legacy)])
+AC_ARG_ENABLE(
+  [dpcrtlmm],
+  [  --enable-dpcrtlmm      Enable legacy DPCRTLMM support],
+  [dpcrtlmm_legacy=yes],
+  [dpcrtlmm_legacy=no]
+)
+if test "$dpcrtlmm_legacy" = "yes"; then
+  AC_DEFINE([DPCRTLMM_LEGACY], [], [Support legacy DPCRTLMM symbols])
+fi
+AC_MSG_RESULT($dpcrtlmm_legacy)
 
 dnl --with-gnu-pth
 AC_MSG_CHECKING([which back-end threadlib to link against])
@@ -179,10 +198,10 @@ AC_ARG_WITH(
   [real_thread_lib=pth],
   [real_thread_lib="$real_thread_lib"]
 )
-AM_CONDITIONAL([DPCRTLMM_THREADS_PTH], [test "$pth_init" = "yes"])
+AM_CONDITIONAL([HORATIO_THREADS_PTH], [test "$pth_init" = "yes"])
 if test "$real_thread_lib" = "pth"; then
   if test "$threads_enabled" = "yes"; then
-    AC_DEFINE([DPCRTLMM_THREADS_PTH], [], [Use code for GNU Portable Threads])
+    AC_DEFINE([HORATIO_THREADS_PTH], [], [Use code for GNU Portable Threads])
   fi
   if test "$ac_cv_header_pth_h" != yes; then
     echo "ERROR: Specified --with-gnu-pth but pth.h was not found";
@@ -197,12 +216,12 @@ if test "$real_thread_lib" = "pthread"; then
       echo "you must use --enable-win32 --enable-threads\n";
       exit 1
     fi
-    AC_DEFINE([DPCRTLMM_THREADS_PTHREAD], [], [Use code for POSIX threads])
+    AC_DEFINE([HORATIO_THREADS_PTHREAD], [], [Use code for POSIX threads])
   fi
 fi
 if test "$real_thread_lib" = "nt"; then
   if test "$threads_enabled" = "yes"; then
-    AC_DEFINE([DPCRTLMM_THREADS_NT], [], [Use code for NT threads])
+    AC_DEFINE([HORATIO_THREADS_NT], [], [Use code for NT threads])
   fi
 fi
 if test "$threads_enabled" = "no"; then
@@ -233,7 +252,7 @@ if test "$stderr_enabled" = "yes"; then
 else
   stderr_stream=stdout
 fi
-AC_DEFINE_UNQUOTED([DPCRTLMM_DEV_ERROR], $stderr_stream, [Stream to print errors on])
+AC_DEFINE_UNQUOTED([HORATIO_DEV_ERROR], $stderr_stream, [Stream to print errors on])
 AC_MSG_RESULT($stderr_enabled)
 
 dnl --with-safety-list-size=N
@@ -254,7 +273,7 @@ AC_ARG_WITH(
     ;;
   esac
 ])
-AC_DEFINE_UNQUOTED([DPCRTLMM_SAFETYLIST_MAXSIZE], $safety_list_size, [Number of entries in safety list])
+AC_DEFINE_UNQUOTED([HORATIO_SAFETYLIST_MAXSIZE], $safety_list_size, [Number of entries in safety list])
 AC_MSG_RESULT($safety_list_size)
 
 dnl --with-hook-chain-size=N
@@ -277,10 +296,10 @@ AC_ARG_WITH(
 ])
 hook_chains_enabled=no
 if test "$hook_chain_size" != "0"; then
-  AC_DEFINE([DPCRTLMM_DEBUGHOOKS], [], [Use debug hooks])
+  AC_DEFINE([HORATIO_DEBUGHOOKS], [], [Use debug hooks])
   hook_chains_enabled=yes
 fi
-AC_DEFINE_UNQUOTED([DPCRTLMM_HOOKCHAIN_SIZE], $hook_chain_size, [Number of entries in a debug hook chain])
+AC_DEFINE_UNQUOTED([HORATIO_HOOKCHAIN_SIZE], $hook_chain_size, [Number of entries in a debug hook chain])
 AC_MSG_RESULT($hook_chain_size)
 AC_MSG_CHECKING([whether to enable debug hook chains])
 AC_MSG_RESULT($hook_chains_enabled)
@@ -292,7 +311,7 @@ AC_ARG_ENABLE(
   [  --enable-fardata        Enable far pointers for data (16-bit only)],
   [fardata_enabled=yes], [fardata_enabled=no])
 if test "$fardata_enabled" = "yes"; then
-  AC_DEFINE([DPCRTLMM_WANTFARDATA], [], [Enable far data (16-bit)])
+  AC_DEFINE([HORATIO_WANTFARDATA], [], [Enable far data (16-bit)])
 fi
 AC_MSG_RESULT($fardata_enabled)
 
@@ -302,23 +321,23 @@ AC_ARG_WITH(no-null-array,
   [  --with-no-null-array    Disable special NULL array for backward compat],
   [null_array_disabled=yes], [null_array_disabled=no])
 if test "$null_array_disabled" = "yes"; then
-  AC_DEFINE([DPCRTLMM_NONULL_BLOCKDESCARRAY], [], [Disable special NULL array])
+  AC_DEFINE([HORATIO_NONULL_BLOCKDESCARRAY], [], [Disable special NULL array])
 fi
 AC_MSG_RESULT($null_array_disabled)
 
 dnl --enable-log
-AC_MSG_CHECKING(whether to log to DPCRTLMM.LOG)
+AC_MSG_CHECKING(whether to log to HORATIO.LOG)
 AC_ARG_ENABLE(
   log,
-  [  --enable-log            Enable logging to DPCRTLMM.LOG],
+  [  --enable-log            Enable logging to HORATIO.LOG],
   [log_enabled=yes], [log_enabled=no]
 )
 if test "$log_enabled" = "yes"; then
-  AC_DEFINE([DPCRTLMM_LOG], [], [Enable logging to DPCRTLMM.LOG])
+  AC_DEFINE([HORATIO_LOG], [], [Enable logging to HORATIO.LOG])
 fi
 AC_MSG_RESULT($log_enabled)
 
 
 # End of configuration
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile lib/Makefile include/Makefile t/Makefile)
 
