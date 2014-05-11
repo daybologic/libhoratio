@@ -578,16 +578,19 @@ annoyance to people, it is disabled by default.~ To enable it,
 re-configure with ./configure -$\,$-enable-hdrstop.\\
 \\
 \textbf{4.0~ Plans for next version}
-\\
-The internal debug hook executive seems to use a parameter which it
+
+\par The internal debug hook executive seems to use a parameter which it
 could get from the debug info structure passed to it, the hook type is
 not used and is a waste.~ This does not affect callers of the
 library,
 since the debug hook executive cannot be called from outside.
+\\
+
 \par Swapping to disk should be implemented with an LRU algorithm, based
 on the flag in block descriptor (unswappable, bit 1) and the block
 descriptor
 may have to be extended with more fields to support this.
+\\
 
 \par The library is a bit slow due to an excessive amount of calls to
 \_VerifyPtrs(
@@ -601,6 +604,18 @@ shell, where the user calls safety wrappers around the real library and
 all functions call the inner shell functions and not the entry points
 the
 users sees.
+\\
+
+\par Memory over-run support
+\\
+
+\par Swapping is not implemented but may be in a future version.
+If the program is going to be released even though
+\\
+
+\par it contains memory bugs, the traps can be turned off or passed to
+a handler which will only execute the serious ones.
+\\
 \\
 \textbf{5.0 Function listings}
 \\
