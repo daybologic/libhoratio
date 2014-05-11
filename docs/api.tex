@@ -86,37 +86,38 @@ library}
 \newpage
 \textbf{1.~ About the library}
 \\
-This could be used as an alternative to
+Horatio is designed to be used as an alternative to
 \\
-memory tracking tools such as CodeGuard of MemorySleuth,
+memory tracking tools such as CodeGuard of MemorySleuth.  A selection of key features follows.
 \\
-it's not as thorough as them however, it can't detect memory over
+However, memory over-run support is not yet supported. TODO Put this is a future features section
 \\
-runs on pointer accesses or anything like that.~ It can be used
-\\
-to detect failures to release memory (as long as it's allocated
-\\
-by us) and attempts to release memory which we do not own.
-\\
-It has an automatic garbage collection feature to free up all
-\\
-unfreed memory too.~ It should be used by the entire program to
-\\
-be most effective, it can provide statistics on memory left and
-\\
-such like too.~ The best thing about the MM is that it provides
-\\
-a central place for dynamic memory allocation in a program, so
-\\
-we can trace all activity, an optional log mode is available too.\\
 Swapping is not implemented but may be in a future version.\\
 If the program is going to be released even though
 \\
 it contains memory bugs, the traps can be turned off or passed to
-\\
 a handler which will only execute the serious ones.
 \\
-\\
+\begin{itemize}
+\item Thread safety
+% TODO Document support threaded abstractions
+\item Memory usage and leak reports, supporting several database back-ends
+% TODO Document the back-ends
+\item Optional verbose log
+% TODO Need to allow the user to rename this log
+\item Optional garbage collection mode
+% TODO Need to document that traps be turned off for this
+\item Memory blocks may be managed by separate master descriptors
+\item API allows interrogation of block information before it is used, include validity, block size and flags
+\item Block locking allows traps in case memory is resized or freed prematurely
+\item Common pointer mistakes such as releasing unowned memory are eliminated
+\item Hooking of almost all operations so the program may preview activity, extend the logging framework, or trigger periodic jobs
+% TODO explain thread locking limitations elsewhere
+\item Re-build to allow more hooks per-event, default=32
+\item Re-build to allow more descriptors per program, default=512
+\item The library does not limit the number of blocks which can be allocated
+\item Source level tracing Information for every block allocated
+\end{itemize}
 \textbf{1.1~ So who are Daybo Logic?}
 \\
 Daybo Logic started in 1997 as a software development company.~ It
