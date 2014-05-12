@@ -77,4 +77,4 @@ export AM_CPPFLAGS
 export AM_CFLAGS
 export AM_LDFLAGS
 
-SUBDIRS = lib include t
+SUBDIRS = lib include t docs

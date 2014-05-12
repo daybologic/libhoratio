@@ -31,3 +31,15 @@ ident: ../utils/hgident
 .PHONY: clean
 clean:
 	rm -f *.pdf *.toc *.aux *.log *.out $(IDENT) $(VERSION)
+
+.PHONY: check
+check:
+	@echo 'Dummy rule'
+
+.PHONY: reallyinstall install
+install:
+	@echo 'Dummy rule'
+
+reallyinstall:
+	mkdir -p $(DESTDIR)/usr/share/doc/libhoratio
+	install -m 444 api.pdf $(DESTDIR)/usr/share/doc/libhoratio/
