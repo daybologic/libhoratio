@@ -5,3 +5,7 @@ syntax:glob
 *.swp
 *.orig
 *.rej
+*.pdf
+
+syntax:regexp
+^docs/\.\w+$
