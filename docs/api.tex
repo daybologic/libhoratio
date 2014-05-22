@@ -170,8 +170,7 @@ some point before \href{#Startup}{horatio\_Startup}( ) is called.\\
 A - The following answer applies to 16-bit segmented programming
 only.~ This only happens if you selected to have explicit far data
 for the 16-bit tiny, small
-or medium memory models.~ The answer is one of these solutions I
-hope,
+or medium memory models.~ The answer is likely to be one of these solutions,
 firstly check the language is set to non-ANSI compliance, if your
 compiler
 only supports ANSI you cannot support explicit far pointers so give
@@ -182,7 +181,7 @@ DPCRTLMM\_FARDATA
 for
 what the 'far' keyword equivalent is in your language.~ If you
 still
-have problems contact me.
+have problems contact the project, and we can try to patch the solution into the autotools system.
 
 \par Q - No prototype for function 'farmalloc' or 'farcalloc' or
 'farfree'
@@ -199,24 +198,23 @@ equivalent functions if you can discover what they are.~ If you
 don't
 have any you will have to give up and turn off this option, make sure
 you
-don't have strict ANSI C compliance on or anything first but if all
+don't have strict ANSI C compliance on first, and if all
 else
-fails just compile for the compact/large or huge model.
+fails compile for the compact/large or huge model, instead.
 
 \par Q - I want to compile for 16-bit x86 processors in small memory
 models.~ However, the pointers returned from Horatio use my
 segment address and not real segment address,~ When I try to
-success these pointers, the program crashes, or unexpected results
-happen.\\
+de-reference these pointers, the program crashes, or I encounter unexpected results.\\
+
 A - The library only functions correctly with far data, run ./configure
 with -$\,$-enable-fardata to enable explicit support.~ Unfortunately,
 this is not within the scope of ANSI C and you may find difficulty
 compiling.~ If your compiler cannot support explicit far pointers,
-you may be forced to compile for another memory model or not use
-Horatio at all.\\
+you may be forced to compile for another memory model.\\
 
-\par Q - My program is crashing unexpectedly when I try to free blocks of
-memory (or earlier while using the memory manager)
+\par Q - My program is crashing, or I am experiencing unexpected results, when I try to free blocks of
+memory, or early on in execution
 \\
 A - The most common problem is forgetting to start the library, if
 this is not the case and you are compiling for a 16-bit processor it
