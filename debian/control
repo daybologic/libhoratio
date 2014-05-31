@@ -3,6 +3,7 @@ Section: utils
 Priority: extra
 Maintainer: David Duncan Ross Palmer <palmer@overchat.org>
 Build-Depends: debhelper (>= 9),
+ libsqlite3-dev, libsqlite3-0,
  libtool,
  bash,
  texlive-latex-base,
@@ -15,7 +16,8 @@ Vcs-Browser: http://svn.daybologic.co.uk/trac/dpcrtlmm/
 Package: libhoratio
 Architecture: any
 Conflicts: libdpcrtlmm
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ libsqlite3-0
 Description: Memory management/leak protection library for C apps
  This library is in its basic form a drop-in replacement for malloc() etc,
  however it has advanced callbacks and logging facilities which can be used.
