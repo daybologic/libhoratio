@@ -8,11 +8,11 @@
  content="Mozilla/4.7 [en] (X11; I; Linux 2.2.17-0.6.1 ppc) [Netscape]">
   <meta name="Classification" content="programming,libraries">
   <meta name="Description"
- content="Technical documentation for DPCRTLMM library">
-  <meta name="KeyWords" content="DPCRTLMM,Memory manager,Daybo Logic">
-  <title>Daybo Logic DPCRTLMM documentation</title>
+ content="Technical documentation for libhoratio">
+  <meta name="KeyWords" content="horatio,dpcrtlmm,Memory manager,Daybo Logic">
+  <title>Horatio's Memory Manager documentation</title>
   <meta content="David Duncan Ross Palmer" name="author">
-  <meta content="Manual for DPCRTLMM" name="description">
+  <meta content="Manual for libhoratio" name="description">
 </head>
 <body style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);"
  alink="#c0ffc0" link="#ffff00" vlink="#c0c0c0">
@@ -62,13 +62,13 @@ use</a>
 <hr width="100%"><br>
 <a name="About"></a><b><u>1.&nbsp; About the library</u></b>
 <br>
-This could be used as an alternative to
+Horatio is designed to be used as an alternative to
 <br>
-memory tracking tools such as CodeGuard of MemorySleuth,
+memory tracking tools such as CodeGuard or MemorySleuth,
 <br>
-it's not as thorough as them however, it can't detect memory over
+it's not as thorough as them yet, however, as it cannot detect memory over-
 <br>
-runs on pointer accesses or anything like that.&nbsp; It can be used
+runs on pointer accesses.&nbsp; It can be used
 <br>
 to detect failures to release memory (as long as it's allocated
 <br>
@@ -78,13 +78,13 @@ It has an automatic garbage collection feature to free up all
 <br>
 unfreed memory too.&nbsp; It should be used by the entire program to
 <br>
-be most effective, it can provide statistics on memory left and
+be most effective, it can provide statistics on memory usage and
 <br>
-such like too.&nbsp; The best thing about the MM is that it provides
+record this to a database back-end.&nbsp; The best thing about Horatio is that
 <br>
-a central place for dynamic memory allocation in a program, so
+it provides a central place for dynamic memory allocation in a program, so
 <br>
-we can trace all activity, an optional log mode is available too.<br>
+we can trace all activity.<br>
 Swapping is not implemented but may be in a future version.<br>
 If the program is going to be released even though
 <br>
@@ -133,16 +133,16 @@ Frequently Asked Questions and common
 compile problems</span>
 <p>Q - I am using ./configure --enable-threads --with-gnu-pth to link
 with the GNU Portable Threads library.&nbsp; As soon as my program
-initialises the DPCRTLMM library, the program crashes with a
+initialises libhoratio, the program crashes with a
 segmentation fault.&nbsp; Is this a bug?<br>
 A - No, GNU Portable Threads needs explicit initialisation before
-use.&nbsp; DPCRTLMM uses GNU Portable threads for an internal lock and
-initialises this lock when DPCRTLMM is initialised.&nbsp; It is your
+use.&nbsp; libhoratio uses GNU Portable threads for an internal lock and
+initialises this lock when libhoratio is initialised.&nbsp; It is your
 program's responsibility to initialise GNU Portable Threads before
-DPCRTLMM is initialised.&nbsp; You will need to call pth_init( ) at
-some point before <a href="#Startup">dpcrtlmm_Startup</a>( ) is called.<br>
+libhoratio is initialised.&nbsp; You will need to call pth_init( ) at
+some point before <a href="#Startup">horatio_Startup</a>( ) is called.<br>
 </p>
-<p>Q - Error dpcrtlmm.h (line number): Declaration missing ;
+<p>Q - Error horatio.h (line number): Declaration missing ;
 <br>
 A - The following answer applies to 16-bit segmented programming
 only.&nbsp; This only happens if you selected to have explict far data
@@ -153,13 +153,13 @@ firstly check the language is set to non-ANSI compliance, if your
 compiler
 only supports ANSI you cannot support explicit far pointers so give
 up!&nbsp;
-The other problem is on line 112 (ish) of BUILD.H #define
-DPCRTLMM_FARDATA
+The other problem is on line 112 (ish) of dpc_build.h #define
+HORATIO_FARDATA
 _ _ far, change the _ _ far bit to just far and try again.&nbsp; Look
 for
-what the 'far' keyword equivilant is in your language.&nbsp; If you
+what the 'far' keyword equivilant is in your compiler.&nbsp; If you
 still
-have problems contact me.
+have problems contact the author.
 </p>
 <p>Q - No prototype for function 'farmalloc' or 'farcalloc' or
 'farfree'
@@ -169,7 +169,7 @@ A - The following answer applies to 16-bit segmented programming
 only.&nbsp; The explicit fars are non-ANSI, unfortunately the functions
 differ
 from one compiler to the next when one strays from ANSI.&nbsp; In
-BUILD.H
+dpc_build.h
 there are a list of functions here, change them to point to your
 compiler's
 equivilant functions if you can discover what they are.&nbsp; If you
@@ -181,16 +181,16 @@ else
 fails just compile for the compact/large or huge model.
 </p>
 <p>Q - I want to compile for 16-bit x86 processors in small memory
-models.&nbsp; However, the pointers returned from DPCRTLMM use my
+models.&nbsp; However, the pointers returned from libhoratio use my
 segment address and not real segment address,&nbsp; When I try to
-success these pointers, the program crashes, or unexpected results
+access these pointers, the program crashes, or unexpected results
 happen.<br>
 A - The library only functions correctly with far data, run ./configure
 with --enable-fardata to enable explicit support.&nbsp; Unfortunately,
 this is not within the scope of ANSI C and you may find difficulty
 compiling.&nbsp; If your compiler cannot support explicit far pointers,
 you may be forced to compile for another memory model or not use
-DPCRTLMM at all.<br>
+libhoratio at all.<br>
 </p>
 <p>Q - My program is crashing unexpectedly when I try to free blocks of
 memory (or earlier while using the memory manager)
@@ -204,7 +204,7 @@ in a memory model which has far data.&nbsp; There is another way in
 this
 version of the library, Configure with --enable-fardata.&nbsp; If this
 does not solve
-the problem please send me all details possible.
+the problem please send the authors all details possible.
 <br>
 </p>
 <hr width="100%"><br>
@@ -219,13 +219,13 @@ work.</span><br style="color: rgb(204, 0, 0);">
 <br style="color: rgb(204, 0, 0);">
 <span style="color: rgb(204, 0, 0);">Unpack the souce tarball with the
 following command:</span><br style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">tar -zxvf dpcrtlmm-1.2.0.tar.gz or</span><br
+<span style="color: rgb(204, 0, 0);">tar -zxvf libhoratio-X.Y.Z.tar.gz or</span><br
  style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">tar -jxvf dpcrtlmm-1.2.0.tar.bz2
+<span style="color: rgb(204, 0, 0);">tar -jxvf libhoratio-X.Y.Z.tar.bz2
 if you are using the bzip2ed version.</span><br
  style="color: rgb(204, 0, 0);">
 <br style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">cd dpcrtlmm-1.2.0/</span><br
+<span style="color: rgb(204, 0, 0);">cd libhoratio-X.Y.Z/</span><br
  style="color: rgb(204, 0, 0);">
 <span style="color: rgb(204, 0, 0);">./configure --help</span><br
  style="color: rgb(204, 0, 0);">
@@ -248,7 +248,7 @@ want to build and run some
 example/test programs.</span><br style="color: rgb(204, 0, 0);">
 <span style="color: rgb(204, 0, 0);">Finally, as root, type make
 install.</span><br style="color: rgb(204, 0, 0);">
-<span style="color: rgb(204, 0, 0);">The DPCRTLMM library is now
+<span style="color: rgb(204, 0, 0);">The libhoratio library is now
 installed and ready for use by your system.</span><br>
 <br>
 Compiling under Win32 (Borland C):<br>
@@ -274,10 +274,10 @@ config.h which will over-write the DOS-crafted one which is stored as
 dos_dist/config.h.<br>
 You now have a useable source for building with Turbo C.&nbsp; I have
 also supplied project files which may or may not work for you.<br>
-I built them from the directory c:\dpcrtlmm.&nbsp; If it works, you
+I built them from the directory c:\horatio.&nbsp; If it works, you
 might be able to get away with typing:<br>
-tc /b dpcrtlmm.prj<br>
-This will build dpcrtlmm.lib from the sources.&nbsp; You may need to
+tc /b horatio.prj<br>
+This will build horatio.lib from the sources.&nbsp; You may need to
 mess around with memory models and the contents of config.h<br>
 to get things to work.&nbsp; I found that things generally worked only
 if built with a large memory model.&nbsp; This is generally what you<br>
@@ -289,7 +289,7 @@ far or near pointers any more.<br>
 <br>
 Since version 1.2.0, the old config program has been removed.&nbsp; It
 has been replaced with a GNU autoconf generated configure script.&nbsp;
-This is good news for the portability and maintenance of DPCRTMM on
+This is good news for the portability and maintenance of libhoratio on
 UNIX platforms but it does means that pure DOS and Win32 users must
 either run the script via Cygwin (Win32) only, or edit config.h
 manually and then build their own makefile for their compiler.&nbsp;
@@ -310,26 +310,26 @@ rather than the pthread (POSIX threads) API.<br>
 <p>--enable-debug
 <br>
 This option defines DEBUG, it means extra debugging code is added to
-DPCRTLMM for when I am debugging it, it does not add any extra
+libhoratio for when I am debugging it, it does not add any extra
 information
 for debugging your programs, only to my code.&nbsp; This could cause
 the
 library to abort on assert( ) traps and such.&nbsp; If you want to help
-submit problems with DPCRTLMM, make sure it's built with
+submit problems with libhoratio, make sure it's built with
 --enable-debug.&nbsp;
-This will also add symbolic debug information to DPCRTLMM where
+This will also add symbolic debug information to libhoratio where
 possible.<br>
 </p>
 <p>--enable-threads
 <br>
 Enables multithread safety.&nbsp; Note: This does not inply support,
-DPCRTLMM can't handle threads portably for logging purposes etc.&nbsp;
-This option makes sure that DPCRTLMM is mutually exclusive, that is, if
+libhoratio can't handle threads portably for logging purposes etc.&nbsp;
+This option makes sure that libhoratio is mutually exclusive, that is, if
 two threads attempt to call the library at the same time, one will
 succeed
 and one will have to wait until the first finishes.&nbsp; This stops
 internal
-corruption of DPCRTLMM's data structures but adds overhead, don't use
+corruption of libhoratio's data structures but adds overhead, don't use
 it
 if you don't use pre-emptive threads.&nbsp; This is supported only on
 the
@@ -342,7 +342,7 @@ uses the GNU Portable Threads rather than POSIX threads.&nbsp; You will
 get a warning if you specifiy --enable-win32 and --with-gnu-pth because
 at time of writing, The GNU Portable Threads are only supported on
 UNIX-like platforms.&nbsp; Your program is resonsible for initialising
-the GNU Portable Threads library before DPCRTLMM is started.<br>
+the GNU Portable Threads library before libhoratio is started.<br>
 </p>
 <p>--enable-stderr
 <br>
@@ -351,7 +351,7 @@ redirected separately from the normal standard output stream.<br>
 </p>
 <p>--with-hook-chain-size:nnnn
 <br>
-The default hook chain size is 32.&nbsp; In DPCRTLMM before it was
+The default hook chain size is 32.&nbsp; In libhoratio before it was
 Open Sourced advanced debug hooks were only allowed in paid-for
 versions.&nbsp;
 to get rid of them set this to zero.&nbsp; Otherwise a debug matrix is
@@ -383,9 +383,9 @@ space or provide more space.
 <br>
 For tiny, small and compact memory models in 16-bit segmented systems
 ONLY.&nbsp; This makes sure pointers are not truncated between callers
-in modules using near pointers and the DPCRTLMM library in other
+in modules using near pointers and the libhoratio library in other
 modules
-using near pointers.&nbsp; This ensures the DPCRTLMM library explictly
+using near pointers.&nbsp; This ensures the libhoratio library explictly
 uses far pointers and the host program's code knows it.&nbsp; Far
 pointers are non-ANSI, therefore, if this doesn't work,
 editing build.h might be necessary, see the <a href="#FAQ">FAQ</a>.&nbsp;
@@ -399,7 +399,7 @@ and will just produce a warning for every file if it is not supported.<br>
 </p>
 <p>--with-no-null-array<br>
 When I created the new NULL (default) array so that calls could be
-made to <a href="#Alloc">dpcrtlmm_Alloc</a>( ) and other functions
+made to <a href="#Alloc">horatio_Alloc</a>( ) and other functions
 without
 specifying a block array, I realised that existing code might be broken
 if it accidently failed to created a new block array and then used
@@ -411,10 +411,10 @@ really is for legacy support only.<br>
 </p>
 <p>--enable-log
 <br>
-A file called DPCRTLMM.LOG wil be created and record the activity of
+A file called HORATIO.LOG wil be created and record the activity of
 every library call.&nbsp; This is an alternative to installing debug
 hooks.&nbsp; Do not forget to disable this feature before releasing
-your program!&nbsp; DPCRTLMM.LOG can grow very quickly!<br>
+your program!&nbsp; HORATIO.LOG can grow very quickly!<br>
 </p>
 <hr width="100%"><br>
 <a name="Enumerations"></a><b><u>2.0&nbsp; Enumerations and detail</u></b><br>
@@ -484,7 +484,7 @@ arrays
 used throughout the program.&nbsp; The interface to this list is kept
 internal
 to the library, if you want to access it you could always add it to
-DPCRTLMM.H,
+horatio.h,
 although there should be no reason to do this.&nbsp; The safety list's
 size can be adjusted at configuration time via the
 --with-safety-list-size option.<br>
@@ -504,10 +504,10 @@ is the primary structure for producing a leak report.
 <a name="Starting"></a><b><u>3.1&nbsp; Getting started</u></b>
 <br>
 If you already have a program to convert to use the library I suggest
-this.&nbsp; Download at least version 1.1.4 and define USING_DPCRTLMM
+this.&nbsp; Download at least version 1.1.4 and define USING_HORATIO
 before
-including dpcrtlmm.h in each module.&nbsp; This makes malloc( ),
-calloc( ), realloc( ) and free( ), call DPCRTLMM instead.&nbsp; Also,
+including horatio.h in each module.&nbsp; This makes malloc( ),
+calloc( ), realloc( ) and free( ), call libhoratio instead.&nbsp; Also,
 since the library should
 be started and shutdown correctly, I recommend code similar to example3
 as a typical transparent usage program.
@@ -609,82 +609,82 @@ users sees.
 No documentation is supplied or can be found that I have written for
 the hidden functions which I believe it is not worth library users
 trying
-to access.&nbsp; The file DPCRTLMM.H contains most structures that will
+to access.&nbsp; The file horatio.h contains most structures that will
 be of any interest too.&nbsp; If you have the library source you can
 read
 all the other headers to discover the hidden interface if you are that
 nosey.
-<p><a href="#InstallDebugHook">dpcrtlmm_InstallDebugHook( )</a>
+<p><a href="#InstallDebugHook">horatio_InstallDebugHook( )</a>
 <br>
-<a href="#GetDebugHookChainCount">dpcrtlmm_GetDebugHookChainCount(
+<a href="#GetDebugHookChainCount">horatio_GetDebugHookChainCount(
 )</a>
 <br>
-<a href="#GetDebugHookMatrixCount">dpcrtlmm_GetDebugHookMatrixCount(
+<a href="#GetDebugHookMatrixCount">horatio_GetDebugHookMatrixCount(
 )</a>
 <br>
-<a href="#UninstallDebugHook">dpcrtlmm_UninstallDebugHook( )</a>
+<a href="#UninstallDebugHook">horatio_UninstallDebugHook( )</a>
 <br>
-<a href="#Alloc">dpcrtlmm_Alloc( )</a>
+<a href="#Alloc">horatio_Alloc( )</a>
 <br>
-<a href="#Free">dpcrtlmm_Free( )</a>
+<a href="#Free">horatio_Free( )</a>
 <br>
-<a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray( )</a>
+<a href="#CreateBlockArray">horatio_CreateBlockArray( )</a>
 <br>
-<a href="#DestroyBlockArray">dpcrtlmm_DestroyBlockArray( )</a>
+<a href="#DestroyBlockArray">horatio_DestroyBlockArray( )</a>
 <br>
-<a href="#IsDefaultBlockArray">dpcrtlmm_IsDefaultBlockArray( )</a>
+<a href="#IsDefaultBlockArray">horatio_IsDefaultBlockArray( )</a>
 <br>
-<a href="#Startup">dpcrtlmm_Startup( )</a>
+<a href="#Startup">horatio_Startup( )</a>
 <br>
-<a href="#Shutdown">dpcrtlmm_Shutdown( )</a>
+<a href="#Shutdown">horatio_Shutdown( )</a>
 <br>
-<a href="#IsStarted">dpcrtlmm_IsStarted( )</a>
+<a href="#IsStarted">horatio_IsStarted( )</a>
 <br>
-<a href="#GetBlockSize">dpcrtlmm_GetBlockSize( )</a>
+<a href="#GetBlockSize">horatio_GetBlockSize( )</a>
 <br>
-<a href="#IsBasBlockPtr">dpcrtlmm_IsBadBlockPtr( )</a>
+<a href="#IsBasBlockPtr">horatio_IsBadBlockPtr( )</a>
 <br>
-<a href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr( )</a>
+<a href="#IsBadArrayPtr">horatio_IsBadArrayPtr( )</a>
 <br>
-<a href="#Realloc">dpcrtlmm_Realloc( )</a>
+<a href="#Realloc">horatio_Realloc( )</a>
 <br>
-<a href="#Calloc">dpcrtlmm_Calloc( )</a>
+<a href="#Calloc">horatio_Calloc( )</a>
 <br>
-<a href="#InstallTrapCallback">dpcrtlmm_InstallTrapCallback( )</a>
+<a href="#InstallTrapCallback">horatio_InstallTrapCallback( )</a>
 <br>
-<a href="#RemoveTrapCallback">dpcrtlmm_RemoveTrapCallback( )</a>
+<a href="#RemoveTrapCallback">horatio_RemoveTrapCallback( )</a>
 <br>
-<a href="#GetTrapCallbackInfo">dpcrtlmm_GetTrapCallbackInfo( )</a>
+<a href="#GetTrapCallbackInfo">horatio_GetTrapCallbackInfo( )</a>
 <br>
-<a href="#ModifyDescriptorFlags">dpcrtlmm_ModifyDescriptorFlags( )</a>
+<a href="#ModifyDescriptorFlags">horatio_ModifyDescriptorFlags( )</a>
 <br>
-<a href="#SetBlockLockingFlag">dpcrtlmm_SetBlockLockingFlag( )</a>
+<a href="#SetBlockLockingFlag">horatio_SetBlockLockingFlag( )</a>
 <br>
-<a href="#IsBlockLocked">dpcrtlmm_IsBlockLocked( )</a>
+<a href="#IsBlockLocked">horatio_IsBlockLocked( )</a>
 <br>
-<a href="#LockBlock">dpcrtlmm_LockBlock( ) &amp; dpcrtlmm_UnlockBlock(
+<a href="#LockBlock">horatio_LockBlock( ) &amp; horatio_UnlockBlock(
 )</a>
 <br>
-<a href="#ToggleBlockLockingStatus">dpcrtlmm_ToggleBlockLockingStatus(
+<a href="#ToggleBlockLockingStatus">horatio_ToggleBlockLockingStatus(
 )</a>
 <br>
-<a href="#EnableTraps">dpcrtlmm_EnableTraps( )</a>
+<a href="#EnableTraps">horatio_EnableTraps( )</a>
 <br>
-<a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a>
+<a href="#DisableTraps">horatio_DisableTraps( )</a>
 <br>
-<a href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled( )</a>
+<a href="#AreTrapsEnabled">horatio_AreTrapsEnabled( )</a>
 <br>
-<a href="#GetStats">dpcrtlmm_GetStats( )</a>
+<a href="#GetStats">horatio_GetStats( )</a>
 <br>
-<a href="#GetBlockCount">dpcrtlmm_GetBlockCount( )</a>
+<a href="#GetBlockCount">horatio_GetBlockCount( )</a>
 <br>
-<a href="#Ver">dpcrtlmm_Ver( )</a>
+<a href="#Ver">horatio_Ver( )</a>
 <br>
-<a href="#Dump">dpcrtlmm_Dump( )</a>
+<a href="#Dump">horatio_Dump( )</a>
 </p>
 <p>External variables
 <br>
-<a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>
+<a href="#_EnableTraps">horatio__EnableTraps</a>
 <br>
 </p>
 <hr width="100%"><br>
@@ -692,9 +692,9 @@ nosey.
 and their use</u></b>
 <br>
 <a name="InstallDebugHook"></a><br>
-<font color="#3333ff">unsigned int dpcrtlmm_InstallDebugHook(const
+<font color="#3333ff">unsigned int horatio_InstallDebugHook(const
 unsigned short HookType, unsigned
-int(*NewHookProc)(PS_DPCRTLMM_DEBUGHOOKINFO));</font>
+int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO));</font>
 <br>
 <font color="#ffffff">Installs a new debug hook into the internal debug
 hook chain, see <a href="#Enumerations">enumerations</a> for a
@@ -717,18 +717,18 @@ deadlock the library under threaded builds where mutual exclusion locks
 do not support recursion.<br>
 <a name="GetDebugHookChainCount"></a><br>
 <font color="#3366ff">unsigned int
-dpcrtlmm_GetDebugHookChainCount(const
+horatio_GetDebugHookChainCount(const
 unsigned int HookType);</font>
 <br>
 <font color="#ffffff">Returns the number of hooks installed for this
-hook type, it is not valid to use DPCRTLMM_HOOK_ALL, for this
+hook type, it is not valid to use HORATIO_HOOK_ALL, for this
 functionalliy
-use <a href="#GetDebugHookMatrixCount">dpcrtlmm_GetDebugHookMatrixCount(
+use <a href="#GetDebugHookMatrixCount">horatio_GetDebugHookMatrixCount(
 )</a></font>
 <br>
 <a name="GetDebugHookMatrixCount"></a><br>
 <font color="#3366ff">unsigned int
-dpcrtlmm_GetDebugHookMatrixCount(void);</font>
+horatio_GetDebugHookMatrixCount(void);</font>
 <br>
 Counts the number of hooks in the entire debug hook matrix, that is
 the total number of hooks for all types, it is very unlikely that a
@@ -738,14 +738,14 @@ plus
 it has a cool name!
 <br>
 <a name="UninstallDebugHook"></a><br>
-<font color="#3366ff">unsigned int dpcrtlmm_UninstallDebugHook(const
+<font color="#3366ff">unsigned int horatio_UninstallDebugHook(const
 unsigned short HookType, unsigned
-int(*HookProc2Remove)(PS_DPCRTLMM_DEBUGHOOKINFO));</font>
+int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO));</font>
 <br>
 Remove the said hook, type of hook should be specified in order to
 find it, although the same hook handler can be installed for many
 hooks,
-so DPCRTLMM_HOOK_ALL is allowed.
+so HORATIO_HOOK_ALL is allowed.
 <br>
 It's not allowed to uninstall hooks by index, the address of the hook
 handler must be specified.&nbsp; On success 1 (true) is returned
@@ -753,7 +753,7 @@ otherwise
 0 (false) is returned.
 <br>
 <a name="Alloc"></a><br>
-<font color="#3366ff">void* dpcrtlmm_Alloc(PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">void* horatio_Alloc(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, const size_t NewBlockSize);</font>
 <br>
 This function is the main allocation function, the equivillant to
@@ -762,9 +762,9 @@ malloc(
 only
 because of the block descriptor array.&nbsp; Block descriptor arrays
 are
-for organisation purposes, use <a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray(
+for organisation purposes, use <a href="#CreateBlockArray">horatio_CreateBlockArray(
 )</a> to get one before allocating any blocks of memory or specify NULL
-to use the array provided by DPCRTLMM (the NULL array is not available
+to use the array provided by libhoratio (the NULL array is not available
 if the library is configured --with-no-null-array).&nbsp; The size in
 bytes of
 the desired block should be specified.&nbsp; NULL is returned if the
@@ -778,7 +778,7 @@ by
 the next version.
 <br>
 <a name="Free"></a><br>
-<font color="#3366ff">void dpcrtlmm_Free(PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">void horatio_Free(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, void* Ptr);</font>
 <br>
 This function is the main deallocation function, the equivilant to
@@ -793,22 +793,22 @@ dereference
 the PRelDesc field, the descriptor will have already been released.
 <br>
 <a name="CreateBlockArray"></a><br>
-<font color="#3366ff">PS_DPCRTLMM_BLOCKDESCARRAY
-dpcrtlmm_CreateBlockArray(void);</font>
+<font color="#3366ff">PS_HORATIO_BLOCKDESCARRAY
+horatio_CreateBlockArray(void);</font>
 <br>
 Creates a new block descriptor array.&nbsp; A block descriptor array
 is returned and should be kept.&nbsp; Then during allocations one can
 use
 the returned pointer in the first parameter.&nbsp; Don't forget to free
 all blocks from an array and destroy it with <a
- href="#DestroyBlockArray">dpcrtlmm_DestroyBlockArray(
+ href="#DestroyBlockArray">horatio_DestroyBlockArray(
 )</a> before the returned pointer goes out of scope.&nbsp; I recommend
 each module, or each major section of a large project has it's own
 block
 descriptor array.&nbsp; I also recommend that the main module of the
 program
 and any shared memory should use the "NULL" block array, when <a
- href="#Alloc">dpcrtlmm_Alloc(
+ href="#Alloc">horatio_Alloc(
 )</a> asks for a pointer to a block array just supply NULL to use
 it.&nbsp;
 Hooking this event is allowed, hooks will be executed whether this
@@ -818,8 +818,8 @@ your
 hook is passed.
 <br>
 <a name="DestroyBlockArray"></a><br>
-<font color="#3366ff">void dpcrtlmm_DestroyBlockArray(
-PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">void horatio_DestroyBlockArray(
+PS_HORATIO_BLOCKDESCARRAY
 PBlockArray );</font>
 <br>
 Destroys the said block descriptor array.&nbsp; NULL is <b>not</b>
@@ -827,15 +827,15 @@ allowed, the reason is NULL for a block descriptor array represents an
 internal default array which the user is not allowed to destroy.&nbsp;
 If the pointer supplied is not in the internal safety list as a valid
 block
-array allocated by <a href="#CreateBlockArray">dpcrtlmm_CreateBlockArray(
+array allocated by <a href="#CreateBlockArray">horatio_CreateBlockArray(
 )</a>, a trap will be executed.&nbsp; There is no return value.&nbsp;
 Hooks
 will normally see both success and failure, check the Success entry of
 the debug hook info.
 <br>
 <a name="IsDefaultBlockArray"></a><br>
-<font color="#3333ff">unsigned int dpcrtlmm_IsDefaultBlockArray(
-PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3333ff">unsigned int horatio_IsDefaultBlockArray(
+PS_HORATIO_BLOCKDESCARRAY
 PBlockArray );</font>
 <br>
 In debug hooks and the like, the user may be returned a pointer which
@@ -851,7 +851,7 @@ supported,
 if you want it, call me.
 <br>
 <a name="Startup"></a><br>
-<font color="#3366ff">void dpcrtlmm_Startup(void);</font>
+<font color="#3366ff">void horatio_Startup(void);</font>
 <br>
 Before one calls any other functions in this library, the library must
 be started, this allows various initialization tasks, there are
@@ -864,7 +864,7 @@ the test, the behaviour of the program calling the library before it is
 started is undefined and could end in disaster.
 <br>
 <a name="Shutdown"></a><br>
-<font color="#3366ff">void dpcrtlmm_Shutdown(void);</font>
+<font color="#3366ff">void horatio_Shutdown(void);</font>
 <br>
 If one ends the program without shutting down the library the whole
 point of this library becomes hidden, calling this function does not
@@ -891,20 +891,20 @@ about
 it.
 <br>
 <a name="IsStarted"></a><br>
-<font color="#3333ff">unsigned int dpcrtlmm_IsStarted(void);</font>
+<font color="#3333ff">unsigned int horatio_IsStarted(void);</font>
 <br>
 Version: 1.1.6
 <br>
-This function returns nonzero if DPCRTLMM has been started.&nbsp; It
-is intended to be used by libraries which rely on DPCRTLMM for
+This function returns nonzero if libhoratio has been started.&nbsp; It
+is intended to be used by libraries which rely on libhoratio for
 debugging
 memory but need to know whether the program which uses it already uses
-DPCRTLMM in oder to know when to start or stop the library or to leave
+libhoratio in oder to know when to start or stop the library or to leave
 well alone.
 <br>
 <a name="GetBlockSize"></a><br>
-<font color="#3366ff">size_t dpcrtlmm_GetBlockSize(
-PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">size_t horatio_GetBlockSize(
+PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, void* BlockPtr);</font>
 <br>
 Returns the size of a block which one allocated earlier.&nbsp; The
@@ -913,8 +913,8 @@ will
 be returned.
 <br>
 <a name="IsBasBlockPtr"></a><br>
-<font color="#3366ff">unsigned int dpcrtlmm_IsBadBlockPtr(
-PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">unsigned int horatio_IsBadBlockPtr(
+PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, const void* BlockPtr);</font>
 <br>
 Normally calling a function in this library with invalid details will
@@ -927,12 +927,12 @@ for a valid block array (supplied) the function returns 1U (true),
 meaning
 "yes, this block ptr is bad".&nbsp; If the block is valid 0U (false) is
 returned.&nbsp; To avoid a trap and test an array pointer call <a
- href="#IsBadArrayPtr">dpcrtlmm_IsBadArrayPtr(
+ href="#IsBadArrayPtr">horatio_IsBadArrayPtr(
 )</a>
 <br>
 <a name="IsBadArrayPtr"></a><br>
-<font color="#3366ff">unsigned int dpcrtlmm_IsBadArrayPtr(
-PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">unsigned int horatio_IsBadArrayPtr(
+PS_HORATIO_BLOCKDESCARRAY
 PBlockArray );</font>
 <br>
 Verifies the validity of a block descriptor array without causing a
@@ -945,7 +945,7 @@ your
 code is a hook.
 <br>
 <a name="Realloc"></a><br>
-<font color="#3366ff">void* dpcrtlmm_Realloc(PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">void* horatio_Realloc(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, void* OldBlockPtr, const size_t NewSize);</font>
 <br>
 Reallocates a block, equivilant to C runtime library call realloc(
@@ -955,7 +955,7 @@ be specified, it can be NULL to specify the default array.&nbsp; The
 pointer
 to the block of memory to resize should be specified next, followed by
 the desired new size.&nbsp; Attempting to resize to 0 is equivillant to
-<a href="#Free">dpcrtlmm_Free(
+<a href="#Free">horatio_Free(
 )</a> I rely on your run-time library supporting this bahaviour
 however,
 in the next version I want to make sure it will work whether your
@@ -979,16 +979,16 @@ reallocation is successful, therefore the hook routine(s) will only see
 Success = 1.
 <br>
 <a name="Calloc"></a><br>
-<font color="#3366ff">void* dpcrtlmm_Calloc(PS_DPCRTLMM_BLOCKDESCARRAY
+<font color="#3366ff">void* horatio_Calloc(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, const unsigned int N, const size_t NewBlockSize);</font>
 <br>
 Equivilant to C run time library calloc( ) purely a wrapper around
 alloc( N * NewBlockSize ) everything else is the same.&nbsp; See <a
- href="#Alloc">dpcrtlmm_Alloc(
+ href="#Alloc">horatio_Alloc(
 )</a> for more information
 <br>
 <a name="InstallTrapCallback"></a><br>
-<font color="#3366ff">void dpcrtlmm_InstallTrapCallback(
+<font color="#3366ff">void horatio_InstallTrapCallback(
 void(*UserCallbackProc)(const
 unsigned int TrapID, const char* TrapMessage), const unsigned int
 AsHook
@@ -1009,22 +1009,22 @@ trap
 is fired but if it returns the default library handler is called
 anyway.&nbsp;
 It just gets a preview.&nbsp; Do not try to remove a handler by passing
-NULL to this function, use <a href="#RemoveTrapCallback">dpcrtlmm_RemoveTrapCallback(
+NULL to this function, use <a href="#RemoveTrapCallback">horatio_RemoveTrapCallback(
 )</a>
 <br>
 <a name="RemoveTrapCallback"></a><br>
-<font color="#3366ff">void dpcrtlmm_RemoveTrapCallback(
+<font color="#3366ff">void horatio_RemoveTrapCallback(
 void(*CurrentCallbackProc)(const
 unsigned int TrapID, const char* TrapDesc) );</font>
 <br>
 Removes a trap handler which was installed by <a
- href="#InstallTrapCallback">dpcrtlmm_InstallTrapHandler(
+ href="#InstallTrapCallback">horatio_InstallTrapHandler(
 )</a>, must pass address so we know you know and are not making a
 dreadful
 mistake, there is no return value.
 <br>
 <a name="GetTrapCallbackInfo"></a><br>
-<font color="#3366ff">signed char dpcrtlmm_GetTrapCallbackInfo(void);</font>
+<font color="#3366ff">signed char horatio_GetTrapCallbackInfo(void);</font>
 <br>
 Sometimes the user of the library has installed a handler for traps
 instead of the default library handler, the function returns very
@@ -1050,8 +1050,8 @@ lead to unpredictable results.
 <br>
 <a name="ModifyDescriptorFlags"></a><br>
 <font color="#3366ff">unsigned char
-dpcrtlmm_ModifyDescriptorFlags(const
-PS_DPCRTLMM_BLOCKDESCARRAY PBlockArray, const void* Ptr, const unsigned
+horatio_ModifyDescriptorFlags(const
+PS_HORATIO_BLOCKDESCARRAY PBlockArray, const void* Ptr, const unsigned
 char* PNewFlags);</font>
 <br>
 This function implements direct flag access (not reconmended except
@@ -1082,7 +1082,7 @@ off trapping).
 <br>
 <a name="SetBlockLockingFlag"></a><br>
 <font color="#3366ff">void
-dpcrtlmm_SetBlockLockingFlag(PS_DPCRTLMM_BLOCKDESCARRAY
+horatio_SetBlockLockingFlag(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, const void* Ptr, const unsigned int NewStatus);</font>
 <br>
 Locks or unlocks a block of memory.&nbsp; When a block of memory is
@@ -1094,7 +1094,7 @@ NewStatus is a boolean, nonzero = true, zero = false.
 <br>
 <a name="IsBlockLocked"></a><br>
 <font color="#3366ff">unsigned int
-dpcrtlmm_IsBlockLocked(PS_DPCRTLMM_BLOCKDESCARRAY
+horatio_IsBlockLocked(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);</font>
 <br>
 Simply returns the boolean status 1 if the block specified has been
@@ -1103,39 +1103,39 @@ freed
 or resized.
 <br>
 <a name="LockBlock"></a><br>
-<font color="#3366ff">#define dpcrtlmm_LockBlock(pArr, pBlock)
-dpcrtlmm_SetBlockLockingFlag(pArr,
+<font color="#3366ff">#define horatio_LockBlock(pArr, pBlock)
+horatio_SetBlockLockingFlag(pArr,
 pBlock, (1U));</font>
 <br>
-<font color="#3366ff">#define dpcrtlmm_UnlockBlock(pArr, pBlock)
-dpcrtlmm_SetBlockLockingFlag(pArr,
+<font color="#3366ff">#define horatio_UnlockBlock(pArr, pBlock)
+horatio_SetBlockLockingFlag(pArr,
 pBlock, (0U));</font>
 <br>
 Both of these functions are simple macros to lock and unlock blocks
-of memory see <a href="#SetBlockLockingFlag">dpcrtlmm_SetBlockLockingFlag(
+of memory see <a href="#SetBlockLockingFlag">horatio_SetBlockLockingFlag(
 )</a>
 <br>
 <a name="ToggleBlockLockingStatus"></a><br>
 <font color="#3366ff">void
-dpcrtlmm_ToggleBlockLockingStatus(PS_DPCRTLMM_BLOCKDESCARRAY
+horatio_ToggleBlockLockingStatus(PS_HORATIO_BLOCKDESCARRAY
 PBlockArray, const void* Ptr);</font>
 <br>
 If the said block is locked, it will be unlocked and vice versa, not
 sure if anyone will bother to use this function really
 <br>
 <a name="EnableTraps"></a><br>
-<font color="#3366ff">void dpcrtlmm_EnableTraps(void);</font>
+<font color="#3366ff">void horatio_EnableTraps(void);</font>
 <br>
-See <a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a>, normally
+See <a href="#DisableTraps">horatio_DisableTraps( )</a>, normally
 only that will be used in a program for the reasons described.&nbsp;
 The
 only reason one might want to use this function is for temporary things
 say like, disable traps, perform actions, re-enable traps.&nbsp;
 Implemented
-as a macro, see dpcrtlmm__EnableTraps
+as a macro, see horatio__EnableTraps
 <br>
 <a name="DisableTraps"></a><br>
-<font color="#3333ff">void dpcrtlmm_DisableTraps(void);</font>
+<font color="#3333ff">void horatio_DisableTraps(void);</font>
 <br>
 Normally when the library starts traps are enabled, however let's say
 that the program is massive, a deadline is coming and it must be
@@ -1144,24 +1144,24 @@ Although there are a few leaks that can't be tracked down it's stable
 and
 users would have nothing to complain about.&nbsp; They won't be too
 happy
-if DPCRTLMM keeps outputting all the mistakes at the end.&nbsp;
+if libhoratio keeps outputting all the mistakes at the end.&nbsp;
 Removing
 the library may not be feasible if the program is designed intimately
 around
 it so the answer is to disable the traps, just call this function once
 after starting the library to avoid traps.&nbsp; Implemented as a
 macro,
-see dpcrtlmm__EnableTraps
+see horatio__EnableTraps
 <br>
 <a name="AreTrapsEnabled"></a><br>
-<font color="#3333ff">unsigned char dpcrtlmm_AreTrapsEnabled(void);</font>
+<font color="#3333ff">unsigned char horatio_AreTrapsEnabled(void);</font>
 <br>
 Returns whether traps are enabled or not, 1U means enabled 0U if
 not.&nbsp;
-Implemented as a macro, see <a href="#_EnableTraps">dpcrtlmm__EnableTraps</a>
+Implemented as a macro, see <a href="#_EnableTraps">horatio__EnableTraps</a>
 <br>
 <a name="GetStats"></a><br>
-<font color="#3333ff">void dpcrtlmm_GetStats(PS_DPCRTLMM_STATS
+<font color="#3333ff">void horatio_GetStats(PS_HORATIO_STATS
 PReadStats);</font>
 <br>
 Returns memory statistics for the library, such as, number of allocated
@@ -1182,7 +1182,7 @@ performance
 too much but remember that the function should not be called too often.
 <br>
 <a name="GetBlockCount"></a><br>
-<font color="#3333ff">unsigned long dpcrtlmm_GetBlockCount(void);</font>
+<font color="#3333ff">unsigned long horatio_GetBlockCount(void);</font>
 <br>
 Returns the number of blocks allocated, don't worry I'm not completely
 mad, the count is stored internally it is not worked out by this
@@ -1190,44 +1190,44 @@ function,
 I don't go mad, looping through all the arrays looking for blocks!
 <br>
 <a name="Ver"></a><br>
-<font color="#3333ff">PS_DPCRTLMM_VERSION
-dpcrtlmm_Ver(PS_DPCRTLMM_VERSION
+<font color="#3333ff">PS_HORATIO_VERSION
+horatio_Ver(PS_HORATIO_VERSION
 PVerStruct);</font>
 <br>
 Returns library version info, the caller supplies the structure and
 I return them the same structure, passing NULL does nothing.
 <br>
 <a name="Dump"></a><br>
-<font color="#3333ff">void dpcrtlmm_Dump(FILE* Target);</font>
+<font color="#3333ff">void horatio_Dump(FILE* Target);</font>
 <br>
 Dumps a listing of all allocated blocks of memory which are currently
-managed by DPCRTLMM. Target may be any stream which allows writing, for
+managed by libhoratio. Target may be any stream which allows writing, for
 example stdout, stderr or a writable file. The output may be used for
 knowing
 what state memory is in at any time without having to wait until a trap
 for a leak dump.
 <br>
 <a name="_EnableTraps"></a><br>
-<font color="#3333ff">extern unsigned char dpcrtlmm__EnableTraps;</font>
+<font color="#3333ff">extern unsigned char horatio__EnableTraps;</font>
 <br>
 This can be used to disable/enable traps, while it is off no trap will
 be executed and if the program makes a mistake it could crash, if can
 either
-be modified directly or with the macros <a href="#EnableTraps">dpcrtlmm_EnableTraps(
-)</a>, <a href="#DisableTraps">dpcrtlmm_DisableTraps( )</a> and <a
- href="#AreTrapsEnabled">dpcrtlmm_AreTrapsEnabled(
+be modified directly or with the macros <a href="#EnableTraps">horatio_EnableTraps(
+)</a>, <a href="#DisableTraps">horatio_DisableTraps( )</a> and <a
+ href="#AreTrapsEnabled">horatio_AreTrapsEnabled(
 )</a>.&nbsp; Generally one will want to switch it off when releasing a
-program, simple start the program with a call to <a href="#Startup">dpcrtlmm_Startup(
+program, simple start the program with a call to <a href="#Startup">horatio_Startup(
 )</a> and then set this variable to 0U, the two valid states are 0U =
 no
 traps, 1U = traps will be used.&nbsp; 1U is the default.&nbsp; If you
 have
-the absoluetely version (source) this variable is store in dpcrtlmm.c
+the absoluetely version (source) this variable is store in horatio.c
 <br>
 &nbsp;
 </p>
 <p>For the lastest news check the&nbsp; <a
- href="http://www.daybologic.co.uk/dev/dpcrtlmm">web
+ href="http://www.daybologic.co.uk/dev/horatio">web
 page</a>&nbsp; and update your documentation &amp; library regularly,
 remember
 updates cost nothing.&nbsp; If you have an equiry of a more technical
