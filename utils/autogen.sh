@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Daybo Logic C RTL Memory Manager
 # Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
 # All rights reserved.
