@@ -99,7 +99,7 @@ static MYSQL *horatio_int_mysql_open()
   return &DBHandle;
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_mysql_logmsg(
+static void horatio_int_mysql_logmsg(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
