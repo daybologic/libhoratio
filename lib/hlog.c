@@ -100,7 +100,7 @@ static sqlite3 *horatio_int_sqlite3_open()
   return dbh;
 }
 /*-------------------------------------------------------------------------*/
-static void dpcrtlmm_int_sqlite3_logmsg(
+static void horatio_int_sqlite3_logmsg(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
