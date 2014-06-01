@@ -31,6 +31,7 @@
 AUTOMAKE_OPTIONS=subdir-objects
 
 lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
+AM_LDFLAGS= -lmongoc
 libdpcrtlmm_la_SOURCES = dpcrtlmm.c
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c

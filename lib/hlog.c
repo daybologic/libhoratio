@@ -53,6 +53,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
+#include <stdbool.h>
+#include <mongoc.h> /* For MongoDB logging support */
 
 #ifdef HORATIO_HDRSTOP
 # pragma hdrstop
@@ -63,6 +65,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hintdata.h" /* Internal library header */
 #include "hlog.h"
 
+#include "htrap.h" /* Trap() */
 #define STRNCAT_FIXEDBUFF(buff, sourcestring) \
     strncat( \
         (buff), \
@@ -70,6 +73,62 @@ POSSIBILITY OF SUCH DAMAGE.
         (sizeof((buff))/sizeof((buff)[0])-1) \
     )
 
+static mongoc_clent_t *horatio_int_mongodb_open(void);
+static void horatio_int_mongodb_logmsg(
+  const char *,
+  const unsigned int,
+  const unsigned short,
+  const char *
+);
+/*-------------------------------------------------------------------------*/
+static mongoc_client_t *client;
+static mongoc_collection_t *collection;
+/*-------------------------------------------------------------------------*/
+static mongoc_client_t *horatio_int_mongodb_open()
+{
+	mongoc_uri_t *uri;
+	mongoc_insert_flags_t flags = MONGOC_INSERT_NONE;
+	mongoc_write_concern_t *write_concern;
+	bson_error_t error;
+	bool qsl;
+	const char *const uriString = "mongodb://username:password@localhost:0/test";
+
+	uri = mongoc_uri_new(uriString);
+	client = mongoc_client_new_from_uri(uri);
+
+	collection = mongoc_client_get_collection(client, "test", "m6kvm");
+
+	return client;
+}
+/*-------------------------------------------------------------------------*/
+static void horatio_int_mongodb_logmsg(
+  const char *File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Msg
+) {
+	bson_t document;
+	int rc;
+
+	if ( !client || !collection ) return;
+
+	fprintf(stderr, "Got database message %s\n", Msg);
+	fprintf(stderr, "Executing query: %s\n", q);
+	bson_init(&document);
+	/*bson_append_document_begin(&document, "$orderby", -1, &child);
+	bson_append_int32(&child, "timestamp", -1, 1);
+	bson_append_document_end(&document, &child);
+	bson_append_document_begin(&document, "$query", -1, &child);
+	bson_append_document_end(&document, &child);*/
+	qsl = mongoc_collection_insert(collection, flags, &document, write_concern, &error);
+	if (!qsl) {
+		fprintf(stderr, "Error mongoc_collection_insert\n");
+		return;
+	}
+
+	return;
+}
+/*-------------------------------------------------------------------------*/
 void horatio_int_Log(
 	const char *File,
 	const unsigned int Line,
@@ -145,6 +204,9 @@ void horatio_int_Log(
 				/* Anything more severe than a warning */
 				fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
 			}
+
+			if ( !DBHandle ) DBHandle = horatio_int_mongodb_open();
+			horatio_int_mongodb_logmsg(File, Line, Severity, formatMsg);
 		}
 	}
 	return;
