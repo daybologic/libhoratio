@@ -74,11 +74,12 @@ POSSIBILITY OF SUCH DAMAGE.
     )
 
 static mongo_sync_connection *horatio_int_mongodb_open(void);
+
 static void horatio_int_mongodb_logmsg(
-  const char *,
-  const unsigned int,
-  const unsigned short,
-  const char *
+    const char *,
+    const unsigned int,
+    const unsigned short,
+    const char *
 );
 
 static mongo_sync_connection *client;
@@ -147,7 +148,7 @@ void horatio_int_Log(
 	char number[64]; /* Paranoia length number to string conversion */
 
 #ifdef HORATIO_LOG
-	FILE* HLogFile; /* Handle for log file */
+	FILE *HLogFile; /* Handle for log file */
 #endif /*HORATIO_LOG*/
 
 	if (Message) {
