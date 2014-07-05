@@ -77,4 +77,7 @@ export AM_CPPFLAGS
 export AM_CFLAGS
 export AM_LDFLAGS
 
-SUBDIRS = lib include t docs
+SUBDIRS = lib include t
+if HORATIO_DOCS
+SUBDIRS += docs
+endif #HORATIO_DOCS
