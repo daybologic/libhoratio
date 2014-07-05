@@ -337,6 +337,18 @@ if test "$log_enabled" = "yes"; then
 fi
 AC_MSG_RESULT($log_enabled)
 
+dnl --enable-docs
+AC_MSG_CHECKING([Whether to build documentation])
+AC_ARG_ENABLE(
+  docs,
+  [  --enable-docs          Build the documentation],
+  [docs_enabled=yes], [docs_enabled=no]
+)
+if test "$docs_enabled" = "yes"; then
+  AC_DEFINE([HORATIO_DOCS], [], [Build the documentation])
+fi
+AM_CONDITIONAL([HORATIO_DOCS], [test "$docs_enabled" = "yes"])
+AC_MSG_RESULT($docs_enabled)
 
 # End of configuration
 AC_OUTPUT(Makefile lib/Makefile include/Makefile t/Makefile)
