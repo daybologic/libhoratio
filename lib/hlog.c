@@ -53,10 +53,23 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
-#include <stdbool.h>
-#include <sqlite3.h> /* For SQLite logging support */
-#include <mysql/mysql.h> /* For MySQL logging support */
-#include <mongo.h> /* For MongoDB logging support */
+
+#ifdef HAVE_STDBOOL_H
+ /* Only used in horatio_int_mongodb_logmsg() */
+# include <stdbool.h>
+#endif /*HAVE_STDBOOL_H*/
+
+#ifdef SQLITE
+# include <sqlite3.h> /* For SQLite logging support */
+#endif /*SQLITE*/
+
+#ifdef MYSQL
+# include <mysql/mysql.h> /* For MySQL logging support */
+#endif /*MYSQL*/
+
+#ifdef MONGO
+# include <mongo.h> /* For MongoDB logging support */
+#endif /*MONGO*/
 
 #ifdef HORATIO_HDRSTOP
 # pragma hdrstop
@@ -75,8 +88,17 @@ POSSIBILITY OF SUCH DAMAGE.
         (sizeof((buff))/sizeof((buff)[0])-1) \
     )
 
+#ifdef SQLITE
 static sqlite3 *horatio_int_sqlite3_open(void);
+#endif /*SQLITE*/
+
+#ifdef MYSQL
 static MYSQL *horatio_int_mysql_open(void);
+#endif /*MYSQL*/
+
+#ifdef MONGO
+static mongo_sync_connection *horatio_int_mongodb_open(void);
+#endif /*MONGO*/
 
 static void horatio_int_sqlite3_logmsg(
   const char *,
@@ -91,52 +113,63 @@ static void horatio_int_mysql_logmsg(
   const unsigned short,
   const char *
 );
-/*-------------------------------------------------------------------------*/
-static sqlite3 *DBHandle = NULL;
-static MYSQL DBHandle;
-/*-------------------------------------------------------------------------*/
-static sqlite3 *horatio_int_sqlite3_open()
 
-static MYSQL *horatio_int_mysql_open()
-{
+#ifdef SQLITE
+static sqlite3 *Handle_sqlite = NULL;
+#endif /*SQLITE*/
+
+#ifdef MYSQL
+static MYSQL Handle_mysql;
+#endif /*MYSQL*/
+
+#ifdef MONGO
+static mongo_sync_connection *mongo_client;
+//static mongoc_collection_t *collection;
+#endif /*MONGO*/
+
+//static MYSQL *horatio_int_mysql_open() {
+
+#ifdef SQLITE
+static sqlite3 *horatio_int_sqlite3_open() {
   /* TODO:
   This scema must be created
   CREATE TABLE debug_log ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ts DATETIME NOT NULL, file CHAR(32) NOT NULL, line INTEGER NOT NULL, severity INTEGER NOT NULL default 0, msg VARCHAR(255) NOT NULL);
   */
 
-  sqlite3 *dbh;
-  const char *errMsgPtr = NULL;
-  int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
-  if ( rc ) { // Fail?
-    errMsgPtr = sqlite3_errmsg(dbh);
-    Trap(0, errMsgPtr);
-    sqlite3_close(dbh);
-  }
-  return dbh;
+	sqlite3 *dbh;
+	const char *errMsgPtr = NULL;
+	int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
+	if ( rc ) { // Fail?
+		errMsgPtr = sqlite3_errmsg(dbh);
+		Trap(0, errMsgPtr);
+		sqlite3_close(dbh);
+	}
+	return dbh;
 }
-/*-------------------------------------------------------------------------*/
+
 static void horatio_int_sqlite3_logmsg(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
   const char *Msg
 ) {
-  int rc;
-  sqlite3_stmt *stmt;
-  const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
-    "VALUES(\n"
-    "  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
-    ")";
+	int rc;
+	sqlite3_stmt *stmt;
+	const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+	"VALUES(\n"
+	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+	")";
 
-  if ( !DBHandle ) return;
+	if ( !DBHandle ) return;
 
-  fprintf(stderr, "Got database message %s\n", Msg);
-  fprintf(stderr, "Executing query: %s\n", q);
-  rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
-  if ( rc != SQLITE_OK ) {
-    fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
-    return;
-static mongo_sync_connection *horatio_int_mongodb_open(void);
+	fprintf(stderr, "Got database message %s\n", Msg);
+	fprintf(stderr, "Executing query: %s\n", q);
+	rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
+	if ( rc != SQLITE_OK ) {
+		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+		return;
+	}
+#endif /*SQLITE*/
 
 static void horatio_int_mongodb_logmsg(
     const char *,
@@ -145,9 +178,7 @@ static void horatio_int_mongodb_logmsg(
     const char *
 );
 
-static mongo_sync_connection *client;
-//static mongoc_collection_t *collection;
-
+#ifdef MONGO
 static mongo_sync_connection *horatio_int_mongodb_open() {
 	//mongoc_uri_t *uri;
 	//mongoc_insert_flags_t flags = MONGOC_INSERT_NONE;
@@ -165,10 +196,10 @@ static mongo_sync_connection *horatio_int_mongodb_open() {
 }
 
 static void horatio_int_mongodb_logmsg(
-  const char *File,
-  const unsigned int Line,
-  const unsigned short Severity,
-  const char *Msg
+    const char *File,
+    const unsigned int Line,
+    const unsigned short Severity,
+    const char *Msg
 ) {
 	//bson_t document;
 	bson *document;
@@ -196,7 +227,9 @@ static void horatio_int_mongodb_logmsg(
 	bson_free(document);
 	return;
 }
+#endif /*MONGO*/
 
+#if 0
   }
   rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
   rc = sqlite3_bind_int(stmt, 2, Line);
@@ -211,7 +244,7 @@ static void horatio_int_mongodb_logmsg(
   if ( rc != SQLITE_OK )
     fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
-/*-------------------------------------------------------------------------*/
+
   char *errMsgPtr = NULL;
   if ( mysql_real_connect(&DBHandle, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
     errMsgPtr = "FIXME";
@@ -221,47 +254,49 @@ static void horatio_int_mongodb_logmsg(
 
   return &DBHandle;
 }
-/*-------------------------------------------------------------------------*/
+
 static void horatio_int_mysql_logmsg(
   const char *File,
   const unsigned int Line,
   const unsigned short Severity,
   const char *Msg
 ) {
-  int rc;
-  sqlite3_stmt *stmt;
-  const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
-    "VALUES(\n"
-    "  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
-    ")";
+	int rc;
+	sqlite3_stmt *stmt;
 
-  if ( !DBHandle ) return;
+	const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+	"VALUES(\n"
+	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+	")";
 
-  fprintf(stderr, "Got database message %s\n", Msg);
-  fprintf(stderr, "Executing query: %s\n", q);
-  rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
-  if ( rc != SQLITE_OK ) {
-    fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
-    return;
-  }
-  if (mysql_query(&dbh, querystring) != 0) {
-    mysql_close(&con);
-    return 0;
-  }
+	if ( !Handle_mysql ) return;
 
-  rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
-  rc = sqlite3_bind_int(stmt, 2, Line);
-  rc = sqlite3_bind_int(stmt, 3, Severity);
-  rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
-  if ( rc != SQLITE_OK )
-    fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
-  rc = sqlite3_step(stmt);
-  if ( rc != SQLITE_DONE )
-    fprintf(stderr, "Error %u from sqlite3_step\n", rc);
-  rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
-  if ( rc != SQLITE_OK )
-    fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+	fprintf(stderr, "Got database message %s\n", Msg);
+	fprintf(stderr, "Executing query: %s\n", q);
+	rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
+	if ( rc != SQLITE_OK ) {
+		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+		return;
+	}
+	if ( mysql_query(&dbh, querystring) != 0 ) {
+		mysql_close(&con);
+		return 0;
+	}
+
+	rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
+	rc = sqlite3_bind_int(stmt, 2, Line);
+	rc = sqlite3_bind_int(stmt, 3, Severity);
+	rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
+	if ( rc != SQLITE_OK )
+		fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
+	rc = sqlite3_step(stmt);
+	if ( rc != SQLITE_DONE )
+		fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+	rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
+	if ( rc != SQLITE_OK )
+		fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
+#endif /*0*/
 
 void horatio_int_Log(
 	const char *File,
@@ -339,12 +374,20 @@ void horatio_int_Log(
 				fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
 			}
 
-      if ( !DBHandle ) DBHandle = horatio_int_sqlite3_open();
-      horatio_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
-			if ( !client ) client = horatio_int_mongodb_open();
+#ifdef SQLITE
+			if ( !Handle_sqlite ) DBHandle = horatio_int_sqlite3_open();
+			horatio_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
+#endif /*MYSQL*/
+
+#ifdef MYSQL
+			if ( !Handle_mysql ) DBHandle = horatio_int_mysql_open();
+			horatio_int_mysql_logmsg(File, Line, Severity, formatMsg);
+#endif /*MONGO*/
+
+#ifdef MONGO
+			if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
 			horatio_int_mongodb_logmsg(File, Line, Severity, formatMsg);
-      if ( !DBHandle ) DBHandle = horatio_int_mysql_open();
-      horatio_int_mysql_logmsg(File, Line, Severity, formatMsg);
+#endif /*MONGO*/
 		}
 	}
 	return;

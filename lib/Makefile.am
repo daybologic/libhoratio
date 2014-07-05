@@ -31,9 +31,21 @@
 AUTOMAKE_OPTIONS=subdir-objects
 
 lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
-AM_LDFLAGS = -lsqlite3
+
+AM_LDFLAGS=
+
+if SQLITE
+AM_LDFLAGS += -lsqlite3
+endif #SQLITE
+
+if MYSQL
 AM_LDFLAGS += -lmysqlclient
+endif #MYSQL
+
+if MONGO
 AM_LDFLAGS += -lmongo-client
+endif #MONGO
+
 libdpcrtlmm_la_SOURCES = dpcrtlmm.c
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c

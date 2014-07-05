@@ -325,6 +325,42 @@ if test "$null_array_disabled" = "yes"; then
 fi
 AC_MSG_RESULT($null_array_disabled)
 
+dnl --with-sqlite
+AC_MSG_CHECKING([whether you want SQlite, my friend])
+AC_ARG_WITH(sqlite,
+  [  --with-sqlite           Link with SQlite],
+  [sqlite=yes], [sqlite=no]
+)
+if test "$sqlite" = "yes"; then
+  AC_DEFINE([SQLITE], [], [Link with SQlite])
+fi
+AM_CONDITIONAL([SQLITE], [test "$sqlite" = "yes"])
+AC_MSG_RESULT($sqlite)
+
+dnl --with-mysql
+AC_MSG_CHECKING([whether you want MySQL, my friend])
+AC_ARG_WITH(mysql,
+  [  --with-mysql            Link with MySQL],
+  [mysql=yes], [mysql=no]
+)
+if test "$mysql" = "yes"; then
+  AC_DEFINE([MYSQL], [], [Link with MySQL])
+fi
+AM_CONDITIONAL([MYSQL], [test "$mysql" = "yes"])
+AC_MSG_RESULT($mysql)
+
+dnl --with-mongo
+AC_MSG_CHECKING([whether you want MongoDB, my friend])
+AC_ARG_WITH(mongo,
+  [  --with-mongo            Link with MongoDB],
+  [mongo=yes], [mongo=no]
+)
+if test "$mongo" = "yes"; then
+  AC_DEFINE([MONGO], [], [Link with MongoDB])
+fi
+AM_CONDITIONAL([MONGO], [test "$mongo" = "yes"])
+AC_MSG_RESULT($mongo)
+
 dnl --enable-log
 AC_MSG_CHECKING(whether to log to HORATIO.LOG)
 AC_ARG_ENABLE(
