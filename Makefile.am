@@ -58,7 +58,11 @@ GENERAL_WFLAGS = \
 
 GENERAL_CC_FLAGS = \
 	-g \
-	-I$(top_srcdir)/../include
+	-I$(top_srcdir)/../include \
+	-I/usr/include/mongo-client \
+	-I/usr/include/glib-2.0 \
+	-I/usr/lib/x86_64-linux-gnu/glib-2.0/include \
+	-I/usr/lib/i386-linux-gnu/glib-2.0/include
 
 AM_CFLAGS = \
 	$(GENERAL_CC_FLAGS) \
