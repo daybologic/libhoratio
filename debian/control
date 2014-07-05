@@ -2,8 +2,13 @@ Source: libhoratio
 Section: utils
 Priority: extra
 Maintainer: David Duncan Ross Palmer <palmer@overchat.org>
-Build-Depends: debhelper (>= 9), libtool,
- libsqlite3-dev, libsqlite3-0
+Build-Depends: debhelper (>= 9),
+ libsqlite3-dev,
+ libsqlite3-0,
+ libtool,
+ bash,
+ texlive-latex-base,
+ texlive-latex-extra
 Build-Depends-Indep: automake
 Standards-Version: 3.7.3
 Homepage: http://www.daybologic.co.uk/software.php?content=dpcrtlmm
