@@ -85,6 +85,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 /* Force internal calls to sprintf() over to snprintf() */
 #ifdef HAVE_SNPRINTF
+# ifdef sprintf
+#  undef sprintf
+# endif /*sprintf*/
 # define sprintf snprintf
 #endif /*HAVE_SNPRINTF*/
 
