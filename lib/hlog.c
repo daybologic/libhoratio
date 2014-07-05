@@ -54,6 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h> /* FILE */
 #include <string.h> /* strcat() */
 #include <sqlite3.h> /* For SQLite logging support */
+#include <mysql/mysql.h> /* For MySQL logging support */
 
 #ifdef HORATIO_HDRSTOP
 # pragma hdrstop
@@ -73,7 +74,16 @@ POSSIBILITY OF SUCH DAMAGE.
     )
 
 static sqlite3 *horatio_int_sqlite3_open(void);
+static MYSQL *horatio_int_mysql_open(void);
+
 static void horatio_int_sqlite3_logmsg(
+  const char *,
+  const unsigned int,
+  const unsigned short,
+  const char *
+);
+
+static void horatio_int_mysql_logmsg(
   const char *,
   const unsigned int,
   const unsigned short,
@@ -81,8 +91,11 @@ static void horatio_int_sqlite3_logmsg(
 );
 /*-------------------------------------------------------------------------*/
 static sqlite3 *DBHandle = NULL;
+static MYSQL DBHandle;
 /*-------------------------------------------------------------------------*/
 static sqlite3 *horatio_int_sqlite3_open()
+
+static MYSQL *horatio_int_mysql_open()
 {
   /* TODO:
   This scema must be created
@@ -136,6 +149,57 @@ static void horatio_int_sqlite3_logmsg(
     fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
 /*-------------------------------------------------------------------------*/
+  char *errMsgPtr = NULL;
+  if ( mysql_real_connect(&DBHandle, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
+    errMsgPtr = "FIXME";
+    Trap(0, errMsgPtr);
+    return 0;
+  }
+
+  return &DBHandle;
+}
+/*-------------------------------------------------------------------------*/
+static void horatio_int_mysql_logmsg(
+  const char *File,
+  const unsigned int Line,
+  const unsigned short Severity,
+  const char *Msg
+) {
+  int rc;
+  sqlite3_stmt *stmt;
+  const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+    "VALUES(\n"
+    "  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+    ")";
+
+  if ( !DBHandle ) return;
+
+  fprintf(stderr, "Got database message %s\n", Msg);
+  fprintf(stderr, "Executing query: %s\n", q);
+  rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
+  if ( rc != SQLITE_OK ) {
+    fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+    return;
+  }
+  if (mysql_query(&dbh, querystring) != 0) {
+    mysql_close(&con);
+    return 0;
+  }
+
+  rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
+  rc = sqlite3_bind_int(stmt, 2, Line);
+  rc = sqlite3_bind_int(stmt, 3, Severity);
+  rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
+  if ( rc != SQLITE_OK )
+    fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
+  rc = sqlite3_step(stmt);
+  if ( rc != SQLITE_DONE )
+    fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+  rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
+  if ( rc != SQLITE_OK )
+    fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+}
+
 void horatio_int_Log(
 	const char *File,
 	const unsigned int Line,
@@ -214,6 +278,8 @@ void horatio_int_Log(
 
       if ( !DBHandle ) DBHandle = horatio_int_sqlite3_open();
       horatio_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
+      if ( !DBHandle ) DBHandle = horatio_int_mysql_open();
+      horatio_int_mysql_logmsg(File, Line, Severity, formatMsg);
 		}
 	}
 	return;
