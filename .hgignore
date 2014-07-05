@@ -6,6 +6,19 @@ syntax:glob
 *.orig
 *.rej
 *.pdf
+*.log
+*.o
+*.lo
+*.Po
+*.la
+Makefile
+*.in
+stamp-h1
+*~
+lib/.deps
+lib/.libs
+test-driver
+autom4te.cache
 
 syntax:regexp
 ^docs/\.\w+$
