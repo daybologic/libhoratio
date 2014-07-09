@@ -63,9 +63,9 @@ POSSIBILITY OF SUCH DAMAGE.
 # include <sqlite3.h> /* For SQLite logging support */
 #endif /*SQLITE*/
 
-#ifdef MYSQL
-# include <mysql/mysql.h> /* For MySQL logging support */
-#endif /*MYSQL*/
+#ifdef USE_MYSQL
+# include <mysql.h> /* For MySQL logging support */
+#endif /*USE_MYSQL*/
 
 #ifdef MONGO
 # include <mongo.h> /* For MongoDB logging support */
@@ -92,9 +92,9 @@ POSSIBILITY OF SUCH DAMAGE.
 static sqlite3 *horatio_int_sqlite3_open(void);
 #endif /*SQLITE*/
 
-#ifdef MYSQL
-static MYSQL *horatio_int_mysql_open(void);
-#endif /*MYSQL*/
+#ifdef USE_MYSQL
+static USE_MYSQL *horatio_int_mysql_open(void);
+#endif /*USE_MYSQL*/
 
 #ifdef MONGO
 static mongo_sync_connection *horatio_int_mongodb_open(void);
@@ -118,9 +118,9 @@ static void horatio_int_mysql_logmsg(
 static sqlite3 *Handle_sqlite = NULL;
 #endif /*SQLITE*/
 
-#ifdef MYSQL
-static MYSQL Handle_mysql;
-#endif /*MYSQL*/
+#ifdef USE_MYSQL
+static USE_MYSQL Handle_mysql;
+#endif /*USE_MYSQL*/
 
 #ifdef MONGO
 static mongo_sync_connection *mongo_client;
@@ -244,8 +244,8 @@ static void horatio_int_mongodb_logmsg(
 }
 #endif /*0*/
 
-#ifdef MYSQL
-static MYSQL *horatio_int_mysql_open() {
+#ifdef USE_MYSQL
+static USE_MYSQL *horatio_int_mysql_open() {
   char *errMsgPtr = NULL;
   if ( mysql_real_connect(&DBHandle, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
     errMsgPtr = "FIXME";
@@ -255,7 +255,7 @@ static MYSQL *horatio_int_mysql_open() {
 
   return &DBHandle;
 }
-#endif /*MYSQL*/
+#endif /*USE_MYSQL*/
 
 #if 0
 static void horatio_int_mysql_logmsg(
@@ -380,9 +380,9 @@ void horatio_int_Log(
 #ifdef SQLITE
 			if ( !Handle_sqlite ) DBHandle = horatio_int_sqlite3_open();
 			horatio_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
-#endif /*MYSQL*/
+#endif /*USE_MYSQL*/
 
-#ifdef MYSQL
+#ifdef USE_MYSQL
 			if ( !Handle_mysql ) DBHandle = horatio_int_mysql_open();
 			horatio_int_mysql_logmsg(File, Line, Severity, formatMsg);
 #endif /*MONGO*/

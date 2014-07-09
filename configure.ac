@@ -344,9 +344,9 @@ AC_ARG_WITH(mysql,
   [mysql=yes], [mysql=no]
 )
 if test "$mysql" = "yes"; then
-  AC_DEFINE([MYSQL], [], [Link with MySQL])
+  AC_DEFINE([USE_MYSQL], [], [Link with MySQL])
 fi
-AM_CONDITIONAL([MYSQL], [test "$mysql" = "yes"])
+AM_CONDITIONAL([USE_MYSQL], [test "$mysql" = "yes"])
 AC_MSG_RESULT($mysql)
 
 dnl --with-mongo

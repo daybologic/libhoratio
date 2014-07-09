@@ -38,9 +38,9 @@ if SQLITE
 AM_LDFLAGS += -lsqlite3
 endif #SQLITE
 
-if MYSQL
+if USE_MYSQL
 AM_LDFLAGS += -lmysqlclient
-endif #MYSQL
+endif #USE_MYSQL
 
 if MONGO
 AM_LDFLAGS += -lmongo-client

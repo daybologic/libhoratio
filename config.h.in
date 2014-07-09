@@ -128,9 +128,6 @@
 /* Link with MongoDB */
 #undef MONGO
 
-/* Link with MySQL */
-#undef MYSQL
-
 /* Disable debug messages */
 #undef NDEBUG
 
@@ -160,6 +157,9 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* Link with MySQL */
+#undef USE_MYSQL
 
 /* Version number of package */
 #undef VERSION
