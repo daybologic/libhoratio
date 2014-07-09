@@ -62,7 +62,8 @@ GENERAL_CC_FLAGS = \
 	-I/usr/include/mongo-client \
 	-I/usr/include/glib-2.0 \
 	-I/usr/lib/x86_64-linux-gnu/glib-2.0/include \
-	-I/usr/lib/i386-linux-gnu/glib-2.0/include
+	-I/usr/lib/i386-linux-gnu/glib-2.0/include \
+	-I/usr/local/mysql/include
 
 AM_CFLAGS = \
 	$(GENERAL_CC_FLAGS) \
@@ -74,7 +75,8 @@ AM_CPPFLAGS = \
 	$(GENERAL_WFLAGS)
 
 AM_LDFLAGS = \
-	-L$(top_srcdir)/../lib
+	-L$(top_srcdir)/../lib \
+	-L/usr/local/mysql/lib
 
 
 export AM_CPPFLAGS
