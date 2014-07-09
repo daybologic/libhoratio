@@ -93,7 +93,7 @@ static sqlite3 *horatio_int_sqlite3_open(void);
 #endif /*SQLITE*/
 
 #ifdef USE_MYSQL
-static USE_MYSQL *horatio_int_mysql_open(void);
+static MYSQL *horatio_int_mysql_open(void);
 #endif /*USE_MYSQL*/
 
 #ifdef MONGO
@@ -119,7 +119,7 @@ static sqlite3 *Handle_sqlite = NULL;
 #endif /*SQLITE*/
 
 #ifdef USE_MYSQL
-static USE_MYSQL Handle_mysql;
+static MYSQL Handle_mysql;
 #endif /*USE_MYSQL*/
 
 #ifdef MONGO
@@ -245,7 +245,7 @@ static void horatio_int_mongodb_logmsg(
 #endif /*0*/
 
 #ifdef USE_MYSQL
-static USE_MYSQL *horatio_int_mysql_open() {
+static MYSQL *horatio_int_mysql_open() {
   char *errMsgPtr = NULL;
   if ( mysql_real_connect(&DBHandle, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
     errMsgPtr = "FIXME";
