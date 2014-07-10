@@ -76,8 +76,8 @@ AM_CPPFLAGS = \
 
 AM_LDFLAGS = \
 	-L$(top_srcdir)/../lib \
+	-L/usr/local/lib \
 	-L/usr/local/mysql/lib
-
 
 export AM_CPPFLAGS
 export AM_CFLAGS

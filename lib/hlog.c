@@ -119,7 +119,7 @@ static sqlite3 *Handle_sqlite = NULL;
 #endif /*SQLITE*/
 
 #ifdef USE_MYSQL
-static MYSQL Handle_mysql;
+static MYSQL *Handle_mysql;
 #endif /*USE_MYSQL*/
 
 #ifdef MONGO
@@ -158,15 +158,18 @@ static void horatio_int_sqlite3_logmsg(
 	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
 	")";
 
-	if ( !DBHandle ) return;
+	if ( !Handle_sqlite ) return;
 
 	fprintf(stderr, "Got database message %s\n", Msg);
 	fprintf(stderr, "Executing query: %s\n", q);
-	rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
+	rc = sqlite3_prepare_v2(Handle_sqlite, q, strlen(q), &stmt, NULL);
 	if ( rc != SQLITE_OK ) {
 		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
 		return;
 	}
+	// FIXME Missing code here?
+	printf("Unused parameter hack only FIXME %u %u, %s", Severity, Line, File);
+}
 #endif /*SQLITE*/
 
 static void horatio_int_mongodb_logmsg(
@@ -247,13 +250,13 @@ static void horatio_int_mongodb_logmsg(
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open() {
   char *errMsgPtr = NULL;
-  if ( mysql_real_connect(&DBHandle, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
+  if ( mysql_real_connect(Handle_mysql, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
     errMsgPtr = "FIXME";
     Trap(0, errMsgPtr);
     return 0;
   }
 
-  return &DBHandle;
+  return Handle_mysql;
 }
 #endif /*USE_MYSQL*/
 
@@ -378,12 +381,12 @@ void horatio_int_Log(
 			}
 
 #ifdef SQLITE
-			if ( !Handle_sqlite ) DBHandle = horatio_int_sqlite3_open();
+			if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
 			horatio_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
 #endif /*USE_MYSQL*/
 
 #ifdef USE_MYSQL
-			if ( !Handle_mysql ) DBHandle = horatio_int_mysql_open();
+			if ( !Handle_mysql ) Handle_mysql = horatio_int_mysql_open();
 			horatio_int_mysql_logmsg(File, Line, Severity, formatMsg);
 #endif /*MONGO*/
 
