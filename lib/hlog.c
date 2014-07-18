@@ -383,6 +383,7 @@ void horatio_int_Log(
 			fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
 		}
 
+		/* Potentially log to various enabled database engines */
 #ifdef SQLITE
 		if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
 		horatio_int_sqlite3_logmsg(File, Line, Severity, Message);
