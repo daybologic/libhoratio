@@ -307,7 +307,7 @@ static void horatio_int_mysql_logmsg(
 void horatio_int_Log(
 	const char *File,
 	const unsigned int Line,
-	const unsigned short Severity,
+	const enum hLogSeverity Severity,
 	const char *Message
 ) {
 	/*

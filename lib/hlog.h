@@ -46,9 +46,12 @@ extern "C" {
  */
 
 /* Types of logging messages */
-#define HORATIO_LOG_MESSAGE (0U) /* Only put in log */
-#define HORATIO_LOG_WARNING (1U) /* stderr and log */
-#define HORATIO_LOG_ERROR   (2U) /* Same as warning for now */
+enum hLogSeverity {
+	HORATIO_LOG_MESSAGE = 0U, /* Only put in log */
+	HORATIO_LOG_WARNING = 1U, /* stderr and log */
+	HORATIO_LOG_ERROR   = 2U, /* Same as warning for now */
+};
+
 /*
  * Even though error and warning do the same thing, they display different
  * messages in the log and on stderr
@@ -60,7 +63,7 @@ extern "C" {
 void horatio_int_Log(
 	const char *File,
 	const unsigned int Line,
-	const unsigned short Severity,
+	const enum hLogSeverity Severity,
 	const char *Message
 );
 
@@ -70,7 +73,7 @@ void horatio_int_Log(
 #ifdef HORATIO_LOG
 # define MESSAGE(sfn, sfl, msg)                                             \
     horatio_int_Log((sfn), (sfl),                                           \
-    (const unsigned short)HORATIO_LOG_MESSAGE, (msg)                        \
+    HORATIO_LOG_MESSAGE, (msg)                                              \
 )
 #else /* Non logging build */
 # define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
@@ -79,13 +82,13 @@ void horatio_int_Log(
 #define WARNING(msg)                                                        \
     horatio_int_Log(                                                        \
         (__FILE__), (__LINE__),                                             \
-        (const unsigned short)HORATIO_LOG_WARNING, (msg)                    \
+        HORATIO_LOG_WARNING, (msg)                                          \
     )
 
 #define ERROR(msg)                                                          \
     horatio_int_Log(                                                        \
     (__FILE__), (__LINE__),                                                 \
-    (const unsigned short)HORATIO_LOG_ERROR, (msg)                          \
+    HORATIO_LOG_ERROR, (msg)                                                \
 )
 
 #ifdef __cplusplus
