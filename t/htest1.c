@@ -384,7 +384,12 @@ static void suite_alloc_AllocLoop() {
 }
 
 static void suite_log_TODO() {
-	CU_ASSERT_PTR_NOT_NULL("Horatio");
+	horatio_int_Log(
+		"dummy.c", /* File */
+		1234, /* Line */
+		0, /* Severity FIXME: forgotten what we do here, Y U NO HAVE ENUM? */
+		"Horatio has merely sniffed his breakfast" /* Message */
+	);
 }
 
 static void test_TrapCallback(const unsigned int tn, const char* str) {
