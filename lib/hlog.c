@@ -107,12 +107,14 @@ static void horatio_int_sqlite3_logmsg(
   const char *
 );
 
+#ifdef USE_MYSQL
 static void horatio_int_mysql_logmsg(
   const char *,
   const unsigned int,
   const unsigned short,
   const char *
 );
+#endif /*USE_MYSQL*/
 
 #ifdef SQLITE
 static sqlite3 *Handle_sqlite = NULL;
@@ -172,6 +174,7 @@ static void horatio_int_sqlite3_logmsg(
 }
 #endif /*SQLITE*/
 
+#ifdef MONGO
 static void horatio_int_mongodb_logmsg(
     const char *,
     const unsigned int,
@@ -179,7 +182,6 @@ static void horatio_int_mongodb_logmsg(
     const char *
 );
 
-#ifdef MONGO
 static mongo_sync_connection *horatio_int_mongodb_open() {
 	//mongoc_uri_t *uri;
 	//mongoc_insert_flags_t flags = MONGOC_INSERT_NONE;
