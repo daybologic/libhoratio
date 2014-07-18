@@ -66,12 +66,14 @@ static int init_suite_core(void); /* Core library implementation testing: horati
 static int init_suite_trap(void); /* Trap function testing: dpc_trap.c */
 static int init_suite_dbghook(void); /* Debug hook testing: hdbghook.c */
 static int init_suite_alloc(void); /* Alloc function test: dpc_alloc.c */
+static int init_suite_log(void); /* Log function test: hlog.c */
 
 /* Suite cleanup routines */
 static int clean_suite_core(void);
 static int clean_suite_trap(void);
 static int clean_suite_dbghook(void);
 static int clean_suite_alloc(void);
+static int clean_suite_log(void);
 
 /* This function aborts the program under extraordinary circumstances */
 static void Die(const char *File, const unsigned int Line, const char *Message);
@@ -93,6 +95,9 @@ static void suite_dbghook_InstallDebugHook(void);
 /* Test suite allloc */
 static void suite_alloc_AllocSimple(void);
 static void suite_alloc_AllocLoop(void);
+
+/* Test suite log */
+static void suite_log_TODO(void);
 
 /* Incidental functions */
 static void test_TrapCallback(const unsigned int, const char*);
@@ -139,6 +144,10 @@ static int init_suite_alloc() {
 	return 1;
 }
 
+static int init_suite_log() {
+	return 0;
+}
+
 static int clean_suite_core() {
 	return 0;
 }
@@ -155,6 +164,10 @@ static int clean_suite_alloc() {
 	}
 
 	return 1;
+}
+
+static int clean_suite_log() {
+	return 0;
 }
 
 static void Die(const char *File, const unsigned int Line, const char *Message) {
@@ -238,6 +251,14 @@ int main(int argc, char *argv[]) {
 		  &suite_alloc_AllocLoop
 		}
 	};
+	static struct {
+		const char *TestName;
+		void (*TestFunc)(void);
+	} LogTests[] = {
+		{ "TODO",
+		 &suite_log_TODO
+		}
+	};
 
 	/* Suites */
 	static struct {
@@ -247,7 +268,8 @@ int main(int argc, char *argv[]) {
 	} Suites[] = {
 		{ "suite_core", &init_suite_core, &clean_suite_core },
 		{ "suite_trap", &init_suite_trap, &clean_suite_trap },
-		{ "suite_alloc", &init_suite_alloc, &clean_suite_alloc }
+		{ "suite_alloc", &init_suite_alloc, &clean_suite_alloc },
+		{ "suite_log", &init_suite_log, &clean_suite_log },
 	};
 
 	CU_pSuite pSuite[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
@@ -285,6 +307,13 @@ int main(int argc, char *argv[]) {
 	suiteI++;
 	for ( testI = 0; testI < sizeof(AllocTests)/sizeof(AllocTests[0]); testI++ ) {
 		if ( !CU_add_test(pSuite[suiteI], AllocTests[testI].TestName, AllocTests[testI].TestFunc) ) {
+			CU_cleanup_registry();
+			return CU_get_error();
+		}
+	}
+	suiteI++;
+	for ( testI = 0; testI < sizeof(LogTests)/sizeof(LogTests[0]); testI++ ) {
+		if ( !CU_add_test(pSuite[suiteI], LogTests[testI].TestName, LogTests[testI].TestFunc) ) {
 			CU_cleanup_registry();
 			return CU_get_error();
 		}
@@ -352,6 +381,10 @@ static void suite_alloc_AllocLoop() {
 	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
 		horatio_Free(BDASharedSingle, blocksSharedSingle[blockI]);
 	}
+}
+
+static void suite_log_TODO() {
+	CU_ASSERT_PTR_NOT_NULL("Horatio");
 }
 
 static void test_TrapCallback(const unsigned int tn, const char* str) {
