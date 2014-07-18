@@ -169,8 +169,19 @@ static void horatio_int_sqlite3_logmsg(
 		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
 		return;
 	}
-	// FIXME Missing code here?
-	printf("Unused parameter hack only FIXME %u %u, %s", Severity, Line, File);
+
+	rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
+	rc = sqlite3_bind_int(stmt, 2, Line);
+	rc = sqlite3_bind_int(stmt, 3, Severity);
+	rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
+	if ( rc != SQLITE_OK )
+	fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
+	rc = sqlite3_step(stmt);
+	if ( rc != SQLITE_DONE )
+	fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+	rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
+	if ( rc != SQLITE_OK )
+	fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
 #endif /*SQLITE*/
 
@@ -231,23 +242,6 @@ static void horatio_int_mongodb_logmsg(
 	return;
 }
 #endif /*MONGO*/
-
-#if 0
-  }
-  rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
-  rc = sqlite3_bind_int(stmt, 2, Line);
-  rc = sqlite3_bind_int(stmt, 3, Severity);
-  rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
-  if ( rc != SQLITE_OK )
-    fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
-  rc = sqlite3_step(stmt);
-  if ( rc != SQLITE_DONE )
-    fprintf(stderr, "Error %u from sqlite3_step\n", rc);
-  rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
-  if ( rc != SQLITE_OK )
-    fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
-}
-#endif /*0*/
 
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open() {
