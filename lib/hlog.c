@@ -319,80 +319,78 @@ void horatio_int_Log(
 	FILE *HLogFile; /* Handle for log file */
 #endif /*HORATIO_LOG*/
 
-	if ( Message ) {
-		if ( Message[0] ) {
-			/* so strncat() knows where to begin */
-			formatMsg[0] = '\0';
-			STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
-			if ( File ) { /* Convert line number to string */
-				sprintf(
-					number,
+	if ( Message && Message[0] ) {
+		/* so strncat() knows where to begin */
+		formatMsg[0] = '\0';
+		STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
+		if ( File ) { /* Convert line number to string */
+			sprintf(
+				number,
 #ifdef HAVE_SNPRINTF
-					sizeof(number)-1,
+				sizeof(number)-1,
 #endif /*HAVE_SNPRINTF*/
-					"%u",
-					Line
+				"%u",
+				Line
+			);
+		}
+		switch ( Severity ) {
+			case HORATIO_LOG_WARNING : {
+				STRNCAT_FIXEDBUFF(
+					formatMsg, "Warning! "
 				);
+				break;
 			}
-			switch ( Severity ) {
-				case HORATIO_LOG_WARNING : {
-					STRNCAT_FIXEDBUFF(
-						formatMsg, "Warning! "
-					);
-					break;
-				}
-				case HORATIO_LOG_ERROR : {
-					STRNCAT_FIXEDBUFF(
-						formatMsg, "FATAL ERROR! "
-					);
-					break;
-				}
+			case HORATIO_LOG_ERROR : {
+				STRNCAT_FIXEDBUFF(
+					formatMsg, "FATAL ERROR! "
+				);
+				break;
 			}
-			if ( File ) {
-				STRNCAT_FIXEDBUFF(formatMsg, File);
-				STRNCAT_FIXEDBUFF(formatMsg, ", L");
-				STRNCAT_FIXEDBUFF(formatMsg, number);
-				STRNCAT_FIXEDBUFF(formatMsg, ": ");
-			}
-			STRNCAT_FIXEDBUFF(formatMsg, Message);
-			/* Close quotes and end line */
-			STRNCAT_FIXEDBUFF(formatMsg, "\"\n");
+		}
+		if ( File ) {
+			STRNCAT_FIXEDBUFF(formatMsg, File);
+			STRNCAT_FIXEDBUFF(formatMsg, ", L");
+			STRNCAT_FIXEDBUFF(formatMsg, number);
+			STRNCAT_FIXEDBUFF(formatMsg, ": ");
+		}
+		STRNCAT_FIXEDBUFF(formatMsg, Message);
+		/* Close quotes and end line */
+		STRNCAT_FIXEDBUFF(formatMsg, "\"\n");
 
-			/*
-			 * Determine what to do with the message
-			 * based on it's severity.
-			 */
+		/*
+		 * Determine what to do with the message
+		 * based on it's severity.
+		 */
 #ifdef HORATIO_LOG
-			/* Everything goes in the log... */
-			/* Append/overwrite text file */
-			HLogFile = fopen("HORATIO.LOG", "at");
-			if ( HLogFile ) { /* Log opened? */
-				/* Output log msg to log file */
-				fputs(formatMsg, HLogFile);
-				fclose(HLogFile); /* Close the log file */
-			}
+		/* Everything goes in the log... */
+		/* Append/overwrite text file */
+		HLogFile = fopen("HORATIO.LOG", "at");
+		if ( HLogFile ) { /* Log opened? */
+			/* Output log msg to log file */
+			fputs(formatMsg, HLogFile);
+			fclose(HLogFile); /* Close the log file */
+		}
 #endif /*HORATIO_LOG*/
 
-			if ( Severity > HORATIO_LOG_MESSAGE ) {
-				/* Anything more severe than a warning */
-				fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
-			}
+		if ( Severity > HORATIO_LOG_MESSAGE ) {
+			/* Anything more severe than a warning */
+			fprintf(HORATIO_DEV_ERROR, "%s", formatMsg);
+		}
 
 #ifdef SQLITE
-			if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
-			horatio_int_sqlite3_logmsg(File, Line, Severity, Message);
+		if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
+		horatio_int_sqlite3_logmsg(File, Line, Severity, Message);
 #endif /*USE_MYSQL*/
 
 #ifdef USE_MYSQL
-			if ( !Handle_mysql ) Handle_mysql = horatio_int_mysql_open();
-			horatio_int_mysql_logmsg(File, Line, Severity, Message);
+		if ( !Handle_mysql ) Handle_mysql = horatio_int_mysql_open();
+		horatio_int_mysql_logmsg(File, Line, Severity, Message);
 #endif /*MONGO*/
 
 #ifdef MONGO
-			if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
-			horatio_int_mongodb_logmsg(File, Line, Severity, Message);
+		if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
+		horatio_int_mongodb_logmsg(File, Line, Severity, Message);
 #endif /*MONGO*/
-		}
 	}
 	return;
 }
