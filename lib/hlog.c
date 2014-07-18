@@ -100,12 +100,14 @@ static MYSQL *horatio_int_mysql_open(void);
 static mongo_sync_connection *horatio_int_mongodb_open(void);
 #endif /*MONGO*/
 
+#ifdef SQLITE
 static void horatio_int_sqlite3_logmsg(
   const char *,
   const unsigned int,
   const unsigned short,
   const char *
 );
+#endif /*SQLITE*/
 
 #ifdef USE_MYSQL
 static void horatio_int_mysql_logmsg(
