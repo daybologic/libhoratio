@@ -348,6 +348,10 @@ void horatio_int_Log(
 				);
 				break;
 			}
+			case HORATIO_LOG_MESSAGE  : {
+				/* HORATIO_LOG_MESSAGE has no string prefix */
+				break;
+			}
 		}
 		if ( File ) {
 			STRNCAT_FIXEDBUFF(formatMsg, File);
