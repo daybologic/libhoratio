@@ -332,9 +332,9 @@ AC_ARG_WITH(sqlite,
   [sqlite=yes], [sqlite=no]
 )
 if test "$sqlite" = "yes"; then
-  AC_DEFINE([SQLITE], [], [Link with SQlite])
+  AC_DEFINE([USE_SQLITE], [], [Link with SQlite])
 fi
-AM_CONDITIONAL([SQLITE], [test "$sqlite" = "yes"])
+AM_CONDITIONAL([USE_SQLITE], [test "$sqlite" = "yes"])
 AC_MSG_RESULT($sqlite)
 
 dnl --with-mysql
@@ -356,9 +356,9 @@ AC_ARG_WITH(mongo,
   [mongo=yes], [mongo=no]
 )
 if test "$mongo" = "yes"; then
-  AC_DEFINE([MONGO], [], [Link with MongoDB])
+  AC_DEFINE([USE_MONGO], [], [Link with MongoDB])
 fi
-AM_CONDITIONAL([MONGO], [test "$mongo" = "yes"])
+AM_CONDITIONAL([USE_MONGO], [test "$mongo" = "yes"])
 AC_MSG_RESULT($mongo)
 
 dnl --enable-log

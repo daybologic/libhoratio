@@ -59,17 +59,17 @@ POSSIBILITY OF SUCH DAMAGE.
 # include <stdbool.h>
 #endif /*HAVE_STDBOOL_H*/
 
-#ifdef SQLITE
+#ifdef USE_SQLITE
 # include <sqlite3.h> /* For SQLite logging support */
-#endif /*SQLITE*/
+#endif /*USE_SQLITE*/
 
 #ifdef USE_MYSQL
 # include <mysql.h> /* For MySQL logging support */
 #endif /*USE_MYSQL*/
 
-#ifdef MONGO
+#ifdef USE_MONGO
 # include <mongo.h> /* For MongoDB logging support */
-#endif /*MONGO*/
+#endif /*USE_MONGO*/
 
 #ifdef HORATIO_HDRSTOP
 # pragma hdrstop
@@ -88,26 +88,26 @@ POSSIBILITY OF SUCH DAMAGE.
         (sizeof((buff))/sizeof((buff)[0])-1) \
     )
 
-#ifdef SQLITE
+#ifdef USE_SQLITE
 static sqlite3 *horatio_int_sqlite3_open(void);
-#endif /*SQLITE*/
+#endif /*USE_SQLITE*/
 
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open(void);
 #endif /*USE_MYSQL*/
 
-#ifdef MONGO
+#ifdef USE_MONGO
 static mongo_sync_connection *horatio_int_mongodb_open(void);
-#endif /*MONGO*/
+#endif /*USE_MONGO*/
 
-#ifdef SQLITE
+#ifdef USE_SQLITE
 static void horatio_int_sqlite3_logmsg(
   const char *,
   const unsigned int,
   const unsigned short,
   const char *
 );
-#endif /*SQLITE*/
+#endif /*USE_SQLITE*/
 
 #ifdef USE_MYSQL
 static void horatio_int_mysql_logmsg(
@@ -118,20 +118,20 @@ static void horatio_int_mysql_logmsg(
 );
 #endif /*USE_MYSQL*/
 
-#ifdef SQLITE
+#ifdef USE_SQLITE
 static sqlite3 *Handle_sqlite = NULL;
-#endif /*SQLITE*/
+#endif /*USE_SQLITE*/
 
 #ifdef USE_MYSQL
 static MYSQL *Handle_mysql;
 #endif /*USE_MYSQL*/
 
-#ifdef MONGO
+#ifdef USE_MONGO
 static mongo_sync_connection *mongo_client;
 //static mongoc_collection_t *collection;
-#endif /*MONGO*/
+#endif /*USE_MONGO*/
 
-#ifdef SQLITE
+#ifdef USE_SQLITE
 static sqlite3 *horatio_int_sqlite3_open() {
   /* TODO:
   This scema must be created
@@ -185,9 +185,9 @@ static void horatio_int_sqlite3_logmsg(
 	if ( rc != SQLITE_OK )
 	fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
-#endif /*SQLITE*/
+#endif /*USE_SQLITE*/
 
-#ifdef MONGO
+#ifdef USE_MONGO
 static void horatio_int_mongodb_logmsg(
     const char *,
     const unsigned int,
@@ -243,7 +243,7 @@ static void horatio_int_mongodb_logmsg(
 	bson_free(document);
 	return;
 }
-#endif /*MONGO*/
+#endif /*USE_MONGO*/
 
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open() {
@@ -384,7 +384,7 @@ void horatio_int_Log(
 		}
 
 		/* Potentially log to various enabled database engines */
-#ifdef SQLITE
+#ifdef USE_SQLITE
 		if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
 		horatio_int_sqlite3_logmsg(File, Line, Severity, Message);
 #endif /*USE_MYSQL*/
@@ -392,12 +392,12 @@ void horatio_int_Log(
 #ifdef USE_MYSQL
 		if ( !Handle_mysql ) Handle_mysql = horatio_int_mysql_open();
 		horatio_int_mysql_logmsg(File, Line, Severity, Message);
-#endif /*MONGO*/
+#endif /*USE_MONGO*/
 
-#ifdef MONGO
+#ifdef USE_MONGO
 		if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
 		horatio_int_mongodb_logmsg(File, Line, Severity, Message);
-#endif /*MONGO*/
+#endif /*USE_MONGO*/
 	}
 	return;
 }

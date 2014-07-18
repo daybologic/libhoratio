@@ -34,17 +34,17 @@ lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
 
 AM_LDFLAGS=
 
-if SQLITE
+if USE_SQLITE
 AM_LDFLAGS += -lsqlite3
-endif #SQLITE
+endif #USE_SQLITE
 
 if USE_MYSQL
 AM_LDFLAGS += -lmysqlclient
 endif #USE_MYSQL
 
-if MONGO
+if USE_MONGO
 AM_LDFLAGS += -lmongo-client
-endif #MONGO
+endif #USE_MONGO
 
 libdpcrtlmm_la_SOURCES = dpcrtlmm.c
 libhoratio_la_SOURCES  = horatio.c
