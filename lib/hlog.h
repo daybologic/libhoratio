@@ -48,7 +48,7 @@ extern "C" {
 /* Types of logging messages */
 #define HORATIO_LOG_MESSAGE (0U) /* Only put in log */
 #define HORATIO_LOG_WARNING (1U) /* stderr and log */
-#define HORATIO_LOG_ERROR   (2U) /* Same as error for now */
+#define HORATIO_LOG_ERROR   (2U) /* Same as warning for now */
 /*
  * Even though error and warning do the same thing, they display different
  * messages in the log and on stderr
