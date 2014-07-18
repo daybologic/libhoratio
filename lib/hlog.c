@@ -138,7 +138,7 @@ static sqlite3 *horatio_int_sqlite3_open() {
 
 	sqlite3 *dbh;
 	const char *errMsgPtr = NULL;
-	int rc = sqlite3_open("DPCRTLMM.SQ3", &dbh);
+	int rc = sqlite3_open("horatio.db", &dbh);
 	if ( rc ) { // Fail?
 		errMsgPtr = sqlite3_errmsg(dbh);
 		Trap(0, errMsgPtr);
