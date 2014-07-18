@@ -378,17 +378,17 @@ void horatio_int_Log(
 
 #ifdef SQLITE
 			if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
-			horatio_int_sqlite3_logmsg(File, Line, Severity, formatMsg);
+			horatio_int_sqlite3_logmsg(File, Line, Severity, Message);
 #endif /*USE_MYSQL*/
 
 #ifdef USE_MYSQL
 			if ( !Handle_mysql ) Handle_mysql = horatio_int_mysql_open();
-			horatio_int_mysql_logmsg(File, Line, Severity, formatMsg);
+			horatio_int_mysql_logmsg(File, Line, Severity, Message);
 #endif /*MONGO*/
 
 #ifdef MONGO
 			if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
-			horatio_int_mongodb_logmsg(File, Line, Severity, formatMsg);
+			horatio_int_mongodb_logmsg(File, Line, Severity, Message);
 #endif /*MONGO*/
 		}
 	}
