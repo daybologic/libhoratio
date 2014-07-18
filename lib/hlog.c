@@ -259,6 +259,8 @@ static MYSQL *horatio_int_mysql_open() {
 #endif /*USE_MYSQL*/
 
 #if 0
+// Nb. The code here, look like SQLite because we're trying to translate from SQLite to MySQL,
+// not because there has been an editing mistake
 static void horatio_int_mysql_logmsg(
   const char *File,
   const unsigned int Line,
