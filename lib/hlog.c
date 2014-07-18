@@ -222,7 +222,7 @@ static void horatio_int_mongodb_logmsg(
 	bson_append_document_end(&document, &child);*/
 	//qsl = mongoc_collection_insert(collection, flags, &document, write_concern, &error);
 	qsl = false;
-	if (!qsl) {
+	if ( !qsl ) {
 		fprintf(stderr, "Error mongoc_collection_insert\n");
 		return;
 	}
@@ -252,7 +252,7 @@ static void horatio_int_mongodb_logmsg(
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open() {
   char *errMsgPtr = NULL;
-  if ( mysql_real_connect(Handle_mysql, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL) { // Fail?
+  if ( mysql_real_connect(Handle_mysql, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL ) { // Fail?
     errMsgPtr = "FIXME";
     Trap(0, errMsgPtr);
     return 0;
@@ -323,8 +323,8 @@ void horatio_int_Log(
 	FILE *HLogFile; /* Handle for log file */
 #endif /*HORATIO_LOG*/
 
-	if (Message) {
-		if (Message[0]) {
+	if ( Message ) {
+		if ( Message[0] ) {
 			/* so strncat() knows where to begin */
 			formatMsg[0] = '\0';
 			STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
@@ -370,7 +370,7 @@ void horatio_int_Log(
 			/* Everything goes in the log... */
 			/* Append/overwrite text file */
 			HLogFile = fopen("HORATIO.LOG", "at");
-			if (HLogFile) { /* Log opened? */
+			if ( HLogFile ) { /* Log opened? */
 				/* Output log msg to log file */
 				fputs(formatMsg, HLogFile);
 				fclose(HLogFile); /* Close the log file */
