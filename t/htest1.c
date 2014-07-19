@@ -144,6 +144,10 @@ static int init_suite_alloc() {
 	return 1;
 }
 
+static int init_suite_dbghook() {
+	return 0;
+}
+
 static int init_suite_log() {
 	return 0;
 }
@@ -268,6 +272,7 @@ int main(int argc, char *argv[]) {
 	} Suites[] = {
 		{ "suite_core", &init_suite_core, &clean_suite_core },
 		{ "suite_trap", &init_suite_trap, &clean_suite_trap },
+		{ "suite_dbghook", &init_suite_dbghook, &clean_suite_dbghook },
 		{ "suite_alloc", &init_suite_alloc, &clean_suite_alloc },
 		{ "suite_log", &init_suite_log, &clean_suite_log },
 	};
@@ -312,6 +317,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	suiteI++;
+	for ( testI = 0; testI < sizeof(DbghookTests)/sizeof(DbghookTests[0]); testI++ ) {
+		if ( !CU_add_test(pSuite[suiteI], DbghookTests[testI].TestName, DbghookTests[testI].TestFunc) ) {
+					CU_cleanup_registry();
+			return CU_get_error();
+		}
+	}
+	suiteI++;
 	for ( testI = 0; testI < sizeof(LogTests)/sizeof(LogTests[0]); testI++ ) {
 		if ( !CU_add_test(pSuite[suiteI], LogTests[testI].TestName, LogTests[testI].TestFunc) ) {
 			CU_cleanup_registry();
@@ -346,6 +358,10 @@ static void suite_core_Ver() {
 
 static void suite_trap_InstallTrapCallback() {
 	horatio_InstallTrapCallback(test_TrapCallback, 0);
+}
+
+static void suite_dbghook_InstallDebugHook() {
+	// TODO
 }
 
 static void suite_alloc_AllocSimple() {
