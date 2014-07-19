@@ -64,14 +64,14 @@ static bool ProcessOptions(int ArgC, char **ArgV);
 /* Suite initialisation routines */
 static int init_suite_core(void); /* Core library implementation testing: horatio.c  */
 static int init_suite_trap(void); /* Trap function testing: dpc_trap.c */
-static int init_suite_dbghook(void); /* Debug hook testing: hdbghook.c */
 static int init_suite_alloc(void); /* Alloc function test: dpc_alloc.c */
+static int init_suite_dbghook(void); /* Debug hook testing: hdbghook.c */
 
 /* Suite cleanup routines */
 static int clean_suite_core(void);
 static int clean_suite_trap(void);
-static int clean_suite_dbghook(void);
 static int clean_suite_alloc(void);
+static int clean_suite_dbghook(void);
 
 /* This function aborts the program under extraordinary circumstances */
 static void Die(const char *File, const unsigned int Line, const char *Message);
@@ -87,12 +87,12 @@ static void suite_core_Ver(void);
 /* Test suite trap */
 static void suite_trap_InstallTrapCallback(void);
 
-/* Test suite debug hook */
-static void suite_dbghook_InstallDebugHook(void);
-
 /* Test suite allloc */
 static void suite_alloc_AllocSimple(void);
 static void suite_alloc_AllocLoop(void);
+
+/* Test suite debug hook */
+static void suite_dbghook_InstallDebugHook(void);
 
 /* Incidental functions */
 static void test_TrapCallback(const unsigned int, const char*);
@@ -139,6 +139,10 @@ static int init_suite_alloc() {
 	return 1;
 }
 
+static int init_suite_dbghook() {
+	return 0;
+}
+
 static int clean_suite_core() {
 	return 0;
 }
@@ -155,6 +159,10 @@ static int clean_suite_alloc() {
 	}
 
 	return 1;
+}
+
+static int clean_suite_dbghook() {
+	return 0;
 }
 
 static void Die(const char *File, const unsigned int Line, const char *Message) {
@@ -238,6 +246,14 @@ int main(int argc, char *argv[]) {
 		  &suite_alloc_AllocLoop
 		}
 	};
+	static struct {
+		const char *TestName;
+		void (*TestFunc)(void);
+	} DbghookTests[] = {
+		{ "DbghookInstallDebugHook",
+		  &suite_dbghook_InstallDebugHook
+		}
+	};
 
 	/* Suites */
 	static struct {
@@ -247,7 +263,8 @@ int main(int argc, char *argv[]) {
 	} Suites[] = {
 		{ "suite_core", &init_suite_core, &clean_suite_core },
 		{ "suite_trap", &init_suite_trap, &clean_suite_trap },
-		{ "suite_alloc", &init_suite_alloc, &clean_suite_alloc }
+		{ "suite_dbghook", &init_suite_dbghook, &clean_suite_dbghook },
+		{ "suite_alloc", &init_suite_alloc, &clean_suite_alloc },
 	};
 
 	CU_pSuite pSuite[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
@@ -289,6 +306,13 @@ int main(int argc, char *argv[]) {
 			return CU_get_error();
 		}
 	}
+	suiteI++;
+	for ( testI = 0; testI < sizeof(DbghookTests)/sizeof(DbghookTests[0]); testI++ ) {
+		if ( !CU_add_test(pSuite[suiteI], DbghookTests[testI].TestName, DbghookTests[testI].TestFunc) ) {
+			CU_cleanup_registry();
+			return CU_get_error();
+		}
+	}
 	/*suiteI++;*/ /* Don't forget to uncomment this before adding more tests */
 
 	/* Run all tests using the CUnit Basic interface */
@@ -317,6 +341,10 @@ static void suite_core_Ver() {
 
 static void suite_trap_InstallTrapCallback() {
 	horatio_InstallTrapCallback(test_TrapCallback, 0);
+}
+
+static void suite_dbghook_InstallDebugHook() {
+	// TODO
 }
 
 static void suite_alloc_AllocSimple() {
