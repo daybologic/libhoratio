@@ -99,11 +99,14 @@ extern "C" {
 #  define __LINE__ (0)
 #endif /*!__LINE__*/
 
-
-/*
- * Special flags, 0-Locked - Cannot be freed or resized by the library
- * 1-NoSwap - Do not swap out (unimplemented)
- * 2-7 - Reserved, must be zero
+/*!
+ *  \struct _S_HORATIO_BLOCKDESCRIPTOR
+ *  \brief Descriptive information about a singular block of memory
+ *
+ *  Flags:<br>
+ *  0 (Locked): Cannot be freed or resized by the library<br>
+ *  1 (NoSwap): Do not swap out (unimplemented)<br>
+ *  2-7: Reserved, must be zero
  */
 typedef struct _S_HORATIO_BLOCKDESCRIPTOR { /* A block descriptor */
 	void HORATIO_FARDATA *PBase; /* Raw pointer to the base address of the block */
