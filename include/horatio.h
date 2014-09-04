@@ -78,9 +78,21 @@ system on which a flaw is seen, whether this is embedded or games console.
 extern "C" {
 #endif /*__cplusplus*/
 
-/*
- * Users who don't have dpc_build.h won't have HORATIO_FARDATA defined,
- * so just remove it to stop any problems happening.
+/*!
+ *  \def HORATIO_FARDATA
+ *  \brief Macro which controls the use of far pointers on segmented architectures
+ *
+ *  This macro controls whether memory pointers allocated by the library on behalf
+ *  of a user are explicitly 'far', which is necessary under some memory models
+ *  on segmented architectures.  The reason being is chiefly that a near pointer
+ *  cannot be used by the caller if the segment portion of the address is discarded,
+ *  as it will address a different area of memory completely, and will likely cause
+ *  a segmentation fault, or other undefined behaviour.
+ *
+ *  You should control this flag with --enable-fardata
+ *  via the configuration script.
+ *
+ *  The default action is to define the macro to nothing, if it is not defined.
  */
 #ifndef HORATIO_FARDATA
 # define HORATIO_FARDATA
