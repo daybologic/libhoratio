@@ -62,8 +62,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbiglock.h" /* Mutual exclusion */
 #include "halloc.h"
 
-/* Internal functions (local) */
-
+/*!
+ * \brief Local logging function for the allocator
+ *
+ * \param File Source code filename
+ * \param Line Source code line number
+ * \param Severity The severity of the error, a higher numeric value is more serious
+ * \param Message Message to be passed on to the logger
+ */
 static void OurLog(
 	const char *File,
 	const unsigned int Line,
@@ -71,11 +77,17 @@ static void OurLog(
 	const char *Message
 );
 
-/*
- * Grow the array by 'GrowByElems' elements, returns FALSE if
- * it fails but then the original array is still valid and no
- * bigger.  Always make sure the array pointer is resolved, NULL
- * pointers are not acceptable and will be caught with assert()
+/*!
+ * \brief Grow the array by 'GrowByElems' elements
+ *
+ * \param PCurrentBlockArray Pointer to a block descriptor
+ * \param GrowByElems number of elements by which the block should be enlarged.
+ *
+ * \return Boolean success value
+ *
+ * Returns a false value if it fails but then the original array is still valid and no
+ * bigger.  Always make sure the array pointer is resolved, NULL pointers are not acceptable
+ * and will be caught with assert(), with a checked build of the library.
  */
 
 static unsigned int GrowBlockArray(
@@ -99,6 +111,16 @@ static unsigned int GrowBlockArray(
 #define OURLOG_POS(sev, msg) \
 	OURLOG(__FILE__, __LINE__, (sev), (msg))
 
+/*!
+ * Function which implements strdup
+ *
+ * This function should not be called directly, use the horatio_Strdup macro.
+
+ * \param PBlockArray Block descriptor array pointer
+ * \param SrcStr Source string to be duplicated
+ * \param File Source code filename information
+ * \param Line Source code line number information
+ */
 char HORATIO_FARDATA *horatio_StrdupEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const char *SrcStr,
