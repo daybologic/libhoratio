@@ -244,7 +244,7 @@ typedef struct _S_HORATIO_DEBUGHOOKINFO { /* Information passed to hooks */
  * Although the hook is valid, this shouldn't happen because the hook chain
  * is not prepared for use before Startup is called, the hook will be executed
  * if Startup() is ever called again.  The parameters (apart from Success) will
- * nbot be used and of course Success will be FALSE (0U) because multiple calls
+ * not be used and of course Success will be FALSE (0U) because multiple calls
  * of Startup() are NOT allowed!
  */
 
