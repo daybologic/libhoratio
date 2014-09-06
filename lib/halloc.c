@@ -114,12 +114,14 @@ static unsigned int GrowBlockArray(
 /*!
  * Function which implements strdup
  *
- * This function should not be called directly, use the horatio_Strdup macro.
-
  * \param PBlockArray Block descriptor array pointer
  * \param SrcStr Source string to be duplicated
  * \param File Source code filename information
  * \param Line Source code line number information
+ *
+ * \return Pointer to new string allocated by Horatio.
+ *
+ * This function should not be called directly, use the horatio_Strdup macro.
  */
 char HORATIO_FARDATA *horatio_StrdupEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
