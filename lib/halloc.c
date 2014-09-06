@@ -139,6 +139,21 @@ char HORATIO_FARDATA *horatio_StrdupEx(
 	return ret;
 }
 
+/*!
+ * Function which wraps horatio_int_AllocEx for thread safety
+ *
+ * \param PBlockArray Block descriptor array pointer
+ * \param NewBlockSize Size of block to be allocated by the library
+ * \param File Source code filename information
+ * \param Line Source code line number information
+ *
+ * \return Pointer to new memory allocated by Horatio.
+ *
+ * This function should not be called directly, use the horatio_Alloc macro.
+ * This function itself does not implement allocations, but acquires the bigLock,
+ * and then passes control to an internal allocator - hotatio_int_AllocEx, and
+ * relinquishes the bigLock before returning to the caller.
+ */
 void HORATIO_FARDATA *horatio_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const size_t NewBlockSize,
