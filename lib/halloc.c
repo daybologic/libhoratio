@@ -112,7 +112,7 @@ static unsigned int GrowBlockArray(
 	OURLOG(__FILE__, __LINE__, (sev), (msg))
 
 /*!
- * Function which implements strdup
+ * \brief Function which implements strdup
  *
  * \param PBlockArray Block descriptor array pointer
  * \param SrcStr Source string to be duplicated
@@ -142,7 +142,7 @@ char HORATIO_FARDATA *horatio_StrdupEx(
 }
 
 /*!
- * Function which wraps horatio_int_AllocEx for thread safety
+ * \brief Function which wraps horatio_int_AllocEx for thread safety
  *
  * \param PBlockArray Block descriptor array pointer
  * \param NewBlockSize Size of block to be allocated by the library
