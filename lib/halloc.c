@@ -62,33 +62,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbiglock.h" /* Mutual exclusion */
 #include "halloc.h"
 
-/*!
- * \brief Local logging function for the allocator
- *
- * \param File Source code filename
- * \param Line Source code line number
- * \param Severity The severity of the error, a higher numeric value is more serious
- * \param Message Message to be passed on to the logger
- */
 static void OurLog(
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
 	const char *Message
 );
-
-/*!
- * \brief Grow the array by 'GrowByElems' elements
- *
- * \param PCurrentBlockArray Pointer to a block descriptor
- * \param GrowByElems number of elements by which the block should be enlarged.
- *
- * \return Boolean success value
- *
- * Returns a false value if it fails but then the original array is still valid and no
- * bigger.  Always make sure the array pointer is resolved, NULL pointers are not acceptable
- * and will be caught with assert(), with a checked build of the library.
- */
 
 static unsigned int GrowBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PCurrentBlockArray,
@@ -172,6 +151,23 @@ void HORATIO_FARDATA *horatio_AllocEx(
 	return ret;
 }
 
+/*!
+ * \brief Internal allocator
+ *
+ * The internal allocator avoids locking semantics and provides
+ * the implementation for the actual call to the libc malloc().
+ *
+ * \param PBlockArray Block descriptor array pointer
+ * \param NewBlockSize Size of block to be allocated by the library
+ * \param File Source code filename information
+ * \param Line Source code line number information
+ *
+ * \return Pointer to new memory allocated by Horatio.
+ *
+ * This function must not be called by user code, because doing
+ * so would not be thread safe under threaded builds,
+ * callers should use horatio_AllocEx() instead.
+ */
 void HORATIO_FARDATA *horatio_int_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const size_t NewBlockSize,
@@ -314,6 +310,19 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 	return genBlockPtr; /* Give pointer to the caller */
 }
 
+/*!
+ * \brief Increase the size of a block descriptor array
+ *
+ * \param PCurrentBlockArray Pointer to a block descriptor you want to be enlarged.
+ * \param GrowByElems Specify the number of blocks you may need to additionally accommodate.
+ *
+ * \return Zero indicates failure, 1 returns success, all other values reserved for future use.
+ *
+ * This function is for the internal use of the allocator within halloc.c, only.
+ * The function returns a zero value if it fails but then the original array is still valid and no
+ * bigger.  Always make sure the array pointer is resolved, NULL pointers are not acceptable
+ * and will be caught with assert(), with a checked build of the library.
+ */
 static unsigned int GrowBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PCurrentBlockArray,
 	const unsigned int GrowByElems
@@ -380,6 +389,16 @@ static unsigned int GrowBlockArray(
 	return 1U; /* Success */
 }
 
+/*!
+ * \brief Local logging function for the allocator
+ *
+ * \param File Source code filename
+ * \param Line Source code line number
+ * \param Severity The severity of the error, a higher numeric value is more serious
+ * \param Message Message to be passed on to the logger
+ *
+ * This is an internal function used to log messages from the allocator
+ */
 static void OurLog(
 	const char *File,
 	const unsigned int Line,
