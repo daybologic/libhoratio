@@ -403,7 +403,7 @@ static void OurLog(
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
-	const char *Str
+	const char *Message
 ) {
 	/*
 	 * Our job is to add "Alloc()" to the start of the string,
@@ -415,7 +415,7 @@ static void OurLog(
 	 */
 
 	/* Valid string of at least on character sent to us? */
-	if (Str && Str[0]) {
+	if (Message && Message[0]) {
 		char *PcopyStr;
 		const char FuncName[] = "Alloc(): "; /* Prefix */
 
@@ -423,10 +423,10 @@ static void OurLog(
 		 * Allocate space for copy, note that NULL termination
 		 * is automagic because of using sizeof()
 		 */
-		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) );
+		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Message) );
 		if (PcopyStr) {
 			strcpy(PcopyStr, FuncName); /* Prepend prefix */
-			strcat(PcopyStr, Str); /* Add log string after prefix */
+			strcat(PcopyStr, Message); /* Add log string after prefix */
 
 			horatio_int_Log(
 				File, Line, Severity, PcopyStr
