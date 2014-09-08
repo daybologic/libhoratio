@@ -74,12 +74,6 @@ static void horatio_int_Free(
 	void HORATIO_FARDATA *Ptr
 );
 
-/*
- * Always make sure to pass resolved arrays to these functions:-
- * Moveup following blocks descriptors in array to remove blank
- * space.  StartPos is the item just deleted when moveup will be
- * started from
- */
 static void Moveup(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int StartPos
@@ -254,6 +248,21 @@ static void horatio_int_Free(
 	return;
 }
 
+/*!
+ * \brief Compact and remove unused slots in a S_HORATIO_BLOCKDESCARRAY
+ *
+ * \param PBlockArray A pointer to the block descriptor array
+ * \param StartPos Relative position of the item removed just now
+ *
+ * Moveup following blocks descriptors in array to remove blank
+ * space.  StartPos is the item just deleted where moveup will be
+ * started from.
+ *
+ * This function is provided for internal use of the relinquisher only,
+ * and can only be called within hfree.c
+ *
+ * Always make sure to pass resolved arrays to this function.
+ */
 static void Moveup(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int StartPos
