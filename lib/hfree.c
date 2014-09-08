@@ -99,17 +99,36 @@ static void OurLog(
 	const char *Msg
 );
 
+
+/* TODO: This is the free() documentation we need to provide for the proper macro */
+/* This function is the main deallocation function, the equivilant to free( ) in the C Run time library. The block descriptor array in which the block was allocated must be specified, even if it is NULL, which represents the default internal li- brary array, if the block did not belong to the array you specify a trap will be executed. If a debug hook is installed on this type of event, remember that it must never dereference the PRelDesc field, the descriptor will have already been released. */
+/*!
+ * \brief Thread safe wrapper around Free()
+ *
+ * \param PBlockArray A pointer to the block descriptor array
+ * \param Ptr Block of memory returned from horatio_AllocEx earlier
+ *
+ * This function provides a thread-safe wrapper around horatio_int_Free
+ */
 void horatio_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
 ) {
-	/* Thread safe wrapper around Free() */
-
 	LOCK
 	horatio_int_Free(PBlockArray, Ptr);
 	UNLOCK
 }
 
+/*!
+ * \brief Implement free
+ *
+ * \param PBlockArray A pointer to the block descriptor array
+ * \param Ptr Block of memory returned from horatio_AllocEx earlier
+ *
+ * This function internally provides the wrapper around the libc free()
+ * and therefore implements the majority of the logic required on behalf of the
+ * user, in terms of logging the event, an calling the necessary hooks.
+ */
 static void horatio_int_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
