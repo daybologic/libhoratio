@@ -70,6 +70,18 @@ POSSIBILITY OF SUCH DAMAGE.
         (sizeof((buff))/sizeof((buff)[0])-1) \
     )
 
+/*!
+ * \brief Logging function, intended for use by Horatio's own code.
+ *
+ * \param File Source file name, internal to the library, typically __FILE__
+ * \param Line Source file line, internal to the library, typically __LINE__
+ * \param Severity The severity level of the logged message
+ * \param Message The text of the message to log
+ *
+ * This function should be called indirectly, via the LOG macro,
+ * and provides the logging facility to all internal code.
+ * The function may silently fail under some conditions.
+ */
 void horatio_int_Log(
 	const char *File,
 	const unsigned int Line,
