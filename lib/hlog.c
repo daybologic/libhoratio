@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Memory usage logging support for HORATIO
+/*!
+ * \file hlog.c Memory usage logging support for Horatio
  * Only included if HORATIO_LOG is defined in build.h
  * (Superseeded by --enable-log configuration option)
  *
