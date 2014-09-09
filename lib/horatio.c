@@ -30,7 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*!
+ * \file horatio.c
+ *
  * Incase you're wondering why HORATIO_SOURCE appears at the top of all
  * sources, it's to do with build.h.  That header is for the compilation of the
  * library only, not to be included in user programs.  If users include build.h
@@ -39,6 +41,9 @@ POSSIBILITY OF SUCH DAMAGE.
  * Allocations on behalf of callers are done with HORATIO_MALLOC,
  * internal allocations are done with malloc() and failure should be
  * ignored by checking for NULL.
+ *
+ * Minimal stuff here please,
+ * if possible promote granularity by using other C files
  */
 
 #define HORATIO_SOURCE
@@ -65,10 +70,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbiglock.h" /* To init / uninit the big lib lock */
 #include "hblocarr.h" /* Internal interface to block arrays */
 
-/*
- * Minimal stuff here please,
- * if possible promote granularity by using other C files
- */
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
 /*
  * Called by TrapUnFreedArrays(), not by other functions,
