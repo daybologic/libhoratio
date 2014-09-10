@@ -30,12 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
-#############################################################################
-# Legacy wrapper functions (ABI compatibility).                             #
-# All functions are designed to retain compatibility with existing apps     #
-#############################################################################
-*/
+/*!
+ * \file Legacy wrapper functions (ABI compatibility)
+ * All functions are designed to retain compatibility with existing apps
+ */
+
 #define HORATIO_SOURCE
 
 #ifdef HAVE_CONFIG_H

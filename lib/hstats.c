@@ -30,14 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Functions for returning statistics about memory handled by the library
- * Programmer: David Duncan Ross Palmer
- * Contact: http://www.daybologic.co.uk/mailddrp/
+/*!
+ * \file Functions for returning statistics about memory handled by the library
+ *
  * Created: 27th July 2000
- * Library: HORATIO 1.0
- * Language: ANSI C (1990)
- * Revision #5
  */
 
 #define HORATIO_SOURCE

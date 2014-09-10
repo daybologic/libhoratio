@@ -30,7 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*!
+ * \file Pre-defined default traps, and internal pointer verification
+ *
  * 19th July 2000: This module replaces bbatrap.c and bbptrap.c, which no
  * longer exist.  It's an internal library issue, prebuilt traps for invalid
  * pointers.  In version 1.0 through all the betas these two finctions which

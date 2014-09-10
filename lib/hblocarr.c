@@ -30,8 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Block array creation and destruction functions
+/*!
+ * \file Block array creation and destruction functions
+ *
  * Normally each module or section of a program will make it's own array
  * using the functions herin, if it is too much hastle (because of cleaning
  * up each module) or the program wants to hide behind a normal allocation

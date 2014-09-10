@@ -30,12 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Created: UNKNOWN
- * Programmer: David Duncan Ross Palmer
- * Library: HORATIO
- * Language: ANSI C (1990 implementation)
- * Purpose: HORATIO's memory user-memory reallocation
+/*!
+ * \file Implementation of realloc()
+ *
+ * HORATIO's memory user-memory reallocation
  */
 
 #define HORATIO_SOURCE

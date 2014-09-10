@@ -30,12 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * The debug hook executive and supporting code
- * written (and perfomed by David Duncan Ross Palmer.
- *
- * File DBGHOOKS.C
- * Library: HORATIO Memory Manager
+/*!
+ * \file The debug hook executive and supporting code
  * Created 24th February 2000
  */
 

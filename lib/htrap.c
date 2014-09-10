@@ -30,9 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Library: HORATIO
- * Created: Feb 2000
+/*!
+ * \file Trap mechanism
+ *
+ * TODO: We should describe in more detail, the purpose of the trap subsystem
  */
 
 #define HORATIO_SOURCE

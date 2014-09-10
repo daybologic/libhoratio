@@ -30,6 +30,18 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*!
+ * \file Internal library structure locking semantics for threaded builds.
+ *
+ * None of the functionality present in this file is directly used by callers
+ * to the library.  Always check there is no macro within hbiglock.h before
+ * calling any function directly.
+ *
+ * The big lock can cause contention, any attempt to lock it should attempt
+ * to place the majority of time-sensitive code outside of the period the
+ * lock is held by the thread.  This is known as the "critical section".
+ */
+
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 # include "config.h"

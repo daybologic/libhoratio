@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Module for handling memory block lock flags,
+/*!
+ * \file Module for handling memory block lock flags,
  * Created 22nd Feb 2000
  */
 
