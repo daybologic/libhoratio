@@ -39,7 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * function re-routed to us via a drop-in wrapper then only one block array
  * exists per process.
  *
- * 24/11/2001 (DDRP): Attention, block arrays need to start supporting file/
+ * 24/11/2001 TODO: (DDRP): Attention, block arrays need to start supporting file/
  * line info soon.
 */
 
