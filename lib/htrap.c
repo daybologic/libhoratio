@@ -86,6 +86,25 @@ void horatio_RemoveTrapCallback(
 	UNLOCK
 }
 
+/*!
+ * \brief Returns the state of trap handler (user configuration)
+ *
+ * Sometimes the user of the library has installed a handler for traps instead of
+ * the default library handler, this function returns very simple information about it.
+ * There are three return possible values, the other values won’t be used. The three possible values are
+ *
+ * -1 for no user trap handler
+ *  0 for a handler which is installed as a handler
+ *  1 for a handler which acts as a hook.
+ *
+ * The important thing about a hook is that it gets preview of the trap but the default one is called
+ * afterwards and therefore the hook is expected to return.  A handler should terminate the program,
+ * if it returns the default handler will not be called, the user handler has replaced it.
+ *
+ * So if a handler returns the program may continue after a trap which could lead to unpredictable results.
+ *
+ * \return Mode of trap operation
+ */
 signed char horatio_GetTrapCallbackInfo() {
 	signed char ret;
 
