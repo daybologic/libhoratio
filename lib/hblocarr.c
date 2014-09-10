@@ -34,10 +34,10 @@ POSSIBILITY OF SUCH DAMAGE.
  * \file Block array creation and destruction functions
  *
  * Normally each module or section of a program will make it's own array
- * using the functions herin, if it is too much hastle (because of cleaning
+ * using the functions here-in, if it is too much trouble (because of cleaning
  * up each module) or the program wants to hide behind a normal allocation
- * function re-routed to us via a hack then only one block array exists per
- * per program.
+ * function re-routed to us via a drop-in wrapper then only one block array
+ * exists per process.
  *
  * 24/11/2001 (DDRP): Attention, block arrays need to start supporting file/
  * line info soon.

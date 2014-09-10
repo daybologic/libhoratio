@@ -38,7 +38,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * being modified or deleted (except for flag changes).  This will return
  * FALSE normally.  If it returns TRUE it because the block is locked, the
  * caller should then make steps not to modify the block.  This TRUE return only
- * ocours when trapping is off or handled by the user who chose to ignore the
+ * occurs when trapping is off or handled by the user who chose to ignore the
  * trap.  Otherwise the function does not return.
  */
 
