@@ -30,9 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Internal function for getting the index of a block
- * within an array (supports NULL arrays)
+/*! \file hiblkptr.c
+ * \brief Internal function for getting the index of a block within an array
+ *
+ * Supports NULL arrays.
  */
 
 #define HORATIO_SOURCE

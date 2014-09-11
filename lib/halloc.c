@@ -31,8 +31,8 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #define HORATIO_SOURCE
 
-/*!
- * \file Main allocation function and block array grower
+/*! \file halloc.c
+ * \brief Main allocation function and block array grower
  */
 
 #ifdef HAVE_CONFIG_H

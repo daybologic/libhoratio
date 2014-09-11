@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Functions for returning statistics about memory handled by the library
+/*! \file hstats.c
+ * \brief Functions for returning statistics about memory handled by the library
  *
  * Created: 27th July 2000
  */

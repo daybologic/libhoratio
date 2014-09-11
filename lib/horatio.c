@@ -30,8 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file horatio.c
+/*! \file horatio.c
+ * \brief Main library function
+ *
+ * Minimal stuff here please,
+ * if possible promote granularity by using other C files
  *
  * Incase you're wondering why HORATIO_SOURCE appears at the top of all
  * sources, it's to do with build.h.  That header is for the compilation of the
@@ -41,9 +44,6 @@ POSSIBILITY OF SUCH DAMAGE.
  * Allocations on behalf of callers are done with HORATIO_MALLOC,
  * internal allocations are done with malloc() and failure should be
  * ignored by checking for NULL.
- *
- * Minimal stuff here please,
- * if possible promote granularity by using other C files
  */
 
 #define HORATIO_SOURCE

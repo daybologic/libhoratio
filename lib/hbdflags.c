@@ -30,8 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Raw block descriptor flag modifiers
+/*! \file hbdflags.c
+ * \brief Raw block descriptor flag modifiers
+ *
  * supports NULL arrays.
  */
 

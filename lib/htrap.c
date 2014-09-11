@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Trap mechanism
+/*! \file htrap.c
+ * \brief Trap mechanism
  *
  * TODO: We should describe in more detail, the purpose of the trap subsystem
  */

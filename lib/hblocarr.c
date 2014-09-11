@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Block array creation and destruction functions
+/*! \file hblocarr.c
+ * \brief Block array creation and destruction functions
  *
  * Normally each module or section of a program will make it's own array
  * using the functions here-in, if it is too much trouble (because of cleaning

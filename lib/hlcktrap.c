@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Block locking trap mechanism
+/*! \file hlcktrap.c
+ * \brief Block locking trap mechanism
  *
  * A trap I prepared earlier - fires trap on a locking violation, call this
  * at the begining of any function which invariably leads to block descriptors

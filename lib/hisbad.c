@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file IsBad....() routines for testing validity of pointers
+/*! \file hisbad.c
+ * \brief IsBad....() routines for testing validity of pointers
  *
  * All function can cope with resolved or unresolved array pointers
  */

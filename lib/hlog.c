@@ -30,8 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file hlog.c Memory usage logging support for Horatio
+/*! \file hlog.c
+ * \brief hlog.c Memory usage logging support for Horatio
+ *
  * Only included if HORATIO_LOG is defined in build.h
  * (Superseeded by --enable-log configuration option)
  *
@@ -42,7 +43,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * warning about the unused parameter, if getting rid of the warning actually
  * causes a warning on your compiler, I aplogise!
  *
- * - Does this apply any longer?  : DDRP
+ * TODO: Does this apply any longer?  : DDRP
  */
 
 #define HORATIO_SOURCE

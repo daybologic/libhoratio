@@ -30,9 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
-  \file Gets size of a block
-*/
+/*! \file hblocksz.c
+ * \brief Gets size of a block
+ */
 
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H

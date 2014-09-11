@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Internal library structure locking semantics for threaded builds.
+/*! \file hbiglock.c
+ * \brief Internal library structure locking semantics for threaded builds.
  *
  * None of the functionality present in this file is directly used by callers
  * to the library.  Always check there is no macro within hbiglock.h before

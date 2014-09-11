@@ -30,8 +30,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*!
- * \file Functions for handling the safety list
+/*! \file hsafelst.c
+ * \brief Functions for handling the safety list
  *
  * No functions here are for calling by the user, they are only for internal
  * library use.
