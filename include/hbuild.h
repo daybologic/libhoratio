@@ -34,7 +34,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * \brief Manually tuned, internal configuration profile.
  *
  * The build header is used to add some more sense to the user options in
- * config.h.  Note: Don't directly edit build.h or config.h, build.h is
+ * config.h.  Note: Don't directly edit hbuild.h or config.h, hbuild.h is
  * readonly and is included by the library, config.h is dynamically written
  * by the config program and included in this file.
  *
