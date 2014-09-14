@@ -960,23 +960,125 @@ PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
  * user installs a user handler it could look at the number and decide
  * to ignore certain traps.
  */
-#define HORATIO_TRAP_UNKNOWN              (0x0)  /* Unknown trap */
-#define HORATIO_TRAP_INDEX_GEN_FAILED     (0x1)  /* Block not found, index not generated */
-#define HORATIO_TRAP_BAD_HANDLER_REMOVAL  (0x2)  /* Can't remove the trap handler or trap hook by installing a NULL one */
-#define HORATIO_TRAP_NULL_HANDLER         (0x3)  /* Attempt to install a NULL trap handler or trap hook */
-#define HORATIO_TRAP_UNAUTH_REMOVE        (0x4)  /* Caller cannot remove the trap handler or trap hook because they do not know it's address (and so probally don't own it) */
-#define HORATIO_TRAP_MUL_STARTUP          (0x5)  /* Multiple calls of Startup() (since library should be started before user handler or hook is installed user callbacks would never see this trap number) */
-#define HORATIO_TRAP_MUL_SHUTDOWN         (0x6)  /* Multiple calls of Shutdown() */
-#define HORATIO_TRAP_UNFREED_DATA         (0x7)  /* User failed to destroy everything before calling Shutdown() */
-#define HORATIO_TRAP_BAD_BLOCK_ARRAY      (0x8)  /* The user supplied a pointer to a block array which is not known */
-#define HORATIO_TRAP_BAD_BLOCK            (0x9)  /* Block not in array so it's details cannot be accessed */
-#define HORATIO_TRAP_UNOWNED_FREE         (0xA)  /* Attempt made to free memory we don't own or memory we have already freed */
-#define HORATIO_TRAP_BAD_RANGE_MOVEUP     (0xB)  /* This is an internal error only: On freeing a block from an array the array is shifted up with Moveup() perhaps Moveup was called incorrectly */
-#define HORATIO_TRAP_SHRINKARR_WHILE_NOWT (0xC)  /* Internal error: Shrinking block array while block array has no size! */
-#define HORATIO_TRAP_SHRINKARR_TOOMUCH    (0xD)  /* Internal error: Shrinking block array mote than current size! */
-#define HORATIO_TRAP_UNFREED_BLOCKS       (0xE)  /* User failed to free blocks in the array which was just requested to be destroyed */
-#define HORATIO_TRAP_BASENONZERO          (0xF)  /* A base pointer was expected to be zero (not valid) at this time.  (more likely an internal error or user tampering of the descriptor details) */
-#define HORATIO_TRAP_LOCKINGVIOLATION     (0x10) /* This block is locked and so the specified operation is illegal */
+
+/*! \def HORATIO_TRAP_UNKNOWN
+ * \brief Unknown trap
+ *
+ * The trap is not supported by this version of the library - or was
+ * previously supported but has been removed.
+ */
+#define HORATIO_TRAP_UNKNOWN              (0x0)
+
+/*! \def HORATIO_TRAP_INDEX_GEN_FAILED
+ * \brief Block not found, index not generated
+ *
+ */
+#define HORATIO_TRAP_INDEX_GEN_FAILED     (0x1)
+
+/*! \def HORATIO_TRAP_BAD_HANDLER_REMOVAL
+ * \brief Illegal attempt to remove a trap handler
+ *
+ * Can't remove the trap handler or trap hook by installing a NULL one
+ */
+#define HORATIO_TRAP_BAD_HANDLER_REMOVAL  (0x2)
+
+/*! \def HORATIO_TRAP_NULL_HANDLER
+ * \brief Attempt to install a NULL trap handler or trap hook
+ *
+ *
+ */
+#define HORATIO_TRAP_NULL_HANDLER         (0x3)
+
+/*! \def HORATIO_TRAP_UNAUTH_REMOVE
+ * \brief Caller cannot remove the trap handler or trap hook because they do not know it's address (and so probally don't own it)
+ *
+ *
+ */
+#define HORATIO_TRAP_UNAUTH_REMOVE        (0x4)
+
+/*! \def HORATIO_TRAP_MUL_STARTUP
+ * \brief Multiple calls of Startup() (since library should be started before user handler or hook is installed user callbacks would never see this trap number)
+ *
+ *
+ */
+#define HORATIO_TRAP_MUL_STARTUP          (0x5)
+
+/*! \def HORATIO_TRAP_MUL_SHUTDOWN
+ * \brief Multiple calls of Shutdown()
+ *
+ *
+ */
+#define HORATIO_TRAP_MUL_SHUTDOWN         (0x6)
+
+/*! \def HORATIO_TRAP_UNFREED_DATA
+ * \brief User failed to destroy everything before calling Shutdown()
+ *
+ *
+ */
+#define HORATIO_TRAP_UNFREED_DATA         (0x7)
+
+/*! \def HORATIO_TRAP_BAD_BLOCK_ARRAY
+ * \brief The user supplied a pointer to a block array which is not known
+ *
+ *
+ */
+#define HORATIO_TRAP_BAD_BLOCK_ARRAY      (0x8)
+
+/*! \def HORATIO_TRAP_BAD_BLOCK
+ * \brief Block not in array so it's details cannot be accessed
+ *
+ *
+ */
+#define HORATIO_TRAP_BAD_BLOCK            (0x9)
+
+/*! \def HORATIO_TRAP_UNOWNED_FREE
+ * \brief Attempt made to free memory we don't own or memory we have already freed
+ *
+ *
+ */
+#define HORATIO_TRAP_UNOWNED_FREE         (0xA)
+
+/*! \def HORATIO_TRAP_BAD_RANGE_MOVEUP
+ * \brief This is an internal error only: On freeing a block from an array the array is shifted up with Moveup() perhaps Moveup was called incorrectly
+ *
+ *
+ */
+#define HORATIO_TRAP_BAD_RANGE_MOVEUP     (0xB)
+
+/*! \def HORATIO_TRAP_SHRINKARR_WHILE_NOWT
+ * \brief Internal error: Shrinking block array while block array has no size!
+ *
+ *
+ */
+#define HORATIO_TRAP_SHRINKARR_WHILE_NOWT (0xC)
+
+/*! \def HORATIO_TRAP_SHRINKARR_TOOMUCH
+ * \brief Internal error: Shrinking block array mote than current size!
+ *
+ *
+ */
+#define HORATIO_TRAP_SHRINKARR_TOOMUCH    (0xD)
+
+/*! \def HORATIO_TRAP_UNFREED_BLOCKS
+ * \brief User failed to free blocks in the array which was just requested to be destroyed
+ *
+ *
+ */
+#define HORATIO_TRAP_UNFREED_BLOCKS       (0xE)
+
+/*! \def HORATIO_TRAP_BASENONZERO
+ * \brief A base pointer was expected to be zero (not valid) at this time.  (more likely an internal error or user tampering of the descriptor details)
+ *
+ *
+ */
+#define HORATIO_TRAP_BASENONZERO          (0xF)
+
+/*! \def HORATIO_TRAP_LOCKINGVIOLATION
+ * \brief This block is locked and so the specified operation is illegal
+ *
+ *
+ */
+#define HORATIO_TRAP_LOCKINGVIOLATION     (0x10)
 
 #ifdef DPCRTLMM_LEGACY
 /* Legacy trap macros */
