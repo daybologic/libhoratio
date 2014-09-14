@@ -30,7 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*! \file hbuild.h
+ * \brief Manually tuned, internal configuration profile.
+ *
  * The build header is used to add some more sense to the user options in
  * config.h.  Note: Don't directly edit build.h or config.h, build.h is
  * readonly and is included by the library, config.h is dynamically written
@@ -68,19 +70,16 @@ POSSIBILITY OF SUCH DAMAGE.
 # error this header is not intended for use outside of the library
 #endif /*!HORATIO_SOURCE*/
 
-/*
- * Definition of MAX_TRAP_STRING_LENGTH (change if trap/log strings are
- *         getting too long
+/*! \def MAX_TRAP_STRING_LENGTH
+ * \brief Maximum length of a trap string
+ *
+ * Not user-configurable.
+ * Excludes space for NULL terminator.
+ * Change if trap/log strings are getting too long.
  */
-
 #ifdef MAX_TRAP_STRING_LENGTH /* Somebody else is using the macro we want? */
 # undef MAX_TRAP_STRING_LENGTH
 #endif /*MAX_TRAP_STRING_LENGTH*/
-
-/*
- * Maximum length of a trap string (excluding space for NULL terminator)
- * - NOT USER CONFIGURABL
- */
 #define MAX_TRAP_STRING_LENGTH (191)
 
 /* Force internal calls to sprintf() over to snprintf() */

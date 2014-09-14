@@ -30,12 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Internal header for a trap I prepared earlier for when a block locking
- * violation ocours.
+/*! \file locktrap.h
+ * \brief Internal header for a trap I prepared earlier for when a block locking violation ocours.
+ *
  * Created 23rd Feb 2000
  */
-
 #ifndef INC_HORATIO_LOCKTRAP_H
 #define INC_HORATIO_LOCKTRAP_H
 

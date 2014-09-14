@@ -29,6 +29,12 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*! \file iblkptr.h
+ * \brief Internal block pointer information
+ *
+ * iblkptr.h is for internal HORATIO usage only
+ */
 #ifndef INC_HORATIO_IBLKPTR
 #define INC_HORATIO_IBLKPTR
 

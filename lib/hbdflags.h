@@ -30,6 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file bdflags.h
+ * \brief Block descriptor flags header
+ *
+ *
+ */
 #ifndef INC_HORATIO_BDFLAGS_H
 #define INC_HORATIO_BDFLAGS_H
 
