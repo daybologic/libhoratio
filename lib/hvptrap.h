@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \def hvptrap.h
+/*! \file hvptrap.h
  * \brief Verify pointer trap header
  *
  * Routines for triggering a trap where a pointer block desciptor is invalid.

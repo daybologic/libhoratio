@@ -33,7 +33,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /*! \file dpcrtlmm.h
  * \brief Legacy support header
  *
- * Please change your code to #include "horatio.h"!
+ * Please change your code to \#include "horatio.h"!
 */
 
 #ifndef DPCRTLMM_LEGACY

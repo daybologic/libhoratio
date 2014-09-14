@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file locktrap.h
+/*! \file hlcktrap.h
  * \brief Internal header for a trap I prepared earlier for when a block locking violation ocours.
  *
  * Created 23rd Feb 2000
@@ -39,7 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_LOCKTRAP_H
 
 #ifndef HORATIO_SOURCE
-# error ("locktrap.h is for internal HORATIO use")
+# error ("hlcktrap.h is for internal HORATIO use")
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus

@@ -30,7 +30,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*! \file bdflags.h
+/*! \file hbdflags.h
  * \brief Block descriptor flags header
  *
  *
@@ -39,7 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define INC_HORATIO_BDFLAGS_H
 
 #ifndef HORATIO_SOURCE
-# error ("bdflags.h is for internal HORATIO use")
+# error ("hbdflags.h is for internal HORATIO use")
 #endif
 
 #ifdef __cplusplus
