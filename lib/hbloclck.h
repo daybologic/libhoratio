@@ -30,6 +30,12 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file hbloclck.h
+ * \brief Block locking mechanism header
+ *
+ * This header is for internal use only
+ */
+
 #ifndef INC_HORATIO_BLOCLOCK_H
 #define INC_HORATIO_BLOCLOCK_H
 

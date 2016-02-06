@@ -30,9 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
-  Legacy support header -- dpcrtlmm.h
-  Please change your code to #include "horatio.h"!
+/*! \file dpcrtlmm.h
+ * \brief Legacy support header
+ *
+ * Please change your code to \#include "horatio.h"!
 */
 
 #ifndef DPCRTLMM_LEGACY

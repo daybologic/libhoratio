@@ -30,11 +30,12 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*! \file hintdata.c
+ * \brief Internal data management
+ *
  * This internal data is shared between the internal and user-called
- * functions in the memory manager library. - David Duncan Ross Palmer
- * Oh, and init of this data is not done here, it is done within
- * horatio.c : horatio_Startup().
+ * functions in the memory manager library.  Initialisation of this data
+ * is not done here, it is done within horatio.c : horatio_Startup().
  */
 
 #define HORATIO_SOURCE
