@@ -33,7 +33,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /*
  * Incase you're wondering why HORATIO_SOURCE appears at the top of all
  * sources, it's to do with build.h.  That header is for the compilation of the
- * library only, not to be included in user programs.  If users include build.h
+ * library only, not to be included in user programs.  If users include hbuild.h
  * the definition won't exist and build.h will tell them off!
  *
  * Allocations on behalf of callers are done with HORATIO_MALLOC,
