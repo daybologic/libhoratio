@@ -1,5 +1,5 @@
-# Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2013, David Duncan Ross Palmer, Daybo Logic
+# Horatio's Memory Manager
+# Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,61 +28,55 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-AUTOMAKE_OPTIONS=
+ACLOCAL_AMFLAGS=-I m4
+AUTOMAKE_OPTIONS=subdir-objects
 
-#AM_CFLAGS= -g -Wall -W -Wcast-qual -Wcast-align -Waggregate-return -Wpointer-arith \
-# -Wshadow -Wmissing-prototypes -Winline -Wstrict-prototypes \
-# -Wredundant-decls -Wwrite-strings -Wformat=2 -Wformat-security \
-# -Wformat-nonliteral -Wundef -Wredundant-decls -Wbad-function-cast \
-# -Wnested-externs -Wmissing-declarations -Wunknown-pragmas
+C_ONLY_WFLAGS = \
+	-Wmissing-prototypes \
+	-Wstrict-prototypes \
+	-Wbad-function-cast \
+	-Wmissing-declarations \
+	-Wnested-externs
 
-# Add any explicit flags here, or on the configure command line.
-AM_CFLAGS=
+GENERAL_WFLAGS = \
+	-Wall \
+	-W \
+	-Wcast-qual \
+	-Wcast-align \
+	-Waggregate-return \
+	-Wpointer-arith \
+	-Wshadow -Winline \
+	-Wredundant-decls \
+	-Wwrite-strings \
+	-Wformat=2 \
+	-Wformat-security \
+	-Wformat-nonliteral \
+	-Wundef \
+	-Wredundant-decls \
+	-Wunknown-pragmas
 
-TESTS = example1 example2 example3
-check_PROGRAMS = $(TESTS)
-examples_LDADD = -ldpcrtlmm
+GENERAL_CC_FLAGS = \
+	-g \
+	-I$(top_srcdir)/../include
 
-if DPCRTLMM_THREADS_PTH
-AM_LDFLAGS= -lpth
-endif
+AM_CFLAGS = \
+	$(GENERAL_CC_FLAGS) \
+	$(GENERAL_WFLAGS) \
+	$(C_ONLY_WFLAGS)
 
-example1_SOURCES = example1.c
-example1_INCLUDES = dpcrtlmm.h
-example1_LDADD = $(examples_LDADD)
+AM_CPPFLAGS = \
+	$(GENERAL_CC_FLAGS) \
+	$(GENERAL_WFLAGS)
 
-example2_SOURCES = example2.cpp dpccap.cpp
-example2_INCLUDES = dpcrtlmm.h dpccap.h
-example2_LDADD = $(examples_LDADD)
+AM_LDFLAGS = \
+	-L$(top_srcdir)/../lib
 
-example3_SOURCES = example3.c
-example3_INCLUDES = dpcrtlmm.h
-example3_LDADD = $(examples_LDADD)
 
-INCLUDES = \
-  -I.
+export AM_CPPFLAGS
+export AM_CFLAGS
+export AM_LDFLAGS
 
-lib_LTLIBRARIES = libdpcrtlmm.la
-libdpcrtlmm_la_SOURCES  = dpcrtlmm.c
-libdpcrtlmm_la_SOURCES += dpc_alloc.c
-libdpcrtlmm_la_SOURCES += dpc_bdflags.c
-libdpcrtlmm_la_SOURCES += dpc_biglock.c
-libdpcrtlmm_la_SOURCES += dpc_blkarray.c
-libdpcrtlmm_la_SOURCES += dpc_bloclock.c
-libdpcrtlmm_la_SOURCES += dpc_calloc.c
-libdpcrtlmm_la_SOURCES += dpc_dbghooks.c
-libdpcrtlmm_la_SOURCES += dpc_free.c
-libdpcrtlmm_la_SOURCES += dpc_getblksz.c
-libdpcrtlmm_la_SOURCES += dpc_iblkptr.c
-libdpcrtlmm_la_SOURCES += dpc_intdata.c
-libdpcrtlmm_la_SOURCES += dpc_isbad.c
-libdpcrtlmm_la_SOURCES += dpc_locktrap.c
-libdpcrtlmm_la_SOURCES += dpc_log.c
-libdpcrtlmm_la_SOURCES += dpc_realloc.c
-libdpcrtlmm_la_SOURCES += dpc_safelist.c
-libdpcrtlmm_la_SOURCES += dpc_stats.c
-libdpcrtlmm_la_SOURCES += dpc_trap.c
-libdpcrtlmm_la_SOURCES += dpc_vptrap.c
-
-nobase_include_HEADERS = dpcrtlmm.h
-
+SUBDIRS = lib include t
+if HORATIO_DOCS
+SUBDIRS += docs
+endif #HORATIO_DOCS

@@ -1,3 +1,21 @@
+2.0.0
+-----
+  * DPCRTLMM has re-branded to libhoratio!
+  * The new libdpcrtlmm wrapper is not a full library, it is a legacy
+    wrapper, which passes calls on to libhoratio, and you will need to link
+    with both.
+  * All legacy calls will emit a warning for one major revision, and
+    the legacy symbols and defs will be stripped at revision 3.x.x
+
+1.3.1
+-----
+  * Fix bugs in implementation of strdup(),
+    first introduced in dpcrtlmm 1.3.0
+
+1.3.0
+-----
+  * 31c91ca539eb: Support strdup().
+
 2006-02-23
 ----------
   * General tidy up for new configure system
