@@ -189,12 +189,12 @@ static void horatio_int_Free(
 				HORATIO_FMTPTRPFX,
 				(void*)PRArr
 			);
-      OURLOG(DPCRTLMM_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
+      OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
 #ifdef HAVE_SNPRINTF
 			trapMsgRemaining -= strlen(trapMsg);
 #endif /*HAVE_SNPRINTF*/
 			OURLOG(
-				DPCRTLMM_LOG_CODE_FREE_BLOCK_REQ,
+				HORATIO_LOG_CODE_FREE_BLOCK_REQ,
 				PRArr->Descriptors[i].SourceFile,
 				PRArr->Descriptors[i].SourceLine,
 				HORATIO_LOG_MESSAGE,
@@ -362,7 +362,7 @@ static void ShrinkBlockArray(
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
-		OURLOG_POS(DPCRTLMM_LOG_CODE_REDUCE_ARRAY_ZERO, HORATIO_LOG_WARNING, logMsg);
+		OURLOG_POS(HORATIO_LOG_CODE_REDUCE_ARRAY_ZERO, HORATIO_LOG_WARNING, logMsg);
 		return;
 	}
 

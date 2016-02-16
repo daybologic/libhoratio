@@ -201,7 +201,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 		(unsigned int)NewBlockSize,
 		HORATIO_FMTPTRPFX, (void*)PBlockArray
 	);
-  OURLOG(DPCRTLMM_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+  OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #ifdef HAVE_SNPRINTF
 	logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -222,7 +222,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 			(unsigned int)NewBlockSize,
 			HORATIO_FMTPTRPFX, (void*)PBlockArray
 		);
-    OURLOG(DPCRTLMM_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
+    OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -251,7 +251,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 		 * This could be quite critical,
 		 * if the memory manager is running our of space
 		 */
-		OURLOG_POS(DPCRTLMM_LOG_CODE_ENLARGE_ARRAY_FAIL, HORATIO_LOG_WARNING, logMsg);
+		OURLOG_POS(HORATIO_LOG_CODE_ENLARGE_ARRAY_FAIL, HORATIO_LOG_WARNING, logMsg);
 		return NULL; /* Give up */
 	}
 
@@ -338,7 +338,7 @@ static unsigned int GrowBlockArray(
 
 	if (!GrowByElems) { /* Want to grow by nothing? */
 		OURLOG_POS(
-			DPCRTLMM_LOG_CODE_ENLARGE_ARRAY_ZERO,
+			HORATIO_LOG_CODE_ENLARGE_ARRAY_ZERO,
 			HORATIO_LOG_WARNING,
 			"Attempt to GrowBlockArray() by no items, ignored"
 		);

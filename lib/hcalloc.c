@@ -119,7 +119,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 		N,
 		(unsigned int)NewBlockSize
 	);
-	OURLOG(DPCRTLMM_LOG_CODE_CALLOC_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+	OURLOG(HORATIO_LOG_CODE_CALLOC_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -144,7 +144,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 
 #ifdef HORATIO_LOG
 		OURLOG(
-			DPCRTLMM_LOG_CODE_CALLOC_DONE,
+			HORATIO_LOG_CODE_CALLOC_DONE,
 			File, Line, HORATIO_LOG_MESSAGE,
 			"Allocation successful"
 		);
@@ -161,7 +161,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 		/*blockDescArray.Success = 0U;   - optimized away */
 #endif /*HORATIO_DEBUGHOOKS*/
 #ifdef HORATIO_LOG
-		OURLOG(DPCRTLMM_LOG_CODE_CALLOC_FAIL, ile, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
+		OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, ile, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
 #endif /*HORATIO_LOG*/
 	}
 

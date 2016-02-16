@@ -187,7 +187,7 @@ void horatio_int_CallDebugHook(
 	if (BadHookType(HookType)) {
 		/* Bad hook type (out of range in matrix) */
 		ERROR(
-			DPCRTLMM_LOG_CODE_HOOK_RANGE,
+			HORATIO_LOG_CODE_HOOK_RANGE,
 			"CallDebugHook: Internal library error, "
 			"HookType out of range!"
 		);

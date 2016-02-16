@@ -139,7 +139,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		 * must be warned about!
 		 */
 		WARNING(
-			DPCRTLMM_LOG_CODE_ALLOC_ARRAY_FAIL,
+			HORATIO_LOG_CODE_ALLOC_ARRAY_FAIL,
 			"CreateBlockArray(): "
 			"Couldn\'t allocate the new block array!"
 		);
@@ -167,7 +167,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		 * Memory outages while in memory manager must be warned about
 		 **/
 		WARNING(
-			DPCRTLMM_LOG_CODE_SL_ADD_FAIL,
+			HORATIO_LOG_CODE_SL_ADD_FAIL,
 			"CreateBlockArray(): The array base address "
 			"could not be added to the safety list"
 		);
@@ -182,7 +182,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		"CreateBlockArray() returns base %s%p",
 		HORATIO_FMTPTRPFX, (void*)Parray
 	);
-	MESSAGE(DPCRTLMM_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
+	MESSAGE(HORATIO_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -303,7 +303,7 @@ void horatio_int_DestroyBlockArray(
 					HORATIO_FMTPTRPFX,
 					(void*)PBlockArray
 				); /* Prepare log message */
-				MESSAGE(DPCRTLMM_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
+				MESSAGE(HORATIO_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
