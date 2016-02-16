@@ -123,7 +123,6 @@ void horatio_int_Trap(
 	char *trapsCopy;
 	const char preFix[] = "HORATIO_UNHANDLED_TRAP: ";
 
-	/* FIXME: Trap codes and log error codes overlap; this should be fixed */
 	ERROR(Id, Message); /* Pass on to the logger automatically */
 	/* Don't execute traps if traps have been switched off */
 	if ( !horatio__EnableTraps ) return;
