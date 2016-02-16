@@ -359,7 +359,6 @@ static void ShrinkBlockArray(
 			"ignored (internal HORATIO error)",
 			HORATIO_FMTPTRPFX, (void*)PBlockArray
 		);
-    OURLOG_POS(DPCRTLMM_LOG_CODE_REDUCE_ARRAY_ZERO, DPCRTLMM_LOG_WARNING, logMsg);
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/

@@ -125,9 +125,9 @@ void horatio_int_Log(
         (const unsigned short)HORATIO_LOG_WARNING, (msg)                    \
     )
 
-#define ERROR(msg)                                                          \
+#define ERROR(lcode, msg)                                                   \
     horatio_int_Log(                                                        \
-    (__FILE__), (__LINE__),                                                 \
+    (lcode), (__FILE__), (__LINE__),                                        \
     (const unsigned short)HORATIO_LOG_ERROR, (msg)                          \
 )
 
