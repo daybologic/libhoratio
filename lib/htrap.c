@@ -193,7 +193,7 @@ static void horatio_int_InstallTrapCallback(
 			(AsHook) ? ("hook") : ("handler"),
 			HORATIO_FMTPTRPFX, (unsigned long int)NewTrapCallback
 		);
-    MESSAGE(HORATIO_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
+		MESSAGE(HORATIO_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -257,7 +257,7 @@ static void horatio_int_RemoveTrapCallback(
 			"RemoveTrapCallback(): %s removed.",
 			(_userTrapCallbackIsHook) ? ("Hook") : ("Handler")
 		);
-    MESSAGE(HORATIO_LOG_CODE_REMOVE_TRAP, NULL, 0, logStr);
+		MESSAGE(HORATIO_LOG_CODE_REMOVE_TRAP, NULL, 0, logStr);
 
 #ifdef HORATIO_DEBUGHOOKS
 		debugHookInfo.Success = 1U;

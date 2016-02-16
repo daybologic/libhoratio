@@ -201,7 +201,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 		(unsigned int)NewBlockSize,
 		HORATIO_FMTPTRPFX, (void*)PBlockArray
 	);
-  OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+	OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #ifdef HAVE_SNPRINTF
 	logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -222,7 +222,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 			(unsigned int)NewBlockSize,
 			HORATIO_FMTPTRPFX, (void*)PBlockArray
 		);
-    OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
+		OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -398,7 +398,7 @@ static unsigned int GrowBlockArray(
  * This is an internal function used to log messages from the allocator
  */
 static void OurLog(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,

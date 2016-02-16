@@ -173,7 +173,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 
 #ifdef HORATIO_LOG
 static void OurLog(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,

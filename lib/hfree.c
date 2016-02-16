@@ -189,7 +189,7 @@ static void horatio_int_Free(
 				HORATIO_FMTPTRPFX,
 				(void*)PRArr
 			);
-      OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
+			OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
 #ifdef HAVE_SNPRINTF
 			trapMsgRemaining -= strlen(trapMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -439,7 +439,7 @@ static void ShrinkBlockArray(
  * This function returns no value
  */
 static void OurLog(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,

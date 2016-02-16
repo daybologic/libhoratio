@@ -154,7 +154,7 @@ void horatio_Startup() {
 #endif /*HORATIO_DEBUGHOOKS*/
 		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
 	}
-  MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
+	MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
 	return;
 }
 
