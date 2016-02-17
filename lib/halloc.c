@@ -222,7 +222,12 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 			(unsigned int)NewBlockSize,
 			HORATIO_FMTPTRPFX, (void*)PBlockArray
 		);
-		OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg); /* I haven't made this a warning because it can happen in a very legitimate situation where the caller may be prepared for a large allocation to handle */
+		/*
+		 * I haven't made this a warning because it can happen in a
+		 * very legitimate situation where the caller may be prepared
+		 * for a large allocation to handle
+		 */
+		OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
