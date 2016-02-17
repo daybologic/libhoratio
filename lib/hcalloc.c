@@ -161,7 +161,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 		/*blockDescArray.Success = 0U;   - optimized away */
 #endif /*HORATIO_DEBUGHOOKS*/
 #ifdef HORATIO_LOG
-		OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, ile, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
+		OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
 #endif /*HORATIO_LOG*/
 	}
 
