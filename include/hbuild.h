@@ -70,6 +70,8 @@ POSSIBILITY OF SUCH DAMAGE.
 # error this header is not intended for use outside of the library
 #endif /*!HORATIO_SOURCE*/
 
+#define HORATIO_LOG (1)
+
 /*! \def MAX_TRAP_STRING_LENGTH
  * \brief Maximum length of a trap string
  *

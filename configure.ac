@@ -325,18 +325,6 @@ if test "$null_array_disabled" = "yes"; then
 fi
 AC_MSG_RESULT($null_array_disabled)
 
-dnl --enable-log
-AC_MSG_CHECKING(whether to log to HORATIO.LOG)
-AC_ARG_ENABLE(
-  log,
-  [  --enable-log            Enable logging to HORATIO.LOG],
-  [log_enabled=yes], [log_enabled=no]
-)
-if test "$log_enabled" = "yes"; then
-  AC_DEFINE([HORATIO_LOG], [], [Enable logging to HORATIO.LOG])
-fi
-AC_MSG_RESULT($log_enabled)
-
 dnl --enable-docs
 AC_MSG_CHECKING([Whether to build documentation])
 AC_ARG_ENABLE(
