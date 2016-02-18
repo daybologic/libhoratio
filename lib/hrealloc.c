@@ -29,13 +29,11 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#define HORATIO_SOURCE
-/*
- * Created: UNKNOWN
- * Programmer: David Duncan Ross Palmer
- * Library: HORATIO
- * Language: ANSI C (1990 implementation)
- * Purpose: HORATIO's memory user-memory reallocation
+
+/*! \file hrealloc.c
+ * \brief Implementation of realloc()
+ *
+ * HORATIO's memory user-memory reallocation
  */
 
 #define HORATIO_SOURCE

@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 #
-# Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+# Horatio's Memory Manager
+# Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -337,6 +337,18 @@ if test "$log_enabled" = "yes"; then
 fi
 AC_MSG_RESULT($log_enabled)
 
+dnl --enable-docs
+AC_MSG_CHECKING([Whether to build documentation])
+AC_ARG_ENABLE(
+  docs,
+  [  --enable-docs          Build the documentation],
+  [docs_enabled=yes], [docs_enabled=no]
+)
+if test "$docs_enabled" = "yes"; then
+  AC_DEFINE([HORATIO_DOCS], [], [Build the documentation])
+fi
+AM_CONDITIONAL([HORATIO_DOCS], [test "$docs_enabled" = "yes"])
+AC_MSG_RESULT($docs_enabled)
 
 # End of configuration
 AC_OUTPUT(Makefile lib/Makefile include/Makefile t/Makefile)

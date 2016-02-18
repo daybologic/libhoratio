@@ -29,6 +29,15 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*! \file hlog.h
+ * \brief Internal logging functions
+ *
+ * 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
+ * messages, warnings and errors
+ *
+ * hlog.h is for HORATIO's internal use only
+ */
 #ifndef INC_HORATIO_LOG_H
 #define INC_HORATIO_LOG_H
 
@@ -37,24 +46,33 @@ extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-# error ("log.h is for HORATIO's internal use only")
+# error ("hlog.h is for HORATIO's internal use only")
 #endif /*!HORATIO_SOURCE*/
 
-/*
- * 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
- * messages, warnings and errors
- */
-
 /* Types of logging messages */
-#define HORATIO_LOG_MESSAGE (0U) /* Only put in log */
-#define HORATIO_LOG_WARNING (1U) /* stderr and log */
-#define HORATIO_LOG_ERROR   (2U) /* Same as error for now */
+
+/*! \def HORATIO_LOG_MESSAGE
+ * \brief Only put in log
+ */
+#define HORATIO_LOG_MESSAGE (0U)
+
+/*! \def HORATIO_LOG_WARNING
+ * \brief stderr and log
+ */
+#define HORATIO_LOG_WARNING (1U)
+
+/*! \def HORATIO_LOG_ERROR
+ * \brief Same as error for now
+ */
+#define HORATIO_LOG_ERROR   (2U)
+
 /*
  * Even though error and warning do the same thing, they display different
  * messages in the log and on stderr
  */
 
 /*
+ * TODO: Doxygen
  * Write the message to the log (or do nothing if the log macro is undefined
  */
 void horatio_int_Log(

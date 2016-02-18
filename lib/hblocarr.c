@@ -30,15 +30,16 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Block array creation and destruction functions
- * Normally each module or section of a program will make it's own array
- * using the functions herin, if it is too much hastle (because of cleaning
- * up each module) or the program wants to hide behind a normal allocation
- * function re-routed to us via a hack then only one block array exists per
- * per program.
+/*! \file hblocarr.c
+ * \brief Block array creation and destruction functions
  *
- * 24/11/2001 (DDRP): Attention, block arrays need to start supporting file/
+ * Normally each module or section of a program will make it's own array
+ * using the functions here-in, if it is too much trouble (because of cleaning
+ * up each module) or the program wants to hide behind a normal allocation
+ * function re-routed to us via a drop-in wrapper then only one block array
+ * exists per process.
+ *
+ * 24/11/2001 TODO: (DDRP): Attention, block arrays need to start supporting file/
  * line info soon.
 */
 

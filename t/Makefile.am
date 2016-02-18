@@ -31,10 +31,11 @@
 ACLOCAL_AMFLAGS=-I m4
 AUTOMAKE_OPTIONS=subdir-objects
 
-TESTS = example1 example2 example3 newbrand
+TESTS = example1 example2 example3 newbrand dpctest1 htest1
 check_PROGRAMS = $(TESTS)
 test_LDADD = -lhoratio
 check_HEADERS = ../include/horatio.h
+cunit_test_LDADD = $(test_LDADD) -lcunit
 
 if HORATIO_THREADS_PTH
 AM_LDFLAGS= -lpth
@@ -43,7 +44,7 @@ endif
 
 example1_SOURCES = example1.c
 example1_AM_CFLAGS = $(check_HEADERS)
-example1_LDADD = $(test_LDADD)
+example1_LDADD = $(test_LDADD) -ldpcrtlmm
 
 newbrand_SOURCES = newbrand.c
 newbrand_AM_CFLAGS = $(check_HEADERS)
@@ -56,3 +57,11 @@ example2_LDADD = $(test_LDADD)
 example3_SOURCES = example3.c
 example3_AM_CFLAGS = $(check_HEADERS)
 example3_LDADD = -lhoratio -ldpcrtlmm
+
+dpctest1_SOURCES = dpctest1.c
+dpctest1_INCLUDES = horatio.h
+dpctest1_LDADD = $(cunit_test_LDADD) -ldpcrtlmm
+
+htest1_SOURCES = htest1.c
+htest1_INCLUDES = horatio.h
+htest1_LDADD = $(cunit_test_LDADD)
