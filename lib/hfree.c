@@ -67,10 +67,10 @@ POSSIBILITY OF SUCH DAMAGE.
 # undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(f, l, sev, msg) \
-  OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-#define OURLOG_POS(sev, msg) \
-  OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG(lcode, f, l, sev, msg) \
+  OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG_POS(lcode, sev, msg) \
+  OURLOG((lcode), __FILE__, __LINE__, (sev), (msg))
 
 static void horatio_int_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
@@ -88,6 +88,7 @@ static void ShrinkBlockArray(
 );
 
 static void OurLog(
+  const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -188,10 +189,12 @@ static void horatio_int_Free(
 				HORATIO_FMTPTRPFX,
 				(void*)PRArr
 			);
+			OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
 #ifdef HAVE_SNPRINTF
 			trapMsgRemaining -= strlen(trapMsg);
 #endif /*HAVE_SNPRINTF*/
 			OURLOG(
+				HORATIO_LOG_CODE_FREE_BLOCK_REQ,
 				PRArr->Descriptors[i].SourceFile,
 				PRArr->Descriptors[i].SourceLine,
 				HORATIO_LOG_MESSAGE,
@@ -359,7 +362,7 @@ static void ShrinkBlockArray(
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
-		OURLOG_POS(HORATIO_LOG_WARNING, logMsg);
+		OURLOG_POS(HORATIO_LOG_CODE_REDUCE_ARRAY_ZERO, HORATIO_LOG_WARNING, logMsg);
 		return;
 	}
 
@@ -436,6 +439,7 @@ static void ShrinkBlockArray(
  * This function returns no value
  */
 static void OurLog(
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -458,7 +462,7 @@ static void OurLog(
 			strcat(PcopyStr, Str); /* Add log string after prefix */
 
 			/* Pass on to the normal logger */
-			horatio_int_Log(File, Line, Severity, PcopyStr);
+			horatio_int_Log(Code, File, Line, Severity, PcopyStr);
 		}
 
 		free(PcopyStr); /* Copy can now be released */

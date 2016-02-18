@@ -63,6 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "halloc.h"
 
 static void OurLog(
+  const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -84,11 +85,11 @@ static unsigned int GrowBlockArray(
 #endif /*OURLOG_POS*/
 
 /* Shortcut for typecast */
-#define OURLOG(f, l, sev, msg) \
-	OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG(lcode, f, l, sev, msg) \
+  OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
 
-#define OURLOG_POS(sev, msg) \
-	OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG_POS(lcode, sev, msg) \
+  OURLOG((lcode), __FILE__, __LINE__, (sev), (msg))
 
 /*!
  * \brief Function which implements strdup
@@ -200,10 +201,10 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 		(unsigned int)NewBlockSize,
 		HORATIO_FMTPTRPFX, (void*)PBlockArray
 	);
+	OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #ifdef HAVE_SNPRINTF
 	logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
-	OURLOG(File, Line, HORATIO_LOG_MESSAGE, logMsg);
 
 	genBlockPtr = HORATIO_MALLOC(NewBlockSize); /* Allocate block */
 	if (!genBlockPtr) { /* Out of memory? */
@@ -221,15 +222,16 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 			(unsigned int)NewBlockSize,
 			HORATIO_FMTPTRPFX, (void*)PBlockArray
 		);
-#ifdef HAVE_SNPRINTF
-		logMsgRemaining -= strlen(logMsg);
-#endif /*HAVE_SNPRINTF*/
 		/*
 		 * I haven't made this a warning because it can happen in a
 		 * very legitimate situation where the caller may be prepared
 		 * for a large allocation to handle
 		 */
-		OURLOG(File, Line, HORATIO_LOG_MESSAGE, logMsg);
+		OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+#ifdef HAVE_SNPRINTF
+		logMsgRemaining -= strlen(logMsg);
+#endif /*HAVE_SNPRINTF*/
+
 		return NULL; /* No pointer generated */
 	}
 
@@ -254,7 +256,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 		 * This could be quite critical,
 		 * if the memory manager is running our of space
 		 */
-		OURLOG_POS(HORATIO_LOG_WARNING, logMsg);
+		OURLOG_POS(HORATIO_LOG_CODE_ENLARGE_ARRAY_FAIL, HORATIO_LOG_WARNING, logMsg);
 		return NULL; /* Give up */
 	}
 
@@ -341,6 +343,7 @@ static unsigned int GrowBlockArray(
 
 	if (!GrowByElems) { /* Want to grow by nothing? */
 		OURLOG_POS(
+			HORATIO_LOG_CODE_ENLARGE_ARRAY_ZERO,
 			HORATIO_LOG_WARNING,
 			"Attempt to GrowBlockArray() by no items, ignored"
 		);
@@ -400,6 +403,7 @@ static unsigned int GrowBlockArray(
  * This is an internal function used to log messages from the allocator
  */
 static void OurLog(
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -429,7 +433,7 @@ static void OurLog(
 			strcat(PcopyStr, Message); /* Add log string after prefix */
 
 			horatio_int_Log(
-				File, Line, Severity, PcopyStr
+				Code, File, Line, Severity, PcopyStr
 			); /* Pass on to the normal logger */
 
 			free(PcopyStr); /* Copy can now be released */

@@ -84,6 +84,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * The function may silently fail under some conditions.
  */
 void horatio_int_Log(
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
