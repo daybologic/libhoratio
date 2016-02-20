@@ -56,3 +56,6 @@ libhoratio_la_SOURCES += hvptrap.c
 
 all-local:
 	raw2c --header=hlic.h --symbol=horatio_license -q -n ../COPYING hlic.c
+
+clean-local:
+	rm hlic.?
