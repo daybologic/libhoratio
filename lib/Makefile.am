@@ -46,9 +46,13 @@ libhoratio_la_SOURCES += hiblkptr.c
 libhoratio_la_SOURCES += hintdata.c
 libhoratio_la_SOURCES += hisbad.c
 libhoratio_la_SOURCES += hlcktrap.c
+libhoratio_la_SOURCES += hlic.c
 libhoratio_la_SOURCES += hlog.c
 libhoratio_la_SOURCES += hrealloc.c
 libhoratio_la_SOURCES += hsafelst.c
 libhoratio_la_SOURCES += hstats.c
 libhoratio_la_SOURCES += htrap.c
 libhoratio_la_SOURCES += hvptrap.c
+
+all-local:
+	raw2c --header=hlic.h --symbol=horatio_license -q -n ../COPYING hlic.c

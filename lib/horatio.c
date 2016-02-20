@@ -69,6 +69,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hdbghook.h" /* The debug hook support/executive */
 #include "hbiglock.h" /* To init / uninit the big lib lock */
 #include "hblocarr.h" /* Internal interface to block arrays */
+#include "hlic.h" /* horatio_license text */
 
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
 static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr);
@@ -155,6 +156,7 @@ void horatio_Startup() {
 		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
 	}
 	MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
+	fprintf(stderr, "%s\n", horatio_license);
 	return;
 }
 
