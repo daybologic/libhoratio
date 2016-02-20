@@ -29,6 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 AUTOMAKE_OPTIONS=subdir-objects
+BUILT_SOURCES=hversion.h
 
 lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
 libdpcrtlmm_la_SOURCES = dpcrtlmm.c
@@ -52,3 +53,9 @@ libhoratio_la_SOURCES += hsafelst.c
 libhoratio_la_SOURCES += hstats.c
 libhoratio_la_SOURCES += htrap.c
 libhoratio_la_SOURCES += hvptrap.c
+
+clean-local:
+	rm -f hversion.h
+
+hversion.h: Makefile
+	../utils/mkverh.sh

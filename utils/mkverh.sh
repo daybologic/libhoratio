@@ -3,9 +3,9 @@
 set -e
 
 OUTPUT='hversion.h'
-LOG='debian/changelog'
+LOG='../debian/changelog'
 
-ident=`utils/hgident`
+ident=`../utils/hgident`
 
 version=`awk -F'[()]' '{print $2; count++; if (count==2) exit}' $LOG`
 
