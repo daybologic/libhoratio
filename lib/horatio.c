@@ -160,14 +160,6 @@ void horatio_Startup() {
 }
 
 /*!
- * \brief Obtain the license text
- */
-const char *horatio_license() {
-
-	return horatio_license_text;
-}
-
-/*!
  * \brief Shut down the Horatio library.
  *
  * This function should be called just before the process terminates,
@@ -220,6 +212,14 @@ void horatio_Shutdown() {
 		);
 	}
 	return;
+}
+
+/*!
+ * \brief Obtain the license text
+ */
+const char *horatio_license() {
+
+	return horatio_license_text;
 }
 
 /*!
