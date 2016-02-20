@@ -156,8 +156,15 @@ void horatio_Startup() {
 		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
 	}
 	MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
-	fprintf(stderr, "%s\n", horatio_license);
 	return;
+}
+
+/*!
+ * \brief Obtain the license text
+ */
+const char *horatio_license() {
+
+	return horatio_license_text;
 }
 
 /*!

@@ -59,4 +59,4 @@ clean-local:
 	rm -f hlic.?
 
 hlic.c: Makefile
-	raw2c --header=hlic.h --symbol=horatio_license -q -n ../COPYING hlic.c
+	raw2c --header=hlic.h --symbol=horatio_license_text -q -n ../COPYING hlic.c
