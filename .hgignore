@@ -27,6 +27,7 @@ config.*
 t/.libs
 t/example?
 t/newbrand
+lib/hlic.?
 
 syntax:regexp
 ^docs/\.\w+$
