@@ -48,6 +48,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "horatio.h"
 #include "hbuild.h"
+#include "hversion.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
 
