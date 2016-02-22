@@ -27,6 +27,7 @@ config.*
 t/.libs
 t/example?
 t/newbrand
+include/hversion.h
 
 syntax:regexp
 ^docs/\.\w+$
