@@ -1,3 +1,5 @@
+#!/bin/sh
+#
 # Horatio's Memory Manager
 # Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 # All rights reserved.
@@ -28,39 +30,22 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-AUTOMAKE_OPTIONS=subdir-objects
-BUILT_SOURCES = hlic.c hversion.h
+set -e
 
-lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
-libdpcrtlmm_la_SOURCES = dpcrtlmm.c
-libhoratio_la_SOURCES  = horatio.c
-libhoratio_la_SOURCES += halloc.c
-libhoratio_la_SOURCES += hbdflags.c
-libhoratio_la_SOURCES += hbiglock.c
-libhoratio_la_SOURCES += hblocarr.c
-libhoratio_la_SOURCES += hbloclck.c
-libhoratio_la_SOURCES += hcalloc.c
-libhoratio_la_SOURCES += hdbghook.c
-libhoratio_la_SOURCES += hfree.c
-libhoratio_la_SOURCES += hblocksz.c
-libhoratio_la_SOURCES += hiblkptr.c
-libhoratio_la_SOURCES += hintdata.c
-libhoratio_la_SOURCES += hisbad.c
-libhoratio_la_SOURCES += hlcktrap.c
-libhoratio_la_SOURCES += hlic.c
-libhoratio_la_SOURCES += hlog.c
-libhoratio_la_SOURCES += hrealloc.c
-libhoratio_la_SOURCES += hsafelst.c
-libhoratio_la_SOURCES += hstats.c
-libhoratio_la_SOURCES += htrap.c
-libhoratio_la_SOURCES += hvptrap.c
+OUTPUT='hversion.h'
+LOG='../debian/changelog'
 
-clean-local:
-	rm -f hlic.?
-	rm -f hversion.h
+ident=`../utils/hgident`
 
-hlic.c: Makefile
-	raw2c --header=hlic.h --symbol=horatio_license_text -q -n ../COPYING hlic.c
-	
-hversion.h: Makefile
-	../utils/mkverh.sh
+version=`awk -F'[()]' '{print $2; count++; if (count==2) exit}' $LOG`
+
+echo "#define HORATIO_VERSION_IDENT \"$ident\"" > $OUTPUT
+echo "#define HORATIO_VERSION \"$version\"" >> $OUTPUT
+
+set `echo $version | tr "." "\n"`
+
+printf "#define HORATIO_VERSION_MAJOR (%d)\n" "$1" >> $OUTPUT
+printf "#define HORATIO_VERSION_MINOR (%d)\n" "$2" >> $OUTPUT
+printf "#define HORATIO_VERSION_PATCH (%d)\n" "$3" >> $OUTPUT
+
+exit 0;
