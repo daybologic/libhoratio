@@ -69,6 +69,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hdbghook.h" /* The debug hook support/executive */
 #include "hbiglock.h" /* To init / uninit the big lib lock */
 #include "hblocarr.h" /* Internal interface to block arrays */
+#include "hversion.h" /* HORATIO_VERSION_ constants */
 
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
 static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr);
@@ -162,7 +163,7 @@ void horatio_startupEx(
 #endif /*HORATIO_DEBUGHOOKS*/
 		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
 	}
-	MESSAGE(NULL, 0, "Library started");
+	MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
 	horatio_options(pOptions);
 	return;
 }
@@ -204,7 +205,7 @@ void horatio_Shutdown() {
 #endif /*HORATIO_DEBUGHOOKS*/
 		/* Output log information if memory has not been released */
 		TrapUnFreedArrays(); 
-		MESSAGE(NULL, 0, "Library shutdown");
+		MESSAGE(HORATIO_LOG_CODE_SHUTDOWN, NULL, 0, "Library shutdown");
 	} else { /* This has been done before! */
 		/* Call hooks and fire trap */
 #ifdef HORATIO_DEBUGHOOKS
@@ -259,7 +260,7 @@ static void TrapUnFreedArrays() {
         "Shutdown(): The array %s%p was not freed, any blocks unfreed in the array will be listed",
         HORATIO_FMTPTRPFX, (void*)(_safetyList[sli])
       );
-      WARNING(trapMsg);
+      WARNING(HORATIO_LOG_CODE_UNFREED_ARRAY, trapMsg);
       if (_safetyList[sli]->Count) { /* Are there any unfreed blocks in the array? */
         totalBytesLeaked += TrapUnFreedBlocks(_safetyList[sli]);
       }
@@ -285,7 +286,7 @@ static void TrapUnFreedArrays() {
       "%lu arrays were not freed",
       numArraysUnfreed
     );
-    WARNING(trapMsg);
+    WARNING(HORATIO_LOG_CODE_UNFREED_ARRAY, trapMsg);
   }
   /* Entire list was processed, if there were any leaks report general message */
   if (totalBytesLeaked) { /* So, were there any unfreed arrays or blocks? */
@@ -340,7 +341,7 @@ static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr) {
           HORATIO_FMTPTRPFX, (void*)PArr,
           (unsigned int)PArr->Descriptors[0].Size
         );
-        MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
+        MESSAGE(HORATIO_LOG_CODE_UNFREED_BLOCK, PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
         totalLeakage += PArr->Descriptors[0].Size; /* Add size of this block to the total leakage value */
         horatio_Free(PArr, PArr->Descriptors[0].PBase); /* Automatically collect the garbage */
       }
@@ -355,7 +356,7 @@ static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr) {
         unfreedBlockCount,
         totalLeakage
       );
-      WARNING(trapMsg);
+      WARNING(HORATIO_LOG_CODE_UNFREED_BLOCK, trapMsg);
     }
   } /*(PArr)*/
   return totalLeakage; /* Caller gets to know this so they can add it to a total */

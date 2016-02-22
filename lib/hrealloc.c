@@ -110,6 +110,7 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 
 	if (!NewSize) { /* No new size, hmm, must be wanting free() really */
 		WARNING(
+			HORATIO_LOG_CODE_REALLOC_NP_1,
 			"Dynamic possibly non-portable use of realloc() "
 			"as a free-er"
 		);
@@ -124,6 +125,7 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 		 * as an initial allocator
 		 */
 		WARNING(
+			HORATIO_LOG_CODE_REALLOC_NP_2,
 			"Dynamic possibly non-portable use of realloc() "
 			"as an initial allocator"
 		);
