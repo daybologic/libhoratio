@@ -57,13 +57,19 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "horatio.h" /* Main library header */
 #include "hdbghook.h" /* Debug hook executive and support functions */
 
+static unsigned long int callCounter;
+static unsigned long int incrementCallCounter(const char *const funcName) {
+	return callCounter++; /* TODO */
+}
+
 static void deprecated(const char *const funcName) {
 #ifdef HORATIO_DEBUGHOOKS
 	unsigned short int hookType = HORATIO_HOOK_LEGACY;
 	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 #endif /*HORATIO_DEBUGHOOKS*/
 
-	fprintf(stderr, "Deprecated function call: dpcrtlmm_%s\n", funcName);
+	if (0 == incrementCallCounter(funcName))
+		fprintf(stderr, "Deprecated function call: dpcrtlmm_%s\n", funcName);
 
 	/* Call the debug hook executive */
 #ifdef HORATIO_DEBUGHOOKS
