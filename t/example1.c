@@ -174,11 +174,16 @@ static void InitArrays() {
 }
 
 static void PrintVersion() {
+
 	S_DPCRTLMM_VERSION ver;
+
+	printf("%s\n", horatio_license());
 	printf("Gathering library version info...");
 	horatio_Ver(&ver);
 	printf("Version: %u.%u.%u", ver.Major, ver.Minor, ver.Patch);
 	printf("\n");
+
+	return;
 }
 
 static void myTrapHandler(
