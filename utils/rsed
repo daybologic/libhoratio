@@ -1,0 +1,11 @@
+#!/bin/sh
+
+os=`uname`
+if test $os = 'Darwin'; then
+	rsed='sed -E'
+else
+	rsed='sed -r'
+fi
+
+$rsed $@
+exit $?

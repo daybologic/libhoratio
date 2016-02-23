@@ -1,22 +1,46 @@
-Source: libdpcrtlmm
+Source: libhoratio
 Section: utils
 Priority: extra
 Maintainer: David Duncan Ross Palmer <palmer@overchat.org>
-Build-Depends: debhelper (>= 7.0.15), autoconf
+Build-Depends: debhelper (>= 9),
+ libtool,
+ bash,
+ texlive-latex-base,
+ texlive-latex-extra,
+ libcunit1-dev,
+ raw2c (>= 1.2.0), raw2c (<< 2.0.0),
+Build-Depends-Indep: automake
 Standards-Version: 3.7.3
 Homepage: http://www.daybologic.co.uk/software.php?content=dpcrtlmm
 Vcs-Browser: http://svn.daybologic.co.uk/trac/dpcrtlmm/
 
-Package: libdpcrtlmm
+Package: libhoratio
 Architecture: any
+Conflicts: libdpcrtlmm
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Memory management/leak protection library for C apps
  This library is in its basic form a drop-in replacement for malloc() etc,
  however it has advanced callbacks and logging facilities which can be used.
 
-Package: libdpcrtlmm-dev
+Package: libhoratio-dev
 Architecture: any
-Depends: libdpcrtlmm
+Conflicts: libdpcrtlmm-dev
+Depends: libhoratio (= ${binary:Version})
 Description: Memory management/lead protection library dev headers
- This package includes dpcrtlmm.h so that you can compile against
- libdcprtlmm.
+ This package includes horatio.h so that you can compile against
+ libhoratio.
+
+Package: libhoratio-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: libhoratio (= ${binary:Version}),
+    ${misc:Depends}
+Description: Debugging symbols for libhoratio
+ These symbols are not required for ordinary use and debugging
+ of user-code.  They are for debugging the internals of the libhoratio
+ library, for maintainers, or anybody who suspects there may be a bug
+ within libhoratio itself.
+ .
+ Equally, it may be installed by programmers who want to learn more
+ about libhoratio, and contribute to development thereof.
