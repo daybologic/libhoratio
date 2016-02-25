@@ -17,8 +17,6 @@ Vcs-Browser: http://svn.daybologic.co.uk/trac/dpcrtlmm/
 
 Package: libhoratio
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
- libsqlite3-0
 Conflicts: libdpcrtlmm
 Depends: ${shlibs:Depends}, ${misc:Depends},
  libsqlite3-0
