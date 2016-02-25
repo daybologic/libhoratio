@@ -29,13 +29,11 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-#define HORATIO_SOURCE
-/*
- * Created: UNKNOWN
- * Programmer: David Duncan Ross Palmer
- * Library: HORATIO
- * Language: ANSI C (1990 implementation)
- * Purpose: HORATIO's memory user-memory reallocation
+
+/*! \file hrealloc.c
+ * \brief Implementation of realloc()
+ *
+ * HORATIO's memory user-memory reallocation
  */
 
 #define HORATIO_SOURCE
@@ -112,6 +110,7 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 
 	if (!NewSize) { /* No new size, hmm, must be wanting free() really */
 		WARNING(
+			HORATIO_LOG_CODE_REALLOC_NP_1,
 			"Dynamic possibly non-portable use of realloc() "
 			"as a free-er"
 		);
@@ -126,6 +125,7 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 		 * as an initial allocator
 		 */
 		WARNING(
+			HORATIO_LOG_CODE_REALLOC_NP_2,
 			"Dynamic possibly non-portable use of realloc() "
 			"as an initial allocator"
 		);

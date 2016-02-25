@@ -30,13 +30,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*! \file hlcktrap.c
+ * \brief Block locking trap mechanism
+ *
  * A trap I prepared earlier - fires trap on a locking violation, call this
  * at the begining of any function which invariably leads to block descriptors
  * being modified or deleted (except for flag changes).  This will return
  * FALSE normally.  If it returns TRUE it because the block is locked, the
  * caller should then make steps not to modify the block.  This TRUE return only
- * ocours when trapping is off or handled by the user who chose to ignore the
+ * occurs when trapping is off or handled by the user who chose to ignore the
  * trap.  Otherwise the function does not return.
  */
 

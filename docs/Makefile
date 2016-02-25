@@ -5,6 +5,7 @@ pdfs = $(shell ls *.tex | sh -x ../utils/rsed "s/tex$$/pdf/")
 SHARED=
 IDENT=.ident
 VERSION=.version
+DOXYGEN_VERSION=.doxygen_version
 CONFIGURE_AC=../configure.ac
 
 .PHONY: all
@@ -22,7 +23,9 @@ all: ident version $(pdfs)
 
 .PHONY: version
 version: $(CONFIGURE_AC) ../utils/version
-	../utils/version -c $(CONFIGURE_AC) > $(VERSION)
+	ver=`../utils/version -c $(CONFIGURE_AC)`; \
+	echo $$ver > $(VERSION); \
+	echo "PROJECT_NUMBER=$$ver" > $(DOXYGEN_VERSION)
 
 .PHONY: ident
 ident: ../utils/hgident
@@ -30,7 +33,7 @@ ident: ../utils/hgident
 
 .PHONY: clean
 clean:
-	rm -f *.pdf *.toc *.aux *.log *.out $(IDENT) $(VERSION)
+	rm -f *.pdf *.toc *.aux *.log *.out $(IDENT) $(VERSION) $(DOXYGEN_VERSION)
 
 .PHONY: check
 check:

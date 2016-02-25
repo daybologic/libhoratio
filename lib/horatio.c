@@ -30,10 +30,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*! \file horatio.c
+ * \brief Main library function
+ *
+ * Minimal stuff here please,
+ * if possible promote granularity by using other C files
+ *
  * Incase you're wondering why HORATIO_SOURCE appears at the top of all
  * sources, it's to do with build.h.  That header is for the compilation of the
- * library only, not to be included in user programs.  If users include build.h
+ * library only, not to be included in user programs.  If users include hbuild.h
  * the definition won't exist and build.h will tell them off!
  *
  * Allocations on behalf of callers are done with HORATIO_MALLOC,
@@ -64,23 +69,32 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hdbghook.h" /* The debug hook support/executive */
 #include "hbiglock.h" /* To init / uninit the big lib lock */
 #include "hblocarr.h" /* Internal interface to block arrays */
+#include "hversion.h" /* HORATIO_VERSION_ constants */
 
-/*
- * Minimal stuff here please,
- * if possible promote granularity by using other C files
- */
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
-/*
- * Called by TrapUnFreedArrays(), not by other functions,
- * TrapUnFreedBlocks() does processing for a block array, I had
- * to put it in a separate function so it could be called in
- * two different locations, the safety list loop and then for the
- * built-in array, returns number of bytes wasted, the called wil
- * add this to the total leakage
- */
 static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr);
 unsigned char horatio__EnableTraps = 1U;
 
+/*!
+ * \brief Request version number from library at run-time.
+ *
+ * \param PVerStruct Pointer to version information structure to fill
+ * \return PVerStruct, as passed.
+ *
+ * Although you can check, with the macros HORATIO_VERSION_MAJOR,
+ * HORATIO_VERSION_MINOR and HORATIO_VERSION_PATCH, the version, using
+ * macros at compile time, or print the version number with the same,
+ * sometimes you may want to verify that the version number you are
+ * running with, is acceptable for the version you were compiled for.
+ * This function returns information about the binary library version
+ * at compile time.
+ *
+ * Pass a pointer to a structure wide enough to hold the version number
+ * and flags, and it will be populated by the library call.
+ * Passing NULL will have no effect, but is safe.  The pointer passed to
+ * the library will be returned for your convenience.  This function does
+ * not fail.
+ */
 PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct) {
 	/*
 	 * No need to lock the big global lock for this,
@@ -108,6 +122,18 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct) {
 	return PVerStruct;
 }
 
+/*!
+ * \brief Initialise the library
+ *
+ * Initialises the library's internal data structures.
+ * This function must be called before any macro invocations,
+ * function calls or static data flags are accessed or set.
+ * This should be done as close to the start of main() as possible.
+ * The atexit() handler for horatio_Shutdown() should not be registered
+ * until this function returns.
+ *
+ * Failure in this function will cause an exit or abort of the process.
+ */
 void horatio_Startup() {
 	if (!_libStarted) {
 		/* Initialization of internal library data */
@@ -129,10 +155,22 @@ void horatio_Startup() {
 #endif /*HORATIO_DEBUGHOOKS*/
 		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
 	}
-	MESSAGE(NULL, 0, "Library started");
+	MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
 	return;
 }
 
+/*!
+ * \brief Shut down the Horatio library.
+ *
+ * This function should be called just before the process terminates,
+ * either in the last statement of the main() function, or within the last
+ * atexit() handler before process termination.
+ *
+ * This function will return, but returns no value.
+ * It should only be called once.
+ * The library must hve been started before the call.
+ * Do not call the function from a signal handler, or outside the main thread.
+ */
 void horatio_Shutdown() {
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -158,7 +196,7 @@ void horatio_Shutdown() {
 #endif /*HORATIO_DEBUGHOOKS*/
 		/* Output log information if memory has not been released */
 		TrapUnFreedArrays(); 
-		MESSAGE(NULL, 0, "Library shutdown");
+		MESSAGE(HORATIO_LOG_CODE_SHUTDOWN, NULL, 0, "Library shutdown");
 	} else { /* This has been done before! */
 		/* Call hooks and fire trap */
 #ifdef HORATIO_DEBUGHOOKS
@@ -176,10 +214,23 @@ void horatio_Shutdown() {
 	return;
 }
 
+/*!
+ * \brief Determine whether the library has been initialised.
+ *
+ * \return Boolean truth or false value
+ */
 unsigned int horatio_IsStarted() {
   return _libStarted;
 }
 
+/*!
+ * \brief Traps all unfreed arrays
+ *
+ * This function loops through all knon block descriptor arrays and
+ * calls TrapUnFreedBlocks on each one in turn.  This function returns
+ * nothing, and triggers the HORATIO_TRAP_UNFREED_DATA trap, should anything
+ * have neglected to be released.
+ */
 static void TrapUnFreedArrays() {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)]; /* Reserved for trap/log messages */
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
@@ -200,7 +251,7 @@ static void TrapUnFreedArrays() {
         "Shutdown(): The array %s%p was not freed, any blocks unfreed in the array will be listed",
         HORATIO_FMTPTRPFX, (void*)(_safetyList[sli])
       );
-      WARNING(trapMsg);
+      WARNING(HORATIO_LOG_CODE_UNFREED_ARRAY, trapMsg);
       if (_safetyList[sli]->Count) { /* Are there any unfreed blocks in the array? */
         totalBytesLeaked += TrapUnFreedBlocks(_safetyList[sli]);
       }
@@ -226,7 +277,7 @@ static void TrapUnFreedArrays() {
       "%lu arrays were not freed",
       numArraysUnfreed
     );
-    WARNING(trapMsg);
+    WARNING(HORATIO_LOG_CODE_UNFREED_ARRAY, trapMsg);
   }
   /* Entire list was processed, if there were any leaks report general message */
   if (totalBytesLeaked) { /* So, were there any unfreed arrays or blocks? */
@@ -243,6 +294,20 @@ static void TrapUnFreedArrays() {
   return;
 }
 
+/*!
+ * \brief Trap unfreed blocks within an array
+ *
+ * \param PArr Pointer to block descriptor array
+ *
+ * \return Total bytes leaked
+ *
+ * Called by TrapUnFreedArrays(), not by other functions,
+ * TrapUnFreedBlocks() does processing for a block array, I had
+ * to put it in a separate function so it could be called in
+ * two different locations, the safety list loop and then for the
+ * built-in array, returns number of bytes wasted, the caller shall
+ * this to the total leakage.
+ */
 static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr) {
   char trapMsg[MAX_TRAP_STRING_LENGTH+sizeof(char)];
   size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
@@ -267,7 +332,7 @@ static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr) {
           HORATIO_FMTPTRPFX, (void*)PArr,
           (unsigned int)PArr->Descriptors[0].Size
         );
-        MESSAGE(PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
+        MESSAGE(HORATIO_LOG_CODE_UNFREED_BLOCK, PArr->Descriptors[0].SourceFile, PArr->Descriptors[0].SourceLine, trapMsg);
         totalLeakage += PArr->Descriptors[0].Size; /* Add size of this block to the total leakage value */
         horatio_Free(PArr, PArr->Descriptors[0].PBase); /* Automatically collect the garbage */
       }
@@ -282,7 +347,7 @@ static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr) {
         unfreedBlockCount,
         totalLeakage
       );
-      WARNING(trapMsg);
+      WARNING(HORATIO_LOG_CODE_UNFREED_BLOCK, trapMsg);
     }
   } /*(PArr)*/
   return totalLeakage; /* Caller gets to know this so they can add it to a total */

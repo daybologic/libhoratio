@@ -30,15 +30,16 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Block array creation and destruction functions
- * Normally each module or section of a program will make it's own array
- * using the functions herin, if it is too much hastle (because of cleaning
- * up each module) or the program wants to hide behind a normal allocation
- * function re-routed to us via a hack then only one block array exists per
- * per program.
+/*! \file hblocarr.c
+ * \brief Block array creation and destruction functions
  *
- * 24/11/2001 (DDRP): Attention, block arrays need to start supporting file/
+ * Normally each module or section of a program will make it's own array
+ * using the functions here-in, if it is too much trouble (because of cleaning
+ * up each module) or the program wants to hide behind a normal allocation
+ * function re-routed to us via a drop-in wrapper then only one block array
+ * exists per process.
+ *
+ * 24/11/2001 TODO: (DDRP): Attention, block arrays need to start supporting file/
  * line info soon.
 */
 
@@ -138,6 +139,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		 * must be warned about!
 		 */
 		WARNING(
+			HORATIO_LOG_CODE_ALLOC_ARRAY_FAIL,
 			"CreateBlockArray(): "
 			"Couldn\'t allocate the new block array!"
 		);
@@ -165,6 +167,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		 * Memory outages while in memory manager must be warned about
 		 **/
 		WARNING(
+			HORATIO_LOG_CODE_SL_ADD_FAIL,
 			"CreateBlockArray(): The array base address "
 			"could not be added to the safety list"
 		);
@@ -179,7 +182,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		"CreateBlockArray() returns base %s%p",
 		HORATIO_FMTPTRPFX, (void*)Parray
 	);
-	MESSAGE(__FILE__, __LINE__, logMsg);
+	MESSAGE(HORATIO_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -300,7 +303,7 @@ void horatio_int_DestroyBlockArray(
 					HORATIO_FMTPTRPFX,
 					(void*)PBlockArray
 				); /* Prepare log message */
-				MESSAGE(__FILE__, __LINE__, trapStr);
+				MESSAGE(HORATIO_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS

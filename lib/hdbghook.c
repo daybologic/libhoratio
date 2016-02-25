@@ -30,12 +30,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * The debug hook executive and supporting code
- * written (and perfomed by David Duncan Ross Palmer.
+/*! \file hdbghook.c
+ * \brief The debug hook executive and supporting code
  *
- * File DBGHOOKS.C
- * Library: HORATIO Memory Manager
  * Created 24th February 2000
  */
 
@@ -190,6 +187,7 @@ void horatio_int_CallDebugHook(
 	if (BadHookType(HookType)) {
 		/* Bad hook type (out of range in matrix) */
 		ERROR(
+			HORATIO_LOG_CODE_HOOK_RANGE,
 			"CallDebugHook: Internal library error, "
 			"HookType out of range!"
 		);

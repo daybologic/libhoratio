@@ -30,6 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file hcalloc.c
+ * \brief Functions related to the implementation of calloc()
+ */
+
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -53,6 +57,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifdef HORATIO_LOG
 static void OurLog(
+  const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -64,8 +69,8 @@ static void OurLog(
 # undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(f, l, sev, msg)                                              \
-    OurLog((f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG(lcode, f, l, sev, msg)                                              \
+    OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
 
 static void HORATIO_FARDATA* horatio_int_CallocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
@@ -114,7 +119,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 		N,
 		(unsigned int)NewBlockSize
 	);
-	OURLOG(File, Line, HORATIO_LOG_MESSAGE, logMsg);
+	OURLOG(HORATIO_LOG_CODE_CALLOC_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -139,6 +144,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 
 #ifdef HORATIO_LOG
 		OURLOG(
+			HORATIO_LOG_CODE_CALLOC_DONE,
 			File, Line, HORATIO_LOG_MESSAGE,
 			"Allocation successful"
 		);
@@ -155,7 +161,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 		/*blockDescArray.Success = 0U;   - optimized away */
 #endif /*HORATIO_DEBUGHOOKS*/
 #ifdef HORATIO_LOG
-		OURLOG(File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
+		OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
 #endif /*HORATIO_LOG*/
 	}
 
@@ -167,6 +173,7 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 
 #ifdef HORATIO_LOG
 static void OurLog(
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -196,7 +203,7 @@ static void OurLog(
 			strcat(PcopyStr, Str); /* Add log string after prefix */
 
 			/* Pass on to the normal logger */
-			horatio_int_Log(File, Line, Severity, PcopyStr);
+			horatio_int_Log(Code, File, Line, Severity, PcopyStr);
 
 			free(PcopyStr); /* Copy can now be released */
 		}

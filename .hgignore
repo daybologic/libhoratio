@@ -11,14 +11,23 @@ syntax:glob
 *.lo
 *.Po
 *.la
+configure
 Makefile
 *.in
 stamp-h1
 *~
 lib/.deps
+lib/.dirstamp
 lib/.libs
+libtool
 test-driver
 autom4te.cache
+compile
+config.*
+t/.libs
+t/example?
+t/newbrand
+include/hversion.h
 
 syntax:regexp
 ^docs/\.\w+$

@@ -30,6 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file hfree.c
+ * \brief Functions related to the impementation of free()
+ */
+
 #define HORATIO_SOURCE
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -63,53 +67,64 @@ POSSIBILITY OF SUCH DAMAGE.
 # undef OURLOG /* Don't want their version */
 #endif /*OURLOG*/
 
-#define OURLOG(f, l, sev, msg) \
-  OurLog((f), (l), ((const unsigned short)(sev)), (msg))
-#define OURLOG_POS(sev, msg) \
-  OURLOG(__FILE__, __LINE__, (sev), (msg))
+#define OURLOG(lcode, f, l, sev, msg) \
+  OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
+#define OURLOG_POS(lcode, sev, msg) \
+  OURLOG((lcode), __FILE__, __LINE__, (sev), (msg))
 
-/* Function under the locked version */
 static void horatio_int_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
 );
 
-/*
- * Always make sure to pass resolved arrays to these functions:-
- * Moveup following blocks descriptors in array to remove blank
- * space.  StartPos is the item just deleted when moveup will be
- * started from
- */
 static void Moveup(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int StartPos
 );
-/*
-  Shrink array, trap is fired on an attempt to shrink more
-  than the current size.
-*/
+
 static void ShrinkBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int Amount
 );
+
 static void OurLog(
+  const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
 	const char *Msg
 );
 
+
+/* TODO: This is the free() documentation we need to provide for the proper macro */
+/* This function is the main deallocation function, the equivilant to free( ) in the C Run time library. The block descriptor array in which the block was allocated must be specified, even if it is NULL, which represents the default internal li- brary array, if the block did not belong to the array you specify a trap will be executed. If a debug hook is installed on this type of event, remember that it must never dereference the PRelDesc field, the descriptor will have already been released. */
+/*!
+ * \brief Thread safe wrapper around Free()
+ *
+ * \param PBlockArray A pointer to the block descriptor array
+ * \param Ptr Block of memory returned from horatio_AllocEx earlier
+ *
+ * This function provides a thread-safe wrapper around horatio_int_Free
+ */
 void horatio_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
 ) {
-	/* Thread safe wrapper around Free() */
-
 	LOCK
 	horatio_int_Free(PBlockArray, Ptr);
 	UNLOCK
 }
 
+/*!
+ * \brief Implement free
+ *
+ * \param PBlockArray A pointer to the block descriptor array
+ * \param Ptr Block of memory returned from horatio_AllocEx earlier
+ *
+ * This function internally provides the wrapper around the libc free()
+ * and therefore implements the majority of the logic required on behalf of the
+ * user, in terms of logging the event, an calling the necessary hooks.
+ */
 static void horatio_int_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
@@ -174,10 +189,12 @@ static void horatio_int_Free(
 				HORATIO_FMTPTRPFX,
 				(void*)PRArr
 			);
+			OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, DPCRTLMM_LOG_MESSAGE, trapMsg);
 #ifdef HAVE_SNPRINTF
 			trapMsgRemaining -= strlen(trapMsg);
 #endif /*HAVE_SNPRINTF*/
 			OURLOG(
+				HORATIO_LOG_CODE_FREE_BLOCK_REQ,
 				PRArr->Descriptors[i].SourceFile,
 				PRArr->Descriptors[i].SourceLine,
 				HORATIO_LOG_MESSAGE,
@@ -235,6 +252,21 @@ static void horatio_int_Free(
 	return;
 }
 
+/*!
+ * \brief Compact and remove unused slots in a S_HORATIO_BLOCKDESCARRAY
+ *
+ * \param PBlockArray A pointer to the block descriptor array
+ * \param StartPos Relative position of the item removed just now
+ *
+ * Moveup following blocks descriptors in array to remove blank
+ * space.  StartPos is the item just deleted where moveup will be
+ * started from.
+ *
+ * This function is provided for internal use of the relinquisher only,
+ * and can only be called within hfree.c
+ *
+ * Always make sure to pass resolved arrays to this function.
+ */
 static void Moveup(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int StartPos
@@ -285,6 +317,24 @@ static void Moveup(
 	return;
 }
 
+/*!
+ * \brief Shrink block desciptor array slots
+ *
+ * \param PBlockArray Pointer to the block descriptor (may not be NULL)
+ * \param Amount The number of slots which we will remove
+ *
+ * The is an internal function used by the relinquisher, to reduce the number of available
+ * within a block descriptor array.  It is deprecated, as it is not very flexible,
+ * and we should be using a linked-list instead, for efficiency.
+ *
+ * The following traps could be fired on an attempt to shrink more than the current size.
+ * HORATIO_TRAP_SHRINKARR_TOOMUCH
+ * HORATIO_TRAP_SHRINKARR_WHILE_NOWT
+ *
+ * Which are usually handled in the same way, as they mean nearly the same thing.
+ *
+ * The function does not return a value
+ */
 static void ShrinkBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int Amount
@@ -312,7 +362,7 @@ static void ShrinkBlockArray(
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
-		OURLOG_POS(HORATIO_LOG_WARNING, logMsg);
+		OURLOG_POS(HORATIO_LOG_CODE_REDUCE_ARRAY_ZERO, HORATIO_LOG_WARNING, logMsg);
 		return;
 	}
 
@@ -371,21 +421,30 @@ static void ShrinkBlockArray(
 	return;
 }
 
+/*!
+ * \brief Local logging function for the relinquisher
+ *
+ * \param File Source file name of the logging code (it will always be this file).
+ * \param Line Source file line of the caller, logging code, in the file.
+ * \param Severity The importance of the message
+ * \param Str The actual log message
+ *
+ * Our job is to add "Free(): " to the start of the string,
+ * saves data space if everybody in this module calls this instead
+ * of _Log() directly.
+ *
+ * We can't call _Log() twice because the information will be put
+ * on different lines so a copy is needed.
+ *
+ * This function returns no value
+ */
 static void OurLog(
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
 	const char *Str
 ) {
-	/*
-	 * Our job is to add "Free()" to the start of the string,
-	 * saves data space if everybody in this module calls this instead
-	 * of _Log() directly.
-	 *
-	 * We can't call _Log() twice because the information will be put
-	 * on different lines so a copy is needed.
-	 */
-
 	if (Str && Str[0]) {
 		/* Valid string of at least one character sent to us */
 		char *PcopyStr;
@@ -403,7 +462,7 @@ static void OurLog(
 			strcat(PcopyStr, Str); /* Add log string after prefix */
 
 			/* Pass on to the normal logger */
-			horatio_int_Log(File, Line, Severity, PcopyStr);
+			horatio_int_Log(Code, File, Line, Severity, PcopyStr);
 		}
 
 		free(PcopyStr); /* Copy can now be released */

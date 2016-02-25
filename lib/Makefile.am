@@ -1,5 +1,5 @@
-# Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+# Horatio's Memory Manager
+# Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 AUTOMAKE_OPTIONS=subdir-objects
+BUILT_SOURCES=hversion.h
 
 lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
 
@@ -67,3 +68,9 @@ libhoratio_la_SOURCES += hsafelst.c
 libhoratio_la_SOURCES += hstats.c
 libhoratio_la_SOURCES += htrap.c
 libhoratio_la_SOURCES += hvptrap.c
+
+clean-local:
+	rm -f hversion.h
+
+hversion.h: Makefile
+	../utils/mkverh.sh

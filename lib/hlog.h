@@ -29,6 +29,15 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*! \file hlog.h
+ * \brief Internal logging functions
+ *
+ * 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
+ * messages, warnings and errors
+ *
+ * hlog.h is for HORATIO's internal use only
+ */
 #ifndef INC_HORATIO_LOG_H
 #define INC_HORATIO_LOG_H
 
@@ -37,15 +46,40 @@ extern "C" {
 #endif /*__cplusplus*/
 
 #ifndef HORATIO_SOURCE
-# error ("log.h is for HORATIO's internal use only")
+# error ("hlog.h is for HORATIO's internal use only")
 #endif /*!HORATIO_SOURCE*/
 
-/*
- * 1st Dec 2000: 1.2b: News: The logging's been reworked, we now support
- * messages, warnings and errors
- */
+/* Specific log codes: These are all draft and subject to change */
+#define HORATIO_LOG_CODE_BASE (256) /* Avoid namespace conflict with DEBUGHOOK */
+#define HORATIO_LOG_CODE_STARTUP (HORATIO_LOG_CODE_BASE+0)
+#define HORATIO_LOG_CODE_SHUTDOWN (HORATIO_LOG_CODE_BASE+1)
+#define HORATIO_LOG_CODE_UNFREED_ARRAY (HORATIO_LOG_CODE_BASE+2)
+#define HORATIO_LOG_CODE_UNFREED_BLOCK (HORATIO_LOG_CODE_BASE+3)
+#define HORATIO_LOG_CODE_ALLOC_BLOCK_REQ (HORATIO_LOG_CODE_BASE+4)
+#define HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL (HORATIO_LOG_CODE_BASE+5)
+#define HORATIO_LOG_CODE_ENLARGE_ARRAY_FAIL (HORATIO_LOG_CODE_BASE+6)
+#define HORATIO_LOG_CODE_ENLARGE_ARRAY_ZERO (HORATIO_LOG_CODE_BASE+7)
+#define HORATIO_LOG_CODE_ALLOC_ARRAY_FAIL (HORATIO_LOG_CODE_BASE+8)
+#define HORATIO_LOG_CODE_SL_ADD_FAIL (HORATIO_LOG_CODE_BASE+9)
+#define HORATIO_LOG_CODE_ALLOC_ARRAY_INFO (HORATIO_LOG_CODE_BASE+10)
+#define HORATIO_LOG_CODE_DESTROY_ARRAY (HORATIO_LOG_CODE_BASE+11)
+#define HORATIO_LOG_CODE_CALLOC_REQ (HORATIO_LOG_CODE_BASE+12)
+#define HORATIO_LOG_CODE_CALLOC_DONE (HORATIO_LOG_CODE_BASE+13)
+#define HORATIO_LOG_CODE_CALLOC_FAIL (HORATIO_LOG_CODE_BASE+14)
+#define HORATIO_LOG_CODE_HOOK_RANGE (HORATIO_LOG_CODE_BASE+15)
+#define HORATIO_LOG_CODE_FREE_BLOCK_REQ (HORATIO_LOG_CODE_BASE+16)
+#define HORATIO_LOG_CODE_REDUCE_ARRAY_ZERO (HORATIO_LOG_CODE_BASE+17)
+#define HORATIO_LOG_CODE_REALLOC_NP_1 (HORATIO_LOG_CODE_BASE+18)
+#define HORATIO_LOG_CODE_REALLOC_NP_2 (HORATIO_LOG_CODE_BASE+19)
+#define HORATIO_LOG_CODE_INSTALL_TRAP (HORATIO_LOG_CODE_BASE+20)
+#define HORATIO_LOG_CODE_REMOVE_TRAP (HORATIO_LOG_CODE_BASE+21)
 
 /* Types of logging messages */
+
+/*! \def HORATIO_LOG_MESSAGE
+ * \brief Only put in log
+ */
+#define HORATIO_LOG_MESSAGE (0U)
 enum hLogSeverity {
 	HORATIO_LOG_MESSAGE = 0U, /* Only put in log */
 	HORATIO_LOG_WARNING = 1U, /* stderr and log */
@@ -58,9 +92,11 @@ enum hLogSeverity {
  */
 
 /*
+ * TODO: Doxygen
  * Write the message to the log (or do nothing if the log macro is undefined
  */
 void horatio_int_Log(
+  const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const enum hLogSeverity Severity,
@@ -71,23 +107,23 @@ void horatio_int_Log(
  * To make our lives easier... but MESSAGE is only defined for logging builds
  */
 #ifdef HORATIO_LOG
-# define MESSAGE(sfn, sfl, msg)                                             \
-    horatio_int_Log((sfn), (sfl),                                           \
+# define MESSAGE(lcode, sfn, sfl, msg)                                      \
+    horatio_int_Log((lcode), (sfn), (sfl),                                  \
     HORATIO_LOG_MESSAGE, (msg)                                              \
 )
 #else /* Non logging build */
-# define MESSAGE(sfn, sfl, msg) /* Do nothing with it */
+# define MESSAGE(lcode, sfn, sfl, msg) /* Do nothing with it */
 #endif /*HORATIO_LOG*/
 
-#define WARNING(msg)                                                        \
+#define WARNING(lcode, msg)                                                 \
     horatio_int_Log(                                                        \
-        (__FILE__), (__LINE__),                                             \
+        (lcode), (__FILE__), (__LINE__),                                    \
         HORATIO_LOG_WARNING, (msg)                                          \
     )
 
-#define ERROR(msg)                                                          \
+#define ERROR(lcode, msg)                                                   \
     horatio_int_Log(                                                        \
-    (__FILE__), (__LINE__),                                                 \
+    (lcode), (__FILE__), (__LINE__),                                        \
     HORATIO_LOG_ERROR, (msg)                                                \
 )
 

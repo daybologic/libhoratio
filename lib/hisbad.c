@@ -30,10 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * IsBad....() routines for testing validity of pointers
- * NOTE: 28th July 2000
- * Both function can now cope with resolved or unresolved array pointers
+/*! \file hisbad.c
+ * \brief IsBad....() routines for testing validity of pointers
+ *
+ * All function can cope with resolved or unresolved array pointers
  */
 
 #define HORATIO_SOURCE

@@ -30,9 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Library: HORATIO
- * Created: Feb 2000
+/*! \file htrap.c
+ * \brief Trap mechanism
+ *
+ * TODO: We should describe in more detail, the purpose of the trap subsystem
  */
 
 #define HORATIO_SOURCE
@@ -86,6 +87,25 @@ void horatio_RemoveTrapCallback(
 	UNLOCK
 }
 
+/*!
+ * \brief Returns the state of trap handler (user configuration)
+ *
+ * Sometimes the user of the library has installed a handler for traps instead of
+ * the default library handler, this function returns very simple information about it.
+ * There are three return possible values, the other values won’t be used. The three possible values are
+ *
+ * -1 for no user trap handler
+ *  0 for a handler which is installed as a handler
+ *  1 for a handler which acts as a hook.
+ *
+ * The important thing about a hook is that it gets preview of the trap but the default one is called
+ * afterwards and therefore the hook is expected to return.  A handler should terminate the program,
+ * if it returns the default handler will not be called, the user handler has replaced it.
+ *
+ * So if a handler returns the program may continue after a trap which could lead to unpredictable results.
+ *
+ * \return Mode of trap operation
+ */
 signed char horatio_GetTrapCallbackInfo() {
 	signed char ret;
 
@@ -103,7 +123,7 @@ void horatio_int_Trap(
 	char *trapsCopy;
 	const char preFix[] = "HORATIO_UNHANDLED_TRAP: ";
 
-	ERROR(Message); /* Pass on to the logger automatically */
+	ERROR(Id, Message); /* Pass on to the logger automatically */
 	/* Don't execute traps if traps have been switched off */
 	if ( !horatio__EnableTraps ) return;
 
@@ -173,7 +193,7 @@ static void horatio_int_InstallTrapCallback(
 			(AsHook) ? ("hook") : ("handler"),
 			HORATIO_FMTPTRPFX, (unsigned long int)NewTrapCallback
 		);
-		MESSAGE(NULL, 0, logStr);
+		MESSAGE(HORATIO_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
 #endif /*HORATIO_LOG*/
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -237,7 +257,7 @@ static void horatio_int_RemoveTrapCallback(
 			"RemoveTrapCallback(): %s removed.",
 			(_userTrapCallbackIsHook) ? ("Hook") : ("Handler")
 		);
-		MESSAGE(NULL, 0, logStr);
+		MESSAGE(HORATIO_LOG_CODE_REMOVE_TRAP, NULL, 0, logStr);
 
 #ifdef HORATIO_DEBUGHOOKS
 		debugHookInfo.Success = 1U;
