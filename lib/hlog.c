@@ -116,20 +116,20 @@ static mongo_sync_connection *horatio_int_mongodb_open(void);
 #ifdef USE_SQLITE
 static void horatio_int_sqlite3_logmsg(
 	const unsigned short Code,
-  const char *,
-  const unsigned int,
-  const unsigned short,
-  const char *
+	const char *,
+	const unsigned int,
+	const unsigned short,
+	const char *
 );
 #endif /*USE_SQLITE*/
 
 #ifdef USE_MYSQL
 static void horatio_int_mysql_logmsg(
 	const unsigned short Code,
-  const char *,
-  const unsigned int,
-  const unsigned short,
-  const char *
+	const char *,
+	const unsigned int,
+	const unsigned short,
+	const char *
 );
 #endif /*USE_MYSQL*/
 
