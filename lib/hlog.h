@@ -77,9 +77,8 @@ extern "C" {
 /* Types of logging messages */
 
 /*! \def HORATIO_LOG_MESSAGE
- * \brief Only put in log
+ * \brief Only put in log TODO
  */
-#define HORATIO_LOG_MESSAGE (0U)
 enum hLogSeverity {
 	HORATIO_LOG_MESSAGE = 0U, /* Only put in log */
 	HORATIO_LOG_WARNING = 1U, /* stderr and log */

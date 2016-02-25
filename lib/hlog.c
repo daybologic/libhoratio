@@ -321,6 +321,7 @@ static void horatio_int_mysql_logmsg(
 #endif /*0*/
 
 void horatio_int_Log(
+  const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const enum hLogSeverity Severity,
