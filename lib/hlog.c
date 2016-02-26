@@ -167,7 +167,6 @@ static sqlite3 *horatio_int_sqlite3_open() {
 static void horatio_int_sqlite3_schema(sqlite3 *dbHandle) {
 
 	int rc;
-	sqlite3_stmt *stmt;
 	const char *const q =
 		"CREATE TABLE IF NOT EXISTS debug_log (\n"
 			"id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
@@ -179,20 +178,11 @@ static void horatio_int_sqlite3_schema(sqlite3 *dbHandle) {
 			"msg VARCHAR(255) NOT NULL\n"
 		");";
 
-	rc = sqlite3_prepare_v2(dbHandle, q, strlen(q), &stmt, NULL);
-	/*rc = sqlite3_exec(db, sql, 0, 0, &err_msg);*/
+	rc = sqlite3_exec(dbHandle, q, 0, 0, NULL);
 	if (rc != SQLITE_OK) {
-		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+		fprintf(stderr, "Error %u from sqlite3_exec\n", rc);
 		return;
 	}
-
-	rc = sqlite3_step(stmt);
-	if (rc != SQLITE_DONE)
-		fprintf(stderr, "Error %u from sqlite3_step\n", rc);
-
-	rc = sqlite3_finalize(stmt); // Destroy the handle, we won't need it again
-	if (rc != SQLITE_OK)
-		fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 
 	return;
 }
