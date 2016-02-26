@@ -149,6 +149,7 @@ static mongo_sync_connection *mongo_client;
 
 #ifdef USE_SQLITE
 static sqlite3 *horatio_int_sqlite3_open() {
+
 	sqlite3 *dbh;
 	const char *errMsgPtr = NULL;
 	int rc = sqlite3_open("horatio.db", &dbh);
@@ -178,7 +179,6 @@ static void horatio_int_sqlite3_schema(sqlite3 *dbHandle) {
 			"msg VARCHAR(255) NOT NULL\n"
 		");";
 
-	fprintf(stderr, "Executing query: %s\n", q);
 	rc = sqlite3_prepare_v2(dbHandle, q, strlen(q), &stmt, NULL);
 	/*rc = sqlite3_exec(db, sql, 0, 0, &err_msg);*/
 	if (rc != SQLITE_OK) {
@@ -188,10 +188,11 @@ static void horatio_int_sqlite3_schema(sqlite3 *dbHandle) {
 
 	rc = sqlite3_step(stmt);
 	if (rc != SQLITE_DONE)
-	fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+		fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+
 	rc = sqlite3_finalize(stmt); // Destroy the handle, we won't need it again
 	if (rc != SQLITE_OK)
-	fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+		fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 
 	return;
 }
@@ -205,15 +206,14 @@ static void horatio_int_sqlite3_logmsg(
 ) {
 	int rc;
 	sqlite3_stmt *stmt;
-	const char *q = "INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
-	"VALUES(\n"
-	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?, ?\n"
-	")";
+	const char *q =
+		"INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
+		"VALUES(\n"
+		"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?, ?\n"
+		")";
 
 	if ( !Handle_sqlite ) return;
 
-	fprintf(stderr, "Got database message %s\n", Msg);
-	fprintf(stderr, "Executing query: %s\n", q);
 	rc = sqlite3_prepare_v2(Handle_sqlite, q, strlen(q), &stmt, NULL);
 	if ( rc != SQLITE_OK ) {
 		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
@@ -226,13 +226,17 @@ static void horatio_int_sqlite3_logmsg(
 	rc = sqlite3_bind_int(stmt, 4, Severity);
 	rc = sqlite3_bind_text(stmt, 5, Msg, -1, SQLITE_STATIC);
 	if ( rc != SQLITE_OK )
-	fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
+		fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
+
 	rc = sqlite3_step(stmt);
 	if ( rc != SQLITE_DONE )
-	fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+		fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+
 	rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
 	if ( rc != SQLITE_OK )
-	fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+		fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+
+	return;
 }
 #endif /*USE_SQLITE*/
 
