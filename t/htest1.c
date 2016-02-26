@@ -268,7 +268,7 @@ int main(int argc, char *argv[]) {
 		const char *TestName;
 		void (*TestFunc)(void);
 	} DbghookTests[] = {
-		{ "InstallDebugHook",
+		{ "DbghookInstallDebugHook",
 		  &suite_dbghook_InstallDebugHook
 		}
 	};
