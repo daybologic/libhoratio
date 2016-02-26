@@ -321,7 +321,7 @@ static void horatio_int_mysql_logmsg(
 #endif /*0*/
 
 void horatio_int_Log(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const enum hLogSeverity Severity,
@@ -403,17 +403,17 @@ void horatio_int_Log(
 		/* Potentially log to various enabled database engines */
 #ifdef USE_SQLITE
 		if ( !Handle_sqlite ) Handle_sqlite = horatio_int_sqlite3_open();
-		horatio_int_sqlite3_logmsg(File, Line, Severity, Message);
+		horatio_int_sqlite3_logmsg(Code, File, Line, Severity, Message);
 #endif /*USE_MYSQL*/
 
 #ifdef USE_MYSQL
 		if ( !Handle_mysql ) Handle_mysql = horatio_int_mysql_open();
-		horatio_int_mysql_logmsg(File, Line, Severity, Message);
+		horatio_int_mysql_logmsg(Code, File, Line, Severity, Message);
 #endif /*USE_MONGO*/
 
 #ifdef USE_MONGO
 		if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
-		horatio_int_mongodb_logmsg(File, Line, Severity, Message);
+		horatio_int_mongodb_logmsg(Code, File, Line, Severity, Message);
 #endif /*USE_MONGO*/
 	}
 	return;
