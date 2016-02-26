@@ -63,5 +63,5 @@ dpctest1_INCLUDES = horatio.h
 dpctest1_LDADD = $(cunit_test_LDADD) -ldpcrtlmm
 
 htest1_SOURCES = htest1.c
-htest1_INCLUDES = horatio.h
+htest1_INCLUDES = horatio.h ../lib/hlog.h
 htest1_LDADD = $(cunit_test_LDADD)

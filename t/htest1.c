@@ -49,6 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "horatio.h"
 #include "hbuild.h"
 #include "hversion.h"
+#include "../lib/hlog.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
 
@@ -419,9 +420,10 @@ static void suite_alloc_AllocLoop() {
 
 static void suite_log_TODO() {
 	horatio_int_Log(
+		HORATIO_LOG_CODE_DUMMY,
 		"dummy.c", /* File */
 		1234, /* Line */
-		0, /* Severity FIXME: forgotten what we do here, Y U NO HAVE ENUM? */
+		HORATIO_LOG_MESSAGE,
 		"Horatio has merely sniffed his breakfast" /* Message */
 	);
 }
