@@ -42,8 +42,8 @@ override_dh_auto_configure: autogen
 		--enable-stderr \
 		--prefix=/usr \
 		--enable-docs \
-		--disable-dependency-tracking; \
 		--with-sqlite \
+		--disable-dependency-tracking; \
 	fi
 
 override_dh_strip:
