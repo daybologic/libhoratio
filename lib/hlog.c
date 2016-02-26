@@ -91,6 +91,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #ifdef USE_SQLITE
 static sqlite3 *horatio_int_sqlite3_open(void);
+static void horatio_int_sqlite3_schema(sqlite3 *);
 #endif /*USE_SQLITE*/
 
 #ifdef USE_MYSQL
@@ -148,11 +149,6 @@ static mongo_sync_connection *mongo_client;
 
 #ifdef USE_SQLITE
 static sqlite3 *horatio_int_sqlite3_open() {
-  /* TODO:
-  This scema must be created
-  CREATE TABLE debug_log ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ts DATETIME NOT NULL, file CHAR(32) NOT NULL, line INTEGER NOT NULL, severity INTEGER NOT NULL default 0, msg VARCHAR(255) NOT NULL);
-  */
-
 	sqlite3 *dbh;
 	const char *errMsgPtr = NULL;
 	int rc = sqlite3_open("horatio.db", &dbh);
@@ -160,22 +156,58 @@ static sqlite3 *horatio_int_sqlite3_open() {
 		errMsgPtr = sqlite3_errmsg(dbh);
 		Trap(0, errMsgPtr);
 		sqlite3_close(dbh);
+	} else {
+		horatio_int_sqlite3_schema(dbh);
 	}
+
 	return dbh;
+}
+
+static void horatio_int_sqlite3_schema(sqlite3 *dbHandle) {
+
+	int rc;
+	sqlite3_stmt *stmt;
+	const char *const q =
+		"CREATE TABLE IF NOT EXISTS debug_log (\n"
+			"id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
+			"code INTEGER NOT NULL,\n"
+			"ts DATETIME NOT NULL,\n"
+			"file CHAR(32) NOT NULL,\n"
+			"line INTEGER NOT NULL,\n"
+			"severity INTEGER NOT NULL default 0,\n"
+			"msg VARCHAR(255) NOT NULL\n"
+		");";
+
+	fprintf(stderr, "Executing query: %s\n", q);
+	rc = sqlite3_prepare_v2(dbHandle, q, strlen(q), &stmt, NULL);
+	/*rc = sqlite3_exec(db, sql, 0, 0, &err_msg);*/
+	if (rc != SQLITE_OK) {
+		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+		return;
+	}
+
+	rc = sqlite3_step(stmt);
+	if (rc != SQLITE_DONE)
+	fprintf(stderr, "Error %u from sqlite3_step\n", rc);
+	rc = sqlite3_finalize(stmt); // Destroy the handle, we won't need it again
+	if (rc != SQLITE_OK)
+	fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+
+	return;
 }
 
 static void horatio_int_sqlite3_logmsg(
 	const unsigned short Code,
-  const char *File,
-  const unsigned int Line,
-  const unsigned short Severity,
-  const char *Msg
+	const char *File,
+	const unsigned int Line,
+	const unsigned short Severity,
+	const char *Msg
 ) {
 	int rc;
 	sqlite3_stmt *stmt;
-	const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+	const char *q = "INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
 	"VALUES(\n"
-	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?, ?\n"
 	")";
 
 	if ( !Handle_sqlite ) return;
@@ -188,10 +220,11 @@ static void horatio_int_sqlite3_logmsg(
 		return;
 	}
 
-	rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
-	rc = sqlite3_bind_int(stmt, 2, Line);
-	rc = sqlite3_bind_int(stmt, 3, Severity);
-	rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
+	rc = sqlite3_bind_int(stmt, 1, Code);
+	rc = sqlite3_bind_text(stmt, 2, File, -1, SQLITE_STATIC);
+	rc = sqlite3_bind_int(stmt, 3, Line);
+	rc = sqlite3_bind_int(stmt, 4, Severity);
+	rc = sqlite3_bind_text(stmt, 5, Msg, -1, SQLITE_STATIC);
 	if ( rc != SQLITE_OK )
 	fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
 	rc = sqlite3_step(stmt);
