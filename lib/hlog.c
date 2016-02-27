@@ -96,6 +96,7 @@ static void horatio_int_sqlite3_schema(sqlite3 *);
 
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open(void);
+static void horatio_int_mysql_schema(MYSQL *);
 #endif /*USE_MYSQL*/
 
 #ifdef USE_MONGO
@@ -290,32 +291,67 @@ static void horatio_int_mongodb_logmsg(
 
 #ifdef USE_MYSQL
 static MYSQL *horatio_int_mysql_open() {
-  char *errMsgPtr = NULL;
-  if ( mysql_real_connect(Handle_mysql, "hurricane", "dpcrtlmmuser", "hefuZ6po", "dpcrtlmm", 0, NULL, 0) == NULL ) { // Fail?
-    errMsgPtr = "FIXME";
-    Trap(0, errMsgPtr);
-    return 0;
-  }
 
-  return Handle_mysql;
+	const char *errMsgPtr = NULL;
+	MYSQL *dbh = mysql_init(NULL);
+
+	if (!dbh) {
+		fprintf(stderr, "mysql_init: %s\n", mysql_error(dbh);
+		return;
+	}
+
+	if (mysql_real_connect(dbh, "localhost", "root", "", "horatio", 0, NULL, 0) == NULL) {
+		// Fail?
+		mysql_close(dbh);
+		errMsgPtr = "FIXME";
+		Trap(0, errMsgPtr);
+		return NULL;
+	}
+
+	return Handle_mysql;
 }
-#endif /*USE_MYSQL*/
 
-#if 0
-// Nb. The code here, look like SQLite because we're trying to translate from SQLite to MySQL,
-// not because there has been an editing mistake
+static void horatio_int_mysql_schema(MYSQL *dbHandle) {
+
+	int rc;
+	const char *const q =
+		"CREATE TABLE IF NOT EXISTS debug_log (\n"
+			"id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,\n"
+			"code INTEGER NOT NULL,\n"
+			"ts DATETIME NOT NULL,\n"
+			"file CHAR(32) NOT NULL,\n"
+			"line INTEGER NOT NULL,\n"
+			"severity INTEGER NOT NULL default 0,\n"
+			"msg VARCHAR(255) NOT NULL\n"
+		");";
+
+	rc = mysql_query(dbHandle, q);
+	if (rc) {
+		fprintf(
+			stderr,
+			"Error %u from mysql_query: %s\n",
+			rc,
+			mysql_error(dbHandle)
+		);
+		return;
+	}
+
+	return;
+}
+
 static void horatio_int_mysql_logmsg(
-  const char *File,
-  const unsigned int Line,
-  const unsigned short Severity,
-  const char *Msg
+	const unsigned short Code,
+	const char *File,
+	const unsigned int Line,
+	const unsigned short Severity,
+	const char *Msg
 ) {
 	int rc;
 	sqlite3_stmt *stmt;
 
-	const char *q = "INSERT INTO debug_log (ts, file, line, severity, msg) \n"
+	const char *q = "INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
 	"VALUES(\n"
-	"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?\n"
+	"  NOW(), ?, ?, ?, ?, ?\n"
 	")";
 
 	if ( !Handle_mysql ) return;
@@ -345,7 +381,7 @@ static void horatio_int_mysql_logmsg(
 	if ( rc != SQLITE_OK )
 		fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
 }
-#endif /*0*/
+#endif /*USE_MYSQL*/
 
 void horatio_int_Log(
 	const unsigned short Code,

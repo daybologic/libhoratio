@@ -125,9 +125,6 @@
    */
 #undef LT_OBJDIR
 
-/* Link with MongoDB */
-#undef MONGO
-
 /* Disable debug messages */
 #undef NDEBUG
 
@@ -152,14 +149,17 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Link with SQlite */
-#undef SQLITE
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* Link with MongoDB */
+#undef USE_MONGO
+
 /* Link with MySQL */
 #undef USE_MYSQL
+
+/* Link with SQlite */
+#undef USE_SQLITE
 
 /* Version number of package */
 #undef VERSION
