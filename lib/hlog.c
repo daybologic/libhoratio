@@ -198,7 +198,7 @@ static void horatio_int_sqlite3_logmsg(
 	int rc;
 	sqlite3_stmt *stmt;
 	const char *q =
-		"INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
+		"INSERT INTO debug_log (ts, code, file, line, severity, msg) \n"
 		"VALUES(\n"
 		"  DATETIME('NOW', 'localtime'), ?, ?, ?, ?, ?\n"
 		")";
