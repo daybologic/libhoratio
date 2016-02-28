@@ -63,7 +63,8 @@ GENERAL_CC_FLAGS = \
 	-I/usr/lib/x86_64-linux-gnu/glib-2.0/include \
 	-I/usr/lib/i386-linux-gnu/glib-2.0/include \
 	-I/usr/local/mysql/include \
-	-I/usr/include/mysql
+	-I/usr/include/mysql \
+	-I/usr/local/Cellar/cunit/2.1-2/include
 
 AM_CFLAGS = \
 	$(GENERAL_CC_FLAGS) \
