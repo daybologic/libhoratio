@@ -296,8 +296,8 @@ static MYSQL *horatio_int_mysql_open() {
 	MYSQL *dbh = mysql_init(NULL);
 
 	if (!dbh) {
-		fprintf(stderr, "mysql_init: %s\n", mysql_error(dbh);
-		return;
+		fprintf(stderr, "mysql_init: %s\n", mysql_error(dbh));
+		return NULL;
 	}
 
 	if (mysql_real_connect(dbh, "localhost", "root", "", "horatio", 0, NULL, 0) == NULL) {
@@ -306,6 +306,8 @@ static MYSQL *horatio_int_mysql_open() {
 		errMsgPtr = "FIXME";
 		Trap(0, errMsgPtr);
 		return NULL;
+	} else {
+		horatio_int_mysql_schema(dbh);
 	}
 
 	return Handle_mysql;
@@ -346,40 +348,68 @@ static void horatio_int_mysql_logmsg(
 	const unsigned short Severity,
 	const char *Msg
 ) {
+	my_bool ret;
 	int rc;
-	sqlite3_stmt *stmt;
+	MYSQL_STMT *stmt;
+	MYSQL_BIND bind[5];
 
 	const char *q = "INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
 	"VALUES(\n"
 	"  NOW(), ?, ?, ?, ?, ?\n"
 	")";
 
-	if ( !Handle_mysql ) return;
+	memset(bind, 0, sizeof(bind));
+	if (!Handle_mysql) return;
 
 	fprintf(stderr, "Got database message %s\n", Msg);
 	fprintf(stderr, "Executing query: %s\n", q);
-	rc = sqlite3_prepare_v2(DBHandle, q, strlen(q), &stmt, NULL);
-	if ( rc != SQLITE_OK ) {
-		fprintf(stderr, "Error %u from sqlite3_prepare_v2\n", rc);
+	stmt = mysql_stmt_init(Handle_mysql);
+	rc = mysql_stmt_prepare(stmt, q, strlen(q)); // TODO prepare once
+	if (rc) {
+		fprintf(
+			stderr,
+			"Error %u from mysql_stmt_prepare: %s\n",
+			rc, mysql_error(Handle_mysql)
+		);
 		return;
 	}
-	if ( mysql_query(&dbh, querystring) != 0 ) {
-		mysql_close(&con);
-		return 0;
+	if (rc = mysql_stmt_execute(stmt)) {
+		fprintf(
+			stderr,
+			"Error %d from mysql_execute: %s\n",
+			rc, mysql_error(Handle_mysql)
+		);
+		return;
 	}
 
-	rc = sqlite3_bind_text(stmt, 1, File, -1, SQLITE_STATIC);
-	rc = sqlite3_bind_int(stmt, 2, Line);
-	rc = sqlite3_bind_int(stmt, 3, Severity);
-	rc = sqlite3_bind_text(stmt, 4, Msg, -1, SQLITE_STATIC);
-	if ( rc != SQLITE_OK )
-		fprintf(stderr, "Error %u from sqlite3_bind_text\n", rc);
-	rc = sqlite3_step(stmt);
-	if ( rc != SQLITE_DONE )
-		fprintf(stderr, "Error %u from sqlite3_step\n", rc);
-	rc = sqlite3_finalize(stmt); // Destroy the handle (FIXME, you should re-use it).
-	if ( rc != SQLITE_OK )
-		fprintf(stderr, "Error %u from sqlite3_finalize\n", rc);
+	bind[0].buffer_type = MYSQL_TYPE_LONG;
+	bind[0].buffer = (void *)Code;
+
+	bind[1].buffer_type = MYSQL_TYPE_STRING;
+	bind[1].buffer = (void *)File;
+	bind[1].length = strlen(File);
+
+	bind[2].buffer_type = MYSQL_TYPE_LONG;
+	bind[2].buffer = (void *)Line;
+
+	bind[3].buffer_type = MYSQL_TYPE_LONG;
+	bind[3].buffer = (void *)Severity;
+
+	bind[4].buffer_type = MYSQL_TYPE_STRING;
+	bind[4].buffer = (void *)Msg;
+	bind[4].length = strlen(Msg);
+
+	ret = mysql_stmt_bind_param(stmt, bind);
+	if (ret) {
+		fprintf(
+			stderr,
+			"mysql_stmt_bind_param: %s\n",
+			mysql_error(Handle_mysql)
+		);
+		return;
+	}
+
+	rc = mysql_stmt_close(stmt); // Destroy the handle (FIXME, you should re-use it).
 }
 #endif /*USE_MYSQL*/
 
