@@ -308,6 +308,7 @@ static MYSQL *horatio_int_mysql_open() {
 		return NULL;
 	} else {
 		horatio_int_mysql_schema(dbh);
+		Handle_mysql = dbh;
 	}
 
 	return Handle_mysql;
