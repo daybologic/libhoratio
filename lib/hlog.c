@@ -354,7 +354,7 @@ static void horatio_int_mysql_logmsg(
 	MYSQL_STMT *stmt;
 	MYSQL_BIND bind[5];
 
-	const char *q = "INSERT INTO debug_log (code, ts, file, line, severity, msg) \n"
+	const char *q = "INSERT INTO debug_log (ts, code, file, line, severity, msg) \n"
 	"VALUES(\n"
 	"  NOW(), ?, ?, ?, ?, ?\n"
 	")";
@@ -365,19 +365,20 @@ static void horatio_int_mysql_logmsg(
 	fprintf(stderr, "Got database message %s\n", Msg);
 	fprintf(stderr, "Executing query: %s\n", q);
 	stmt = mysql_stmt_init(Handle_mysql);
+	if (!stmt) {
+		fprintf(
+			stderr,
+			"Error from mysql_stmt_init: %s\n",
+			mysql_error(Handle_mysql)
+		);
+		return;
+	}
+
 	rc = mysql_stmt_prepare(stmt, q, strlen(q)); // TODO prepare once
 	if (rc) {
 		fprintf(
 			stderr,
-			"Error %u from mysql_stmt_prepare: %s\n",
-			rc, mysql_error(Handle_mysql)
-		);
-		return;
-	}
-	if (rc = mysql_stmt_execute(stmt)) {
-		fprintf(
-			stderr,
-			"Error %d from mysql_execute: %s\n",
+			"Error %d from mysql_stmt_prepare: %s\n",
 			rc, mysql_error(Handle_mysql)
 		);
 		return;
@@ -406,6 +407,15 @@ static void horatio_int_mysql_logmsg(
 			stderr,
 			"mysql_stmt_bind_param: %s\n",
 			mysql_error(Handle_mysql)
+		);
+		return;
+	}
+
+	if (rc = mysql_stmt_execute(stmt)) {
+		fprintf(
+			stderr,
+			"Error %d from mysql_execute: %s\n",
+			rc, mysql_error(Handle_mysql)
 		);
 		return;
 	}
