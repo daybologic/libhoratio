@@ -43,7 +43,7 @@ override_dh_auto_configure: autogen
 		--enable-stderr \
 		--prefix=/usr \
 		--enable-docs \
-		--with-mysql \
+		--with-sqlite \
 		--disable-dependency-tracking; \
 	fi
 
