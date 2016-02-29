@@ -69,6 +69,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hdbghook.h" /* The debug hook support/executive */
 #include "hbiglock.h" /* To init / uninit the big lib lock */
 #include "hblocarr.h" /* Internal interface to block arrays */
+#include "hlic.h" /* horatio_license text */
 #include "hversion.h" /* HORATIO_VERSION_ constants */
 
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
@@ -212,6 +213,14 @@ void horatio_Shutdown() {
 		);
 	}
 	return;
+}
+
+/*!
+ * \brief Obtain the license text
+ */
+const char *horatio_license() {
+
+	return horatio_license_text;
 }
 
 /*!

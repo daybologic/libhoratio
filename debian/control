@@ -10,7 +10,8 @@ Build-Depends: debhelper (>= 9),
  bash,
  texlive-latex-base,
  texlive-latex-extra,
- libcunit1-dev
+ libcunit1-dev,
+ raw2c (>= 1.2.0), raw2c (<< 2.0.0),
 Build-Depends-Indep: automake
 Standards-Version: 3.7.3
 Homepage: http://www.daybologic.co.uk/software.php?content=dpcrtlmm

@@ -29,7 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 AUTOMAKE_OPTIONS=subdir-objects
-BUILT_SOURCES=hversion.h
+BUILT_SOURCES = hlic.c hversion.h
 
 lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
 
@@ -62,6 +62,7 @@ libhoratio_la_SOURCES += hiblkptr.c
 libhoratio_la_SOURCES += hintdata.c
 libhoratio_la_SOURCES += hisbad.c
 libhoratio_la_SOURCES += hlcktrap.c
+libhoratio_la_SOURCES += hlic.c
 libhoratio_la_SOURCES += hlog.c
 libhoratio_la_SOURCES += hrealloc.c
 libhoratio_la_SOURCES += hsafelst.c
@@ -70,7 +71,11 @@ libhoratio_la_SOURCES += htrap.c
 libhoratio_la_SOURCES += hvptrap.c
 
 clean-local:
+	rm -f hlic.?
 	rm -f hversion.h
 
+hlic.c: Makefile
+	raw2c --header=hlic.h --symbol=horatio_license_text -q -n ../COPYING hlic.c
+	
 hversion.h: Makefile
 	../utils/mkverh.sh
