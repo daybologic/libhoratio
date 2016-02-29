@@ -44,6 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h> /* for abort() */
 
 #ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
