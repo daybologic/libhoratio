@@ -353,6 +353,7 @@ static void horatio_int_mysql_logmsg(
 	int rc;
 	MYSQL_STMT *stmt;
 	MYSQL_BIND bind[5];
+	unsigned long fileStrlen, msgStrlen;
 
 	const char *q = "INSERT INTO debug_log (ts, code, file, line, severity, msg) \n"
 	"VALUES(\n"
@@ -385,21 +386,31 @@ static void horatio_int_mysql_logmsg(
 	}
 
 	bind[0].buffer_type = MYSQL_TYPE_LONG;
-	bind[0].buffer = (void *)Code;
+	bind[0].buffer = (char *)&Code;
+	bind[0].length = 0;
+	bind[0].is_null = 0;
 
 	bind[1].buffer_type = MYSQL_TYPE_STRING;
 	bind[1].buffer = (void *)File;
-	bind[1].length = strlen(File);
+	fileStrlen = strlen(File);
+	bind[1].length = &fileStrlen;
+	bind[1].is_null = 0;
 
 	bind[2].buffer_type = MYSQL_TYPE_LONG;
-	bind[2].buffer = (void *)Line;
+	bind[2].buffer = (char *)&Line;
+	bind[2].length = 0;
+	bind[2].is_null = 0;
 
-	bind[3].buffer_type = MYSQL_TYPE_LONG;
-	bind[3].buffer = (void *)Severity;
+	bind[3].buffer_type = MYSQL_TYPE_SHORT;
+	bind[3].buffer = (char *)&Severity;
+	bind[3].length = 0;
+	bind[3].is_null = 0;
 
 	bind[4].buffer_type = MYSQL_TYPE_STRING;
-	bind[4].buffer = (void *)Msg;
-	bind[4].length = strlen(Msg);
+	bind[4].buffer = (const void *)Msg;
+	msgStrlen = strlen(Msg);
+	bind[4].length = &msgStrlen;
+	bind[4].is_null = 0;
 
 	ret = mysql_stmt_bind_param(stmt, bind);
 	if (ret) {
@@ -411,7 +422,7 @@ static void horatio_int_mysql_logmsg(
 		return;
 	}
 
-	if (rc = mysql_stmt_execute(stmt)) {
+	if ((rc = mysql_stmt_execute(stmt))) {
 		fprintf(
 			stderr,
 			"Error %d from mysql_execute: %s\n",
