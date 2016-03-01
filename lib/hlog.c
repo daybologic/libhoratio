@@ -325,7 +325,8 @@ static void horatio_int_mysql_schema(MYSQL *dbHandle) {
 			"file CHAR(32) NOT NULL,\n"
 			"line INTEGER NOT NULL,\n"
 			"severity INTEGER NOT NULL default 0,\n"
-			"msg VARCHAR(255) NOT NULL\n"
+			"msg VARCHAR(255) NOT NULL,\n"
+			"pid INTEGER NOT NULL\n" /* Process ID */
 		");";
 
 	rc = mysql_query(dbHandle, q);
@@ -351,13 +352,14 @@ static void horatio_int_mysql_logmsg(
 ) {
 	my_bool ret;
 	int rc;
+	pid_t pid;
 	MYSQL_STMT *stmt;
-	MYSQL_BIND bind[5];
+	MYSQL_BIND bind[6];
 	unsigned long fileStrlen, msgStrlen;
 
-	const char *q = "INSERT INTO debug_log (ts, code, file, line, severity, msg) \n"
+	const char *q = "INSERT INTO debug_log (ts, code, file, line, severity, msg, pid) \n"
 	"VALUES(\n"
-	"  NOW(), ?, ?, ?, ?, ?\n"
+	"  NOW(), ?, ?, ?, ?, ?, ?\n"
 	")";
 
 	memset(bind, 0, sizeof(bind));
@@ -385,6 +387,8 @@ static void horatio_int_mysql_logmsg(
 		return;
 	}
 
+	pid = getpid(); /* Obtain process ID */
+
 	bind[0].buffer_type = MYSQL_TYPE_LONG;
 	bind[0].buffer = (char *)&Code;
 	bind[0].length = 0;
@@ -411,6 +415,11 @@ static void horatio_int_mysql_logmsg(
 	msgStrlen = strlen(Msg);
 	bind[4].length = &msgStrlen;
 	bind[4].is_null = 0;
+
+	bind[5].buffer_type = MYSQL_TYPE_SHORT;
+	bind[5].buffer = (char *)&pid;
+	bind[5].length = 0;
+	bind[5].is_null = 0;
 
 	ret = mysql_stmt_bind_param(stmt, bind);
 	if (ret) {
