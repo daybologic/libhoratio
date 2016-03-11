@@ -110,10 +110,16 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 #ifdef HORATIO_LOG
 	char logMsg[MAX_TRAP_STRING_LENGTH+1];
 #endif /*HORATIO_LOG*/
+#ifdef HAVE_SNPRINTF
+	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+#endif /*HAVE_SNPRINTF*/
 
 #ifdef HORATIO_LOG
 	sprintf(
 		logMsg,
+#ifdef HAVE_SNPRINTF
+		logMsgRemaining,
+#endif /*HAVE_SNPRINTF*/
 		"Calloc() called, %u blocks of %u bytes requested, "
 		"passing on to Alloc()",
 		N,
@@ -121,6 +127,10 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 	);
 	OURLOG(HORATIO_LOG_CODE_CALLOC_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
 #endif /*HORATIO_LOG*/
+
+#ifdef HAVE_SNPRINTF
+	logMsgRemaining -= strlen(logMsg);
+#endif /*HAVE_SNPRINTF*/
 
 #ifdef HORATIO_DEBUGHOOKS
 	debugHookInfo.PRelArr = _ResolveArrayPtr(PBlockArray);
