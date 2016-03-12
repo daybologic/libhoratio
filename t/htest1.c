@@ -341,7 +341,16 @@ static void suite_core_Ver() {
 }
 
 static void suite_trap_InstallTrapCallback() {
+	char state = horatio_GetTrapCallbackInfo();
+	CU_ASSERT_EQUAL(state, -1);
+
 	horatio_InstallTrapCallback(test_TrapCallback, 0);
+	state = horatio_GetTrapCallbackInfo();
+	CU_ASSERT_EQUAL(state, 0);
+
+	horatio_InstallTrapCallback(test_TrapCallback, 1);
+	state = horatio_GetTrapCallbackInfo();
+	CU_ASSERT_EQUAL(state, 1);
 }
 
 static void suite_dbghook_InstallDebugHook() {
