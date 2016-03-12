@@ -121,6 +121,10 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 #endif /*HORATIO_DEBUGHOOKS*/
 
+#ifdef HAVE_SNPRINTF
+	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+#endif /*HAVE_SNPRINTF*/
+
 #ifdef HORATIO_DEBUGHOOKS
 	/* Init debug hook info */
 	memset(&debugHookInfo, 0, sizeof(S_HORATIO_DEBUGHOOKINFO));
@@ -179,11 +183,18 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 	/* Safe, log progress */
 	sprintf(
 		logMsg,
+#ifdef HAVE_SNPRINTF
+		logMsgRemaining,
+#endif /*HAVE_SNPRINTF*/
 		"CreateBlockArray() returns base %s%p",
 		HORATIO_FMTPTRPFX, (void*)Parray
 	);
 	MESSAGE(HORATIO_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
 #endif /*HORATIO_LOG*/
+
+#ifdef HAVE_SNPRINTF
+	logMsgRemaining -= strlen(logMsg);
+#endif /*HAVE_SNPRINTF*/
 
 #ifdef HORATIO_DEBUGHOOKS
 	/*
