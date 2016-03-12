@@ -49,6 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "horatio.h"
 #include "hbuild.h"
 #include "hversion.h"
+#include "lib/hintdata.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
 
@@ -87,6 +88,7 @@ static void suite_core_Ver(void);
 
 /* Test suite trap */
 static void suite_trap_InstallTrapCallback(void);
+static void suite_trap_InstallTrapCallback_bad(void);
 
 /* Test suite allloc */
 static void suite_alloc_AllocSimple(void);
@@ -234,6 +236,9 @@ int main(int argc, char *argv[]) {
 	} TrapTests[] = {
 		{ "TrapInstallTrapCallback",
 		  &suite_trap_InstallTrapCallback
+		}, {
+		  "TrapInstallTrapCallback_bad",
+		  &suite_trap_InstallTrapCallback_bad
 		}
 	};
 	static struct {
@@ -319,6 +324,7 @@ int main(int argc, char *argv[]) {
 	/* Run all tests using the CUnit Basic interface */
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	horatio_Startup();
+	horatio_int__unitTest = 1;
 	CU_basic_run_tests();
 	failCount = CU_get_number_of_failure_records();
 	CU_cleanup_registry();
@@ -342,15 +348,41 @@ static void suite_core_Ver() {
 
 static void suite_trap_InstallTrapCallback() {
 	char state = horatio_GetTrapCallbackInfo();
-	CU_ASSERT_EQUAL(state, -1);
+	CU_ASSERT_EQUAL(state, -1); /* Not installed */
 
 	horatio_InstallTrapCallback(test_TrapCallback, 0);
 	state = horatio_GetTrapCallbackInfo();
-	CU_ASSERT_EQUAL(state, 0);
+	CU_ASSERT_EQUAL(state, 0); /* Installed but not a hook */
 
 	horatio_InstallTrapCallback(test_TrapCallback, 1);
 	state = horatio_GetTrapCallbackInfo();
+	CU_ASSERT_EQUAL(state, 1); /* Installed handler is a hook */
+
+	horatio_InstallTrapCallback(test_TrapCallback, -1); /* Any non-zero is one */
+	state = horatio_GetTrapCallbackInfo();
 	CU_ASSERT_EQUAL(state, 1);
+
+	horatio_InstallTrapCallback(test_TrapCallback, 2); /* Any non-zero is one */
+	state = horatio_GetTrapCallbackInfo();
+	CU_ASSERT_EQUAL(state, 1);
+
+	horatio_RemoveTrapCallback(test_TrapCallback); /* Cleanup for next test */
+	state = horatio_GetTrapCallbackInfo();
+	CU_ASSERT_EQUAL(state, -1);
+}
+
+/*! \brief suite_trap_InstallTrapCallback_bad
+ *
+ *  Install a NULL handler; this is not permitted, since horatio_RemoveTrapCallback
+ *  must be used.  So the code will call abort and log an error to stderr.
+ */
+static void suite_trap_InstallTrapCallback_bad() {
+	CU_ASSERT_EQUAL(horatio_int__aborts, 0);
+	CU_ASSERT_EQUAL(horatio_int__defHandlerCode, HORATIO_TRAP_UNKNOWN);
+
+	horatio_InstallTrapCallback(NULL, 0);
+	CU_ASSERT_EQUAL(horatio_int__aborts, 1);
+	CU_ASSERT_EQUAL(horatio_int__defHandlerCode, HORATIO_TRAP_NULL_HANDLER);
 }
 
 static void suite_dbghook_InstallDebugHook() {

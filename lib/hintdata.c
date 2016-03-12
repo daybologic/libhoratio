@@ -100,3 +100,25 @@ unsigned long horatio_int__allocCharge = 0U;
 
 /* Allocation charge peak, maximum ever allocated */
 unsigned long horatio_int__allocPeak = 0U;
+
+/*! \brief horatio_int__unitTest.
+ *
+ *  Users must not set this flag to non-zero.
+ *  Doing so will change the some documented library behavior for
+ *  the convenience of the unit testing suite.
+ */
+int horatio_int__unitTest = 0;
+
+/*! \brief horatio_int__aborts.
+ *
+ *  The number of times abort() would have been called if horatio_int__unitTest
+ *  were zero.
+ */
+unsigned int horatio_int__aborts = 0U;
+
+/*! \brief horatio_int__defHandlerCode.
+ *
+ *  The Id which was passed to the default trap handler,
+ *  which aborts the program.  This is only useful during unit tests.
+ */
+unsigned int horatio_int__defHandlerCode = HORATIO_TRAP_UNKNOWN;

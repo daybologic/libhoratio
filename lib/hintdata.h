@@ -87,6 +87,11 @@ extern unsigned long horatio_int__blockCountPeak;
 extern unsigned long horatio_int__allocCharge;
 extern unsigned long horatio_int__allocPeak;
 
+/* Unit testing */
+extern int horatio_int__unitTest;
+extern unsigned int horatio_int__aborts;
+extern unsigned int horatio_int__defHandlerCode;
+
 /* Magic lazy references for library's own use */
 #define _safetyList horatio_int__safetyList
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY
@@ -101,5 +106,8 @@ extern unsigned long horatio_int__allocPeak;
 #define _blockCountPeak horatio_int__blockCountPeak
 #define _allocCharge horatio_int__allocCharge
 #define _allocPeak horatio_int__allocPeak
+#define _unitTest horatio_int__unitTest
+#define _aborts horatio_int__aborts
+#define _defHandlerCode horatio_int__defHandlerCode
 
 #endif /*!INC_HORATIO_INTDATA_H*/
