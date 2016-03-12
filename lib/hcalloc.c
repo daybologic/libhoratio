@@ -110,6 +110,9 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 #ifdef HORATIO_LOG
 	char logMsg[MAX_TRAP_STRING_LENGTH+1];
 #endif /*HORATIO_LOG*/
+#ifdef HAVE_SNPRINTF
+	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
+#endif /*HAVE_SNPRINTF*/
 
 #ifdef HAVE_SNPRINTF
 	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
