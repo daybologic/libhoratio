@@ -351,7 +351,7 @@ static void defHandler(
 	const char *trapMsg
 ) {
 	/* Output trap's message on the standard error stream */
-	fprintf(HORATIO_DEV_ERROR, "%s", trapMsg);
+	fprintf(_options.errorHandle, "%s", trapMsg);
 	_defHandlerCode = Id;
 
 	if (_unitTest)

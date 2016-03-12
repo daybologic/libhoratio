@@ -162,6 +162,7 @@ typedef struct _S_HORATIO_VERSION {
 typedef struct _S_HORATIO_OPTIONS {
 	unsigned int len; /* Length of structure */
 	unsigned int enableLog;
+	FILE *errorHandle;
 } S_HORATIO_OPTIONS, HORATIO_FARDATA *PS_HORATIO_OPTIONS;
 
 /* Version flag mnemonics (1.1.6) */
@@ -622,11 +623,18 @@ void horatio_Startup(void);
 void dpcrtlmm_Startup(void);
 #endif /*DPCRTLMM_LEGACY*/
 
-/*
- * Before any of these functions are used, internal initialization of the
- * memory manager is neccersary and must be done ONCE and ONLY ONCE per
- * program initialization.  This is done with the function Startup().
- * An optional options block is supported.
+/*! \brief horatio_startupEx
+ *
+ *  Before any of these functions are used, internal initialization of the
+ *  memory manager is neccersary and must be done ONCE and ONLY ONCE per
+ *  program initialization.  This is done with the function horatio_startupEx().
+ *  An optional options block is supported.  This must have been initialized
+ *  with horatio_options_init().
+ *
+ *  Returns: void
+ *
+ *  Parameters:
+ *  pOptions; Pointer to S_HORATIO_OPTIONS structure, or NULL.
  */
 void horatio_startupEx(
 	PS_HORATIO_OPTIONS pOptions
@@ -985,6 +993,21 @@ PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
  * the function never returns NULL.
  */
 PS_HORATIO_OPTIONS horatio_options(
+	PS_HORATIO_OPTIONS pOptions
+);
+
+/*!
+ * \brief horatio_options_init
+ *
+ * Initialze an options structure prior to passing to horatio_options
+ * or horatio_startupEx.
+ *
+ * Parameters:
+ * pOptions: Pointer to options structure.
+ *
+ * Returns: pOptions after modification; the pointer will be the same.
+ */
+PS_HORATIO_OPTIONS horatio_options_init(
 	PS_HORATIO_OPTIONS pOptions
 );
 

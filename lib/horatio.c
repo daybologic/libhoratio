@@ -148,6 +148,7 @@ void horatio_startupEx(
 		/* Initialization of internal library data */
 		_libStarted = 1U; /* The library is started now */
 		_UserTrapCallback = NULL; /* No user trap handler installed */
+		horatio_options_init(NULL);
 		SafetyList_Init(); /* Init the safety list */
 #ifdef HORATIO_DEBUGHOOKS
 		/* Init the debug hook matrix */

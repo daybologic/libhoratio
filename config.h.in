@@ -82,9 +82,6 @@
 /* Use debug hooks */
 #undef HORATIO_DEBUGHOOKS
 
-/* Stream to print errors on */
-#undef HORATIO_DEV_ERROR
-
 /* Build the documentation */
 #undef HORATIO_DOCS
 
