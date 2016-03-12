@@ -136,6 +136,15 @@ void horatio_int_Log(
 				STRNCAT_FIXEDBUFF(formatMsg, number);
 				STRNCAT_FIXEDBUFF(formatMsg, ": ");
 			}
+			sprintf(
+				number,
+#ifdef HAVE_SNPRINTF
+				sizeof(number)-1,
+#endif /*HAVE_SNPRINTF*/
+				"code %u; ",
+				Code
+			);
+			STRNCAT_FIXEDBUFF(formatMsg, number); /* Add the Code */
 			STRNCAT_FIXEDBUFF(formatMsg, Message);
 			/* Close quotes and end line */
 			STRNCAT_FIXEDBUFF(formatMsg, "\"\n");
