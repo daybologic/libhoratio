@@ -114,10 +114,6 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
 #endif /*HAVE_SNPRINTF*/
 
-#ifdef HAVE_SNPRINTF
-	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
-#endif /*HAVE_SNPRINTF*/
-
 #ifdef HORATIO_LOG
 	sprintf(
 		logMsg,
