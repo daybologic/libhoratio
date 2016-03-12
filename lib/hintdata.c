@@ -87,6 +87,14 @@ unsigned int horatio_int__userTrapCallbackIsHook = 0U;
 unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix */
 #endif /*HORATIO_DEBUGHOOKS*/
 
+/*!
+ * \def S_HORATIO_OPTIONS
+ * \brief Options currently in use
+ *
+ * TODO: Need to determine what locking is involved in accessing this.
+ */
+S_HORATIO_OPTIONS horatio_int__options;
+
 /*
  * For statistics
  */

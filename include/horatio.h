@@ -154,6 +154,17 @@ typedef struct _S_HORATIO_VERSION {
 } S_HORATIO_VERSION, HORATIO_FARDATA *PS_HORATIO_VERSION,
   S_DPCRTLMM_VERSION, HORATIO_FARDATA *PS_DPCRTLMM_VERSION;
 
+/*! \typedef S_HORATIO_OPTIONS
+ * \brief TODO
+ *
+ * TODO
+ */
+typedef struct _S_HORATIO_OPTIONS {
+	unsigned int len; /* Length of structure */
+	unsigned int enableLog;
+	FILE *errorHandle;
+} S_HORATIO_OPTIONS, HORATIO_FARDATA *PS_HORATIO_OPTIONS;
+
 /* Version flag mnemonics (1.1.6) */
 #define HORATIO_VERSION_DEBUG    (0x1)
 #define HORATIO_VERSION_SPECIAL  (0x2)
@@ -604,12 +615,30 @@ unsigned int dpcrtlmm_IsDefaultBlockArray(
 /*
  * Before any of these functions are used, internal initialization of the
  * memory manager is neccersary and must be done ONCE and ONLY ONCE per
- * program initialization.  This is done with the function Startup()
+ * program initialization.  This is done with the function Startup().
+ * This call is now deprecated, and you should use horatio_startupEx().
  */
 void horatio_Startup(void);
 #ifdef DPCRTLMM_LEGACY
 void dpcrtlmm_Startup(void);
 #endif /*DPCRTLMM_LEGACY*/
+
+/*! \brief horatio_startupEx
+ *
+ *  Before any of these functions are used, internal initialization of the
+ *  memory manager is neccersary and must be done ONCE and ONLY ONCE per
+ *  program initialization.  This is done with the function horatio_startupEx().
+ *  An optional options block is supported.  This must have been initialized
+ *  with horatio_options_init().
+ *
+ *  Returns: void
+ *
+ *  Parameters:
+ *  pOptions; Pointer to S_HORATIO_OPTIONS structure, or NULL.
+ */
+void horatio_startupEx(
+	PS_HORATIO_OPTIONS pOptions
+);
 
 /*
  * Normally unfreed memory is trapped during the destroying of an array,
@@ -948,6 +977,39 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
 #ifdef DPCRTLMM_LEGACY
 PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
 #endif /*DPCRTLMM_LEGACY*/
+
+/*!
+ * \brief Options setter/getter
+ *
+ * Set library options which where formerly provided by the configure script.
+ * The first item is the length of the structure, the second is the version
+ * serial.  You should initialize the the options with horatio_options_init(),
+ * and pass the structure to horatio_startupEx() or horatio_options().
+ *
+ * This function returns the existing options.  You should not modify the
+ * returned structure.  Pass NULL to not alter the existing structure.
+ *
+ * Note that if no options are ever set, there is still a default structure,
+ * the function never returns NULL.
+ */
+PS_HORATIO_OPTIONS horatio_options(
+	PS_HORATIO_OPTIONS pOptions
+);
+
+/*!
+ * \brief horatio_options_init
+ *
+ * Initialze an options structure prior to passing to horatio_options
+ * or horatio_startupEx.
+ *
+ * Parameters:
+ * pOptions: Pointer to options structure.
+ *
+ * Returns: pOptions after modification; the pointer will be the same.
+ */
+PS_HORATIO_OPTIONS horatio_options_init(
+	PS_HORATIO_OPTIONS pOptions
+);
 
 /* I have my own MIN/MAXs here, use these only if you want to */
 #define HORATIO_MIN(a,b) (((a) < (b)) ? (a) : (b))
