@@ -173,6 +173,10 @@ static void horatio_int_InstallTrapCallback(
 		char logStr[MAX_TRAP_STRING_LENGTH+sizeof(char)];
 #endif /*HORATIO_LOG*/
 
+#ifdef HAVE_SNPRINTF
+		size_t logStrRemaining = MAX_TRAP_STRING_LENGTH;
+#endif /*HAVE_SNPRINTF*/
+
 		/* Install the handler/hook */
 		_UserTrapCallback = NewTrapCallback; /* Replace the PFunc */
 		_userTrapCallbackIsHook = AsHook; /* Set hook mode (or not) */
@@ -189,12 +193,19 @@ static void horatio_int_InstallTrapCallback(
 		/* Log that we did that */
 		sprintf(
 			logStr,
+#ifdef HAVE_SNPRINTF
+			logStrRemaining,
+#endif /*HAVE_SNPRINTF*/
 			"InstallTrapCallback(): Installed the trap %s %s%lX",
 			(AsHook) ? ("hook") : ("handler"),
 			HORATIO_FMTPTRPFX, (unsigned long int)NewTrapCallback
 		);
 		MESSAGE(HORATIO_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
 #endif /*HORATIO_LOG*/
+
+#ifdef HAVE_SNPRINTF
+		logStrRemaining -= strlen(logStr);
+#endif /*HAVE_SNPRINTF*/
 
 #ifdef HORATIO_DEBUGHOOKS
 		horatio_int_CallDebugHook(
