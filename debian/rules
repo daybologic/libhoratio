@@ -39,7 +39,6 @@ override_dh_auto_configure: autogen
 		echo 'Skipping ./configure; Makefile already exists'; \
 	else \
 		sh configure \
-		--enable-stderr \
 		--prefix=/usr \
 		--enable-docs \
 		--disable-dependency-tracking; \
