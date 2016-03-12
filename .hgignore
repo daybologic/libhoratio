@@ -27,6 +27,7 @@ config.*
 t/.libs
 t/example?
 t/newbrand
+lib/hlic.?
 include/hversion.h
 
 syntax:regexp

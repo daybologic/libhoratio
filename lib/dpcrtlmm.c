@@ -44,6 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h> /* for abort() */
 
 #ifdef HORATIO_HDRSTOP
 #  pragma hdrstop
@@ -57,13 +58,64 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "horatio.h" /* Main library header */
 #include "hdbghook.h" /* Debug hook executive and support functions */
 
+static struct {
+	const char *funcName;
+	unsigned long int count;
+} callCounters[] = {
+	{ "InstallDebugHook", 0 },
+	{ "GetDebugHookChainCount", 0 },
+	{ "GetDebugHookMatrixCount", 0 },
+	{ "UninstallDebugHook", 0 },
+	{ "AllocEx", 0 },
+	{ "StrdupEx", 0 },
+	{ "Free", 0 },
+	{ "CreateBlockArray", 0 },
+	{ "DestroyBlockArray", 0 },
+	{ "IsDefaultBlockArray", 0 },
+	{ "Startup", 0 },
+	{ "Shutdown", 0 },
+	{ "IsStarted", 0 },
+	{ "GetBlockSize", 0 },
+	{ "IsBadBlockPtr", 0 },
+	{ "IsBadBlockPtr", 0 },
+	{ "Realloc", 0 },
+	{ "CallocEx", 0 },
+	{ "InstallTrapCallback", 0 },
+	{ "RemoveTrapCallback", 0 },
+	{ "GetTrapCallbackInfo", 0 },
+	{ "ModifyDescriptorFlags", 0 },
+	{ "SetBlockLockingFlag", 0 },
+	{ "IsBlockLocked", 0 },
+	{ "ToggleBlockLockingStatus", 0 },
+	{ "AreTrapsEnabled", 0 },
+	{ "DisableTraps", 0 },
+	{ "EnableTraps", 0 },
+	{ "GetBlockCount", 0 },
+	{ "GetStats", 0 },
+	{ "Dump", 0 },
+	{ "Ver", 0 }
+};
+static unsigned long int incrementCallCounter(const char *const funcName) {
+	unsigned int i;
+	for (i = 0U; i < sizeof(callCounters)/sizeof(callCounters[0]); i++) {
+		if (0 != strcmp(funcName, callCounters[i].funcName))
+			continue;
+
+		return callCounters[i].count++;
+	}
+
+	fprintf(stderr, "Deprecated call %s, missing from counters\n", funcName);
+	abort();
+}
+
 static void deprecated(const char *const funcName) {
 #ifdef HORATIO_DEBUGHOOKS
 	unsigned short int hookType = HORATIO_HOOK_LEGACY;
 	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 #endif /*HORATIO_DEBUGHOOKS*/
 
-	fprintf(stderr, "Deprecated function call: dpcrtlmm_%s\n", funcName);
+	if (0 == incrementCallCounter(funcName))
+		fprintf(stderr, "Deprecated function call: dpcrtlmm_%s\n", funcName);
 
 	/* Call the debug hook executive */
 #ifdef HORATIO_DEBUGHOOKS

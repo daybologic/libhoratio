@@ -645,6 +645,11 @@ void dpcrtlmm_Shutdown(void);
 #endif /*DPCRTLMM_LEGACY*/
 
 /*
+ * Recover license text
+ */
+const char *horatio_license(void);
+
+/*
  * To test whether the library is started call this, normally use for
  * conditional startup/shutdown when it is not clear whether a host program
  * is already using HORATIO (if you're building a library which uses
