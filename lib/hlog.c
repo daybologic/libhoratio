@@ -134,14 +134,14 @@ void horatio_int_Log(
 				STRNCAT_FIXEDBUFF(formatMsg, File);
 				STRNCAT_FIXEDBUFF(formatMsg, ", L");
 				STRNCAT_FIXEDBUFF(formatMsg, number);
-				STRNCAT_FIXEDBUFF(formatMsg, ": ");
+				STRNCAT_FIXEDBUFF(formatMsg, ", ");
 			}
 			sprintf(
 				number,
 #ifdef HAVE_SNPRINTF
 				sizeof(number)-1,
 #endif /*HAVE_SNPRINTF*/
-				"code %u; ",
+				"code %u, ",
 				Code
 			);
 			STRNCAT_FIXEDBUFF(formatMsg, number); /* Add the Code */
