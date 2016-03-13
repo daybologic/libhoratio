@@ -32,36 +32,36 @@ POSSIBILITY OF SUCH DAMAGE.
 
 /*
  * This example should help end users to understand how to convert
- * old code (code which has not been built around the intimate DPCRTLMM
- * functions) into code which can use DPCRTLMM without being changed too
+ * old code (code which has not been built around the intimate HORATIO
+ * functions) into code which can use HORATIO without being changed too
  * much.  Remember to use the define in every module.  The define
- * requires DPCRTLMM version 1.1.4, the NULL array used by the macros
- * secretly only came about in DPCRTLMM 1.1.0 (I think), so don't try to
- * use it with the old proprietary closed source DPCRTLMMs
+ * requires HORATIO version 1.1.4, the NULL array used by the macros
+ * secretly only came about in HORATIO 1.1.0 (I think), so don't try to
+ * use it with the old proprietary closed source HORATIOs
  */
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif /*HAVE_CONFIG_H*/
 
-#include <stdio.h> /* Required for dpcrtlmm.h since 1.1.4 */
+#include <stdio.h>
 #include <stdlib.h> /* Old code would be using this anyway but also for atexit() */
 #include <string.h>
 
-#ifdef DPCRTLMM_THREADS_PTH
+#ifdef HORATIO_THREADS_PTH
 # ifdef HAVE_PTH_H
 #  include <pth.h>
 # endif /*HAVE_PTH_H*/
-#endif /*DPCRTLMM_THREADS_PTH*/
+#endif /*HORATIO_THREADS_PTH*/
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 # pragma hdrstop  /* Precompile above headers if compiler supports it */
-#endif /*DPCRTMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
-#define USING_DPCRTLMM /* Activate malloc() etc as macros */
-#include "dpcrtlmm.h"
+#define USING_HORATIO /* Activate malloc() etc as macros */
+#include "horatio.h"
 
-/* main() belongs to DPCRTLMM, rename your old main my_main or something */
+/* main() belongs to HORATIO, rename your old main my_main or something */
 static unsigned int hookCounter(PS_HORATIO_DEBUGHOOKINFO debugHookInfo);
 static int my_main(const int argc, const char* argv[]);
 static void handler(char** vector); /* Incase we can't allocate enough */
@@ -74,19 +74,19 @@ static void strdup_test(void);
 static unsigned short int hookCount = 0U;
 
 int main(const int argc, const char *argv[]) {
-	if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
-		printf("Can\'t register dpcrtlmm_Shutdown, aborting.\n");
+	if ( atexit(horatio_Shutdown) == -1 ) {
+		printf("Can\'t register horatio_Shutdown, aborting.\n");
 		return EXIT_FAILURE;
 	}
 
-#ifdef DPCRTLMM_THREADS_PTH
+#ifdef HORATIO_THREADS_PTH
 	if ( !pth_init() ) {
 		puts("Can\'t initialise GNU Portable Threads\n");
 		return EXIT_FAILURE;
 	}
-#endif /*DPCRTLMM_THREADS_PTH*/
+#endif /*HORATIO_THREADS_PTH*/
 
-	dpcrtlmm_Startup();
+	horatio_Startup();
 	return my_main(argc, argv);
 }
 
@@ -100,7 +100,7 @@ static int my_main(const int argc, const char* argv[]) {
 	/*
 	 * This is where the original program will begin, here's a
 	 * quick example of your program, allocating all the arguments,
-	 * using the dpcrtlmm_Dump and then releasing them.
+	 * using the horatio_Dump and then releasing them.
 	 */
 
 	int i;
@@ -108,8 +108,8 @@ static int my_main(const int argc, const char* argv[]) {
 
 	Title();
 	strdup_test();
-	dpcrtlmm_InstallDebugHook(
-		HORATIO_HOOK_LEGACY,
+	horatio_InstallDebugHook(
+		HORATIO_HOOK_ALLOC,
 		hookCounter
 	);
 
@@ -137,7 +137,7 @@ static int my_main(const int argc, const char* argv[]) {
 	}
 	PrintInfo(copyvector);
 #ifndef NDEBUG
-	dpcrtlmm_Dump(stdout);
+	horatio_Dump(stdout);
 #endif /*!NDEBUG*/
 	handler(copyvector); /* normal clean up */
 
@@ -179,7 +179,7 @@ static void InitVector(char** vector, unsigned int n) {
 }
 
 static void Title() {
-	printf("DPCRTLMM ");
+	printf("HORATIO ");
 	Version();
 	printf(" example program.\n");
 	printf("The command line is copied into a NULL\n");
@@ -188,20 +188,20 @@ static void Title() {
 }
 
 static void Version() {
-	S_DPCRTLMM_VERSION version;
+	S_HORATIO_VERSION version;
 
-	dpcrtlmm_Ver(&version); /* Call lib to get version */
+	horatio_Ver(&version); /* Call lib to get version */
 	printf("%u.%u.%u", version.Major, version.Minor, version.Patch);
 
-	if ( (version.Flags & DPCRTLMM_VERSION_BETA) )
+	if ( (version.Flags & HORATIO_VERSION_BETA) )
 		fputc((int)'b', stdout); /* b for beta of library */
-	if ( (version.Flags & DPCRTLMM_VERSION_DEBUG) )
+	if ( (version.Flags & HORATIO_VERSION_DEBUG) )
 		printf("%s", " (debug)");
-	if ( (version.Flags & DPCRTLMM_VERSION_PRIVATE) )
+	if ( (version.Flags & HORATIO_VERSION_PRIVATE) )
 		printf("%s", " (private)");
-	if ( (version.Flags & DPCRTLMM_VERSION_SPECIAL) )
+	if ( (version.Flags & HORATIO_VERSION_SPECIAL) )
 		printf("%s", " (special)");
-	if ( (version.Flags & DPCRTLMM_VERSION_MT) )
+	if ( (version.Flags & HORATIO_VERSION_MT) )
 		printf("%s", " (multi-threaded)");
 
 	return;

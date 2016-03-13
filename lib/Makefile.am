@@ -31,8 +31,7 @@
 AUTOMAKE_OPTIONS=subdir-objects
 BUILT_SOURCES = hlic.c hversion.h
 
-lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
-libdpcrtlmm_la_SOURCES = dpcrtlmm.c
+lib_LTLIBRARIES = libhoratio.la
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c
 libhoratio_la_SOURCES += hbdflags.c

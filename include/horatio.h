@@ -35,9 +35,6 @@ POSSIBILITY OF SUCH DAMAGE.
 /* \def DPCRTLMM_LEGACY
  * \brief Legacy sentry
  */
-#ifdef DPCRTLMM_LEGACY
-# define INC_DPCRTLMM_H
-#endif /*DPCRTLMM_LEGACY*/
 
 /*! \file horatio.h
  * \brief Horatio's Memory Manager, main user-mode header
@@ -74,7 +71,6 @@ extern "C" {
 #ifndef HORATIO_FARDATA
 # define HORATIO_FARDATA
 #endif /*!HORATIO_FARDATA*/
-#define DPCRTLMM_FARDATA HORATIO_FARDATA /* Legacy */
 
 /*! \def __FILE__
  * \brief Provide a default definition for __FILE__
@@ -110,8 +106,7 @@ typedef struct _S_HORATIO_BLOCKDESCRIPTOR { /* A block descriptor */
 	unsigned char Flags; /**< Flags as documented above S_HORATIO_BLOCKDESCRIPTOR#Flags */
 	unsigned int SourceLine; /**< Line number at which the block was allocated S_HORATIO_BLOCKDESCRIPTOR#SourceLine */
 	char *SourceFile; /**< Dynamic, filename of place where allocation was requested S_HORATIO_BLOCKDESCRIPTOR#SourceFile */
-} S_HORATIO_BLOCKDESCRIPTOR, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCRIPTOR,
-  S_DPCRTLMM_BLOCKDESCRIPTOR, DPCRTLMM_FARDATA *PS_DPCRTLMM_BLOCKDESCRIPTOR;
+} S_HORATIO_BLOCKDESCRIPTOR, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCRIPTOR;
 
 /*! \typedef S_HORATIO_BLOCKDESCARRAY
  * \brief Array of block descriptors
@@ -121,8 +116,7 @@ typedef struct _S_HORATIO_BLOCKDESCRIPTOR { /* A block descriptor */
 typedef struct _S_HORATIO_BLOCKDESCARRAY {
 	unsigned int Count; /**< Number of elements (block descriptors) S_HORATIO_BLOCKDESCARRAY#Count */
 	PS_HORATIO_BLOCKDESCRIPTOR Descriptors; /**< Raw array of blocks descs (each element is a BLOCKDESCRIPTOR, NOT a pointer to a BLOCKDESCRIPTOR) S_HORATIO_BLOCKDESCARRAY#Descriptors */
-} S_HORATIO_BLOCKDESCARRAY, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCARRAY,
-  S_DPCRTLMM_BLOCKDESCARRAY, HORATIO_FARDATA *PS_DPCRTLMM_BLOCKDESCARRAY;
+} S_HORATIO_BLOCKDESCARRAY, HORATIO_FARDATA *PS_HORATIO_BLOCKDESCARRAY;
 
 /*! \typedef S_HORATIO_STATS
  * \brief Statistics info for horatio_GetStats()
@@ -140,8 +134,7 @@ typedef struct _S_HORATIO_STATS {
 		unsigned long Allocated, /**< Contains number of bytes used by all blocks S_HORATIO_STATS#Allocated */
 		Peak; /**< The peak of memory usage, how much was used by all the blocks at one time (Allocated's peak) S_HORATIO_STATS#Peak */
 	} Charge;
-} S_HORATIO_STATS, HORATIO_FARDATA *PS_HORATIO_STATS,
-  S_DPCRTLMM_STATS, HORATIO_FARDATA *PS_DPCRTLMM_STATS;
+} S_HORATIO_STATS, HORATIO_FARDATA *PS_HORATIO_STATS;
 
 /*! \typedef S_HORATIO_VERSION
  * \brief TODO
@@ -151,8 +144,7 @@ typedef struct _S_HORATIO_STATS {
 typedef struct _S_HORATIO_VERSION {
 	unsigned char Major, Minor, Patch;
 	unsigned char Flags; /**< See mnemonics S_HORATIO_VERSION#Flags */
-} S_HORATIO_VERSION, HORATIO_FARDATA *PS_HORATIO_VERSION,
-  S_DPCRTLMM_VERSION, HORATIO_FARDATA *PS_DPCRTLMM_VERSION;
+} S_HORATIO_VERSION, HORATIO_FARDATA *PS_HORATIO_VERSION;
 
 /*! \typedef S_HORATIO_OPTIONS
  * \brief TODO
@@ -349,8 +341,11 @@ typedef struct _S_HORATIO_DEBUGHOOKINFO { /* Information passed to hooks */
  * Misc1 contains a pointer to the function itself, which should not be called,
  * since you may not know what parameters are to be passed to the function from
  * the context, reliably.
+ *
+ * This definition has been removed, but is kept, commented out, for historical
+ * purposes, to ensure the hook code is not removed in the near future.
  */
-#define HORATIO_HOOK_LEGACY ((unsigned short)(0x000BU))
+/*#define HORATIO_HOOK_LEGACY ((unsigned short)(0x000BU))*/
 
 /*
  * No hooks are available for locking functions as monitoring the descriptor
@@ -390,7 +385,7 @@ TODO: Doxygen?
  * This is not useful to use as a hook, but only to validate hook numerical
  * values are within the permitted range.
  */
-#define HORATIO_DEBUGHOOK_LASTHOOK ( HORATIO_HOOK_LEGACY )
+#define HORATIO_DEBUGHOOK_LASTHOOK (HORATIO_HOOK_MODIFYDESCFLAGS)
 
 /*! \fn HookFunc
  * \brief This is the definition of a hook function for reference only
@@ -423,32 +418,11 @@ TODO: Doxygen?
  * the executive, call them freely as I have designated for user
  * callings, infact they aren't even called from inside.
  */
-#ifdef DPCRTLMM_LEGACY
-# define DPCRTLMM_HOOK_ALLOC (HORATIO_HOOK_ALLOC)
-# define DPCRTLMM_HOOK_FREE (HORATIO_HOOK_FREE)
-# define DPCRTLMM_HOOK_CREATEBLOCKARRAY (HORATIO_HOOK_CREATEBLOCKARRAY)
-# define DPCRTLMM_HOOK_DESTROYBLOCKARRAY (HORATIO_HOOK_DESTROYBLOCKARRAY)
-# define DPCRTLMM_HOOK_STARTUP (HORATIO_HOOK_STARTUP)
-# define DPCRTLMM_HOOK_SHUTDOWN (HORATIO_HOOK_SHUTDOWN)
-# define DPCRTLMM_HOOK_REALLOC (HORATIO_HOOK_REALLOC)
-# define DPCRTLMM_HOOK_CALLOC (HORATIO_HOOK_CALLOC)
-# define DPCRTLMM_HOOK_INSTTRAPCALLBACK (HORATIO_HOOK_INSTTRAPCALLBACK)
-# define DPCRTLMM_HOOK_REMTRAPCALLBACK (HORATIO_HOOK_REMTRAPCALLBACK)
-# define DPCRTLMM_HOOK_MODIFYDESCFLAGS (HORATIO_HOOK_MODIFYDESCFLAGS)
-# define DPCRTLMM_HOOK_ALL (HORATIO_HOOK_ALL)
-# define DPCRTLMM_DEBUGHOOK_LASTHOOK (HORATIO_DEBUGHOOK_LASTHOOK)
-#endif /*DPCRTLMM_LEGACY*/
 
 unsigned int horatio_InstallDebugHook(
 	const unsigned short HookType,
 	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_InstallDebugHook(
-	const unsigned short HookType,
-	unsigned int(*NewHookProc)(PS_HORATIO_DEBUGHOOKINFO)
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Counts the number of hooks installed for this type of hook
@@ -456,20 +430,12 @@ unsigned int dpcrtlmm_InstallDebugHook(
 unsigned int horatio_GetDebugHookChainCount(
 	const unsigned int HookType
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_GetDebugHookChainCount(
-	const unsigned int HookType
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Counts the number of hooks in the entire debug hook matrix,
  * that is the total number of hooks for all types
  */
 unsigned int horatio_GetDebugHookMatrixCount(void);
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_GetDebugHookMatrixCount(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Remove the said hook, type of hook must be specified in order to find it
@@ -478,12 +444,6 @@ unsigned int horatio_UninstallDebugHook(
 	const unsigned short HookType,
 	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_UninstallDebugHook(
-	const unsigned short HookType,
-	unsigned int(*HookProc2Remove)(PS_HORATIO_DEBUGHOOKINFO)
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*------------------ E N D   D E B U G   H O O K S ------------------------*/
 
@@ -510,16 +470,6 @@ void HORATIO_FARDATA* horatio_AllocEx(
 	const char *File,
 	const unsigned int Line
 );
-#ifdef DPCRTLMM_LEGACY
-void HORATIO_FARDATA* dpcrtlmm_AllocEx(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const size_t NewBlockSize,
-	const char *File,
-	const unsigned int Line
-);
-#define dpcrtlmm_Alloc(blkarray, blksize) \
-        dpcrtlmm_AllocEx((blkarray), (blksize), (__FILE__), (__LINE__))
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Alloc() "backwards compatibillity", it's actually a lot easier to use
@@ -543,17 +493,6 @@ char HORATIO_FARDATA *horatio_StrdupEx(
 #define horatio_Strdup(blkarray, blksize) \
 	horatio_StrdupEx((blkarray), (blksize), (__FILE__), (__LINE__))
 
-#ifdef DPCRTLMM_LEGACY
-char HORATIO_FARDATA *dpcrtlmm_StrdupEx(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const char *SrcStr,
-	const char *File,
-	const unsigned int Line
-);
-#define dpcrtlmm_Strdup(blkarray, blksize) \
-	dpcrtlmm_StrdupEx((blkarray), (blksize), (__FILE__), (__LINE__))
-#endif /*DPCRTLMM_LEGACY*/
-
 /*
  * Free() - BlockPtr - Pass a pointer to the block to free, attempting to
  * free a block we don't own will cause a trap which crashes the program,
@@ -564,12 +503,6 @@ void horatio_Free(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	void HORATIO_FARDATA *Ptr
 );
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_Free(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	void HORATIO_FARDATA *Ptr
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * CreateBlockArray() takes no parameters and returns a dynamically
@@ -583,18 +516,10 @@ void dpcrtlmm_Free(
  * caller can cope or crash the program with a trap themselves.
  */
 PS_HORATIO_BLOCKDESCARRAY horatio_CreateBlockArray(void);
-#ifdef DPCRTLMM_LEGACY
-PS_HORATIO_BLOCKDESCARRAY dpcrtlmm_CreateBlockArray(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 void horatio_DestroyBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_DestroyBlockArray(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * In debug hooks and the like, the user may be returned a pointer
@@ -606,11 +531,6 @@ void dpcrtlmm_DestroyBlockArray(
 unsigned int horatio_IsDefaultBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_IsDefaultBlockArray(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Before any of these functions are used, internal initialization of the
@@ -619,9 +539,6 @@ unsigned int dpcrtlmm_IsDefaultBlockArray(
  * This call is now deprecated, and you should use horatio_startupEx().
  */
 void horatio_Startup(void);
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_Startup(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*! \brief horatio_startupEx
  *
@@ -648,9 +565,6 @@ void horatio_startupEx(
  * the program ends to guarentee all memory was released.
  */
 void horatio_Shutdown(void);
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_Shutdown(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Recover license text
@@ -664,9 +578,6 @@ const char *horatio_license(void);
  * HORATIO.
  */
 unsigned int horatio_IsStarted(void);
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_IsStarted(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * GetBlockSize() - BlockPtr - Pass a pointer to the block
@@ -680,12 +591,6 @@ size_t horatio_GetBlockSize(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const void HORATIO_FARDATA *const BlockPtr
 );
-#ifdef DPCRTLMM_LEGACY
-size_t dpcrtlmm_GetBlockSize(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA *const BlockPtr
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * IsBadBlockPtr() - BlockPtr - Pass a pointer to the block base address,
@@ -701,12 +606,6 @@ unsigned int horatio_IsBadBlockPtr(
 	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const void HORATIO_FARDATA *BlockPtr
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_IsBadBlockPtr(
-	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA *BlockPtr
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * IsBadArrayPtr() - PblockArray - A different use for our block array pointer,
@@ -717,11 +616,6 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 unsigned int horatio_IsBadArrayPtr(
 	const PS_HORATIO_BLOCKDESCARRAY PBlockArray
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_IsBadArrayPtr(
-	const PS_HORATIO_BLOCKDESCARRAY PBlockArray
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Some other operations we might want to do on memory which is our
@@ -742,13 +636,6 @@ void HORATIO_FARDATA *horatio_Realloc(
 	void HORATIO_FARDATA *OldBlockPtr,
 	const size_t NewSize
 );
-#ifdef DPCRTLMM_LEGACY
-void HORATIO_FARDATA *dpcrtlmm_Realloc(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	void HORATIO_FARDATA *OldBlockPtr,
-	const size_t NewSize
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Calloc() - N - Number of items
@@ -767,18 +654,6 @@ void HORATIO_FARDATA *horatio_CallocEx(
 );
 #define horatio_Calloc(blkarray, n, blksize) \
         horatio_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
-
-#ifdef DPCRTLMM_LEGACY
-void HORATIO_FARDATA *dpcrtlmm_CallocEx(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const unsigned int N,
-	const size_t NewBlockSize,
-	const char *File,
-	const unsigned int Line
-);
-#define dpcrtlmm_Calloc(blkarray, n, blksize) \
-        dpcrtlmm_CallocEx((blkarray), (n), (blksize), (__FILE__), (__LINE__))
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * When a trap is fired, the default behaviour of the program is to put
@@ -800,15 +675,6 @@ void horatio_InstallTrapCallback(
 	),
 	const unsigned int AsHook
 );
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_InstallTrapCallback(
-	void(*UserCallbackProc)(
-		const unsigned int TrapID,
-		const char *TrapMessage
-	),
-	const unsigned int AsHook
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * These are other misc. trap handler functions. ---
@@ -821,23 +687,12 @@ void horatio_RemoveTrapCallback(
 		const char *TrapDesc
 	)
 );
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_RemoveTrapCallback(
-	void(*CurrentCallbackProc)(
-		const unsigned int TrapID,
-		const char *TrapDesc
-	)
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Returns -1 for no user trap handler, 0 indicates it is installed as
  * a handler, 1 as a hook.
  */
 signed char horatio_GetTrapCallbackInfo(void);
-#ifdef DPCRTLMM_LEGACY
-signed char dpcrtlmm_GetTrapCallbackInfo(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * These functions implement direct flag access (not reconmended except
@@ -864,13 +719,6 @@ unsigned char horatio_ModifyDescriptorFlags(
 	const void HORATIO_FARDATA *Ptr,
 	const unsigned char *PNewFlags
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned char dpcrtlmm_ModifyDescriptorFlags(
-	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA *Ptr,
-	const unsigned char *PNewFlags
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * These functions deal with locking, when a block of memory is locked,
@@ -883,24 +731,11 @@ void horatio_SetBlockLockingFlag(
 	const void HORATIO_FARDATA* Ptr,
 	const unsigned int NewStatus
 );
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_SetBlockLockingFlag(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA* Ptr,
-	const unsigned int NewStatus
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 unsigned int horatio_IsBlockLocked(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const void HORATIO_FARDATA *Ptr
 );
-#ifdef DPCRTLMM_LEGACY
-unsigned int dpcrtlmm_IsBlockLocked(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA *Ptr
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * These next two are simple shortcuts and are therefore
@@ -909,23 +744,10 @@ unsigned int dpcrtlmm_IsBlockLocked(
 #define horatio_LockBlock(pArr, pBlock) horatio_SetBlockLockingFlag(pArr, pBlock, (1U));
 #define horatio_UnlockBlock(pArr, pBlock) horatio_SetBlockLockingFlag(pArr, pBlock, (0U));
 
-#ifdef DPCRTLMM_LEGACY
-# define dpcrtlmm_LockBlock \
-   horatio_LockBlock
-# define dpcrtlmm_UnlockBlock \
-   horatio_UnlockBlock
-#endif /*DPCRTLMM_LEGACY*/
-
 void horatio_ToggleBlockLockingStatus(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const void HORATIO_FARDATA* Ptr
 ); /* If locked, unlocks, if unlocked, locks */
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_ToggleBlockLockingStatus(
-	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA* Ptr
-);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * These are for switching on and off traps.  horatio__EnableTraps the
@@ -936,47 +758,26 @@ void dpcrtlmm_ToggleBlockLockingStatus(
  */
 
 unsigned char horatio_AreTrapsEnabled(void);
-#ifdef DPCRTLMM_LEGACY
-unsigned char dpcrtlmm_AreTrapsEnabled(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 void horatio_DisableTraps(void);
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_DisableTraps(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 void horatio_EnableTraps(void);
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_EnableTraps(void);
-#endif /*DPCRTLMM_LEGACY*/
 
 extern unsigned char horatio__EnableTraps; /* Obsolete */
 
 /* Statistics functions */
 unsigned long horatio_GetBlockCount(void); /* Returns number of allocated blocks */
-#ifdef DPCRTLMM_LEGACY
-unsigned long dpcrtlmm_GetBlockCount(void); /* Returns number of allocated blocks */
-#endif /*DPCRTLMM_LEGACY*/
 
 /*
  * Look at the structure S_HORATIO_STATS, it's all returned in the
  * structure you pass
  */
 void horatio_GetStats(PS_HORATIO_STATS PReadStats);
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_GetStats(PS_HORATIO_STATS PReadStats);
-#endif /*DPCRTLMM_LEGACY*/
 
 void horatio_Dump(FILE *Target); /* Dumps a table of all active allocations with lots of detail */
-#ifdef DPCRTLMM_LEGACY
-void dpcrtlmm_Dump(FILE *Target);
-#endif /*DPCRTLMM_LEGACY*/
 
 /* Call this to get the library version info */
 PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct);
-#ifdef DPCRTLMM_LEGACY
-PS_HORATIO_VERSION dpcrtlmm_Ver(PS_HORATIO_VERSION PVerStruct);
-#endif /*DPCRTLMM_LEGACY*/
 
 /*!
  * \brief Options setter/getter
@@ -1141,41 +942,13 @@ PS_HORATIO_OPTIONS horatio_options_init(
  */
 #define HORATIO_TRAP_LOCKINGVIOLATION     (0x10)
 
-#ifdef DPCRTLMM_LEGACY
-/* Legacy trap macros */
-#define DPCRTLMM_TRAP_UNKNOWN              (HORATIO_TRAP_UNKNOWN)
-#define DPCRTLMM_TRAP_INDEX_GEN_FAILED     (HORATIO_TRAP_INDEX_GEN_FAILED)
-#define DPCRTLMM_TRAP_BAD_HANDLER_REMOVAL  (HORATIO_TRAP_BAD_HANDLER_REMOVAL)
-#define DPCRTLMM_TRAP_NULL_HANDLER         (HORATIO_TRAP_NULL_HANDLER)
-#define DPCRTLMM_TRAP_UNAUTH_REMOVE        (HORATIO_TRAP_UNAUTH_REMOVE)
-#define DPCRTLMM_TRAP_MUL_STARTUP          (HORATIO_TRAP_MUL_STARTUP)
-#define DPCRTLMM_TRAP_MUL_SHUTDOWN         (HORATIO_TRAP_MUL_SHUTDOWN)
-#define DPCRTLMM_TRAP_UNFREED_DATA         (HORATIO_TRAP_UNFREED_DATA)
-#define DPCRTLMM_TRAP_BAD_BLOCK_ARRAY      (HORATIO_TRAP_BAD_BLOCK_ARRAY)
-#define DPCRTLMM_TRAP_BAD_BLOCK            (HORATIO_TRAP_BAD_BLOCK)
-#define DPCRTLMM_TRAP_UNOWNED_FREE         (HORATIO_TRAP_UNOWNED_FREE)
-#define DPCRTLMM_TRAP_BAD_RANGE_MOVEUP     (HORATIO_TRAP_BAD_RANGE_MOVEUP)
-#define DPCRTLMM_TRAP_SHRINKARR_WHILE_NOWT (HORATIO_TRAP_SHRINKARR_WHILE_NOWT)
-#define DPCRTLMM_TRAP_SHRINKARR_TOOMUCH    (HORATIO_TRAP_SHRINKARR_TOOMUCH)
-#define DPCRTLMM_TRAP_UNFREED_BLOCKS       (HORATIO_TRAP_UNFREED_BLOCKS)
-#define DPCRTLMM_TRAP_BASENONZERO          (HORATIO_TRAP_BASENONZERO)
-#define DPCRTLMM_TRAP_LOCKINGVIOLATION     (HORATIO_TRAP_LOCKINGVIOLATION)
-#endif /*DPCRTLMM_LEGACY*/
-
-/*! \def USING_DPCRTLMM
- * \brief Legacy support, which enables USING_HORATIO
+/*! \def USING_HORATIO
+ * \brief Plug-in replacement for C library rotuines
  *
- * New in 1.1.4, define USING_DPCRTLMM before including this header if
- * you wish to make normal C runtime using code switch to libhoratio code
- * without changing all the calls.  In some custom distributions this was
- * done with usedpcrtlmm.h or similar.  Nb. USING_DPCRTLMM is the legacy
- * name for USING_HORATIO
+ * If you wish to make normal C runtime using code switch to libhoratio code
+ * without changing all the calls, define this macro in your code afore including
+ * horatio.h.
  */
-
-#ifdef USING_DPCRTLMM
-  /* Legacy support */
-#  define USING_HORATIO
-#endif /*USING_DPCRTLMM*/
 
 #ifdef USING_HORATIO
 #  ifdef HORATIO_NONULL_BLOCKDESCARRAY
@@ -1188,21 +961,13 @@ PS_HORATIO_OPTIONS horatio_options_init(
 #      define realloc(p, s) MemManager.Realloc((p), (s))
 #    else
 #      ifdef strdup
-#       undef strdup
+#        undef strdup
 #      endif /*strdup*/
-#      ifdef DPCRTLMM_LEGACY
-#       define strdup(s)     dpcrtlmm_Strdup(NULL, (s))
-#       define malloc(s)     dpcrtlmm_Alloc(NULL, (s))
-#       define free(p)       dpcrtlmm_Free(NULL, (p))
-#       define calloc(n, s)  dpcrtlmm_Calloc(NULL, (n), (s))
-#       define realloc(p, s) dpcrtlmm_Realloc(NULL, (p), (s))
-#      else
-#       define strdup(s)     horatio_Strdup(NULL, (s))
-#       define malloc(s)     horatio_Alloc(NULL, (s))
-#       define free(p)       horatio_Free(NULL, (p))
-#       define calloc(n, s)  horatio_Calloc(NULL, (n), (s))
-#       define realloc(p, s) horatio_Realloc(NULL, (p), (s))
-#      endif /*DPCRTLMM_LEGACY*/
+#      define strdup(s)     horatio_Strdup(NULL, (s))
+#      define malloc(s)     horatio_Alloc(NULL, (s))
+#      define free(p)       horatio_Free(NULL, (p))
+#      define calloc(n, s)  horatio_Calloc(NULL, (n), (s))
+#      define realloc(p, s) horatio_Realloc(NULL, (p), (s))
 #    endif /*__cplusplus*/
 #  endif
 #endif /*USING_HORATIO*/
@@ -1226,28 +991,17 @@ PS_HORATIO_OPTIONS horatio_options_init(
 #  define horatio_block_Realloc(bd, p, s) horatio_Realloc((bd), (p), (s))
 #endif /*__cplusplus*/
 
-#ifdef DPCRTLMM_LEGACY
-/* Legacy */
-#  define dpcrtlmm_block_Alloc   horatio_block_Alloc
-#  define dpcrtlmm_block_Free    horatio_block_Free
-#  define dpcrtlmm_block_Calloc  horatio_block_Calloc
-#  define dpcrtlmm_block_Realloc horatio_block_Realloc
-#endif /*DPCRTLMM_LEGACY*/
-
-/*! \def DPCRTLMM_LAZYHACK
- * \brief Legacy wrapper for HORATIO_LAZYHACK
+/*! \def HORATIO_LAZYHACK
+ * \brief Make legacy dpc macros available
  *
  * Hacks for laziness in typing, to use these rather than the long names define
  * HORATIO_LAZYHACK just before including horatio.h in the user source, these
  * names are not used internally by the library and are intended solely for the
  * users.  I'm not saying these are always going to be here, if I ever remove
  * them it won't be hard to write your own hack table.
+ *
+ * TODO: Remove these names
  */
-
-#ifdef DPCRTLMM_LAZYHACK
-  /* Legacy support */
-#  define HORATIO_LAZYHACK
-#endif /*DPCRTLMM_LAZYHACK*/
 
 #ifdef HORATIO_LAZYHACK
   /* Short function names */
