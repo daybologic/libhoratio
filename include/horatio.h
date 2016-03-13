@@ -32,10 +32,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef INC_HORATIO_H
 #define INC_HORATIO_H
 
-/* \def DPCRTLMM_LEGACY
- * \brief Legacy sentry
- */
-
 /*! \file horatio.h
  * \brief Horatio's Memory Manager, main user-mode header
  *
