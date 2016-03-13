@@ -85,6 +85,9 @@
 /* Stream to print errors on */
 #undef HORATIO_DEV_ERROR
 
+/* Build the documentation */
+#undef HORATIO_DOCS
+
 /* Use pragma hdrstop */
 #undef HORATIO_HDRSTOP
 

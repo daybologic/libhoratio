@@ -29,24 +29,43 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
-// HORATIO 1.2 compatible encapsulation header for C++
-// include this and add dpccap.cpp to your project
-// You can have this particular module, it's free
-// I'm writing this in ANSI/ISO C++, that doesn't mean it'll work on all
-// old compilers!  define __NO_NAMESPACES__ if you don't want the namespace.
-// I've got rid of all inline functions as a wicked article on C++
-// porting on Mozilla said not to bother with them more or less, they'd
-// know, look how far Mozilla and Netscape has been ported!
-// I know the keyword bool is new, so I'm not using it, I'll use int thanks
+
+/*! \file dpccap.h
+ *
+ * \brief HORATIO 1.2 legacy compatible encapsulation header for C++
+ *
+ * include this and add dpccap.cpp to your project
+ * You can have this particular module, it's free
+ * I'm writing this in ANSI/ISO C++, that doesn't mean it'll work on all
+ * old compilers!  define __NO_NAMESPACES__ if you don't want the namespace.
+ * I've got rid of all inline functions as a wicked article on C++
+ * porting on Mozilla said not to bother with them more or less, they'd
+ * know, look how far Mozilla and Netscape has been ported!
+ * I know the keyword bool is new, so I'm not using it, I'll use int thanks
+ */
 
 #ifndef INC_HORATIO_CAP_H
 #define INC_HORATIO_CAP_H
 
 // main object, don't create more than one, the object is externed
 
+/*! \namespace daybo
+ * \brief The Daybo Logic namespace
+ *
+ * This namespace encapsulates all code in this library, and other libraries
+ * written by the author, in order to avoid conflicts with classes written
+ * by other organisations, which may hve similar names, and for consistency.
+ */
 #ifndef __NO_NAMESPACES__
 namespace daybo {
 #endif /*!__NO_NAMESPACES__*/
+	/*! \class THORATIO_MemManager
+         * \brief All memory management interfaces exposed by the memory manager
+         *
+	 * These functions control the library as a whole.  BlockArray-specific controls
+	 * are in THORATIO_BlockArray.  There can only be one THORATIO_MemManager,
+	 * the singleton is exposed in the name daybo::MemManager
+	 */
 	class THORATIO_MemManager {
 	private:
 		int firstAccess;
@@ -185,6 +204,13 @@ namespace daybo {
 		);
 	};
 
+	/*! \class THORATIO_BlockArray
+	 * \brief Block array control functions.
+	 *
+	 * Once you have allocated a block array using THORATIO_MemManager,
+	 * this class can be used to allocate blocks within that array, and otherwise
+	 * control them.
+	 */
 	class THORATIO_BlockArray {
 	private:
 		PS_HORATIO_BLOCKDESCARRAY _PblockArray;
@@ -267,6 +293,13 @@ namespace daybo {
 } /*namespace daybo*/
 #endif
 
+/*! \var THORATIO_MemManager MemManager
+ * \brief Singleton which controls the C++ interface into the library.
+ *
+ * There can be only one instance of THORATIO_MemManager per process,
+ * this is it.  See the class THORATIO_MemManager for the interfaces,
+ * and address them all through this singleton.
+ */
 extern
 #ifndef __NO_NAMESPACES__
 daybo::

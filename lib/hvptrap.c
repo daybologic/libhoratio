@@ -30,10 +30,12 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
+/*! \file hvptrap.c
+ * \brief Pre-defined default traps, and internal pointer verification
+ *
  * 19th July 2000: This module replaces bbatrap.c and bbptrap.c, which no
  * longer exist.  It's an internal library issue, prebuilt traps for invalid
- * pointers.  In version 1.0 through all the betas these two finctions which
+ * pointers.  In version 1.0 through all the betas these two functions which
  * were always called at the same time where in two separate modules.
  * I decided it would be cleaner to move them into the same module. If there
  * is no block pointer in the array to check, pass NULL as arg three.

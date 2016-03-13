@@ -32,7 +32,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef INC_HORATIO_INTDATA_H
 #define INC_HORATIO_INTDATA_H
 
-/*
+/*! \file hintdata.h
+ * \brief Internal data header
+ *
  * WARNING! This header is for internal library use only, it contains
  * internal data for the library.
  */

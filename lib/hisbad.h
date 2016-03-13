@@ -30,6 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file hisbad.h
+ * \brief Routines for validating block pointers
+ *
+ * This header is for internal use only
+ */
 #ifndef INC_HORATIO_ISBAD_H
 #define INC_HORATIO_ISBAD_H
 

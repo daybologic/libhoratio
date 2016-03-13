@@ -29,11 +29,17 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*! \file hiblkptr.h
+ * \brief Internal block pointer information
+ *
+ * hiblkptr.h is for internal HORATIO usage only
+ */
 #ifndef INC_HORATIO_IBLKPTR
 #define INC_HORATIO_IBLKPTR
 
 #ifndef HORATIO_SOURCE
-# error ("iblkptr.h is for internal HORATIO usage only")
+# error ("hiblkptr.h is for internal HORATIO usage only")
 #endif /*HORATIO_SOURCE*/
 
 #ifdef __cplusplus

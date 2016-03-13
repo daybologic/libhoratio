@@ -1,6 +1,6 @@
-#!/bin/sh
-# Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+#!/bin/bash
+# Horatio's Memory Manager
+# Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
