@@ -1015,12 +1015,6 @@ PS_HORATIO_OPTIONS horatio_options_init(
 #define HORATIO_MIN(a,b) (((a) < (b)) ? (a) : (b))
 #define HORATIO_MAX(a,b) (((a) > (b)) ? (a) : (b))
 
-#ifdef DPCRTLMM_LEGACY
-/* Legacy MIN/MAX macros */
-#define DPCRTLMM_MIN(a,b) HORATIO_MIN((a),(b))
-#define DPCRTLMM_MAX(a,b) HORATIO_MAX((a),(b))
-#endif /*DPCRTLMM_LEGACY*/
-
 /*
  * TODO: Where do we put the Doxygen for this?
  * Trap numbers, these aren't used by the default handler but if the
