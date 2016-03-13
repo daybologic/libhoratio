@@ -66,8 +66,9 @@ static void horatio_int_RemoveTrapCallback(
 	void(*CurrentCallback)(const unsigned int, const char*)
 );
 static signed char horatio_int_GetTrapCallbackInfo(void);
-static void DefHandler(
-	const char *TrapMsg
+static void defHandler(
+	const unsigned int Id,
+	const char *trapMsg
 );
 
 void horatio_InstallTrapCallback(
@@ -145,7 +146,7 @@ void horatio_int_Trap(
 				goto trapRecover; /* Recover from trap */
 		}
 		/* No user proc installed or user hook called */
-		DefHandler(Message);
+		defHandler(Id, Message);
 
 trapRecover:
 		/*
@@ -179,7 +180,8 @@ static void horatio_int_InstallTrapCallback(
 
 		/* Install the handler/hook */
 		_UserTrapCallback = NewTrapCallback; /* Replace the PFunc */
-		_userTrapCallbackIsHook = AsHook; /* Set hook mode (or not) */
+		/* Set hook mode (or not) */
+		_userTrapCallbackIsHook = (AsHook) ? (1) : (0);
 
 #ifdef HORATIO_DEBUGHOOKS
 		/* Update debug hook info */
@@ -328,10 +330,32 @@ unsigned char horatio_AreTrapsEnabled() {
 	return ret;
 }
 
-static void DefHandler(
-	const char *TrapMsg
+/*! \brief defHandler
+ *  This handler is called when no user handler is installed, it calls abort.
+ *
+ *  This function will not return, and calls abort(), after printing a trap
+ *  message to stderr.
+ *
+ *  This method is static, and not available to code outside htrap.c
+ *
+ *  This method is only called when a horatio_int_Trap is called and there
+ *  is no user handler set in the _UserTrapCallback variable.
+ *
+ *  Returns: void
+ *
+ *  Parameters:
+ *  trapMsg: Pointer to the trap message.
+ */
+static void defHandler(
+	const unsigned int Id,
+	const char *trapMsg
 ) {
 	/* Output trap's message on the standard error stream */
-	fprintf(HORATIO_DEV_ERROR, "%s", TrapMsg);
-	abort();
+	fprintf(_options.errorHandle, "%s", trapMsg);
+	_defHandlerCode = Id;
+
+	if (_unitTest)
+		_aborts++;
+	else
+		abort();
 }

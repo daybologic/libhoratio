@@ -239,22 +239,6 @@ if test "$real_thread_lib" = "pth"; then
   fi
 fi
 
-dnl --enable-stderr
-AC_MSG_CHECKING([whether to use stderr output])
-AC_ARG_ENABLE(
-  [stderr],
-  [  --enable-stderr         Enable stderr output],
-  [stderr_enabled=yes],
-  [stderr_enabled=no]
-)
-if test "$stderr_enabled" = "yes"; then
-  stderr_stream=stderr
-else
-  stderr_stream=stdout
-fi
-AC_DEFINE_UNQUOTED([HORATIO_DEV_ERROR], $stderr_stream, [Stream to print errors on])
-AC_MSG_RESULT($stderr_enabled)
-
 dnl --with-safety-list-size=N
 safety_list_size=512
 AC_MSG_CHECKING([number of entries in safety list])
@@ -360,18 +344,6 @@ if test "$mongo" = "yes"; then
 fi
 AM_CONDITIONAL([USE_MONGO], [test "$mongo" = "yes"])
 AC_MSG_RESULT($mongo)
-
-dnl --enable-log
-AC_MSG_CHECKING(whether to log to HORATIO.LOG)
-AC_ARG_ENABLE(
-  log,
-  [  --enable-log            Enable logging to HORATIO.LOG],
-  [log_enabled=yes], [log_enabled=no]
-)
-if test "$log_enabled" = "yes"; then
-  AC_DEFINE([HORATIO_LOG], [], [Enable logging to HORATIO.LOG])
-fi
-AC_MSG_RESULT($log_enabled)
 
 dnl --enable-docs
 AC_MSG_CHECKING([Whether to build documentation])

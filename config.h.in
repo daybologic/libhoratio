@@ -82,9 +82,6 @@
 /* Use debug hooks */
 #undef HORATIO_DEBUGHOOKS
 
-/* Stream to print errors on */
-#undef HORATIO_DEV_ERROR
-
 /* Build the documentation */
 #undef HORATIO_DOCS
 
@@ -93,9 +90,6 @@
 
 /* Number of entries in a debug hook chain */
 #undef HORATIO_HOOKCHAIN_SIZE
-
-/* Enable logging to HORATIO.LOG */
-#undef HORATIO_LOG
 
 /* Disable special NULL array */
 #undef HORATIO_NONULL_BLOCKDESCARRAY

@@ -123,6 +123,12 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct) {
 	return PVerStruct;
 }
 
+void horatio_Startup() {
+
+	horatio_startupEx(NULL);
+	return;
+}
+
 /*!
  * \brief Initialise the library
  *
@@ -135,11 +141,14 @@ PS_HORATIO_VERSION horatio_Ver(PS_HORATIO_VERSION PVerStruct) {
  *
  * Failure in this function will cause an exit or abort of the process.
  */
-void horatio_Startup() {
+void horatio_startupEx(
+	PS_HORATIO_OPTIONS pOptions
+) {
 	if (!_libStarted) {
 		/* Initialization of internal library data */
 		_libStarted = 1U; /* The library is started now */
 		_UserTrapCallback = NULL; /* No user trap handler installed */
+		horatio_options_init(NULL);
 		SafetyList_Init(); /* Init the safety list */
 #ifdef HORATIO_DEBUGHOOKS
 		/* Init the debug hook matrix */
@@ -157,6 +166,7 @@ void horatio_Startup() {
 		Trap(HORATIO_TRAP_MUL_STARTUP, "Multiple calls of Startup()!");
 	}
 	MESSAGE(HORATIO_LOG_CODE_STARTUP, NULL, 0, "Library started");
+	horatio_options(pOptions);
 	return;
 }
 

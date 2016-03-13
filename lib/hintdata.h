@@ -75,6 +75,9 @@ extern unsigned int horatio_int__userTrapCallbackIsHook;
  * Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length)
  */
 extern unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo);
+
+extern S_HORATIO_OPTIONS horatio_int__options;
+
 #endif /*HORATIO_DEBUGHOOKS*/
 #ifdef HORATIO_NONULL_BLOCKDESCARRAY
 # define horatio_int__ResolveArrayPtr(p) (p)  /* Resolving not neccersary, it's for the NULL array */
@@ -86,6 +89,11 @@ extern unsigned long horatio_int__blockCount;
 extern unsigned long horatio_int__blockCountPeak;
 extern unsigned long horatio_int__allocCharge;
 extern unsigned long horatio_int__allocPeak;
+
+/* Unit testing */
+extern int horatio_int__unitTest;
+extern unsigned int horatio_int__aborts;
+extern unsigned int horatio_int__defHandlerCode;
 
 /* Magic lazy references for library's own use */
 #define _safetyList horatio_int__safetyList
@@ -101,5 +109,9 @@ extern unsigned long horatio_int__allocPeak;
 #define _blockCountPeak horatio_int__blockCountPeak
 #define _allocCharge horatio_int__allocCharge
 #define _allocPeak horatio_int__allocPeak
+#define _options horatio_int__options
+#define _unitTest horatio_int__unitTest
+#define _aborts horatio_int__aborts
+#define _defHandlerCode horatio_int__defHandlerCode
 
 #endif /*!INC_HORATIO_INTDATA_H*/

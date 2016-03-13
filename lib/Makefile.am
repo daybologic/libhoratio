@@ -64,6 +64,7 @@ libhoratio_la_SOURCES += hisbad.c
 libhoratio_la_SOURCES += hlcktrap.c
 libhoratio_la_SOURCES += hlic.c
 libhoratio_la_SOURCES += hlog.c
+libhoratio_la_SOURCES += hopts.c
 libhoratio_la_SOURCES += hrealloc.c
 libhoratio_la_SOURCES += hsafelst.c
 libhoratio_la_SOURCES += hstats.c
