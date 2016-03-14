@@ -32,10 +32,11 @@
 
 set -e
 
-OUTPUT='hversion.h'
-LOG='../debian/changelog'
+SCRIPTDIR=`dirname $0`;
+OUTPUT="${SCRIPTDIR}/../include/hversion.h"
+LOG="${SCRIPTDIR}/../debian/changelog"
 
-ident=`../utils/hgident`
+ident=`${SCRIPTDIR}/../utils/hgident`
 
 version=`awk -F'[()]' '{print $2; count++; if (count==2) exit}' $LOG`
 
