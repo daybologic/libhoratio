@@ -1,0 +1,17 @@
+#!/bin/bash
+
+scriptdir=`dirname $0`
+
+$scriptdir/have-hg
+
+if [ "$?" == "0" ]; then
+	hg ident;
+elif [ "$?" == "1" ]; then
+	user=`whoami`
+	host=`hostname -f`
+	echo "Non-RCS build by $user@$host"
+else
+	exit "$?";
+fi;
+
+exit 0;

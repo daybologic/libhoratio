@@ -31,8 +31,8 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 #define HORATIO_SOURCE
 
-/*
- * Main allocation function and block array grower
+/*! \file halloc.c
+ * \brief Main allocation function and block array grower
  */
 
 #ifdef HAVE_CONFIG_H
@@ -62,21 +62,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbiglock.h" /* Mutual exclusion */
 #include "halloc.h"
 
-/* Internal functions (local) */
-
 static void OurLog(
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
 	const char *Message
 );
-
-/*
- * Grow the array by 'GrowByElems' elements, returns FALSE if
- * it fails but then the original array is still valid and no
- * bigger.  Always make sure the array pointer is resolved, NULL
- * pointers are not acceptable and will be caught with assert()
- */
 
 static unsigned int GrowBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PCurrentBlockArray,
@@ -99,13 +90,25 @@ static unsigned int GrowBlockArray(
 #define OURLOG_POS(sev, msg) \
 	OURLOG(__FILE__, __LINE__, (sev), (msg))
 
+/*!
+ * \brief Function which implements strdup
+ *
+ * \param PBlockArray Block descriptor array pointer
+ * \param SrcStr Source string to be duplicated
+ * \param File Source code filename information
+ * \param Line Source code line number information
+ *
+ * \return Pointer to new string allocated by Horatio.
+ *
+ * This function should not be called directly, use the horatio_Strdup macro.
+ */
 char HORATIO_FARDATA *horatio_StrdupEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const char *SrcStr,
 	const char *File,
 	const unsigned int Line
 ) {
-	char HORATIO_FARDATA *ret = horatio_int_AllocEx(
+	char HORATIO_FARDATA *ret = horatio_AllocEx(
 		PBlockArray,
 		strlen(SrcStr)+1,
 		File,
@@ -117,6 +120,21 @@ char HORATIO_FARDATA *horatio_StrdupEx(
 	return ret;
 }
 
+/*!
+ * \brief Function which wraps horatio_int_AllocEx for thread safety
+ *
+ * \param PBlockArray Block descriptor array pointer
+ * \param NewBlockSize Size of block to be allocated by the library
+ * \param File Source code filename information
+ * \param Line Source code line number information
+ *
+ * \return Pointer to new memory allocated by Horatio.
+ *
+ * This function should not be called directly, use the horatio_Alloc macro.
+ * This function itself does not implement allocations, but acquires the bigLock,
+ * and then passes control to an internal allocator - hotatio_int_AllocEx, and
+ * relinquishes the bigLock before returning to the caller.
+ */
 void HORATIO_FARDATA *horatio_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const size_t NewBlockSize,
@@ -133,6 +151,23 @@ void HORATIO_FARDATA *horatio_AllocEx(
 	return ret;
 }
 
+/*!
+ * \brief Internal allocator
+ *
+ * The internal allocator avoids locking semantics and provides
+ * the implementation for the actual call to the libc malloc().
+ *
+ * \param PBlockArray Block descriptor array pointer
+ * \param NewBlockSize Size of block to be allocated by the library
+ * \param File Source code filename information
+ * \param Line Source code line number information
+ *
+ * \return Pointer to new memory allocated by Horatio.
+ *
+ * This function must not be called by user code, because doing
+ * so would not be thread safe under threaded builds,
+ * callers should use horatio_AllocEx() instead.
+ */
 void HORATIO_FARDATA *horatio_int_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const size_t NewBlockSize,
@@ -275,6 +310,19 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 	return genBlockPtr; /* Give pointer to the caller */
 }
 
+/*!
+ * \brief Increase the size of a block descriptor array
+ *
+ * \param PCurrentBlockArray Pointer to a block descriptor you want to be enlarged.
+ * \param GrowByElems Specify the number of blocks you may need to additionally accommodate.
+ *
+ * \return Zero indicates failure, 1 returns success, all other values reserved for future use.
+ *
+ * This function is for the internal use of the allocator within halloc.c, only.
+ * The function returns a zero value if it fails but then the original array is still valid and no
+ * bigger.  Always make sure the array pointer is resolved, NULL pointers are not acceptable
+ * and will be caught with assert(), with a checked build of the library.
+ */
 static unsigned int GrowBlockArray(
 	PS_HORATIO_BLOCKDESCARRAY PCurrentBlockArray,
 	const unsigned int GrowByElems
@@ -341,11 +389,21 @@ static unsigned int GrowBlockArray(
 	return 1U; /* Success */
 }
 
+/*!
+ * \brief Local logging function for the allocator
+ *
+ * \param File Source code filename
+ * \param Line Source code line number
+ * \param Severity The severity of the error, a higher numeric value is more serious
+ * \param Message Message to be passed on to the logger
+ *
+ * This is an internal function used to log messages from the allocator
+ */
 static void OurLog(
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
-	const char *Str
+	const char *Message
 ) {
 	/*
 	 * Our job is to add "Alloc()" to the start of the string,
@@ -357,7 +415,7 @@ static void OurLog(
 	 */
 
 	/* Valid string of at least on character sent to us? */
-	if (Str && Str[0]) {
+	if (Message && Message[0]) {
 		char *PcopyStr;
 		const char FuncName[] = "Alloc(): "; /* Prefix */
 
@@ -365,10 +423,10 @@ static void OurLog(
 		 * Allocate space for copy, note that NULL termination
 		 * is automagic because of using sizeof()
 		 */
-		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) );
+		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Message) );
 		if (PcopyStr) {
 			strcpy(PcopyStr, FuncName); /* Prepend prefix */
-			strcat(PcopyStr, Str); /* Add log string after prefix */
+			strcat(PcopyStr, Message); /* Add log string after prefix */
 
 			horatio_int_Log(
 				File, Line, Severity, PcopyStr

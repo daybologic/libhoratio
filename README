@@ -1,1 +1,31 @@
 Documentation is provided on the following site: http://2E0EOL.bitbucket.org/libhoratio
+
+What is the purpose of this library?
+It is a memory tracking tool.  Although it can't detect memory
+over runs on pointer accesses or corruption.  It can be used
+to detect failures to release memory (as long as it's allocated
+by us) and attempts to release memory which we do not own.
+It has an automatic garbage collection feature to free up all
+unfreed memory too.  It should be used by the entire program to
+be most effective, it can provide statistics on memory left an
+such like too.  The best thing about the MM is that it provides
+a central place for dynamic memory allocation in a program so
+we can trace all activity, an optional log mode is avialable
+though a define.  Swapping cannot be implemented as the MM has
+no control over pointer-based memory accesses.  This is indeed
+why we don't see memory overruns. If the program is going to
+be released even though it contains memory bugs, the traps can
+be turned off or passed to a handler which will only execute the
+serious ones.
+
+Direction: We intend to log statistics to optional back-end systems such
+as MongoDB, MySQL and SQLite.  Although this work is ongoing,
+it has yet to be merged into mainline.
+
+At some point we will write a dummy library, which will allow
+programs which are designed around libhoratio to effectively
+remove the library, without being re-written.
+
+Language: Everything here is portable to ANSI C, We try our best to make
+this library as portable as possible and appreciate any feedback for /any/
+system on which a flaw is seen, whether this is embedded or games console.

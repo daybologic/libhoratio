@@ -30,6 +30,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*! \file halloc.h
+ * \brief Allocation routines
+ *
+ * This header is for internal use only
+ */
 #ifndef INC_HORATIO_ALLOC_H
 #define INC_HORATIO_ALLOC_H
 

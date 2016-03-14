@@ -1,5 +1,5 @@
-# Daybo Logic C RTL Memory Manager
-# Copyright (c) 2000-2014, David Duncan Ross Palmer, Daybo Logic
+# Horatio's Memory Manager
+# Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,6 @@ C_ONLY_WFLAGS = \
 	-Wnested-externs
 
 GENERAL_WFLAGS = \
-	-Werror \
 	-Wall \
 	-W \
 	-Wcast-qual \
@@ -78,3 +77,6 @@ export AM_CFLAGS
 export AM_LDFLAGS
 
 SUBDIRS = lib include t
+if HORATIO_DOCS
+SUBDIRS += docs
+endif #HORATIO_DOCS

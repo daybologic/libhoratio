@@ -29,6 +29,12 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*! \file htrap.h
+ * \brief Header for invoking a trap
+ *
+ * For internal use only
+ */
 #ifndef INC_HORATIO_TRAP_H
 #define INC_HORATIO_TRAP_H
 
@@ -47,9 +53,13 @@ void horatio_int_Trap(
 } /* extern "C" */
 #endif /*__cplusplus*/
 
-/* NOTE: Prototype for InstallTrapHandler() is in horatio.h */
-
 #ifdef INC_HORATIO_INTDATA_H
+  /*! \def Trap
+   * \brief Shortcut Trap is a wapper around InstallTrapHandler
+   *
+   * This macro is only available when INC_HORATIO_INTDATA_H is defined
+   * nb. Prototype for InstallTrapHandler() is in horatio.h
+   */
 # define Trap horatio_int_Trap
 #endif /*INC_HORATIO_INTDATA_H*/
 

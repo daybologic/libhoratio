@@ -30,8 +30,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * Header for the debug hook executive and support code
+/*! \file hdbghook.h
+ * \brief Header for the debug hook executive and support code
+ *
+ * This header is for internal use only
  */
 
 #ifndef INC_HORATIO_DBGHOOKS_H
@@ -53,6 +55,8 @@ void horatio_int_InitDebugHookMatrix(void);
 /*
  * Debug hook executive, caller must prepare information according to the
  * rules first.
+ *
+ * TODO: Duplicate description?  Check hdbghook.c  Should move to Doxygen
  */
 void horatio_int_CallDebugHook(
   const unsigned short HookType,

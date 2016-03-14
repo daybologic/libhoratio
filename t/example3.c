@@ -62,6 +62,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "dpcrtlmm.h"
 
 /* main() belongs to DPCRTLMM, rename your old main my_main or something */
+static unsigned int hookCounter(PS_HORATIO_DEBUGHOOKINFO debugHookInfo);
 static int my_main(const int argc, const char* argv[]);
 static void handler(char** vector); /* Incase we can't allocate enough */
 static void PrintInfo(char** vector); /* Prints strings from vector */
@@ -69,6 +70,8 @@ static void InitVector(char** vector, unsigned int n);
 static void Title(void); /* Just displays some information */
 static void Version(void); /* Prints the library version */
 static void strdup_test(void);
+
+static unsigned short int hookCount = 0U;
 
 int main(const int argc, const char *argv[]) {
 	if ( atexit(dpcrtlmm_Shutdown) == -1 ) {
@@ -87,6 +90,12 @@ int main(const int argc, const char *argv[]) {
 	return my_main(argc, argv);
 }
 
+static unsigned int hookCounter(PS_HORATIO_DEBUGHOOKINFO debugHookInfo) {
+	printf("hookCounter called for %s\n", (const char *)debugHookInfo->Misc0);
+	hookCount++;
+	return 0;
+}
+
 static int my_main(const int argc, const char* argv[]) {
 	/*
 	 * This is where the original program will begin, here's a
@@ -98,7 +107,11 @@ static int my_main(const int argc, const char* argv[]) {
 	char **copyvector; /* NULL terminated vector version of arguments */
 
 	Title();
-  strdup_test();
+	strdup_test();
+	dpcrtlmm_InstallDebugHook(
+		HORATIO_HOOK_LEGACY,
+		hookCounter
+	);
 
 	/* Allocate vector */
 	copyvector = (char**)calloc((argc + 1),sizeof(char*));
@@ -127,6 +140,8 @@ static int my_main(const int argc, const char* argv[]) {
 	dpcrtlmm_Dump(stdout);
 #endif /*!NDEBUG*/
 	handler(copyvector); /* normal clean up */
+
+	printf("hookCount total %u\n", hookCount);
 	return EXIT_SUCCESS;
 }
 

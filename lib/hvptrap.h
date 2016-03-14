@@ -29,6 +29,13 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
+
+/*! \file hvptrap.h
+ * \brief Verify pointer trap header
+ *
+ * Routines for triggering a trap where a pointer block desciptor is invalid.
+ * See horatio_int_VerifyPtrs
+ */
 #ifndef INC_HORATIO_VPTRAP_H
 #define INC_HORATIO_VPTRAP_H
 
@@ -45,6 +52,11 @@ void horatio_int_VerifyPtrs(
 #endif /*__cplusplus*/
 
 #ifdef INC_HORATIO_INTDATA_H
+ /*! \def _VerifyPtrs
+  * \brief Shortcut to call horatio_int_VerifyPtrs
+  *
+  * This macro is only availablr when INC_HORATIO_INTDATA_H is defined
+  */
 # define _VerifyPtrs horatio_int_VerifyPtrs
 #endif /*INC_HORATIO_INTDATA_H*/
 
