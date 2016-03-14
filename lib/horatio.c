@@ -69,6 +69,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hdbghook.h" /* The debug hook support/executive */
 #include "hbiglock.h" /* To init / uninit the big lib lock */
 #include "hblocarr.h" /* Internal interface to block arrays */
+#include "hversion.h" /* HORATIO_VERSION_ constants */
 
 static void TrapUnFreedArrays(void); /* Traps all unfreed arrays */
 static unsigned long TrapUnFreedBlocks(const PS_HORATIO_BLOCKDESCARRAY PArr);

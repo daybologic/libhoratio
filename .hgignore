@@ -19,6 +19,7 @@ lib/.deps
 lib/.libs
 test-driver
 autom4te.cache
+include/hversion.h
 
 syntax:regexp
 ^docs/\.\w+$

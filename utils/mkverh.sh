@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Horatio's Memory Manager
 # Copyright (c) 2000-2014, David Duncan Ross Palmer (M6KVM), Daybo Logic
@@ -30,18 +30,23 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-scriptdir=`dirname $0`
+set -e
 
-$scriptdir/have-hg
+SCRIPTDIR=`dirname $0`;
+OUTPUT="${SCRIPTDIR}/../include/hversion.h"
+LOG="${SCRIPTDIR}/../debian/changelog"
 
-if [ "$?" == "0" ]; then
-	hg ident;
-elif [ "$?" == "1" ]; then
-	user=`whoami`
-	host=`hostname -f`
-	echo "Non-RCS build by $user@$host"
-else
-	exit "$?";
-fi;
+ident=`${SCRIPTDIR}/../utils/hgident`
+
+version=`awk -F'[()]' '{print $2; count++; if (count==2) exit}' $LOG`
+
+echo "#define HORATIO_VERSION_IDENT \"$ident\"" > $OUTPUT
+echo "#define HORATIO_VERSION \"$version\"" >> $OUTPUT
+
+set `echo $version | tr "." "\n"`
+
+printf "#define HORATIO_VERSION_MAJOR (%d)\n" "$1" >> $OUTPUT
+printf "#define HORATIO_VERSION_MINOR (%d)\n" "$2" >> $OUTPUT
+printf "#define HORATIO_VERSION_PATCH (%d)\n" "$3" >> $OUTPUT
 
 exit 0;
