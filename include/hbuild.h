@@ -129,6 +129,6 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Library version information can be set here */
 #define HORATIO_VERSION_MAJOR (2)
 #define HORATIO_VERSION_MINOR (0)
-#define HORATIO_VERSION_PATCH (0)
+#define HORATIO_VERSION_PATCH (1)
 
 #endif /*!INC_HORATIO_BUILD_H*/
