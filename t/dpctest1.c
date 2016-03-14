@@ -49,6 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define DPCRTLMM_LEGACY
 #include "dpcrtlmm.h"
 #include "hbuild.h"
+#include "hversion.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
 
