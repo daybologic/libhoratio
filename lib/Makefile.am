@@ -58,4 +58,4 @@ clean-local:
 	rm -f hversion.h
 
 hversion.h: Makefile
-	../utils/mkverh.sh
+	$(SHELL) ../utils/mkverh.sh
