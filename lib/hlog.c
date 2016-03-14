@@ -96,10 +96,7 @@ void horatio_int_Log(
 	 */
 	char formatMsg[MAX_TRAP_STRING_LENGTH + 1024 + 512];
 	char number[64]; /* Paranoia length number to string conversion */
-
-#ifdef HORATIO_LOG
 	FILE* HLogFile; /* Handle for log file */
-#endif /*HORATIO_LOG*/
 
 	if (Message) {
 		if (Message[0]) {
@@ -153,16 +150,16 @@ void horatio_int_Log(
 			 * Determine what to do with the message
 			 * based on it's severity.
 			 */
-#ifdef HORATIO_LOG
-			/* Everything goes in the log... */
-			/* Append/overwrite text file */
-			HLogFile = fopen("HORATIO.LOG", "at");
-			if (HLogFile) { /* Log opened? */
-				/* Output log msg to log file */
-				fputs(formatMsg, HLogFile);
-				fclose(HLogFile); /* Close the log file */
+			if (_options.enableLog) {
+				/* Everything goes in the log... */
+				/* Append/overwrite text file */
+				HLogFile = fopen("HORATIO.LOG", "at");
+				if (HLogFile) { /* Log opened? */
+					/* Output log msg to log file */
+					fputs(formatMsg, HLogFile);
+					fclose(HLogFile); /* Close the log file */
+				}
 			}
-#endif /*HORATIO_LOG*/
 
 			if ( Severity > HORATIO_LOG_MESSAGE ) {
 				/* Anything more severe than a warning */

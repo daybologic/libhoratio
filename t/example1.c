@@ -71,6 +71,7 @@ int main() {
 	unsigned int i;
 	S_DPCRTLMM_STATS stats;
 	PS_DPCRTLMM_BLOCKDESCARRAY Parr;
+	S_HORATIO_OPTIONS options;
 	const char *title = "HORATIO TEST";
 	char *titleCopy;
 
@@ -81,7 +82,9 @@ int main() {
 	}
 #endif /*DPCRTLMM_THREADS_PTH*/
 
-	horatio_Startup();
+	horatio_options_init(&options);
+	options.enableLog = 1;
+	horatio_startupEx(&options);
 	InitArrays();
 	/* Wow, a hook for a change ;), I just wanted the stats on trap */
 	horatio_InstallTrapCallback(myTrapHandler, 1U);
