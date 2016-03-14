@@ -1,3 +1,15 @@
+libhoratio (2.0.2) stable; urgency=low
+
+  * 8d1d3fa884c7 (stable): Merged in f/201602-dynamic-version (pull request #9)
+  * 1eca97d7639d (stable): Fix build problem with mkverh.sh not being executable
+  * 9436c686d77f (stable): Missing inclusions of hversion.h
+  * c55d53ab5a30 (stable): Cherry pick and modify 33a46e4870ad from develop
+  * a927a697c9ae (stable): Merged default release (2.0.1) into stable
+  * 1c8a1c22d59c (stable): Start work on reducing number of deprecated calls warnings
+  * 86cc2e33e480 (stable): Make counters for all deprecated function calls
+
+ -- David Duncan Ross Palmer <palmer@overchat.org>  Mon, 14 Mar 2016 19:34:33 +0000
+
 libhoratio (2.0.1) stable; urgency=low
 
   * b49a666ee8b2 (default): Merge rel/2.0 (2.0.0 tag) into default release branch
