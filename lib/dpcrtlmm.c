@@ -97,9 +97,11 @@ static struct {
 };
 static unsigned long int incrementCallCounter(const char *const funcName) {
 	unsigned int i;
+
 	for (i = 0U; i < sizeof(callCounters)/sizeof(callCounters[0]); i++) {
-		if (0 != strcmp(funcName, callCounters[i].funcName))
+		if (0 != strcmp(funcName, callCounters[i].funcName)) {
 			continue;
+		}
 
 		return callCounters[i].count++;
 	}
@@ -114,8 +116,9 @@ static void deprecated(const char *const funcName) {
 	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 #endif /*HORATIO_DEBUGHOOKS*/
 
-	if (0 == incrementCallCounter(funcName))
+	if (0 == incrementCallCounter(funcName)) {
 		fprintf(stderr, "Deprecated function call: dpcrtlmm_%s\n", funcName);
+	}
 
 	/* Call the debug hook executive */
 #ifdef HORATIO_DEBUGHOOKS
@@ -140,9 +143,9 @@ unsigned int dpcrtlmm_InstallDebugHook(
 ) {
 	deprecated("InstallDebugHook");
 	return horatio_InstallDebugHook(
-		HookType,
-		NewHookProc
-	);
+		       HookType,
+		       NewHookProc
+	       );
 }
 
 unsigned int dpcrtlmm_GetDebugHookChainCount(
@@ -150,8 +153,8 @@ unsigned int dpcrtlmm_GetDebugHookChainCount(
 ) {
 	deprecated("GetDebugHookChainCount");
 	return horatio_GetDebugHookChainCount(
-		HookType
-	);
+		       HookType
+	       );
 }
 
 unsigned int dpcrtlmm_GetDebugHookMatrixCount() {
@@ -165,12 +168,12 @@ unsigned int dpcrtlmm_UninstallDebugHook(
 ) {
 	deprecated("UninstallDebugHook");
 	return horatio_UninstallDebugHook(
-		HookType,
-		HookProc2Remove
-	);
+		       HookType,
+		       HookProc2Remove
+	       );
 }
 
-void HORATIO_FARDATA* dpcrtlmm_AllocEx(
+void HORATIO_FARDATA *dpcrtlmm_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const size_t NewBlockSize,
 	const char *File,
@@ -178,11 +181,11 @@ void HORATIO_FARDATA* dpcrtlmm_AllocEx(
 ) {
 	deprecated("AllocEx");
 	return horatio_AllocEx(
-		PBlockArray,
-		NewBlockSize,
-		File,
-		Line
-	);
+		       PBlockArray,
+		       NewBlockSize,
+		       File,
+		       Line
+	       );
 }
 
 char HORATIO_FARDATA *dpcrtlmm_StrdupEx(
@@ -193,11 +196,11 @@ char HORATIO_FARDATA *dpcrtlmm_StrdupEx(
 ) {
 	deprecated("StrdupEx");
 	return horatio_StrdupEx(
-		PBlockArray,
-		SrcStr,
-		File,
-		Line
-	);
+		       PBlockArray,
+		       SrcStr,
+		       File,
+		       Line
+	       );
 }
 
 void dpcrtlmm_Free(
@@ -232,8 +235,8 @@ unsigned int dpcrtlmm_IsDefaultBlockArray(
 ) {
 	deprecated("IsDefaultBlockArray");
 	return horatio_IsDefaultBlockArray(
-		PBlockArray
-	);
+		       PBlockArray
+	       );
 }
 
 void dpcrtlmm_Startup() {
@@ -259,9 +262,9 @@ size_t dpcrtlmm_GetBlockSize(
 ) {
 	deprecated("GetBlockSize");
 	return horatio_GetBlockSize(
-		PBlockArray,
-		BlockPtr
-	);
+		       PBlockArray,
+		       BlockPtr
+	       );
 }
 
 unsigned int dpcrtlmm_IsBadBlockPtr(
@@ -270,9 +273,9 @@ unsigned int dpcrtlmm_IsBadBlockPtr(
 ) {
 	deprecated("IsBadBlockPtr");
 	return horatio_IsBadBlockPtr(
-		PBlockArray,
-		BlockPtr
-	);
+		       PBlockArray,
+		       BlockPtr
+	       );
 }
 
 unsigned int dpcrtlmm_IsBadArrayPtr(
@@ -280,8 +283,8 @@ unsigned int dpcrtlmm_IsBadArrayPtr(
 ) {
 	deprecated("IsBadBlockPtr");
 	return horatio_IsBadArrayPtr(
-		PBlockArray
-	);
+		       PBlockArray
+	       );
 }
 
 void HORATIO_FARDATA *dpcrtlmm_Realloc(
@@ -291,10 +294,10 @@ void HORATIO_FARDATA *dpcrtlmm_Realloc(
 ) {
 	deprecated("Realloc");
 	return horatio_Realloc(
-		PBlockArray,
-		OldBlockPtr,
-		NewSize
-	);
+		       PBlockArray,
+		       OldBlockPtr,
+		       NewSize
+	       );
 }
 
 void HORATIO_FARDATA *dpcrtlmm_CallocEx(
@@ -306,12 +309,12 @@ void HORATIO_FARDATA *dpcrtlmm_CallocEx(
 ) {
 	deprecated("CallocEx");
 	return horatio_CallocEx(
-		PBlockArray,
-		N,
-		NewBlockSize,
-		File,
-		Line
-	);
+		       PBlockArray,
+		       N,
+		       NewBlockSize,
+		       File,
+		       Line
+	       );
 }
 
 void dpcrtlmm_InstallTrapCallback(
@@ -354,15 +357,15 @@ unsigned char dpcrtlmm_ModifyDescriptorFlags(
 ) {
 	deprecated("ModifyDescriptorFlags");
 	return horatio_ModifyDescriptorFlags(
-		PBlockArray,
-		Ptr,
-		PNewFlags
-	);
+		       PBlockArray,
+		       Ptr,
+		       PNewFlags
+	       );
 }
 
 void dpcrtlmm_SetBlockLockingFlag(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA* Ptr,
+	const void HORATIO_FARDATA *Ptr,
 	const unsigned int NewStatus
 ) {
 	deprecated("SetBlockLockingFlag");
@@ -380,9 +383,9 @@ unsigned int dpcrtlmm_IsBlockLocked(
 ) {
 	deprecated("IsBlockLocked");
 	return horatio_IsBlockLocked(
-		PBlockArray,
-		Ptr
-	);
+		       PBlockArray,
+		       Ptr
+	       );
 }
 
 void dpcrtlmm_ToggleBlockLockingStatus(
@@ -438,6 +441,6 @@ PS_HORATIO_VERSION dpcrtlmm_Ver(
 ) {
 	deprecated("Ver");
 	return horatio_Ver(
-		PVerStruct
-	);
+		       PVerStruct
+	       );
 }

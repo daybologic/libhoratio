@@ -75,6 +75,7 @@ PS_HORATIO_OPTIONS horatio_options(
 		_options.enableLog = pOptions->enableLog;
 		_options.errorHandle = pOptions->errorHandle;
 	}
+
 	return &_options;
 }
 
@@ -92,7 +93,9 @@ PS_HORATIO_OPTIONS horatio_options(
  */
 PS_HORATIO_OPTIONS horatio_options_init(PS_HORATIO_OPTIONS pOptions) {
 
-	if (!pOptions) pOptions = &horatio_int__options;
+	if (!pOptions) {
+		pOptions = &horatio_int__options;
+	}
 
 	pOptions->len = sizeof(S_HORATIO_OPTIONS);
 	pOptions->enableLog = 0;

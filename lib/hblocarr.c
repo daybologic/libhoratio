@@ -132,9 +132,10 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 #endif /*HORATIO_DEBUGHOOKS*/
 
 	/* Alloc the array for the caller */
-	Parray = (S_HORATIO_BLOCKDESCARRAY*)malloc(
-		sizeof(S_HORATIO_BLOCKDESCARRAY)
-	);
+	Parray = (S_HORATIO_BLOCKDESCARRAY *)malloc(
+			 sizeof(S_HORATIO_BLOCKDESCARRAY)
+		 );
+
 	if (!Parray) { /* Failed to alloc */
 		/*
 		 * Memory outages while in memory manager mode
@@ -156,6 +157,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 #endif /*HORATIO_DEBUGHOOKS*/
 		return Parray; /* Give the NULL pointer back to the caller */
 	}
+
 	Parray->Count = 0U; /* No descriptors in list */
 	Parray->Descriptors = NULL; /* Nothing in block list */
 
@@ -163,7 +165,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 	 * The array base must be added to the list of acceptable arrays,
 	 * (the so called safety list)
 	 */
-	if ( !SafetyList_AddBase(Parray) ) { /* Add to safety list */
+	if (!SafetyList_AddBase(Parray)) {   /* Add to safety list */
 		/*
 		 * Failed to add to the list?!
 		 * Memory outages while in memory manager must be warned about
@@ -185,7 +187,7 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 			logMsgRemaining,
 #endif /*HAVE_SNPRINTF*/
 			"CreateBlockArray() returns base %s%p",
-			HORATIO_FMTPTRPFX, (void*)Parray
+			HORATIO_FMTPTRPFX, (void *)Parray
 		);
 		MESSAGE(HORATIO_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
 	}
@@ -233,7 +235,7 @@ void horatio_int_DestroyBlockArray(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 	/* For all the possible items in the safety list */
-	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
+	for (sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++) {
 		if (_safetyList[sli]) { /* Is this entry used? */
 			if (_safetyList[sli] == PBlockArray) {
 				/* Pointer match!  Any descriptors remaining? */
@@ -248,7 +250,7 @@ void horatio_int_DestroyBlockArray(
 					) { /* All blocks */
 						/* Add size of block to total */
 						totBytes += _safetyList[sli]->
-							Descriptors[li].Size;
+							    Descriptors[li].Size;
 					}
 
 					sprintf(
@@ -263,7 +265,7 @@ void horatio_int_DestroyBlockArray(
 						"array: %lu",
 						_safetyList[sli]->Count,
 						HORATIO_FMTPTRPFX,
-						(void*)_safetyList[sli],
+						(void *)_safetyList[sli],
 						totBytes
 					);
 					Trap(
@@ -277,19 +279,19 @@ void horatio_int_DestroyBlockArray(
 
 					sprintf(
 						trapStr,
-	#ifdef HAVE_SNPRINTF
+#ifdef HAVE_SNPRINTF
 						trapMsgRemaining,
-	#endif /*HAVE_SNPRINTF*/
+#endif /*HAVE_SNPRINTF*/
 						"DestroyBlockArray(): "
 						"Base of raw descriptor array"
 						" not freed!\n%s%p->%s%p "
 						"(PBlockArray->"
 						"Descriptors must be NULL)",
 						HORATIO_FMTPTRPFX,
-						(void*)_safetyList[sli],
+						(void *)_safetyList[sli],
 						HORATIO_FMTPTRPFX,
-						(void*)_safetyList[sli]->
-							Descriptors
+						(void *)_safetyList[sli]->
+						Descriptors
 					);
 					Trap(HORATIO_TRAP_BASENONZERO, trapStr);
 				}
@@ -301,6 +303,7 @@ void horatio_int_DestroyBlockArray(
 				HORATIO_FREE(_safetyList[sli]);
 				/* Remove this array from the safety list */
 				_safetyList[sli] = NULL;
+
 				if (_options.enableLog) {
 					sprintf(
 						trapStr,
@@ -310,7 +313,7 @@ void horatio_int_DestroyBlockArray(
 						"DestroyBlockArray(): The array at "
 						"base %s%p was destroyed",
 						HORATIO_FMTPTRPFX,
-						(void*)PBlockArray
+						(void *)PBlockArray
 					); /* Prepare log message */
 					MESSAGE(HORATIO_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
 				}
@@ -327,6 +330,7 @@ void horatio_int_DestroyBlockArray(
 			}
 		}
 	}
+
 	/* Entire list processed, array base specified not found */
 #ifdef HORATIO_DEBUGHOOKS
 	/* Call hooks */
@@ -338,12 +342,12 @@ void horatio_int_DestroyBlockArray(
 	/* Fire trap */
 	sprintf(
 		trapStr,
-		#ifdef HAVE_SNPRINTF
+#ifdef HAVE_SNPRINTF
 		trapMsgRemaining,
-		#endif /*HAVE_SNPRINTF*/
+#endif /*HAVE_SNPRINTF*/
 		"DestroyBlockArray(): "
 		"Attempt to destroy unknown array (%s%p)!\n",
-		HORATIO_FMTPTRPFX, (void*)PBlockArray
+		HORATIO_FMTPTRPFX, (void *)PBlockArray
 	);
 	Trap(HORATIO_TRAP_BAD_BLOCK_ARRAY, trapStr);
 	return;
@@ -355,8 +359,10 @@ static unsigned int horatio_int_IsDefaultBlockArray(
 #ifdef HORATIO_NONULL_BLOCKDESCARRAY
 	return 0; /* Default (NULL) array does not exist */
 #else
-	if (!PBlockArray || PBlockArray == &_defaultArray)
-		return 1U; /* TRUE */
+
+	if (!PBlockArray || PBlockArray == &_defaultArray) {
+		return 1U;        /* TRUE */
+	}
 
 	return 0U; /* FALSE */
 #endif

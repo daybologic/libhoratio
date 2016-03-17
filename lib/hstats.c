@@ -80,6 +80,7 @@ void horatio_GetStats(
 	PS_HORATIO_STATS PReadStats
 ) {
 	LOCK
+
 	if (PReadStats) {
 		PReadStats->Blocks.Allocated = _blockCount;
 		/* Loop through the entire load counting us flags */
@@ -88,13 +89,17 @@ void horatio_GetStats(
 		PReadStats->Charge.Allocated = _allocCharge;
 		PReadStats->Charge.Peak = _allocPeak;
 	}
+
 	UNLOCK
 }
 
 static void CountFlagsInUse(
 	PS_HORATIO_STATS PFlagsStats
 ) {
-	if (!PFlagsStats) return;
+	if (!PFlagsStats) {
+		return;
+	}
+
 	unsigned int i;
 
 	/* First reset the counts in the stats struct */
@@ -102,31 +107,41 @@ static void CountFlagsInUse(
 	PFlagsStats->Blocks.Unswappable = 0UL;
 
 	/* Go through normal arrays */
-	for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ ) {
+	for (i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++) {
 		if (_safetyList[i]) { /* Used entry? */
 			unsigned int j;
-			for ( j = 0U; j < _safetyList[i]->Count; j++ ) {
-			unsigned char flags = _safetyList[i]
-				->Descriptors[j].Flags;
 
-			if ( (flags & 1) == 1) /* Lock bit set */
-				PFlagsStats->Blocks.Locked++;
-			if ( (flags & 2) == 2) /* NoSwap bit set */
-				PFlagsStats->Blocks.Unswappable++;
+			for (j = 0U; j < _safetyList[i]->Count; j++) {
+				unsigned char flags = _safetyList[i]
+						      ->Descriptors[j].Flags;
+
+				if ((flags & 1) == 1) { /* Lock bit set */
+					PFlagsStats->Blocks.Locked++;
+				}
+
+				if ((flags & 2) == 2) { /* NoSwap bit set */
+					PFlagsStats->Blocks.Unswappable++;
+				}
 			}
 		}
 	}
+
 	/* Extra support for the "NULL array" */
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY
-	for ( i = 0U; i < _defaultArray.Count; i++ ) {
+
+	for (i = 0U; i < _defaultArray.Count; i++) {
 		unsigned char flags
 			= _defaultArray.Descriptors[i].Flags;
 
-		if ( (flags & 1) == 1) /* Lock bit set */
+		if ((flags & 1) == 1) { /* Lock bit set */
 			PFlagsStats->Blocks.Locked++;
-		if ( (flags & 2) == 2) /* NoSwap bit set */
+		}
+
+		if ((flags & 2) == 2) { /* NoSwap bit set */
 			PFlagsStats->Blocks.Unswappable++;
+		}
 	}
+
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 }
 
@@ -134,17 +149,21 @@ void horatio_Dump(
 	FILE *Target
 ) {
 	LOCK
-	if ( Target ) {
+
+	if (Target) {
 		unsigned int i;
 
-		for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ ) {
-			if ( _safetyList[i] ) /* Used entry? */
+		for (i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++) {
+			if (_safetyList[i]) { /* Used entry? */
 				DumpOnArray(Target, _safetyList[i]);
+			}
 		}
+
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY
 		DumpOnArray(Target, &_defaultArray);
 #endif
 	}
+
 	UNLOCK
 	return;
 }
@@ -156,28 +175,31 @@ static void DumpOnArray(
 	/* Just so I don't get confused with the other function */
 	unsigned int j;
 
-	for ( j = 0U; j < CurrentArray->Count; j++ ) {
+	for (j = 0U; j < CurrentArray->Count; j++) {
 		char defaultFilename[] = "(unknown)";
 		char *filename;
 		unsigned char flags = CurrentArray->Descriptors[j].Flags;
 
-		if ( CurrentArray->Descriptors[j].SourceFile )
+		if (CurrentArray->Descriptors[j].SourceFile) {
 			filename = CurrentArray->Descriptors[j].SourceFile;
-		else
+
+		} else {
 			filename = defaultFilename;
+		}
 
 		fprintf(
 			Target,
 			"Address: %s%p, (Array: %s%p), owner: %s, "
 			"line %u is %u bytes. ",
 			HORATIO_FMTPTRPFX, CurrentArray->Descriptors[j].PBase,
-			HORATIO_FMTPTRPFX, (void*)CurrentArray,
+			HORATIO_FMTPTRPFX, (void *)CurrentArray,
 			filename,
 			CurrentArray->Descriptors[j].SourceLine,
 			(unsigned int)CurrentArray->Descriptors[j].Size
 		);
 		CrackAndPrintFlags(Target, flags);
 	}
+
 	return;
 }
 
@@ -185,21 +207,28 @@ static void CrackAndPrintFlags(
 	FILE *Target,
 	unsigned char Flags
 ) {
-	if ( !Target ) return;
+	if (!Target) {
+		return;
+	}
+
 	int comma = 0;
 	fprintf(Target, "Flags=");
-	if ( (Flags & 1) == 1 ) {
+
+	if ((Flags & 1) == 1) {
 		fprintf(Target, "LOCKED");
 		comma = 1;
 	}
-	if ( (Flags & 2) == 2 ) {
-		if ( comma ) {
+
+	if ((Flags & 2) == 2) {
+		if (comma) {
 			/*comma = 0;*/
 			fprintf(Target, ", ");
 		}
+
 		fprintf(Target, "NOSWAP");
 		/*comma = 1;*/
 	}
+
 	fprintf(Target, "\n");
 	return;
 }

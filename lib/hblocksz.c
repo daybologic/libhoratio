@@ -91,13 +91,13 @@ static size_t horatio_int_GetBlockSize(
 			"Attempt to GetBlockSize() "
 			"unknown block at base %s%p, in array base: %s%p",
 			HORATIO_FMTPTRPFX, BlockPtr,
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 		Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg);
 	}
 
 	return _ResolveArrayPtr(
-		PBlockArray)->Descriptors[
-			_IndexFromBlockPtr(PBlockArray, BlockPtr)
-		].Size;
+		       PBlockArray)->Descriptors[
+		       _IndexFromBlockPtr(PBlockArray, BlockPtr)
+	       ].Size;
 }

@@ -74,13 +74,13 @@ unsigned int horatio_int_LockTrap(
 
 		sprintf(
 			trapMsg,
-	#ifdef HAVE_SNPRINTF
+#ifdef HAVE_SNPRINTF
 			MAX_TRAP_STRING_LENGTH,
-	#endif /*HAVE_SNPRINTF*/
+#endif /*HAVE_SNPRINTF*/
 			"%s: (locking violation) Block %s%p in "
 			"array %s%p, flag dump: %X",
 			FuncName,
-			HORATIO_FMTPTRPFX, (void*)PBlockArray,
+			HORATIO_FMTPTRPFX, (void *)PBlockArray,
 			HORATIO_FMTPTRPFX, BlockPtr,
 			(unsigned short)horatio_int_ModifyDescriptorFlags(
 				PBlockArray,
@@ -96,5 +96,6 @@ unsigned int horatio_int_LockTrap(
 		 */
 		return 1U;
 	}
+
 	return 0U; /* Block not locked */
 }

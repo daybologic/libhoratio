@@ -62,9 +62,13 @@ unsigned int horatio_SafetyList_IsArrayPtrPresent(
 ) {
 	if (ArrayBase) {
 		unsigned int sli; /* Used for processing of the list */
-		for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ )
-			if (_safetyList[sli] == ArrayBase) return 1U;
+
+		for (sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++)
+			if (_safetyList[sli] == ArrayBase) {
+				return 1U;
+			}
 	}
+
 	return 0U; /* Not present or bad params */
 }
 
@@ -72,8 +76,9 @@ void horatio_SafetyList_Init() {
 	unsigned int i;
 
 	/* All possible entries in list */
-	for ( i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++ )
-		_safetyList[i] = NULL; /* Zero pointer */
+	for (i = 0U; i < HORATIO_SAFETYLIST_MAXSIZE; i++) {
+		_safetyList[i] = NULL;        /* Zero pointer */
+	}
 
 	return;
 }
@@ -81,9 +86,10 @@ void horatio_SafetyList_Init() {
 unsigned int horatio_SafetyList_CountUsed() {
 	unsigned int sli, slc = 0U;
 
-	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
-		if (_safetyList[sli]) /* Valid pointer in list? */
-			slc++; /* Increment count */
+	for (sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++) {
+		if (_safetyList[sli]) { /* Valid pointer in list? */
+			slc++;        /* Increment count */
+		}
 	}
 
 	return slc; /* Give count to caller */
@@ -98,9 +104,11 @@ unsigned int horatio_SafetyList_AddBase(
 	 * Sorry, this slows things down, must check to see if already here
 	 * otherwise it would cause false leaks later.
 	 */
-	if (SafetyList_IsArrayPtrPresent(PArrayBase)) return 0U;
+	if (SafetyList_IsArrayPtrPresent(PArrayBase)) {
+		return 0U;
+	}
 
-	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
+	for (sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++) {
 		if (!_safetyList[sli]) { /* First free entry? */
 			/* Store base in safety list */
 			_safetyList[sli] = PArrayBase;
@@ -131,7 +139,7 @@ unsigned int horatio_SafetyList_RemoveBase(
 	 * is set to NULL, which is an effective removal.
 	 */
 
-	for ( sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++ ) {
+	for (sli = 0U; sli < HORATIO_SAFETYLIST_MAXSIZE; sli++) {
 		if (_safetyList[sli] == PArrayBase) {
 			/*
 			 * Found the base in question.  Mark entry in the list
@@ -141,5 +149,6 @@ unsigned int horatio_SafetyList_RemoveBase(
 			return 1U; /* Successfully removed */
 		}
 	}
+
 	return 0U; /* Looks like the item was not present */
 }

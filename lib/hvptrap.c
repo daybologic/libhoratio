@@ -90,6 +90,7 @@ void horatio_int_VerifyPtrs(
 	 * First trap invalid array pointers
 	 */
 	TrapOnBadBlockArray(FuncName, PBlockArray);
+
 	if (BlockPtr) {
 		/*
 		 * Then trap invalid block pointers within the array
@@ -110,13 +111,15 @@ static void TrapOnBadBlockArray(
 	char *dynMsg; /* Dynamically allocated message string */
 	/* Calculate enough space for address and NULL (and more) */
 	size_t dynMsgSize = ((FuncName) ? (strlen(FuncName)) : (0))
-	    + strlen(cTrapMsg0) + 32;
+			    + strlen(cTrapMsg0) + 32;
 
-	if ( !horatio_int_IsBadArrayPtr(PBlockArray) )
+	if (!horatio_int_IsBadArrayPtr(PBlockArray)) {
 		return;
+	}
 
 	/* The array base is bad */
-	dynMsg = (char*)malloc(dynMsgSize);
+	dynMsg = (char *)malloc(dynMsgSize);
+
 	if (dynMsg) {
 		sprintf(
 			dynMsg,
@@ -137,8 +140,11 @@ static void TrapOnBadBlockArray(
 		);
 
 		Trap(HORATIO_TRAP_BAD_BLOCK_ARRAY, dynMsg);
+
 	} else { /* malloc() failed */
-		if ( horatio__EnableTraps ) abort();
+		if (horatio__EnableTraps) {
+			abort();
+		}
 	}
 }
 
@@ -152,28 +158,30 @@ static void TrapOnBadBlockPtr(
 	size_t trapMsgRemaining = MAX_TRAP_STRING_LENGTH;
 #endif /*HAVE_SNPRINTF*/
 
-	if ( horatio_int_IsBadArrayPtr(PBlockArray) ) {
+	if (horatio_int_IsBadArrayPtr(PBlockArray)) {
 		/* The pointer to the array is invalid */
 		char blankStr[] = "";
 		/* PusedFuncName points to function name to use (not dynamic) */
 		const char *PusedFuncName;
 
-		if (FuncName) /* Function name sent? */
-			PusedFuncName = FuncName; /* Use sent funtion name */
-		else /* Funtion name not sent? */
-			PusedFuncName = blankStr; /* Point to blank string */
+		if (FuncName) { /* Function name sent? */
+			PusedFuncName = FuncName;        /* Use sent funtion name */
+
+		} else { /* Funtion name not sent? */
+			PusedFuncName = blankStr;        /* Point to blank string */
+		}
 
 		sprintf(
 			trapMsg,
-	#ifdef HAVE_SNPRINTF
+#ifdef HAVE_SNPRINTF
 			trapMsgRemaining,
-	#endif /*HAVE_SNPRINTF*/
+#endif /*HAVE_SNPRINTF*/
 			"%s: The block pointer %s%p "
 			"is not valid for array %s%p, "
 			"cannot test block pointer validity.",
 			PusedFuncName,
 			HORATIO_FMTPTRPFX, BlockPtr,
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 
 		Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg);
@@ -183,15 +191,16 @@ static void TrapOnBadBlockPtr(
 	 * The array is a valid and acceptable pointer,
 	 * pass on to IsBadBlockPtr() and if it's bad fire a trap.
 	 */
-	if ( horatio_int_IsBadBlockPtr( PBlockArray, BlockPtr ) ) {
+	if (horatio_int_IsBadBlockPtr(PBlockArray, BlockPtr)) {
 		char *PusedFuncName;
 		int pusedDynamic= 0;
 		char blankStr[] = "";
 
 		if (FuncName) {
 			unsigned int lenUsedFuncName = strlen(FuncName);
-			PusedFuncName = malloc( lenUsedFuncName +1 );
-			if ( PusedFuncName ) {
+			PusedFuncName = malloc(lenUsedFuncName +1);
+
+			if (PusedFuncName) {
 				pusedDynamic = 1;
 				PusedFuncName[0] = '\0';
 				strncat(
@@ -200,15 +209,16 @@ static void TrapOnBadBlockPtr(
 					lenUsedFuncName
 				);
 			}
+
 		} else {
 			PusedFuncName = blankStr;
 		}
 
 		sprintf(
 			trapMsg,
-			#ifdef HAVE_SNPRINTF
+#ifdef HAVE_SNPRINTF
 			trapMsgRemaining,
-			#endif /*HAVE_SNPRINTF*/
+#endif /*HAVE_SNPRINTF*/
 			"%s: Bad block pointer: %s%p for array %s%p",
 			PusedFuncName,
 			HORATIO_FMTPTRPFX, BlockPtr,
@@ -216,8 +226,11 @@ static void TrapOnBadBlockPtr(
 		);
 
 		Trap(HORATIO_TRAP_BAD_BLOCK, trapMsg); /* Fire trap */
-		if ( pusedDynamic )
+
+		if (pusedDynamic) {
 			free(PusedFuncName);
+		}
 	}
+
 	return;
 }

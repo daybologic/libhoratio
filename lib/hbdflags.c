@@ -73,10 +73,10 @@ unsigned char horatio_ModifyDescriptorFlags(
 
 	LOCK
 	ret = horatio_int_ModifyDescriptorFlags(
-		PBlockArray,
-		Ptr,
-		PNewFlags
-	);
+		      PBlockArray,
+		      Ptr,
+		      PNewFlags
+	      );
 	UNLOCK
 
 	return ret;
@@ -119,14 +119,16 @@ unsigned char horatio_int_ModifyDescriptorFlags(
 	PRArr = _ResolveArrayPtr(PBlockArray);
 	blockIndex = _IndexFromBlockPtr(PRArr, Ptr); /* Get the index */
 	oldFlags = PRArr->Descriptors[blockIndex].Flags; /* Save flags */
-	if (PNewFlags) /* Caller passed new flags - modify the flags */
+
+	if (PNewFlags) { /* Caller passed new flags - modify the flags */
 		PRArr->Descriptors[blockIndex].Flags = *PNewFlags;
+	}
 
 #ifdef HORATIO_DEBUGHOOKS
 	debugHookInfo.Success = 1U;
 	debugHookInfo.Misc0 = (unsigned long)oldFlags;
 	debugHookInfo.Misc1
-		= (unsigned long)( (PNewFlags) ? (*PNewFlags) : (oldFlags) );
+		= (unsigned long)((PNewFlags) ? (*PNewFlags) : (oldFlags));
 
 	horatio_int_CallDebugHook(HORATIO_HOOK_MODIFYDESCFLAGS, &debugHookInfo);
 #endif /*HORATIO_DEBUGHOOKS*/

@@ -59,11 +59,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbiglock.h" /* Mutual exclusion */
 
 static void horatio_int_InstallTrapCallback(
-	void(*NewTrapCallback)(const unsigned int, const char*),
+	void(*NewTrapCallback)(const unsigned int, const char *),
 	const unsigned int AsHook
 );
 static void horatio_int_RemoveTrapCallback(
-	void(*CurrentCallback)(const unsigned int, const char*)
+	void(*CurrentCallback)(const unsigned int, const char *)
 );
 static signed char horatio_int_GetTrapCallbackInfo(void);
 static void defHandler(
@@ -72,7 +72,7 @@ static void defHandler(
 );
 
 void horatio_InstallTrapCallback(
-	void(*NewTrapCallback)(const unsigned int, const char*),
+	void(*NewTrapCallback)(const unsigned int, const char *),
 	const unsigned int AsHook
 ) {
 	LOCK
@@ -81,7 +81,7 @@ void horatio_InstallTrapCallback(
 }
 
 void horatio_RemoveTrapCallback(
-	void(*CurrentCallback)(const unsigned int, const char*)
+	void(*CurrentCallback)(const unsigned int, const char *)
 ) {
 	LOCK
 	horatio_int_RemoveTrapCallback(CurrentCallback);
@@ -125,14 +125,18 @@ void horatio_int_Trap(
 	const char preFix[] = "HORATIO_UNHANDLED_TRAP: ";
 
 	ERROR(Id, Message); /* Pass on to the logger automatically */
+
 	/* Don't execute traps if traps have been switched off */
-	if ( !horatio__EnableTraps ) return;
+	if (!horatio__EnableTraps) {
+		return;
+	}
 
 	/*
 	 * The message is prefixed with "HORATIO (Trap): " by copying it
 	 * No NULL terminator because sizeof() includes this
 	 */
-	trapsCopy = (char*)malloc( sizeof(preFix) + strlen(Message) );
+	trapsCopy = (char *)malloc(sizeof(preFix) + strlen(Message));
+
 	if (trapsCopy) {
 		strcpy(trapsCopy, preFix);
 		strcat(trapsCopy, Message);
@@ -141,10 +145,13 @@ void horatio_int_Trap(
 		if (_UserTrapCallback) { /* Is user callback installed? */
 			/* Call user's callback */
 			_UserTrapCallback(Id, Message);
+
 			/* Is handler, not hook? */
-			if (!_userTrapCallbackIsHook)
-				goto trapRecover; /* Recover from trap */
+			if (!_userTrapCallbackIsHook) {
+				goto trapRecover;        /* Recover from trap */
+			}
 		}
+
 		/* No user proc installed or user hook called */
 		defHandler(Id, Message);
 
@@ -155,11 +162,12 @@ trapRecover:
 		 */
 		free(trapsCopy);
 	}
+
 	return;
 }
 
 static void horatio_int_InstallTrapCallback(
-	void(*NewTrapCallback)(const unsigned int, const char*),
+	void(*NewTrapCallback)(const unsigned int, const char *),
 	const unsigned int AsHook
 ) {
 #ifdef HORATIO_DEBUGHOOKS
@@ -185,8 +193,12 @@ static void horatio_int_InstallTrapCallback(
 		/* Update debug hook info */
 		debugHookInfo.Success = 1U;
 		debugHookInfo.Misc0 = (unsigned long)NewTrapCallback;
+
 		/* Set bit 0 in accordance with the documentation */
-		if (AsHook) debugHookInfo.Misc1 |= 1;
+		if (AsHook) {
+			debugHookInfo.Misc1 |= 1;
+		}
+
 #endif /*HORATIO_DEBUGHOOKS*/
 
 		if (_options.enableLog) {
@@ -212,6 +224,7 @@ static void horatio_int_InstallTrapCallback(
 			HORATIO_HOOK_INSTTRAPCALLBACK, &debugHookInfo
 		);
 #endif /*HORATIO_DEBUGHOOKS*/
+
 	} else { /* Pointer to trap handler not passed */
 #ifdef HORATIO_DEBUGHOOKS
 		horatio_int_CallDebugHook(
@@ -229,6 +242,7 @@ static void horatio_int_InstallTrapCallback(
 				"InstallTrapCallback(): Can\'t remove handler "
 				"or hook in this way"
 			);
+
 		} else {
 			/*
 			 * Trying to set handler when no current handler
@@ -241,11 +255,12 @@ static void horatio_int_InstallTrapCallback(
 			);
 		}
 	}
+
 	return;
 }
 
 static void horatio_int_RemoveTrapCallback(
-	void(*CurrentCallback)(const unsigned int, const char*)
+	void(*CurrentCallback)(const unsigned int, const char *)
 ) {
 	char logStr[MAX_TRAP_STRING_LENGTH+1];
 #ifdef HORATIO_DEBUGHOOKS
@@ -276,6 +291,7 @@ static void horatio_int_RemoveTrapCallback(
 			HORATIO_HOOK_REMTRAPCALLBACK, &debugHookInfo
 		);
 #endif /*HORATIO_DEBUGHOOKS*/
+
 	} else { /* The user does not know the address! */
 #ifdef HORATIO_DEBUGHOOKS
 		horatio_int_CallDebugHook(
@@ -285,23 +301,27 @@ static void horatio_int_RemoveTrapCallback(
 
 		sprintf(
 			logStr,
-	#ifdef HAVE_SNPRINTF
+#ifdef HAVE_SNPRINTF
 			MAX_TRAP_STRING_LENGTH,
-	#endif /*HAVE_SNPRINTF*/
+#endif /*HAVE_SNPRINTF*/
 			"RemoveTrapCallback(): The handler is NOT %s%lX !!!",
 			HORATIO_FMTPTRPFX, (unsigned long int)CurrentCallback
 		);
 
 		Trap(HORATIO_TRAP_UNAUTH_REMOVE, logStr);
 	}
+
 	return;
 }
 
 static signed char horatio_int_GetTrapCallbackInfo() {
-	if (!_UserTrapCallback) /* No user handler installed */
+	if (!_UserTrapCallback) { /* No user handler installed */
 		return (signed char)-1;
-	if (!_userTrapCallbackIsHook) /* Installed but not hook */
+	}
+
+	if (!_userTrapCallbackIsHook) { /* Installed but not hook */
 		return (signed char)0;
+	}
 
 	return (signed char)1; /* Hook installed */
 }
@@ -352,8 +372,10 @@ static void defHandler(
 	fprintf(_options.errorHandle, "%s", trapMsg);
 	_defHandlerCode = Id;
 
-	if (_unitTest)
+	if (_unitTest) {
 		_aborts++;
-	else
+
+	} else {
 		abort();
+	}
 }

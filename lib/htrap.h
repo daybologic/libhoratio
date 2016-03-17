@@ -54,12 +54,12 @@ void horatio_int_Trap(
 #endif /*__cplusplus*/
 
 #ifdef INC_HORATIO_INTDATA_H
-  /*! \def Trap
-   * \brief Shortcut Trap is a wapper around InstallTrapHandler
-   *
-   * This macro is only available when INC_HORATIO_INTDATA_H is defined
-   * nb. Prototype for InstallTrapHandler() is in horatio.h
-   */
+/*! \def Trap
+ * \brief Shortcut Trap is a wapper around InstallTrapHandler
+ *
+ * This macro is only available when INC_HORATIO_INTDATA_H is defined
+ * nb. Prototype for InstallTrapHandler() is in horatio.h
+ */
 # define Trap horatio_int_Trap
 #endif /*INC_HORATIO_INTDATA_H*/
 

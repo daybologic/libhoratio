@@ -93,7 +93,7 @@ unsigned int horatio_int_IsBadBlockPtr(
 	PS_HORATIO_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
 	/* Test for bad block array */
-	if ( horatio_int_IsBadArrayPtr(PBlockArray) ) { /* Block array bad? */
+	if (horatio_int_IsBadArrayPtr(PBlockArray)) {   /* Block array bad? */
 		/* Fire a trap */
 		char trapmsg[MAX_TRAP_STRING_LENGTH + sizeof(char)];
 
@@ -104,19 +104,20 @@ unsigned int horatio_int_IsBadBlockPtr(
 #endif /*HAVE_SNPRINTF*/
 			"The block array address %s%p is unknown, "
 			"unable to search for blocks.",
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 
 		Trap(HORATIO_TRAP_BAD_BLOCK_ARRAY, trapmsg);
 	}
 
 	/* For all the block descriptors in the list */
-	for ( i = 0U; i < PRArr->Count; i++ ) {
+	for (i = 0U; i < PRArr->Count; i++) {
 		if (BlockPtr == PRArr->Descriptors[i].PBase) {
 			/* Block base match */
 			return 0U; /* Block is not bad */
 		}
 	}
+
 	/*
 	 * The block was not matched in the loop above,
 	 * therefore the block is bad or not in the specified array.
@@ -134,8 +135,10 @@ unsigned int horatio_int_IsBadArrayPtr(
 
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY /* Build supports NULL arrays? */
 	/* NULL array (or resolved version) */
-	if ( !PBlockArray || PBlockArray == &_defaultArray )
-		return 0U; /* Not a bad array */
+	if (!PBlockArray || PBlockArray == &_defaultArray) {
+		return 0U;        /* Not a bad array */
+	}
+
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 
 	/* Check the normal safety list */

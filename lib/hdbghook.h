@@ -59,8 +59,8 @@ void horatio_int_InitDebugHookMatrix(void);
  * TODO: Duplicate description?  Check hdbghook.c  Should move to Doxygen
  */
 void horatio_int_CallDebugHook(
-  const unsigned short HookType,
-  const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
+	const unsigned short HookType,
+	const PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo
 );
 
 /*

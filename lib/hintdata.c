@@ -84,7 +84,9 @@ void (*horatio_int__UserTrapCallback)(
 unsigned int horatio_int__userTrapCallbackIsHook = 0U;
 
 #ifdef HORATIO_DEBUGHOOKS
-unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix */
+unsigned int (
+	*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK
+			+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo); /* Debug hook matrix */
 #endif /*HORATIO_DEBUGHOOKS*/
 
 /*!

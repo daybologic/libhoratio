@@ -128,7 +128,7 @@ static Mutant bigLock;
 
 #ifdef HORATIO_THREADS_PTHREAD
 # ifdef HORATIO_THREADS_PTHREAD_NP
-void InitNPMutant(pthread_mutex_t* PMutant);
+void InitNPMutant(pthread_mutex_t *PMutant);
 # endif /*HORATIO_THREADS_PTHREAD_NP*/
 #endif /*HORATIO_THREADS_PTHREAD*/
 
@@ -141,15 +141,17 @@ void horatio_int_BigLockUninit() {
 }
 
 void horatio_int_BigLock(int LockState) {
-	if ( LockState )
+	if (LockState) {
 		LockMutant(&bigLock);
-	else
+
+	} else {
 		UnlockMutant(&bigLock);
+	}
 }
 
 #ifdef HORATIO_THREADS_PTHREAD
 #ifdef HORATIO_THREADS_PTHREAD_NP
-void InitNPMutant(pthread_mutex_t* PMutant) {
+void InitNPMutant(pthread_mutex_t *PMutant) {
 	pthread_mutexattr_t attributes;
 
 	pthread_mutexattr_init(&attributes);

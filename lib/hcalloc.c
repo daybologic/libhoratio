@@ -56,7 +56,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "halloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 
 static void OurLog(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -70,7 +70,7 @@ static void OurLog(
 #define OURLOG(lcode, f, l, sev, msg)                                              \
     OurLog((lcode), (f), (l), ((const unsigned short)(sev)), (msg))
 
-static void HORATIO_FARDATA* horatio_int_CallocEx(
+static void HORATIO_FARDATA *horatio_int_CallocEx(
 	PS_HORATIO_BLOCKDESCARRAY PBlockArray,
 	const unsigned int N,
 	const size_t NewBlockSize,
@@ -135,16 +135,17 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 	resultantPtr = horatio_int_AllocEx(
-		PBlockArray, (N*NewBlockSize), File, Line /* Call Alloc() */
-	);
+			       PBlockArray, (N*NewBlockSize), File, Line /* Call Alloc() */
+		       );
+
 	if (resultantPtr) {
 #ifdef HORATIO_DEBUGHOOKS
 		/* I'll have to look up the descriptor for this block */
 		unsigned int blkIndex = horatio_int_IndexFromBlockPtr(
-			PBlockArray, resultantPtr
-		);
+						PBlockArray, resultantPtr
+					);
 		debugHookInfo.PRelDesc = &_ResolveArrayPtr(PBlockArray)
-			->Descriptors[blkIndex];
+					 ->Descriptors[blkIndex];
 		debugHookInfo.Success = 1U;
 #endif /*HORATIO_DEBUGHOOKS*/
 
@@ -156,18 +157,22 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 			);
 		}
 
-	/*
-	 * Bug fix: I didn't realize this but the specification for for calloc()
-	 * requires that the new memory is zeroed.
-	 * Fix HORATIO Version 1.1.2 or 1.1.3
-	 */
-	memset(resultantPtr, 0, N*NewBlockSize);
+		/*
+		 * Bug fix: I didn't realize this but the specification for for calloc()
+		 * requires that the new memory is zeroed.
+		 * Fix HORATIO Version 1.1.2 or 1.1.3
+		 */
+		memset(resultantPtr, 0, N*NewBlockSize);
+
 	} else {
 #ifdef HORATIO_DEBUGHOOKS
 		/*blockDescArray.Success = 0U;   - optimized away */
 #endif /*HORATIO_DEBUGHOOKS*/
-		if (_options.enableLog)
-			OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
+
+		if (_options.enableLog) {
+			OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, File, Line, HORATIO_LOG_MESSAGE,
+			       "Allocation failed");
+		}
 	}
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -201,7 +206,8 @@ static void OurLog(
 		 * Note that NULL termination is automatic because of
 		 * using sizeof()
 		 */
-		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) );
+		PcopyStr = (char *)malloc(sizeof(FuncName) + strlen(Str));
+
 		if (PcopyStr) {
 			strcpy(PcopyStr, FuncName); /* Prepend prefix */
 			strcat(PcopyStr, Str); /* Add log string after prefix */
@@ -212,5 +218,6 @@ static void OurLog(
 			free(PcopyStr); /* Copy can now be released */
 		}
 	}
+
 	return;
 }

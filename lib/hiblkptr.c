@@ -65,9 +65,11 @@ unsigned int horatio_int_IndexFromBlockPtr(
 	_VerifyPtrs("IndexFromBlockPtr()", PBlockArray, NULL);
 
 	PRArr = _ResolveArrayPtr(PBlockArray);
-	for ( i = 0U; i < PRArr->Count; i++ ) {
-		if ( PRArr->Descriptors[i].PBase == BlockPtr ) /* Found it */
-		return i; /* Give index to caller */
+
+	for (i = 0U; i < PRArr->Count; i++) {
+		if (PRArr->Descriptors[i].PBase == BlockPtr) { /* Found it */
+			return i;        /* Give index to caller */
+		}
 	}
 
 	Trap(

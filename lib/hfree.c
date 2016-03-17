@@ -88,7 +88,7 @@ static void ShrinkBlockArray(
 );
 
 static void OurLog(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -147,7 +147,7 @@ static void horatio_int_Free(
 	/* Don't check if bad block in this trap, use own trap... */
 	_VerifyPtrs(funcName, PBlockArray, NULL);
 
-	if ( horatio_int_IsBadBlockPtr(PBlockArray, Ptr) ) {
+	if (horatio_int_IsBadBlockPtr(PBlockArray, Ptr)) {
 		/* Block pointer not valid */
 		sprintf(
 			trapMsg,
@@ -157,7 +157,7 @@ static void horatio_int_Free(
 			"Free(): Attempt to release memory we don\'t own or "
 			"memory which has already been released, "
 			"array: %s%p, block %s%p",
-			HORATIO_FMTPTRPFX, (void*)PBlockArray,
+			HORATIO_FMTPTRPFX, (void *)PBlockArray,
 			HORATIO_FMTPTRPFX, Ptr
 		);
 #ifdef HAVE_SNPRINTF
@@ -167,15 +167,16 @@ static void horatio_int_Free(
 	}
 
 	/* Do trap if block is locked */
-	if (_LockTrap(funcName, PBlockArray, Ptr))
+	if (_LockTrap(funcName, PBlockArray, Ptr)) {
 		return;
+	}
 
 	/*
 	 * Find the block's descriptor using the block base address,
 	 * have a caution to use the resolved array pointer
 	 */
-	for ( i = 0U; i < PRArr->Count; i++ ) {
-		if ( PRArr->Descriptors[i].PBase == Ptr ) {
+	for (i = 0U; i < PRArr->Count; i++) {
+		if (PRArr->Descriptors[i].PBase == Ptr) {
 			/* This is the one */
 			if (_options.enableLog) {
 				sprintf(
@@ -187,9 +188,10 @@ static void horatio_int_Free(
 					HORATIO_FMTPTRPFX,
 					PRArr->Descriptors[i].PBase,
 					HORATIO_FMTPTRPFX,
-					(void*)PRArr
+					(void *)PRArr
 				);
-				OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, HORATIO_LOG_MESSAGE, trapMsg);
+				OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile,
+				       PRArr->Descriptors[i].SourceLine, HORATIO_LOG_MESSAGE, trapMsg);
 #ifdef HAVE_SNPRINTF
 				trapMsgRemaining -= strlen(trapMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -203,8 +205,9 @@ static void horatio_int_Free(
 			}
 
 			/* Free the block */
-			HORATIO_FREE( PRArr->Descriptors[i].PBase );
-			if ( PRArr->Descriptors[i].SourceFile ) {
+			HORATIO_FREE(PRArr->Descriptors[i].PBase);
+
+			if (PRArr->Descriptors[i].SourceFile) {
 				/* We know the file which allocated this */
 				free(PRArr->Descriptors[i].SourceFile);
 				/* Now we don't! */
@@ -222,6 +225,7 @@ static void horatio_int_Free(
 				 */
 				Moveup(PRArr, i);
 			}
+
 			/*
 			 * Shrink size of array of descriptors
 			 * (deleting redundant end item
@@ -249,6 +253,7 @@ static void horatio_int_Free(
 			break; /* Don't look at anymore blocks */
 		}
 	}
+
 	return;
 }
 
@@ -274,7 +279,7 @@ static void Moveup(
 	/* locals */
 	unsigned int i; /* Loop control */
 
-	if ( PBlockArray->Count < 2) {
+	if (PBlockArray->Count < 2) {
 		/* Only one or no items, can't do a moveup - Do trap*/
 		Trap(
 			HORATIO_TRAP_BAD_RANGE_MOVEUP,
@@ -282,7 +287,8 @@ static void Moveup(
 		);
 		return;
 	}
-	if ( StartPos >= PBlockArray->Count ) { /* StartPos out of range? */
+
+	if (StartPos >= PBlockArray->Count) {   /* StartPos out of range? */
 		/* Do trap */
 		char trapMsg[MAX_TRAP_STRING_LENGTH+1]; /* Space for message */
 #ifdef HAVE_SNPRINTF
@@ -297,7 +303,7 @@ static void Moveup(
 			"Free()/Moveup: StartPos is not valid. "
 			"StartPos=%u, %s%p->Count=%u",
 			StartPos,
-			HORATIO_FMTPTRPFX, (void*)PBlockArray,
+			HORATIO_FMTPTRPFX, (void *)PBlockArray,
 			PBlockArray->Count
 		);
 #ifdef HAVE_SNPRINTF
@@ -308,12 +314,13 @@ static void Moveup(
 	}
 
 	/* Moving elements left to fill a gap */
-	for ( i = StartPos+1; i < PBlockArray->Count; i++ ) {
+	for (i = StartPos+1; i < PBlockArray->Count; i++) {
 		S_HORATIO_BLOCKDESCRIPTOR blockDesc;
 
 		blockDesc = PBlockArray->Descriptors[i];
 		PBlockArray->Descriptors[i-1] = blockDesc;
 	}
+
 	return;
 }
 
@@ -357,7 +364,7 @@ static void ShrinkBlockArray(
 #endif /*HAVE_SNPRINTF*/
 			"Attempt to ShrinkBlockArray(%s%p) by nothing, "
 			"ignored (internal HORATIO error)",
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
@@ -374,7 +381,7 @@ static void ShrinkBlockArray(
 #endif /*HAVE_SNPRINTF*/
 			"ShrinkBlockArray(): %s%p->Count=0U, "
 			"can\'t shrink the array any more!",
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
@@ -382,6 +389,7 @@ static void ShrinkBlockArray(
 		Trap(HORATIO_TRAP_SHRINKARR_WHILE_NOWT, logMsg);
 		return;
 	}
+
 	if (Amount > PBlockArray->Count) { /* Shrink further than size?! */
 		sprintf(
 			logMsg,
@@ -392,7 +400,7 @@ static void ShrinkBlockArray(
 			"Amount=%u, greater than original size in "
 			"elements (%s%p->Count=%u)",
 			Amount,
-			HORATIO_FMTPTRPFX, (void*)PBlockArray,
+			HORATIO_FMTPTRPFX, (void *)PBlockArray,
 			PBlockArray->Count
 		);
 #ifdef HAVE_SNPRINTF
@@ -403,20 +411,22 @@ static void ShrinkBlockArray(
 	}
 
 	/* Reducing to zero? */
-	if ( !(PBlockArray->Count - Amount) ) {
+	if (!(PBlockArray->Count - Amount)) {
 		/* Release entire descriptor array */
 		HORATIO_FREE(PBlockArray->Descriptors);
 		/* Mark as no allocation in entire array */
 		PBlockArray->Descriptors = NULL;
+
 	} else { /* Reducing somewhat but not completely */
 		/* Shrink array */
 		PBlockArray->Descriptors
 			= HORATIO_REALLOC(
-				PBlockArray->Descriptors,
-				(PBlockArray->Count - Amount)
-					* sizeof(S_HORATIO_BLOCKDESCRIPTOR)
-			);
+				  PBlockArray->Descriptors,
+				  (PBlockArray->Count - Amount)
+				  * sizeof(S_HORATIO_BLOCKDESCRIPTOR)
+			  );
 	}
+
 	PBlockArray->Count -= Amount; /* Adjust count for descriptor array */
 	return;
 }
@@ -456,7 +466,8 @@ static void OurLog(
 		 * Note that NULL termination is automagic because of using
 		 * sizeof()
 		 */
-		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Str) );
+		PcopyStr = (char *)malloc(sizeof(FuncName) + strlen(Str));
+
 		if (PcopyStr) {
 			strcpy(PcopyStr, FuncName); /* Prepend prefix */
 			strcat(PcopyStr, Str); /* Add log string after prefix */
@@ -467,5 +478,6 @@ static void OurLog(
 
 		free(PcopyStr); /* Copy can now be released */
 	}
+
 	return;
 }

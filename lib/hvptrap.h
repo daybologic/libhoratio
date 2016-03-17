@@ -52,11 +52,11 @@ void horatio_int_VerifyPtrs(
 #endif /*__cplusplus*/
 
 #ifdef INC_HORATIO_INTDATA_H
- /*! \def _VerifyPtrs
-  * \brief Shortcut to call horatio_int_VerifyPtrs
-  *
-  * This macro is only availablr when INC_HORATIO_INTDATA_H is defined
-  */
+/*! \def _VerifyPtrs
+ * \brief Shortcut to call horatio_int_VerifyPtrs
+ *
+ * This macro is only availablr when INC_HORATIO_INTDATA_H is defined
+ */
 # define _VerifyPtrs horatio_int_VerifyPtrs
 #endif /*INC_HORATIO_INTDATA_H*/
 

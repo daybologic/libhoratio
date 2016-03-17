@@ -96,14 +96,15 @@ void horatio_int_Log(
 	 */
 	char formatMsg[MAX_TRAP_STRING_LENGTH + 1024 + 512];
 	char number[64]; /* Paranoia length number to string conversion */
-	FILE* HLogFile; /* Handle for log file */
+	FILE *HLogFile; /* Handle for log file */
 
 	if (Message) {
 		if (Message[0]) {
 			/* so strncat() knows where to begin */
 			formatMsg[0] = '\0';
 			STRNCAT_FIXEDBUFF(formatMsg, "HORATIO: \"");
-			if ( File ) { /* Convert line number to string */
+
+			if (File) {   /* Convert line number to string */
 				sprintf(
 					number,
 #ifdef HAVE_SNPRINTF
@@ -113,13 +114,15 @@ void horatio_int_Log(
 					Line
 				);
 			}
-			switch ( Severity ) {
+
+			switch (Severity) {
 				case HORATIO_LOG_WARNING : {
 					STRNCAT_FIXEDBUFF(
 						formatMsg, "Warning! "
 					);
 					break;
 				}
+
 				case HORATIO_LOG_ERROR : {
 					STRNCAT_FIXEDBUFF(
 						formatMsg, "FATAL ERROR! "
@@ -127,12 +130,14 @@ void horatio_int_Log(
 					break;
 				}
 			}
-			if ( File ) {
+
+			if (File) {
 				STRNCAT_FIXEDBUFF(formatMsg, File);
 				STRNCAT_FIXEDBUFF(formatMsg, ", L");
 				STRNCAT_FIXEDBUFF(formatMsg, number);
 				STRNCAT_FIXEDBUFF(formatMsg, ", ");
 			}
+
 			sprintf(
 				number,
 #ifdef HAVE_SNPRINTF
@@ -154,6 +159,7 @@ void horatio_int_Log(
 				/* Everything goes in the log... */
 				/* Append/overwrite text file */
 				HLogFile = fopen("HORATIO.LOG", "at");
+
 				if (HLogFile) { /* Log opened? */
 					/* Output log msg to log file */
 					fputs(formatMsg, HLogFile);
@@ -161,11 +167,12 @@ void horatio_int_Log(
 				}
 			}
 
-			if ( Severity > HORATIO_LOG_MESSAGE ) {
+			if (Severity > HORATIO_LOG_MESSAGE) {
 				/* Anything more severe than a warning */
 				fprintf(_options.errorHandle, "%s", formatMsg);
 			}
 		}
 	}
+
 	return;
 }

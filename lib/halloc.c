@@ -63,7 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "halloc.h"
 
 static void OurLog(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
@@ -110,13 +110,15 @@ char HORATIO_FARDATA *horatio_StrdupEx(
 	const unsigned int Line
 ) {
 	char HORATIO_FARDATA *ret = horatio_AllocEx(
-		PBlockArray,
-		strlen(SrcStr)+1,
-		File,
-		Line
-	);
+					    PBlockArray,
+					    strlen(SrcStr)+1,
+					    File,
+					    Line
+				    );
 
-	if ( ret ) strcpy(ret, SrcStr);
+	if (ret) {
+		strcpy(ret, SrcStr);
+	}
 
 	return ret;
 }
@@ -188,7 +190,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 	PS_HORATIO_BLOCKDESCARRAY PRArr = _ResolveArrayPtr(PBlockArray);
 
 	/*
-         *  Haults program if array not valid, third arg is not applicable here
+	 *  Haults program if array not valid, third arg is not applicable here
 	 */
 	_VerifyPtrs("Alloc()", PBlockArray, NULL);
 
@@ -199,14 +201,16 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 #endif /*HAVE_SNPRINTF*/
 		"Program Requested to allocate %u byte block for array %s%p",
 		(unsigned int)NewBlockSize,
-		HORATIO_FMTPTRPFX, (void*)PBlockArray
+		HORATIO_FMTPTRPFX, (void *)PBlockArray
 	);
-	OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+	OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_REQ, File, Line, HORATIO_LOG_MESSAGE,
+	       logMsg);
 #ifdef HAVE_SNPRINTF
 	logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
 
 	genBlockPtr = HORATIO_MALLOC(NewBlockSize); /* Allocate block */
+
 	if (!genBlockPtr) { /* Out of memory? */
 		/*
 		 * Use buffer for log messages,
@@ -220,14 +224,15 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 			"Attempt to allocate block of %u bytes "
 			"for array at base %s%p has failed",
 			(unsigned int)NewBlockSize,
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 		/*
 		 * I haven't made this a warning because it can happen in a
 		 * very legitimate situation where the caller may be prepared
 		 * for a large allocation to handle
 		 */
-		OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+		OURLOG(HORATIO_LOG_CODE_ALLOC_BLOCK_FAIL, File, Line, HORATIO_LOG_MESSAGE,
+		       logMsg);
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
 #endif /*HAVE_SNPRINTF*/
@@ -247,7 +252,7 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 #endif /*HAVE_SNPRINTF*/
 			"Attempt to enlarge array at base %s%p "
 			"by one element failed",
-			HORATIO_FMTPTRPFX, (void*)PBlockArray
+			HORATIO_FMTPTRPFX, (void *)PBlockArray
 		);
 #ifdef HAVE_SNPRINTF
 		logMsgRemaining -= strlen(logMsg);
@@ -270,27 +275,31 @@ void HORATIO_FARDATA *horatio_int_AllocEx(
 
 	/* Version 1.1.4 changes, source file/line records */
 	PRArr->Descriptors[PRArr->Count-1].SourceLine = Line;
-	if ( File ) {
-		PRArr->Descriptors[PRArr->Count-1].SourceFile
-			= (char*)malloc((strlen(File)+1)*sizeof(char));
 
-		if ( PRArr->Descriptors[PRArr->Count-1].SourceFile ) {
+	if (File) {
+		PRArr->Descriptors[PRArr->Count-1].SourceFile
+			= (char *)malloc((strlen(File)+1)*sizeof(char));
+
+		if (PRArr->Descriptors[PRArr->Count-1].SourceFile) {
 			strcpy(
 				PRArr->Descriptors[PRArr->Count-1].SourceFile,
 				File
 			);
 		}
-	  }
+	}
 
 	/* Update library statistics */
 	horatio_int__blockCount++;
 	horatio_int__allocCharge += NewBlockSize;
 
 	/* Update peaks */
-	if ( horatio_int__blockCount > horatio_int__blockCountPeak )
+	if (horatio_int__blockCount > horatio_int__blockCountPeak) {
 		horatio_int__blockCountPeak = horatio_int__blockCount;
-	if ( horatio_int__allocCharge > horatio_int__allocPeak )
+	}
+
+	if (horatio_int__allocCharge > horatio_int__allocPeak) {
 		horatio_int__allocPeak = horatio_int__allocCharge;
+	}
 
 	/* Call the debug hook executive */
 #ifdef HORATIO_DEBUGHOOKS
@@ -335,8 +344,12 @@ static unsigned int GrowBlockArray(
 	unsigned int initi; /* Initialization interator */
 
 #ifdef NDEBUG /* Not in debug mode? */
+
 	/* Just get out indicating error before disaster */
-	if (!PCurrentBlockArray) return 0U;
+	if (!PCurrentBlockArray) {
+		return 0U;
+	}
+
 #else /* Debug mode */
 	assert(PCurrentBlockArray);
 #endif /*NDEBUG*/
@@ -358,11 +371,13 @@ static unsigned int GrowBlockArray(
 	/* Take count before we grow array */
 	oldCount = PCurrentBlockArray->Count;
 	ptr = HORATIO_REALLOC( /* Grow array */
-		PCurrentBlockArray->Descriptors,
-		(oldCount + GrowByElems) * sizeof(S_HORATIO_BLOCKDESCRIPTOR)
-	);
-	if (!ptr) /* Couldn't grow? */
-		return 0U; /* Fail */
+		      PCurrentBlockArray->Descriptors,
+		      (oldCount + GrowByElems) * sizeof(S_HORATIO_BLOCKDESCRIPTOR)
+	      );
+
+	if (!ptr) { /* Couldn't grow? */
+		return 0U;        /* Fail */
+	}
 
 	/* Update array information */
 	PCurrentBlockArray->Count += GrowByElems;
@@ -373,7 +388,7 @@ static unsigned int GrowBlockArray(
 	PCurrentBlockArray->Descriptors = ptr;
 
 	/* Loop through All new descriptors in the array that we just created */
-	for ( initi = oldCount; initi < PCurrentBlockArray->Count; initi++ ) {
+	for (initi = oldCount; initi < PCurrentBlockArray->Count; initi++) {
 		/* No block assigned to this new descriptor yet */
 		PCurrentBlockArray->Descriptors[initi].PBase = NULL;
 
@@ -389,6 +404,7 @@ static unsigned int GrowBlockArray(
 		/* No known source file */
 		PCurrentBlockArray->Descriptors[initi].SourceFile = NULL;
 	}
+
 	return 1U; /* Success */
 }
 
@@ -427,7 +443,8 @@ static void OurLog(
 		 * Allocate space for copy, note that NULL termination
 		 * is automagic because of using sizeof()
 		 */
-		PcopyStr = (char*)malloc( sizeof(FuncName) + strlen(Message) );
+		PcopyStr = (char *)malloc(sizeof(FuncName) + strlen(Message));
+
 		if (PcopyStr) {
 			strcpy(PcopyStr, FuncName); /* Prepend prefix */
 			strcat(PcopyStr, Message); /* Add log string after prefix */
@@ -439,5 +456,6 @@ static void OurLog(
 			free(PcopyStr); /* Copy can now be released */
 		}
 	}
+
 	return;
 }

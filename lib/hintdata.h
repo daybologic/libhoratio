@@ -47,13 +47,14 @@ POSSIBILITY OF SUCH DAMAGE.
  * List of pointers to arrays of block descriptors
  * (for validating array base pointers)
  */
-extern PS_HORATIO_BLOCKDESCARRAY horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE];
+extern PS_HORATIO_BLOCKDESCARRAY
+horatio_int__safetyList[HORATIO_SAFETYLIST_MAXSIZE];
 #ifndef HORATIO_NONULL_BLOCKDESCARRAY /* New NULL block array support enabled? */
 /*
  * Always here, never created, never destroyed accessable by specifying
  * NULL for an array pointer
  */
-  extern S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray;
+extern S_HORATIO_BLOCKDESCARRAY horatio_int__defaultArray;
 #endif /*!HORATIO_NONULL_BLOCKDESCARRAY*/
 
 /* Set horatio_int__libStarted to TRUE when library is started */
@@ -74,7 +75,9 @@ extern unsigned int horatio_int__userTrapCallbackIsHook;
 /*
  * Debug hook matrix (sizeof(a hook) * hook types * maximum hook chain length)
  */
-extern unsigned int (*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo);
+extern unsigned int (
+	*horatio_int__debugHookMatrix[HORATIO_HOOKCHAIN_SIZE][HORATIO_DEBUGHOOK_LASTHOOK
+			+1])(PS_HORATIO_DEBUGHOOKINFO PDebugHookInfo);
 
 extern S_HORATIO_OPTIONS horatio_int__options;
 

@@ -94,7 +94,7 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 	void HORATIO_FARDATA *ptr = OldBlockPtr;
 	const char funcName[] = "Realloc()"; /* Name of our function */
 	unsigned int blockIndex; /* Index of block in the array */
-	char HORATIO_FARDATA* sizePtr; /* Pointer used during resizing */
+	char HORATIO_FARDATA *sizePtr; /* Pointer used during resizing */
 	PS_HORATIO_BLOCKDESCARRAY PRArr;
 #ifdef HORATIO_DEBUGHOOKS
 	/* Used for advanced debug hooks! */
@@ -104,9 +104,11 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 	PRArr = _ResolveArrayPtr(PBlockArray);
 	/* Do trap if passed pointers are invalid */
 	_VerifyPtrs(funcName, PBlockArray, OldBlockPtr);
+
 	/* Do trap if block is locked */
-	if (_LockTrap(funcName, PBlockArray, OldBlockPtr))
+	if (_LockTrap(funcName, PBlockArray, OldBlockPtr)) {
 		return NULL;
+	}
 
 	if (!NewSize) { /* No new size, hmm, must be wanting free() really */
 		WARNING(
@@ -119,7 +121,7 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 		return NULL;
 	}
 
-	if ( !OldBlockPtr ) {
+	if (!OldBlockPtr) {
 		/*
 		 * This is a non-portable attempt to use realloc
 		 * as an initial allocator
@@ -133,22 +135,27 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 	}
 
 	blockIndex = horatio_int_IndexFromBlockPtr(PRArr, OldBlockPtr);
-	if ( PRArr->Descriptors[blockIndex].Size == NewSize ) {
+
+	if (PRArr->Descriptors[blockIndex].Size == NewSize) {
 		/*
 		 * The block is already the requested size!
 		 * Give current pointer back to caller wihout touching it
 		 */
 		return ptr;
 	}
+
 	/* The resize is valid */
 
 	/* Attempt to resize the block */
-	sizePtr = HORATIO_REALLOC( OldBlockPtr, NewSize );
+	sizePtr = HORATIO_REALLOC(OldBlockPtr, NewSize);
+
 	/*
 	 * If the block cannot be enlarged return NULL to the caller
 	 * to indicate the failure
 	 */
-	if (!sizePtr) return NULL;
+	if (!sizePtr) {
+		return NULL;
+	}
 
 #ifdef HORATIO_DEBUGHOOKS
 	/* Call debug hooks */
@@ -161,16 +168,19 @@ static void HORATIO_FARDATA *horatio_int_Realloc(
 
 	/* Set AllocReq to size difference */
 	debugHookInfo.AllocReq = HORATIO_MAX(
-		PRArr->Descriptors[blockIndex].Size, NewSize
-	) - HORATIO_MIN(
-		PRArr->Descriptors[blockIndex].Size, NewSize
-	);
-	if ( NewSize < PRArr->Descriptors[blockIndex].Size ) {
+					 PRArr->Descriptors[blockIndex].Size, NewSize
+				 ) - HORATIO_MIN(
+					 PRArr->Descriptors[blockIndex].Size, NewSize
+				 );
+
+	if (NewSize < PRArr->Descriptors[blockIndex].Size) {
 		/* Negate number */
 		debugHookInfo.Misc0 |= 1; /* Set bit 0 */
+
 	} else { /* Positive number */
 		debugHookInfo.Misc0 &= ~1; /* Clear bit 0 */
 	}
+
 	/*
 	 * Misc1 points to the new block, the hook routine can
 	 * dereference it if it wants to

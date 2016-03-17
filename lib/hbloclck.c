@@ -95,10 +95,13 @@ void horatio_int_SetBlockLockingFlag(
 
 	/* Get current flags */
 	flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
-	if (NewStatus) /* Locking? */
-		flags |= 1; /* Set lock bit */
-	else /* Unlocking? */
-		flags |= ~1; /* Clear lock bit */
+
+	if (NewStatus) { /* Locking? */
+		flags |= 1;        /* Set lock bit */
+
+	} else { /* Unlocking? */
+		flags |= ~1;        /* Clear lock bit */
+	}
 
 	/* Set the new flags */
 	horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, &flags);
@@ -113,8 +116,10 @@ unsigned int horatio_int_IsBlockLocked(
 
 	/* Get the flags for the descriptor */
 	flags = horatio_int_ModifyDescriptorFlags(PBlockArray, Ptr, NULL);
-	if ( ((flags & 1) == 1) ) /* The lock bit is set? */
-		return 1U; /* Yes, the block is locked */
+
+	if (((flags & 1) == 1)) { /* The lock bit is set? */
+		return 1U;        /* Yes, the block is locked */
+	}
 
 	return 0U; /* No, the block is not locked */
 }

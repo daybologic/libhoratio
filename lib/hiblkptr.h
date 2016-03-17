@@ -47,7 +47,7 @@ extern "C" {
 #endif /*__cplusplus*/
 unsigned int horatio_int_IndexFromBlockPtr(
 	const PS_HORATIO_BLOCKDESCARRAY PBlockArray,
-	const void HORATIO_FARDATA* BlockPtr
+	const void HORATIO_FARDATA *BlockPtr
 );
 #ifdef __cplusplus
 } /* extern "C" */

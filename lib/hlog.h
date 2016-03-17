@@ -101,7 +101,7 @@ extern "C" {
  * Write the message to the log (or do nothing if the log macro is undefined
  */
 void horatio_int_Log(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
 	const unsigned short Severity,
