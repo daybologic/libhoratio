@@ -41,7 +41,7 @@ override_dh_auto_configure: autogen
 		sh configure \
 		--prefix=/usr \
 		--enable-docs \
-		--with-mysql \
+		--with-mongo \
 		--disable-dependency-tracking; \
 	fi
 
