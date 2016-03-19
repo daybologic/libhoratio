@@ -1,1 +1,5 @@
-utils = ssh://hg@bitbucket.org/2E0EOL/build-scripts
+utils = utils
+
+[subpaths]
+ssh://hg@bitbucket.org/2E0EOL/libhoratio/utils = ssh://hg@bitbucket.org/2E0EOL/build-scripts
+https://bitbucket.org/2E0EOL/libhoratio/utils = https://bitbucket.org/2E0EOL/build-scripts
