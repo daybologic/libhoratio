@@ -1,6 +1,6 @@
 #!/usr/bin/make -k
 
-pdfs = $(shell ls *.tex | sh -x ../utils/rsed "s/tex$$/pdf/")
+pdfs = $(shell ls *.tex | sh -x ../build-scripts/bin/rsed "s/tex$$/pdf/")
 #SHARED = daybo.sty
 SHARED=
 IDENT=.ident
@@ -22,14 +22,14 @@ all: ident version $(pdfs)
 	rm -f $(basename $<).toc $(basename $<).aux $(basename $<).log  $(basename $<).out
 
 .PHONY: version
-version: $(CONFIGURE_AC) ../utils/version
-	ver=`../utils/version -c $(CONFIGURE_AC)`; \
+version: $(CONFIGURE_AC) ../build-scripts/bin/version
+	ver=`../build-scripts/bin/version -c $(CONFIGURE_AC)`; \
 	echo $$ver > $(VERSION); \
 	echo "PROJECT_NUMBER=$$ver" > $(DOXYGEN_VERSION)
 
 .PHONY: ident
-ident: ../utils/hgident
-	../utils/hgident > $(IDENT)
+ident: ../build-scripts/bin/hgident
+	../build-scripts/bin/hgident > $(IDENT)
 
 .PHONY: clean
 clean:
