@@ -144,7 +144,7 @@ static MYSQL *Handle_mysql;
 #endif /*USE_MYSQL*/
 
 #ifdef USE_MONGO
-static mongo_sync_connection *mongo_client;
+static mongo_sync_connection *Handle_mongo;
 //static mongoc_collection_t *collection;
 #endif /*USE_MONGO*/
 
@@ -233,13 +233,15 @@ static void horatio_int_sqlite3_logmsg(
 
 #ifdef USE_MONGO
 static void horatio_int_mongodb_logmsg(
-    const char *,
-    const unsigned int,
-    const unsigned short,
-    const char *
+	const unsigned short,
+	const char *,
+	const unsigned int,
+	const unsigned short,
+	const char *
 );
 
 static mongo_sync_connection *horatio_int_mongodb_open() {
+	mongo_sync_connection *client;
 	//mongoc_uri_t *uri;
 	//mongoc_insert_flags_t flags = MONGOC_INSERT_NONE;
 	//mongoc_write_concern_t *write_concern;
@@ -248,25 +250,38 @@ static mongo_sync_connection *horatio_int_mongodb_open() {
 
 	//uri = mongoc_uri_new(uriString);
 	//client = mongoc_client_new_from_uri(uri);
-	client = mongo_sync_connect("localhost", 0, false);
-
-	//collection = mongoc_client_get_collection(client, "test", "m6kvm");
+	client = mongo_sync_connect("localhost", 27017, true);
+	if (client) {
+		mongo_sync_conn_set_auto_reconnect(client, true);
+		mongo_sync_cmd_is_master(client);
+		if (!mongo_sync_cmd_authenticate(client, "test", "test", "")) {
+			fprintf(stderr, "Error: mongo_sync_cmd_authenticate\n");
+			perror("mongo_sync_cmd_authenticate");
+			mongo_sync_disconnect(client);
+			return NULL;
+		}
+	} else {
+		fprintf(stderr, "Error: mongo_sync_connect\n");
+		perror("mongo_sync_connect");
+		return client;
+	}
 
 	return client;
 }
 
 static void horatio_int_mongodb_logmsg(
-    const char *File,
-    const unsigned int Line,
-    const unsigned short Severity,
-    const char *Msg
+	const unsigned short Code,
+	const char *File,
+	const unsigned int Line,
+	const unsigned short Severity,
+	const char *Msg
 ) {
 	//bson_t document;
 	bson *document;
 	bool qsl;
 
 	//if ( !client || !collection ) return;
-	if ( !client ) return;
+	if (!Handle_mongo) return;
 	fprintf(stderr, "File %s, line %u, severity %u\n", File, Line, Severity);
 
 	fprintf(stderr, "Got database message %s\n", Msg);
@@ -545,7 +560,7 @@ void horatio_int_Log(
 #endif /*USE_MONGO*/
 
 #ifdef USE_MONGO
-		if ( !mongo_client ) mongo_client = horatio_int_mongodb_open();
+		if (!Handle_mongo) Handle_mongo = horatio_int_mongodb_open();
 		horatio_int_mongodb_logmsg(Code, File, Line, Severity, Message);
 #endif /*USE_MONGO*/
 	}
