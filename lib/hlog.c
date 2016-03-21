@@ -529,16 +529,16 @@ void horatio_int_Log(
 		 * Determine what to do with the message
 		 * based on it's severity.
 		 */
-			if (_options.enableLog) {
-				/* Everything goes in the log... */
-				/* Append/overwrite text file */
-				HLogFile = fopen("HORATIO.LOG", "at");
-				if (HLogFile) { /* Log opened? */
-					/* Output log msg to log file */
-					fputs(formatMsg, HLogFile);
-					fclose(HLogFile); /* Close the log file */
-				}
+		if (_options.enableLog) {
+			/* Everything goes in the log... */
+			/* Append/overwrite text file */
+			HLogFile = fopen("HORATIO.LOG", "at");
+			if (HLogFile) { /* Log opened? */
+				/* Output log msg to log file */
+				fputs(formatMsg, HLogFile);
+				fclose(HLogFile); /* Close the log file */
 			}
+		}
 
 		if ( Severity > HORATIO_LOG_MESSAGE ) {
 			/* Anything more severe than a warning */
