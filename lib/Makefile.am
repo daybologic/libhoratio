@@ -79,4 +79,4 @@ hlic.c: Makefile
 	raw2c --header=hlic.h --symbol=horatio_license_text -q -n ../COPYING hlic.c
 	
 hversion.h: Makefile
-	../utils/mkverh.sh
+	$(SHELL) ../build-scripts/bin/mkverh.sh
