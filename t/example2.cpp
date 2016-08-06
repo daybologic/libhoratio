@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
- * This is my little test app for my DPCRTLMM library
+ * This is my little test app for my HORATIO library
  * I use it to simmulate a caller to debug my library - C++ version
  */
 
@@ -44,21 +44,21 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <time.h>
 #include <stdlib.h>
 
-#ifdef DPCRTLMM_THREADS_PTH
+#ifdef HORATIO_THREADS_PTH
 # ifdef HAVE_PTH_H
 #  include <pth.h>
 # endif /*HAVE_PTH_H*/
-#endif /*DPCRTLMM_THREADS_PTH*/
+#endif /*HORATIO_THREADS_PTH*/
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 # pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
-#define USING_DPCRTLMM /* Needed for calloc() re-definition */
+#define USING_HORATIO /* Needed for calloc() re-definition */
 #include "horatio.h"
 #include "dpccap.h"
 
-static void PrintStats(const PS_DPCRTLMM_STATS PStats);
+static void PrintStats(const PS_HORATIO_STATS PStats);
 static void InitArrays(void);
 static void PrintVersion(void);
 static void myTrapHandler(const unsigned int TrapID, const char* TrapMsg);
@@ -71,21 +71,21 @@ static void* arrptrs[16];
 
 int main() {
 	unsigned int i;
-	S_DPCRTLMM_STATS stats;
-	TDPCRTLMM_BlockArray blockDesc(false);
+	S_HORATIO_STATS stats;
+	THORATIO_BlockArray blockDesc(false);
 
-#ifdef DPCRTLMM_THREADS_PTH
+#ifdef HORATIO_THREADS_PTH
 	if ( !pth_init() ) {
 		puts("Can\'t initialise GNU Portable Threads\n");
 		return EXIT_FAILURE;
 	}
-#endif /*DPCRTLMM_THREADS_PTH*/
+#endif /*HORATIO_THREADS_PTH*/
 
 	MemManager.Startup();
 	blockDesc.Init();
 	InitArrays();
 	MemManager.InstallTrapCallback(myTrapHandler, 1U); /* Wow, a hook for a change ;-), I just wanted the stats on trap */
-	printf("DPCRTLMM TEST\n");
+	printf("HORATIO TEST\n");
 	printf("-------------\n\n");
 	printf("starting library\n");
 	PrintVersion();
@@ -133,7 +133,7 @@ int main() {
 }
 
 static void PrintStats(
-	const PS_DPCRTLMM_STATS PStats
+	const PS_HORATIO_STATS PStats
 ) {
 	if (PStats) {
 		printf("Blocks allocated: %lu (peaked at %lu)\n", PStats->Blocks.Allocated, PStats->Blocks.Peak);
@@ -154,7 +154,7 @@ static void InitArrays() {
 }
 
 static void PrintVersion() {
-	S_DPCRTLMM_VERSION ver;
+	S_HORATIO_VERSION ver;
 
 	printf("Gathering library version info...");
 	horatio_Ver(&ver);
@@ -168,11 +168,11 @@ static void myTrapHandler(
 ) {
 	/*
 	 * Why am I handling this trap?  I'm not, I install this as a
-	 * hook only.  Which means control is returned to the DPCRTLMM
+	 * hook only.  Which means control is returned to the HORATIO
 	 * trap handler afterards.
 	 */
 
-	S_DPCRTLMM_STATS stats;
+	S_HORATIO_STATS stats;
 	printf("------------Caution! Stats display from trap hook!-----------\n");
 	printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
 	MemManager.GetStats(&stats);
