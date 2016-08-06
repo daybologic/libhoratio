@@ -109,7 +109,7 @@ char HORATIO_FARDATA *horatio_StrdupEx(
 	const char *File,
 	const unsigned int Line
 ) {
-	char HORATIO_FARDATA *ret = horatio_int_AllocEx(
+	char HORATIO_FARDATA *ret = horatio_AllocEx(
 		PBlockArray,
 		strlen(SrcStr)+1,
 		File,

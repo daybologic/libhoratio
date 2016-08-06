@@ -177,30 +177,30 @@ static void horatio_int_Free(
 	for ( i = 0U; i < PRArr->Count; i++ ) {
 		if ( PRArr->Descriptors[i].PBase == Ptr ) {
 			/* This is the one */
-#ifdef HORATIO_LOG
-			sprintf(
-				trapMsg,
+			if (_options.enableLog) {
+				sprintf(
+					trapMsg,
 #ifdef HAVE_SNPRINTF
-				trapMsgRemaining,
+					trapMsgRemaining,
 #endif /*HAVE_SNPRINTF*/
-				"Freeing block %s%p from array %s%p",
-				HORATIO_FMTPTRPFX,
-				PRArr->Descriptors[i].PBase,
-				HORATIO_FMTPTRPFX,
-				(void*)PRArr
-			);
-			OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, HORATIO_LOG_MESSAGE, trapMsg);
+					"Freeing block %s%p from array %s%p",
+					HORATIO_FMTPTRPFX,
+					PRArr->Descriptors[i].PBase,
+					HORATIO_FMTPTRPFX,
+					(void*)PRArr
+				);
+				OURLOG(HORATIO_LOG_CODE_FREE_BLOCK_REQ, PRArr->Descriptors[i].SourceFile, PRArr->Descriptors[i].SourceLine, HORATIO_LOG_MESSAGE, trapMsg);
 #ifdef HAVE_SNPRINTF
-			trapMsgRemaining -= strlen(trapMsg);
+				trapMsgRemaining -= strlen(trapMsg);
 #endif /*HAVE_SNPRINTF*/
-			OURLOG(
-				HORATIO_LOG_CODE_FREE_BLOCK_REQ,
-				PRArr->Descriptors[i].SourceFile,
-				PRArr->Descriptors[i].SourceLine,
-				HORATIO_LOG_MESSAGE,
-				trapMsg
-			);
-#endif /*HORATIO_LOG*/
+				OURLOG(
+					HORATIO_LOG_CODE_FREE_BLOCK_REQ,
+					PRArr->Descriptors[i].SourceFile,
+					PRArr->Descriptors[i].SourceLine,
+					HORATIO_LOG_MESSAGE,
+					trapMsg
+				);
+			}
 
 			/* Free the block */
 			HORATIO_FREE( PRArr->Descriptors[i].PBase );

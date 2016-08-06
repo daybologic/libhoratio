@@ -170,9 +170,7 @@ static void horatio_int_InstallTrapCallback(
 #endif /*HORATIO_DEBUGHOOKS*/
 
 	if (NewTrapCallback) {
-#ifdef HORATIO_LOG
 		char logStr[MAX_TRAP_STRING_LENGTH+sizeof(char)];
-#endif /*HORATIO_LOG*/
 
 #ifdef HAVE_SNPRINTF
 		size_t logStrRemaining = MAX_TRAP_STRING_LENGTH;
@@ -191,19 +189,19 @@ static void horatio_int_InstallTrapCallback(
 		if (AsHook) debugHookInfo.Misc1 |= 1;
 #endif /*HORATIO_DEBUGHOOKS*/
 
-#ifdef HORATIO_LOG
-		/* Log that we did that */
-		sprintf(
-			logStr,
+		if (_options.enableLog) {
+			/* Log that we did that */
+			sprintf(
+				logStr,
 #ifdef HAVE_SNPRINTF
-			logStrRemaining,
+				logStrRemaining,
 #endif /*HAVE_SNPRINTF*/
-			"InstallTrapCallback(): Installed the trap %s %s%lX",
-			(AsHook) ? ("hook") : ("handler"),
-			HORATIO_FMTPTRPFX, (unsigned long int)NewTrapCallback
-		);
-		MESSAGE(HORATIO_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
-#endif /*HORATIO_LOG*/
+				"InstallTrapCallback(): Installed the trap %s %s%lX",
+				(AsHook) ? ("hook") : ("handler"),
+				HORATIO_FMTPTRPFX, (unsigned long int)NewTrapCallback
+			);
+			MESSAGE(HORATIO_LOG_CODE_INSTALL_TRAP, NULL, 0, logStr);
+		}
 
 #ifdef HAVE_SNPRINTF
 		logStrRemaining -= strlen(logStr);

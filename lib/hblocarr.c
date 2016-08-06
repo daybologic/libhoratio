@@ -114,9 +114,7 @@ unsigned int horatio_IsDefaultBlockArray(
 
 static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 	PS_HORATIO_BLOCKDESCARRAY Parray; /* Pointer for caller */
-#ifdef HORATIO_LOG
 	char logMsg[MAX_TRAP_STRING_LENGTH+1];
-#endif /*HORATIO_LOG*/
 #ifdef HORATIO_DEBUGHOOKS
 	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 #endif /*HORATIO_DEBUGHOOKS*/
@@ -179,18 +177,18 @@ static PS_HORATIO_BLOCKDESCARRAY horatio_int_CreateBlockArray() {
 		Parray = NULL; /* So caller sees there's nothing allocated */
 	}
 
-#ifdef HORATIO_LOG
-	/* Safe, log progress */
-	sprintf(
-		logMsg,
+	if (_options.enableLog) {
+		/* Safe, log progress */
+		sprintf(
+			logMsg,
 #ifdef HAVE_SNPRINTF
-		logMsgRemaining,
+			logMsgRemaining,
 #endif /*HAVE_SNPRINTF*/
-		"CreateBlockArray() returns base %s%p",
-		HORATIO_FMTPTRPFX, (void*)Parray
-	);
-	MESSAGE(HORATIO_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
-#endif /*HORATIO_LOG*/
+			"CreateBlockArray() returns base %s%p",
+			HORATIO_FMTPTRPFX, (void*)Parray
+		);
+		MESSAGE(HORATIO_LOG_CODE_ALLOC_ARRAY_INFO, __FILE__, __LINE__, logMsg);
+	}
 
 #ifdef HAVE_SNPRINTF
 	logMsgRemaining -= strlen(logMsg);
@@ -303,19 +301,19 @@ void horatio_int_DestroyBlockArray(
 				HORATIO_FREE(_safetyList[sli]);
 				/* Remove this array from the safety list */
 				_safetyList[sli] = NULL;
-#ifdef HORATIO_LOG
-				sprintf(
-					trapStr,
+				if (_options.enableLog) {
+					sprintf(
+						trapStr,
 #ifdef HAVE_SNPRINTF
-					trapMsgRemaining,
+						trapMsgRemaining,
 #endif /*HAVE_SNPRINTF*/
-					"DestroyBlockArray(): The array at "
-					"base %s%p was destroyed",
-					HORATIO_FMTPTRPFX,
-					(void*)PBlockArray
-				); /* Prepare log message */
-				MESSAGE(HORATIO_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
-#endif /*HORATIO_LOG*/
+						"DestroyBlockArray(): The array at "
+						"base %s%p was destroyed",
+						HORATIO_FMTPTRPFX,
+						(void*)PBlockArray
+					); /* Prepare log message */
+					MESSAGE(HORATIO_LOG_CODE_DESTROY_ARRAY, __FILE__, __LINE__, trapStr);
+				}
 
 #ifdef HORATIO_DEBUGHOOKS
 				/* Success, call hooks */

@@ -51,6 +51,6 @@ maintainer : override_dh_auto_configure
 	make
 
 autogen:
-	sh utils/autogen.sh
+	$(SHELL) build-scripts/bin/autogen.sh
 
 .PHONY: autogen maintainer override_dh_auto_configure

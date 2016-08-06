@@ -55,7 +55,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "hbiglock.h" /* For entire library mutual exclusion */
 #include "halloc.h" /* Allows us to call AllocEx(), bipassing the big lock */
 
-#ifdef HORATIO_LOG
 static void OurLog(
   const unsigned short Code,
 	const char *File,
@@ -63,7 +62,6 @@ static void OurLog(
 	const unsigned short Severity,
 	const char *Str
 );
-#endif /*HORATIO_LOG*/
 
 #ifdef OURLOG /* Somebody else using OURLOG? */
 # undef OURLOG /* Don't want their version */
@@ -107,26 +105,24 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 #ifdef HORATIO_DEBUGHOOKS
 	S_HORATIO_DEBUGHOOKINFO debugHookInfo;
 #endif /*HORATIO_DEBUGHOOKS*/
-#ifdef HORATIO_LOG
 	char logMsg[MAX_TRAP_STRING_LENGTH+1];
-#endif /*HORATIO_LOG*/
 #ifdef HAVE_SNPRINTF
 	size_t logMsgRemaining = MAX_TRAP_STRING_LENGTH;
 #endif /*HAVE_SNPRINTF*/
 
-#ifdef HORATIO_LOG
-	sprintf(
-		logMsg,
+	if (_options.enableLog) {
+		sprintf(
+			logMsg,
 #ifdef HAVE_SNPRINTF
-		logMsgRemaining,
+			logMsgRemaining,
 #endif /*HAVE_SNPRINTF*/
-		"Calloc() called, %u blocks of %u bytes requested, "
-		"passing on to Alloc()",
-		N,
-		(unsigned int)NewBlockSize
-	);
-	OURLOG(HORATIO_LOG_CODE_CALLOC_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
-#endif /*HORATIO_LOG*/
+			"Calloc() called, %u blocks of %u bytes requested, "
+			"passing on to Alloc()",
+			N,
+			(unsigned int)NewBlockSize
+		);
+		OURLOG(HORATIO_LOG_CODE_CALLOC_REQ, File, Line, HORATIO_LOG_MESSAGE, logMsg);
+	}
 
 #ifdef HAVE_SNPRINTF
 	logMsgRemaining -= strlen(logMsg);
@@ -152,13 +148,13 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 		debugHookInfo.Success = 1U;
 #endif /*HORATIO_DEBUGHOOKS*/
 
-#ifdef HORATIO_LOG
-		OURLOG(
-			HORATIO_LOG_CODE_CALLOC_DONE,
-			File, Line, HORATIO_LOG_MESSAGE,
-			"Allocation successful"
-		);
-#endif /*HORATIO_LOG*/
+		if (_options.enableLog) {
+			OURLOG(
+				HORATIO_LOG_CODE_CALLOC_DONE,
+				File, Line, HORATIO_LOG_MESSAGE,
+				"Allocation successful"
+			);
+		}
 
 	/*
 	 * Bug fix: I didn't realize this but the specification for for calloc()
@@ -170,9 +166,8 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 #ifdef HORATIO_DEBUGHOOKS
 		/*blockDescArray.Success = 0U;   - optimized away */
 #endif /*HORATIO_DEBUGHOOKS*/
-#ifdef HORATIO_LOG
-		OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
-#endif /*HORATIO_LOG*/
+		if (_options.enableLog)
+			OURLOG(HORATIO_LOG_CODE_CALLOC_FAIL, File, Line, HORATIO_LOG_MESSAGE, "Allocation failed");
 	}
 
 #ifdef HORATIO_DEBUGHOOKS
@@ -181,7 +176,6 @@ static void HORATIO_FARDATA *horatio_int_CallocEx(
 	return resultantPtr;
 }
 
-#ifdef HORATIO_LOG
 static void OurLog(
 	const unsigned short Code,
 	const char *File,
@@ -220,4 +214,3 @@ static void OurLog(
 	}
 	return;
 }
-#endif /*HORATIO_LOG*/

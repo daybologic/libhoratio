@@ -1,3 +1,156 @@
+libhoratio (2.0.1) stable; urgency=low
+
+  * b49a666ee8b2 (default): Merge rel/2.0 (2.0.0 tag) into default release branch
+  * 2f89355e5b89 (develop): Merged default down into develop
+  * 16b64a67db41 (develop): Moved hbuild.h into include/
+  * 899fdd6d8192 (develop): Handle a new trap for legacy calls.
+  * ea31bee4d12e (develop): Count the number of times the hookCounter is called
+  * 59be1f604a78 (develop): Initial list of C files for dependency diagram (for developers)
+  * d8d002527099 (develop): Added a line to show dependency from malloc to logging
+  * 9e29d4f95c7d (develop): hbdflags depends on hdbghook and hiblkptr
+  * ff33bce8f851 (develop): Link had wrong source in diagram
+  * 02538fc77f47 (develop): Patch for systems which have sprintf as a macro already.
+  * 892d2c901978 (develop): Fix reference to legacy build.h -> hbuild.h
+  * 0c5fb1164233 (f/201304-latex-doc): Added API documentation, auto-generated with gnuhtml2latex, from help.html
+  * 76ddccd8a8ff (f/201304-latex-doc): Re-write api.tex with UNIX line formatting
+  * 7010389da4f5 (f/201304-latex-doc): Manual fixups to corruption in gnuhtml2latex output
+  * fe36c35f1aa9 (f/201304-latex-doc): Added initial Makefile for docs, but it is not automake compatible yet.
+  * 468429364f92 (f/201304-latex-doc): Use sed -r on any system but Darwin, where we must ue sed -E
+  * 72a5f8fb1d08 (f/201304-latex-doc): Move bin/rsed to utils/rsed.
+  * 9696982f28cb (f/201304-latex-doc): Change a load of explicit references to 'DPCRTLMM' within the docs to 'Horatio'
+  * 90f3aea9d7e4 (f/201304-latex-doc): Rename references to DPCRTLMM.LOG to HORATIO.LOG
+  * 2d35fffdb3e5 (f/201304-latex-doc): Rename references to various out of date filenames
+  * bb1f00c4bddc (f/201304-latex-doc): Add the Mercurial (Hg) repository changeset ident into the PDF documentation at build time.
+  * 6eaf3cfc610f (f/201304-latex-doc): Take the version number from configure.ac and use it within the api.pdf
+  * 968eb380ff2d (f/201304-latex-doc): Only get the hg ident for api.pdf if you have an hg checkout, and have hg installed.
+  * ec5a07906c83 (f/201304-latex-doc): If Hg is not available, say who built the documentation and where.
+  * a879bc7f3cca (f/201304-latex-doc): make version shall depend on configure.ac
+  * ab906a7833d7 (f/201304-latex-doc): Should not escape apostophe in LaTeX
+  * 669c1c062365 (f/201304-latex-doc): Add a bunch of FIXME/TODO comments to the tex
+  * ce773217a367 (f/201304-latex-doc): Misc fixups and re-wordings
+  * ba81639af7ef (f/201304-latex-doc): Various formatting fixups and editing.
+  * f835457ccb4d (f/201304-latex-doc): Dynamically calculate the copyright year
+  * 10409d194c07 (f/201304-latex-doc): Mass rename (mostly functions): dpcrtlmm -> horatio in docs/api.tex
+  * 0cc3126acb46 (f/201304-latex-doc): Mis-spelt word; absoluetely
+  * bf9ec979464e (f/201304-latex-doc): Fix many spell checking errors in the .tex
+  * 327799198532 (f/201304-latex-doc): Added copyright notice to api.tex
+  * 929f071a558d (f/201304-latex-doc): Freshen the LaTeX branch from develop
+  * 6dda6a10c1fc (f/201304-latex-doc): Modify the version script due to automake changes
+  * 40419f314e7e (f/201304-latex-doc): Version depends on the version script
+  * ba61e672bece (f/201304-latex-doc): Comments on the Hg .version file, ie when you don't have Hg installed
+  * e70dbb6bf768 (f/201304-latex-doc): Re-write library 'about' section based on feature list from the web-site.
+  * 147f37871757 (f/201304-latex-doc): Edit the future improvements section
+  * e0c9be4b47ca (develop): Sack off some automatically generated commentry in .hgignore
+  * 7bf107683517 (develop): Repo ignores .DS_Store, patch rejections/originals and vim swap files
+  * ba1c9946ce29 (f/201304-latex-doc): Fixes required for building .pdf within sbuild chroot
+  * 941525dad8dc (f/201304-latex-doc): Merge from master develop branch
+  * f48994c21b83 (f/201304-latex-doc): Ignore hidden files within the docs directory.
+  * 6c3b4614694c (f/201304-latex-doc): Rename BUILD.H documentation references to hbuild.h
+  * 0700168c07f5 (f/201304-latex-doc): Also mention the bitbucket site
+  * 1c717727dc0c (f/201304-latex-doc): Improve the wording of some parts of the document
+  * 6837f79467d3 (f/201304-latex-doc): Rename DPCRTLMM_FARDATA to HORATIO_FARDATA in documentation.
+  * 44c4246eb165 (f/201304-latex-doc): Dynamically put the version number in filenames mentioned in the documentation.
+  * b3044d446bc6 (f/201304-latex-doc): Added comments to discourage some folk from building the library themselves.
+  * 111ab8d2128d (f/201304-latex-doc): Minor misc changes.
+  * b6e6c36a17f2 (develop): Merge heads
+  * a3edd41106a5 (develop): Merge heads
+  * 05d1178bd743 (f/201304-latex-doc): PDF is now "good enough".  Further development can take place in the develop branch.
+  * 7bd20e8b0b2f (develop): Merged branch f/201304-latex-doc at revision 05d1178bd743 into develop
+  * ff352ef55c05 (develop): Workaround for systems on which 'sprintf' is a macro.
+  * b1e553be04f7 (develop): Ignore some more cruft within the repository.
+  * 6e133acebe1f (develop): Don't build the documentation by default -- most people won't have pdflatex installed.
+  * ce51afb7e24d (develop): Use --enable-docs with the Debian packaging, since we installed the Build-Depends
+  * f5bf7bb702f1 (develop): Add initial empty test suite framework (CUnit)
+  * c305d7737cc8 (develop): Added tests1.c (CUnit) into Makefile.am, and add CUnit to Debian packaging.
+  * 9ce15ec309ae (develop): Check that dpcrtlmm_Ver( ) returns the correction x.y.z version number.
+  * 9ac95e04cc9c (develop): Test InstallTrapCallback, however, extremely difficult to unit test
+  * 4c32d83204a9 (develop): Add standard BSD license to unit tests.
+  * 58aeed73a9ae (develop): Test that simple call to dpcrtlmm_int_AllocEx() with the NULL block array works.
+  * 44ef1b8b96a9 (develop): Test dpcrtlmm_int_AllocEx() using a shared block array -- BDASharedSingle
+  * 7e46a4f0026d (develop): Loop and allocate some memory, then free it.
+  * a4b362bfdb37 (develop): Don't use the internal interface, this appears to cause the warning;
+  * acb0867b0199 (develop): Avoid the need to use __FILE__ and __LINE__ in the tests.
+  * e745926885d5 (develop): Test suite failed to startup/shutdown the library.
+  * 2176fec33a3f (develop): Split up sizes/allocations for NULL versus single block desc array
+  * 763e2e3a0c11 (develop): Merge upstream changes into test fork (develop)
+  * ecb0a8228976 (develop): Merge heads
+  * ff4890e0a3ce (develop): Merge from upstream
+  * 5f91e45fb9e0 (develop): Re-generate Makefile.in with tests1
+  * 45f60f15ec06 (develop): Fix up unit tests to avoid internal DPCRTLMM references
+  * 966c050b15e0 (develop): Remove duplicate test of minor version number
+  * a9ba2aa8e93a (develop): Rename DPCRTLMM TEST Horatio's test in example1
+  * 6b7373805420 (develop): Rename CUnit test suite, because it consists of legacy tests
+  * 178e159f7c05 (develop): Rename legacy brand CUnit tests to the new name, within the makefile
+  * e83f4fa0c192 (develop): Re-generate automake
+  * 7986acef2d99 (develop): Copy dpctest1.c into htest1.c for new branding
+  * 6dcc3717bf32 (develop): Add a copy of the CUnit unit tests which will be for the new branding (Horatio), into the Makefile.am
+  * 0f0206084e2d (develop): Re-generate Makefile.am
+  * 0a6d30d6ccde (develop): Fix copyright year in CUnit tests
+  * 63b586bcc27c (develop): Rename dpcrtlmm -> horatio references within htest1.c
+  * dd5855d84365 (develop): dpcrtlmm tests should be linked with the legacy library
+  * 4f2244a0fc25 (develop): Run autoreconf -ivf
+  * 0619604cd486 (develop): Merge unit tests
+  * e5471bdb12c3 (develop): Move unit tests under t/ with the example programs
+  * f463ad802319 (develop): Remove -Werror within the unit testing branch.
+  * a4327d129e21 (develop): Fix CUnit linkage
+  * e6123c4e1988 (develop): Remove redundant test case references,
+  * cf56df30ca77 (develop): We are getting warnings to add subdir-objects as an Automake option.
+  * 7373dcda4991 (develop): Merge in the unit tests
+  * 445ddd05050b (develop): Merged header location change, for hbuild.h
+  * 67edc97e94ed (develop): Link against -ldpcrtlmm explicitly in example3 and dpctest1.
+  * b293693b7e9b (develop): Merge upstream into unit tests
+  * 4dffa598d374 (develop): Remove line bar function separators from Horatio unit tests
+  * dc0dee752c77 (develop): htest1: Cuddled function definitions
+  * ec267c956940 (develop): Update copyright year in CUnit unit tests
+  * 78178391d3d8 (develop): Cuddle function declarations in t/dpctest1.c
+  * 72568b2879fc (develop): Remove function line bar separators from t/dpctest1.c
+  * aec037ea1666 (develop): Start adding declarations for suite_dbghook_
+  * 66f8569ff17e (develop): Flush out the dbghook skeleton slightly -- still no actual functional tests.
+  * f2fd50baca50 (develop): Merge heads on develop branch (palmer experimental branch)
+  * b66896d51737 (develop): Automatically generated Doxygen configuration file (Doxyfile 1.8.7)
+  * 11dd795c6482 (develop): Automagically generated Doxygen config using DoxyWizard on Mac OS X
+  * 20ab455895a9 (develop): Previous commit removed verbose comments
+  * 1af46ab698cc (develop): Patch for systems which have sprintf as a macro already.
+  * 3888e67b7ed4 (develop): Use relative paths for documentation.
+  * 71c75b3d9cb7 (develop): Bump project version in Doxyfile
+  * 602cf3dcbd4b (develop): Merge doxygen
+  * 7cd217487628 (develop): Insert automagic version number into Doxygen config file
+  * d2fb5dd03da0 (develop): Merge docs/filedep.dia
+  * 3e2e2e33b70b (stable): Introduce stable branch model;
+  * 2d021152304f (develop): Document the _S_HORATIO_BLOCKDESCRIPTOR structure (Doxygen)
+  * 5cff812609ee (develop): Doxygen documentation for HORATIO_FARDATA
+  * d53d922e85e7 (develop): nbot -> not
+  * 270ca7c2816d (develop): Document some more parts of the allocator
+  * eeb2c8f478da (develop): Write new Doxygen documentation for the horatio_AllocEx function.
+  * 5184c0ac1f9f (develop): Minor fixups for strdup documentation.
+  * 73d1cfb23009 (develop): 2x Missing \brief in documentation
+  * 398f48565147 (develop): Document more internal functions; move documentaton to func defs, not decls
+  * 43c360258aa1 (develop): Change OurLog variable 'Str' to 'Message' in accordance with @param and prototype
+  * 7e1d50d4a722 (develop): Write some documentation for the hfree.c code.
+  * 8e7385dec361 (develop): Properly document the Moveup() function (local)
+  * 1a7069075c49 (develop): Document hfree.c functions.
+  * 687ea0f95eb1 (develop): Document horatio.c \file description (Doxygen)
+  * 8688e7872302 (develop): Document the functions in horatio.c (Doxygen)
+  * e21b246e0570 (develop): Merged daybologic/libhoratio-exp develop into daybologic/libhoratio-doxygen develop
+  * a77146b73d29 (develop): Added file description for hlog.c
+  * 7602e510c931 (develop): Document horatio_int_Log
+  * cd57898b4da5 (develop): Remove duplicate definition of HORATIO_SOURCE
+  * 0823edbe61b2 (develop): Added Doxygen documentation for horatio_GetTrapCallbackInfo()
+  * 28aba6913f4b (develop): Ensure every core library C file has a basic description
+  * fe6d6ed8a9ad (develop): Typos, bad spelling, better wording
+  * 6df16d4e1924 (develop): Mark a TODO on a comment which says block descriptors don't have source file/line.
+  * e83eb6cb73b4 (develop): hblocksz.c has legacy library title
+  * 8143366443c9 (develop): Update further legacy references to old library name in copyright notices
+  * da49e288a088 (develop): Ensure each \file section has a \brief
+  * c596c42f910b (develop): Updated the README with the contents for horatio's headers.
+  * 8ec42c14ea19 (develop): A couple of references to build.h updated
+  * b3ee49ff1e7a (develop): Documented all trap mnemonics.
+  * ba4a8e9fd13e (develop): Fix some Doxygen warnings.
+  * c385a2c774b9 (develop): Merge doxygen improvements
+  * c33b2b630714 (stable): Merged branch develop at revision c385a2c774b9 into stable
+
+ -- David Duncan Ross Palmer <palmer@overchat.org>  Mon, 14 Mar 2016 18:52:20 +0000
+
 libhoratio (2.0.0) stable; urgency=low
 
   * New branding release (libhoratio)
