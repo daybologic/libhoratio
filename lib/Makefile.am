@@ -32,6 +32,21 @@ AUTOMAKE_OPTIONS=subdir-objects
 BUILT_SOURCES = hlic.c hversion.h
 
 lib_LTLIBRARIES = libhoratio.la
+
+AM_LDFLAGS=
+
+if USE_SQLITE
+AM_LDFLAGS += -lsqlite3
+endif #USE_SQLITE
+
+if USE_MYSQL
+AM_LDFLAGS += -lmysqlclient
+endif #USE_MYSQL
+
+if USE_MONGO
+AM_LDFLAGS += -lmongo-client
+endif #USE_MONGO
+
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c
 libhoratio_la_SOURCES += hbdflags.c

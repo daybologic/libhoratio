@@ -296,6 +296,42 @@ if test "$null_array_disabled" = "yes"; then
 fi
 AC_MSG_RESULT($null_array_disabled)
 
+dnl --with-sqlite
+AC_MSG_CHECKING([whether you want SQlite, my friend])
+AC_ARG_WITH(sqlite,
+  [  --with-sqlite           Link with SQlite],
+  [sqlite=yes], [sqlite=no]
+)
+if test "$sqlite" = "yes"; then
+  AC_DEFINE([USE_SQLITE], [], [Link with SQlite])
+fi
+AM_CONDITIONAL([USE_SQLITE], [test "$sqlite" = "yes"])
+AC_MSG_RESULT($sqlite)
+
+dnl --with-mysql
+AC_MSG_CHECKING([whether you want MySQL, my friend])
+AC_ARG_WITH(mysql,
+  [  --with-mysql            Link with MySQL],
+  [mysql=yes], [mysql=no]
+)
+if test "$mysql" = "yes"; then
+  AC_DEFINE([USE_MYSQL], [], [Link with MySQL])
+fi
+AM_CONDITIONAL([USE_MYSQL], [test "$mysql" = "yes"])
+AC_MSG_RESULT($mysql)
+
+dnl --with-mongo
+AC_MSG_CHECKING([whether you want MongoDB, my friend])
+AC_ARG_WITH(mongo,
+  [  --with-mongo            Link with MongoDB],
+  [mongo=yes], [mongo=no]
+)
+if test "$mongo" = "yes"; then
+  AC_DEFINE([USE_MONGO], [], [Link with MongoDB])
+fi
+AM_CONDITIONAL([USE_MONGO], [test "$mongo" = "yes"])
+AC_MSG_RESULT($mongo)
+
 dnl --enable-docs
 AC_MSG_CHECKING([Whether to build documentation])
 AC_ARG_ENABLE(

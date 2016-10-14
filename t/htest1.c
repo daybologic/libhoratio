@@ -49,6 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "horatio.h"
 #include "hbuild.h"
 #include "hversion.h"
+#include "../lib/hlog.h"
 #include "lib/hintdata.h"
 
 #define DIE(m) Die((__FILE__), (__LINE__), (m))
@@ -68,12 +69,14 @@ static int init_suite_core(void); /* Core library implementation testing: horati
 static int init_suite_trap(void); /* Trap function testing: dpc_trap.c */
 static int init_suite_alloc(void); /* Alloc function test: dpc_alloc.c */
 static int init_suite_dbghook(void); /* Debug hook testing: hdbghook.c */
+static int init_suite_log(void); /* Log function test: hlog.c */
 
 /* Suite cleanup routines */
 static int clean_suite_core(void);
 static int clean_suite_trap(void);
 static int clean_suite_alloc(void);
 static int clean_suite_dbghook(void);
+static int clean_suite_log(void);
 
 /* This function aborts the program under extraordinary circumstances */
 static void Die(const char *File, const unsigned int Line, const char *Message);
@@ -96,6 +99,9 @@ static void suite_alloc_AllocLoop(void);
 
 /* Test suite debug hook */
 static void suite_dbghook_InstallDebugHook(void);
+
+/* Test suite log */
+static void suite_log_TODO(void);
 
 /* Incidental functions */
 static void test_TrapCallback(const unsigned int, const char*);
@@ -146,6 +152,10 @@ static int init_suite_dbghook() {
 	return 0;
 }
 
+static int init_suite_log() {
+	return 0;
+}
+
 static int clean_suite_core() {
 	return 0;
 }
@@ -165,6 +175,10 @@ static int clean_suite_alloc() {
 }
 
 static int clean_suite_dbghook() {
+	return 0;
+}
+
+static int clean_suite_log() {
 	return 0;
 }
 
@@ -222,6 +236,7 @@ int main(int argc, char *argv[]) {
 	CU_ErrorCode err;
 	unsigned int failCount;
 	size_t testI, suiteI;
+
 	static struct {
 		const char *TestName;
 		void (*TestFunc)(void);
@@ -230,6 +245,7 @@ int main(int argc, char *argv[]) {
 		  &suite_core_Ver
 		}
 	};
+
 	static struct {
 		const char *TestName;
 		void (*TestFunc)(void);
@@ -241,6 +257,7 @@ int main(int argc, char *argv[]) {
 		  &suite_trap_InstallTrapCallback_bad
 		}
 	};
+
 	static struct {
 		const char *TestName;
 		void (*TestFunc)(void);
@@ -252,12 +269,22 @@ int main(int argc, char *argv[]) {
 		  &suite_alloc_AllocLoop
 		}
 	};
+
 	static struct {
 		const char *TestName;
 		void (*TestFunc)(void);
 	} DbghookTests[] = {
 		{ "DbghookInstallDebugHook",
 		  &suite_dbghook_InstallDebugHook
+		}
+	};
+
+	static struct {
+		const char *TestName;
+		void (*TestFunc)(void);
+	} LogTests[] = {
+		{ "TODO",
+		 &suite_log_TODO
 		}
 	};
 
@@ -271,6 +298,7 @@ int main(int argc, char *argv[]) {
 		{ "suite_trap", &init_suite_trap, &clean_suite_trap },
 		{ "suite_dbghook", &init_suite_dbghook, &clean_suite_dbghook },
 		{ "suite_alloc", &init_suite_alloc, &clean_suite_alloc },
+		{ "suite_log", &init_suite_log, &clean_suite_log },
 	};
 
 	CU_pSuite pSuite[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
@@ -315,6 +343,13 @@ int main(int argc, char *argv[]) {
 	suiteI++;
 	for ( testI = 0; testI < sizeof(DbghookTests)/sizeof(DbghookTests[0]); testI++ ) {
 		if ( !CU_add_test(pSuite[suiteI], DbghookTests[testI].TestName, DbghookTests[testI].TestFunc) ) {
+			CU_cleanup_registry();
+			return CU_get_error();
+		}
+	}
+	suiteI++;
+	for ( testI = 0; testI < sizeof(LogTests)/sizeof(LogTests[0]); testI++ ) {
+		if ( !CU_add_test(pSuite[suiteI], LogTests[testI].TestName, LogTests[testI].TestFunc) ) {
 			CU_cleanup_registry();
 			return CU_get_error();
 		}
@@ -422,6 +457,16 @@ static void suite_alloc_AllocLoop() {
 	for ( blockI = 0U; blockI < sizeof(blocksSharedSingle)/sizeof(blocksSharedSingle[0]); blockI++ ) {
 		horatio_Free(BDASharedSingle, blocksSharedSingle[blockI]);
 	}
+}
+
+static void suite_log_TODO() {
+	horatio_int_Log(
+		HORATIO_LOG_CODE_DUMMY,
+		"dummy.c", /* File */
+		1234, /* Line */
+		HORATIO_LOG_MESSAGE,
+		"Horatio has merely sniffed his breakfast" /* Message */
+	);
 }
 
 static void test_TrapCallback(const unsigned int tn, const char* str) {

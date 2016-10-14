@@ -73,23 +73,18 @@ extern "C" {
 #define HORATIO_LOG_CODE_REALLOC_NP_2 (HORATIO_LOG_CODE_BASE+19)
 #define HORATIO_LOG_CODE_INSTALL_TRAP (HORATIO_LOG_CODE_BASE+20)
 #define HORATIO_LOG_CODE_REMOVE_TRAP (HORATIO_LOG_CODE_BASE+21)
+#define HORATIO_LOG_CODE_DUMMY (HORATIO_LOG_CODE_BASE+22)
 
 /* Types of logging messages */
 
 /*! \def HORATIO_LOG_MESSAGE
- * \brief Only put in log
+ * \brief Only put in log TODO
  */
-#define HORATIO_LOG_MESSAGE (0U)
-
-/*! \def HORATIO_LOG_WARNING
- * \brief stderr and log
- */
-#define HORATIO_LOG_WARNING (1U)
-
-/*! \def HORATIO_LOG_ERROR
- * \brief Same as error for now
- */
-#define HORATIO_LOG_ERROR   (2U)
+enum hLogSeverity {
+	HORATIO_LOG_MESSAGE = 0U, /* Only put in log */
+	HORATIO_LOG_WARNING = 1U, /* stderr and log */
+	HORATIO_LOG_ERROR   = 2U, /* Same as warning for now */
+};
 
 /*
  * Even though error and warning do the same thing, they display different
@@ -101,10 +96,10 @@ extern "C" {
  * Write the message to the log (or do nothing if the log macro is undefined
  */
 void horatio_int_Log(
-  const unsigned short Code,
+	const unsigned short Code,
 	const char *File,
 	const unsigned int Line,
-	const unsigned short Severity,
+	const enum hLogSeverity Severity,
 	const char *Message
 );
 
@@ -114,7 +109,7 @@ void horatio_int_Log(
 #ifdef HORATIO_LOG
 # define MESSAGE(lcode, sfn, sfl, msg)                                      \
     horatio_int_Log((lcode), (sfn), (sfl),                                  \
-    (const unsigned short)HORATIO_LOG_MESSAGE, (msg)                        \
+    HORATIO_LOG_MESSAGE, (msg)                                              \
 )
 #else /* Non logging build */
 # define MESSAGE(lcode, sfn, sfl, msg) /* Do nothing with it */
@@ -123,13 +118,13 @@ void horatio_int_Log(
 #define WARNING(lcode, msg)                                                 \
     horatio_int_Log(                                                        \
         (lcode), (__FILE__), (__LINE__),                                    \
-        (const unsigned short)HORATIO_LOG_WARNING, (msg)                    \
+        HORATIO_LOG_WARNING, (msg)                                          \
     )
 
 #define ERROR(lcode, msg)                                                   \
     horatio_int_Log(                                                        \
     (lcode), (__FILE__), (__LINE__),                                        \
-    (const unsigned short)HORATIO_LOG_ERROR, (msg)                          \
+    HORATIO_LOG_ERROR, (msg)                                                \
 )
 
 #ifdef __cplusplus

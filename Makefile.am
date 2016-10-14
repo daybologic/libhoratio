@@ -57,7 +57,15 @@ GENERAL_WFLAGS = \
 
 GENERAL_CC_FLAGS = \
 	-g \
-	-I$(top_srcdir)/../include
+	-O0 \
+	-I$(top_srcdir)/../include \
+	-I/usr/include/mongo-client \
+	-I/usr/include/glib-2.0 \
+	-I/usr/lib/x86_64-linux-gnu/glib-2.0/include \
+	-I/usr/lib/i386-linux-gnu/glib-2.0/include \
+	-I/usr/local/mysql/include \
+	-I/usr/include/mysql \
+	-I/usr/local/Cellar/cunit/2.1-2/include
 
 AM_CFLAGS = \
 	$(GENERAL_CC_FLAGS) \
@@ -69,8 +77,9 @@ AM_CPPFLAGS = \
 	$(GENERAL_WFLAGS)
 
 AM_LDFLAGS = \
-	-L$(top_srcdir)/../lib
-
+	-L$(top_srcdir)/../lib \
+	-L/usr/local/lib \
+	-L/usr/local/mysql/lib
 
 export AM_CPPFLAGS
 export AM_CFLAGS
