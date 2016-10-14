@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*
-  This is my little test app for my DPCRTLMM library
+  This is my little test app for my HORATIO library
   I use it to simmulate a caller to debug my library
 */
 #ifdef HAVE_CONFIG_H
@@ -43,21 +43,20 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <time.h>
 #include <stdlib.h>
 
-#ifdef DPCRTLMM_THREADS_PTH
+#ifdef HORATIO_THREADS_PTH
 # ifdef HAVE_PTH_H
 #  include <pth.h>
 # endif /*HAVE_PTH_H*/
-#endif /*DPCRTLMM_THREADS_PTH*/
+#endif /*HORATIO_THREADS_PTH*/
 
-#ifdef DPCRTLMM_HDRSTOP
+#ifdef HORATIO_HDRSTOP
 # pragma hdrstop
-#endif /*DPCRTLMM_HDRSTOP*/
+#endif /*HORATIO_HDRSTOP*/
 
-#undef DPCRTLMM_LEGACY
 #include "horatio.h"
 
 int main(void);
-static void PrintStats(const PS_DPCRTLMM_STATS PStats);
+static void PrintStats(const PS_HORATIO_STATS PStats);
 static void InitArrays(void);
 static void PrintVersion(void);
 static void myTrapHandler(
@@ -69,18 +68,18 @@ static void *arrptrs[8];
 
 int main() {
 	unsigned int i;
-	S_DPCRTLMM_STATS stats;
-	PS_DPCRTLMM_BLOCKDESCARRAY Parr;
+	S_HORATIO_STATS stats;
+	PS_HORATIO_BLOCKDESCARRAY Parr;
 	S_HORATIO_OPTIONS options;
 	const char *title = "HORATIO TEST";
 	char *titleCopy;
 
-#ifdef DPCRTLMM_THREADS_PTH
+#ifdef HORATIO_THREADS_PTH
 	if ( !pth_init() ) {
 		puts("Can\'t initialise GNU Portable Threads.\n");
 		return EXIT_FAILURE;
 	}
-#endif /*DPCRTLMM_THREADS_PTH*/
+#endif /*HORATIO_THREADS_PTH*/
 
 	horatio_options_init(&options);
 	options.enableLog = 1;
@@ -145,7 +144,7 @@ int main() {
 	return 0;
 }
 
-static void PrintStats(const PS_DPCRTLMM_STATS PStats) {
+static void PrintStats(const PS_HORATIO_STATS PStats) {
 	if (PStats) {
 		printf(
 			"Blocks allocated: %lu (peaked at %lu)\n",
@@ -178,7 +177,7 @@ static void InitArrays() {
 
 static void PrintVersion() {
 
-	S_DPCRTLMM_VERSION ver;
+	S_HORATIO_VERSION ver;
 
 	printf("%s\n", horatio_license());
 	printf("Gathering library version info...");
@@ -195,10 +194,10 @@ static void myTrapHandler(
 ) {
 	/*
 	 * Why am I handling this trap?  I'm not, I install this as
-	 * a hook only.  Which means control is returned to the DPCRTLMM rap
+	 * a hook only.  Which means control is returned to the HORATIO trap
 	 * handler afterwards.
 	 */
-	S_DPCRTLMM_STATS stats;
+	S_HORATIO_STATS stats;
 	puts("--------Caution! Stats display from trap hook!---------\n");
 	printf("TrapID %u, message: %s\n\n", TrapID, TrapMsg);
 	horatio_GetStats(&stats);

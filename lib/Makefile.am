@@ -31,7 +31,7 @@
 AUTOMAKE_OPTIONS=subdir-objects
 BUILT_SOURCES = hlic.c hversion.h
 
-lib_LTLIBRARIES = libhoratio.la  libdpcrtlmm.la
+lib_LTLIBRARIES = libhoratio.la
 
 AM_LDFLAGS=
 
@@ -47,7 +47,6 @@ if USE_MONGO
 AM_LDFLAGS += -lmongo-client
 endif #USE_MONGO
 
-libdpcrtlmm_la_SOURCES = dpcrtlmm.c
 libhoratio_la_SOURCES  = horatio.c
 libhoratio_la_SOURCES += halloc.c
 libhoratio_la_SOURCES += hbdflags.c

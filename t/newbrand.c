@@ -176,7 +176,7 @@ static void myTrapHandler(
 ) {
 	/*
 	 * Why am I handling this trap?  I'm not, I install this as
-	 * a hook only.  Which means control is returned to the HORATIO rap
+	 * a hook only.  Which means control is returned to the HORATIO trap
 	 * handler afterwards.
 	 */
 	S_HORATIO_STATS stats;
