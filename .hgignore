@@ -29,6 +29,7 @@ t/example?
 t/newbrand
 lib/hlic.?
 include/hversion.h
+aclocal.m4
 
 syntax:regexp
 ^docs/\.\w+$
