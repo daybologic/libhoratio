@@ -10,4 +10,4 @@ tasks:
       cd libhoratio
   - build: |
       cd libhoratio
-      make && make check
+      debian/rules
