@@ -1,0 +1,13 @@
+image: debian/stable
+packages:
+  - build-essential
+sources:
+  - https://hg.sr.ht/~m6kvm/libhoratio
+environment:
+  deploy: palmer@overchat.org
+tasks:
+  - setup: |
+      cd libhoratio
+  - build: |
+      cd libhoratio
+      make && make check
