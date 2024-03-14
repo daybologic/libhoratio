@@ -10,7 +10,7 @@ environment:
 tasks:
   - setup: |
       cd libhoratio
-      hg clone -r dlscripts-0.4.0 https://hg.sr.ht/~m6kvm/dlscripts
+      hg clone -r dlscripts-0.4.1 https://hg.sr.ht/~m6kvm/dlscripts
       sudo apt-get install -q -y `dlscripts/build-deps.sh debian/control`
   - build: |
       cd libhoratio
