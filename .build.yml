@@ -1,6 +1,7 @@
 image: debian/stable
 packages:
   - build-essential
+  - autoconf
 sources:
   - https://hg.sr.ht/~m6kvm/libhoratio
 environment:
