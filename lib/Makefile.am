@@ -75,7 +75,7 @@ clean-local:
 	rm -f hversion.h
 
 hlic.c: Makefile
-	raw2c --header=hlic.h --symbol=horatio_license_text -q -n ../COPYING hlic.c
-	
+	build-scripts/bin/raw2c --header=hlic.h --symbol=horatio_license_text -q -n ../COPYING hlic.c
+
 hversion.h: Makefile
 	$(SHELL) ../build-scripts/bin/mkverh.sh
